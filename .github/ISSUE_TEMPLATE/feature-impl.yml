@@ -1,0 +1,39 @@
+name: ✨ Feature Implementation
+description: Use this template to register an issue for feature implementation
+title: "✨ Your text here"
+labels: [feature, frontend]
+projects: alechkos/8
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!IMPORTANT]
+        > **BEFORE CONTINUING ASSIGN YOURSELF TO THE ISSUE**
+
+        #### The button is to the right:
+        ![](https://github.com/alechkos/vzou-frontend/assets/93551621/d5d54ea9-aded-43ee-9f86-807c9b5ed55c)
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        **CLEARY DESCRIBE A FEATURE YOU ARE GOING TO IMPLEMENT,
+        YOU CAN ADD PICTURES IF YOU WANT TO:**
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to implement the feature
+      description: |
+        **PROVIDE SUBTASKS FOR FEATURE IMPLEMENTATION,
+        USE THE FOLLOWING FORMAT:**
+        ```
+        - [ ] First subtask (change the text as you want)
+        - [ ] Second subtask
+        - [ ] Third subtask
+
+        ...
+        ```
+        **TO DO THAT, SIMPLY CLICK ON THE `Task list` BUTTON:**
+        ![](https://github.com/alechkos/vzou-frontend/assets/93551621/5798c8a3-efc9-4ed9-ba18-da93cbebd46b)
+    validations:
+      required: true

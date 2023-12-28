@@ -1,0 +1,22 @@
+name: 📚 Documentation Changes
+description: Use this template to register an issue for documentation changes
+title: "📚 Your text here"
+labels: [documentation, frontend]
+projects: alechkos/8
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!IMPORTANT]
+        > **BEFORE CONTINUING ASSIGN YOURSELF TO THE ISSUE**
+
+        #### The button is to the right:
+        ![](https://github.com/alechkos/vzou-frontend/assets/93551621/d5d54ea9-aded-43ee-9f86-807c9b5ed55c)
+  - type: textarea
+    attributes:
+      label: Description
+      description: |
+        **CLEARY DESCRIBE DOCUMENTATION CHANGES YOU ARE GOING TO PROVIDE,
+        YOU CAN ADD PICTURES IF YOU WANT TO:**
+    validations:
+      required: true
