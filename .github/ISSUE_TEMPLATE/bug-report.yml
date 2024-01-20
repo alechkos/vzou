@@ -7,10 +7,19 @@ body:
     attributes:
       value: |
         > [!IMPORTANT]
-        > **BEFORE CONTINUING ASSIGN YOURSELF TO THE ISSUE**
+        > **ONCE YOU ASSIGNED YOURSELF TO THE ISSUE, THAT ISSUE WILL BE MOVED FROM `To Do` TO `In Progress` AND VICE VERSA**
 
-        #### The button is to the right:
-        ![](https://github.com/alechkos/vzou-frontend/assets/93551621/d5d54ea9-aded-43ee-9f86-807c9b5ed55c)
+        <details>
+          <summary>
+          
+          ### How can I assign myself to the issue?
+          
+          </summary>
+
+          #### The button is on the top right:
+          ![](https://github.com/alechkos/vzou-frontend/assets/93551621/d5d54ea9-aded-43ee-9f86-807c9b5ed55c)
+
+        </details>
   - type: textarea
     attributes:
       label: Description
