@@ -24,7 +24,7 @@ body:
     attributes:
       label: Description
       description: |
-        **CLEARY DESCRIBE A BUG YOU ARE REPORTING, YOU CAN ADD PICTURES IF YOU WANT TO:**
+        **CLEARLY DESCRIBE A BUG YOU ARE REPORTING, YOU CAN ADD PICTURES IF YOU WANT TO:**
     validations:
       required: true
   - type: textarea

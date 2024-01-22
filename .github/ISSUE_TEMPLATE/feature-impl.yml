@@ -24,7 +24,7 @@ body:
     attributes:
       label: Description
       description: |
-        **CLEARY DESCRIBE A FEATURE YOU ARE GOING TO IMPLEMENT,
+        **CLEARLY DESCRIBE A FEATURE YOU ARE GOING TO IMPLEMENT,
         YOU CAN ADD PICTURES IF YOU WANT TO:**
     validations:
       required: true

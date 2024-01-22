@@ -10,6 +10,7 @@ env:
 jobs:
   set-assigned-issue-status:
     name: Set Assigned Issue Status
+    if: github.event.issue.assignees[0] != null
     runs-on: ubuntu-latest
     steps:
       - name: Get Manager
