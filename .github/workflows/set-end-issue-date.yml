@@ -1,34 +1,10 @@
-name: Set Start/End Issue Date
+name: Set End Issue Date
 on:
   issues:
     types:
-      - assigned
       - closed
 
 jobs:
-  set-start-issue-date:
-    name: Set Start Issue Date
-    if: github.event.action == 'assigned'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Manager
-        id: get-manager
-        run: echo "::set-output name=manager::${{ toJson(github.event.issue.user.login) }}"
-
-      - name: Get Current Date
-        id: get-current-date
-        run: echo "::set-output name=date::$(TZ=':Asia/Jerusalem' date +'%Y-%m-%dT%H:%M:%S%:z')"
-
-      - name: Set Start Date
-        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
-        with:
-          gh_token: ${{ secrets.PAC_TOKEN }}
-          user: ${{ steps.get-manager.outputs.manager }}
-          project_id: 8
-          resource_node_id: ${{ github.event.issue.node_id }}
-          operation_mode: custom_field
-          custom_field_values: '[{\"name\": \"Start date\",\"type\": \"date\",\"value\": \"${{ steps.get-current-date.outputs.date }}\"}]'
-
   set-end-issue-date:
     name: Set End Issue Date
     if: github.event.action == 'closed' && github.event.issue.assignees[0] != null
