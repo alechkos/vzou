@@ -1,0 +1,20 @@
+name: Automerge PR
+on:
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  automerge:
+    name: Automerge PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automerge PR
+        id: automerge
+        uses: pascalgn/automerge-action@v0.16.2
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: ""
+          MERGE_METHOD: "squash"
+          MERGE_REQUIRED_APPROVALS: 2
+          MERGE_DELETE_BRANCH: true
