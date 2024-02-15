@@ -15,8 +15,7 @@ jobs:
     steps:
       - name: Get Manager
         id: get-manager
-        #run: echo "::set-output name=manager::${{ toJson(github.repository_owner) }}"
-        run: echo "::set-output name=manager::${{ toJson(github.event.issue.user.login) }}"
+        run: echo "::set-output name=manager::${{ toJson(github.repository_owner) }}"
 
       - name: Set Issue Status
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
