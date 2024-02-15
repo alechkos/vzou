@@ -29,6 +29,18 @@ const AvlPage: FC = () => {
   const controller = AvlAnimationController.getController(root, useDispatch());
   const [ viewportWidth, setViewportWidth ] = useState(window.innerWidth);
 
+  const [ showActions, setShowActions ] = useState(false);
+  const [ editingConstruction, setEditingConstruction ] = useState(false);
+
+  const handleShowActions = () => {
+    setShowActions(true);
+  };
+
+  const handleHideActions = () => {
+    setShowActions(false);
+    setEditingConstruction(true);
+  };
+
   useEffect(() => {
     function handleResize() {
       setViewportWidth(window.innerWidth);
@@ -45,12 +57,16 @@ const AvlPage: FC = () => {
   return (
     <>
       {fitsAnimation ? (
-        <>
+        <div className="flex flex-col items-center justify-between">
           <AvlControlsPanel
             isButtonDisabled={isPlaying}
             controller={controller}
+            showActions={showActions}
+            handleShowActions={handleShowActions}
+            handleHideActions={handleHideActions}
+            editingConstruction={editingConstruction}
           />
-          <div className="container mx-auto max-w-7xl px-0 py-0 mt-[400px]">
+          {(showActions || editingConstruction) && <div className="container mx-auto max-w-7xl p-52">
             <BinaryTree
               viewportWidth={viewportWidth}
               root={root}
@@ -63,7 +79,7 @@ const AvlPage: FC = () => {
               visitedNodes={visitedNodes}
               passedNodes={passedNodes}
             />
-          </div>
+          </div>}
           {traversalResults.length > 0 && (
             <div className="container mx-auto max-w-7xl px-0 py-0 mt-72">
               <p className="mr-56">
@@ -76,10 +92,11 @@ const AvlPage: FC = () => {
               />
             </div>
           )}
-          <PlayerControlsPanel
+          {showActions && <PlayerControlsPanel
             controller={controller}
             isPlaying={isPlaying}
-          />
+          />}
+
           <div className="flex justify-end mr-5">
             <div className=" w-fit">
               <PseudoCodeContainer
@@ -88,7 +105,7 @@ const AvlPage: FC = () => {
               />
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="relative grid place-content-center place-items-center gap-2 before:bg-gradient-to-t before:from-teal-500/70 before:via-fuchsia-600 before:to-transparent before:blur-xl before:filter">
           <h2 className="title text-3xl font-black text-lime-600">

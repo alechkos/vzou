@@ -1,4 +1,5 @@
 .branch {
+  margin-top: 50px;
   position: absolute;
   height: 2px;
   background-color: black;
@@ -26,6 +27,7 @@
 .node {
   display: flex;
   position: absolute;
+  margin-top: 50px;
   justify-content: center;
   align-items: center;
   width: 36px;

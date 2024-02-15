@@ -23,6 +23,10 @@ import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/
 interface Props {
   controller: AvlAnimationController;
   isButtonDisabled: boolean;
+  showActions: boolean;
+  editingConstruction: boolean;
+  handleShowActions: () => void;
+  handleHideActions: () => void;
 }
 
 const buttonClassname =
@@ -35,13 +39,15 @@ const buttonClassname =
  * @param {boolean} props.isButtonDisabled - Determines if the button is disabled.
  * @return {JSX.Element} The BSTreeControlsPanel component.
  */
-const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
+const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideActions, handleShowActions, showActions, editingConstruction }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
-  const [ value, setValue ] = useState("1");
   const [ regsterActivity ] = useRegisterActivityMutation();
+
+  const [ value, setValue ] = useState("1");
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -61,6 +67,8 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
     if (typeof res !== "string") {
       try {
         controller.setTreeFromInput(res);
+        handleShowActions();
+        setValue("2");
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -170,6 +178,8 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   };
   const randomizeInput = () => {
     controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap()));
+    handleShowActions();
+    setValue("2");
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
@@ -200,10 +210,21 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     aria-label="algorithms and actions"
                     centered
                   >
-                    <Tab
-                      label="AVL construction"
+                    {!showActions && !editingConstruction && <Tab
+                      label="Create AVL construction"
                       value="1"
-                    />
+                    />}
+                    {(showActions || editingConstruction) && <Tab
+                      label="Change Avl construction"
+                      value="1"
+                      onClick={handleHideActions}
+                    />}
+                  </TabList>
+                  {showActions && <TabList
+                    onChange={handleChange}
+                    aria-label="algorithms and actions"
+                    centered
+                  >
                     <Tab
                       label="Min / Max"
                       value="2"
@@ -233,7 +254,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                       label="Delete"
                       value="DeleteNode"
                     />
-                  </TabList>
+                  </TabList>}
                 </Box>
                 <TabPanel
                   value="1"
