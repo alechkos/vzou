@@ -79,7 +79,6 @@ abstract class AnimationController<T, Y> {
     }
     this.setReference({ name: this.memento.getCurrentAlg(), line: 0 }); // Set the reference to the first frame.
     this.setPlaying(false);
-    this.frame = 0;
   }
 
   /** This function receives an algorithm to execute, and the arguments, and executes it while retaining a reference to it.

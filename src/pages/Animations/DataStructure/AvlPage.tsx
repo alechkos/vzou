@@ -45,12 +45,12 @@ const AvlPage: FC = () => {
   return (
     <>
       {fitsAnimation ? (
-        <>
+        <div className="flex flex-col items-center justify-between">
           <AvlControlsPanel
             isButtonDisabled={isPlaying}
             controller={controller}
           />
-          <div className="container mx-auto max-w-7xl px-0 py-0 mt-[400px]">
+          <div className="container mx-auto max-w-7xl p-52">
             <BinaryTree
               viewportWidth={viewportWidth}
               root={root}
@@ -88,7 +88,7 @@ const AvlPage: FC = () => {
               />
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="relative grid place-content-center place-items-center gap-2 before:bg-gradient-to-t before:from-teal-500/70 before:via-fuchsia-600 before:to-transparent before:blur-xl before:filter">
           <h2 className="title text-3xl font-black text-lime-600">

@@ -30,7 +30,7 @@ const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
     animateObj = animate;
   }
   return (
-    <>
+    <div>
       <motion.span
         data-id={nodeObj.nodeRole}
         transition={{
@@ -60,7 +60,7 @@ const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
           speed={nodeObj.speed}
         />
       )}
-    </>
+    </div>
   );
 };
 

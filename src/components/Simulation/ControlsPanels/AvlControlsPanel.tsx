@@ -39,8 +39,18 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
-  const [ value, setValue ] = useState("1");
   const [ regsterActivity ] = useRegisterActivityMutation();
+
+  const [ value, setValue ] = useState("1");
+  const [ showActions, setShowActions ] = useState(false);
+
+  const handleShowActions = () => {
+    setShowActions(true);
+  };
+
+  const handleHideActions = () => {
+    setShowActions(false);
+  };
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -60,6 +70,8 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
     if (typeof res !== "string") {
       try {
         controller.setTreeFromInput(res);
+        handleShowActions();
+        setValue("2");
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -169,6 +181,8 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   };
   const randomizeInput = () => {
     controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap()));
+    handleShowActions();
+    setValue("2");
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
@@ -199,10 +213,21 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     aria-label="algorithms and actions"
                     centered
                   >
-                    <Tab
-                      label="AVL construction"
+                    {!showActions && <Tab
+                      label="Create AVL construction"
                       value="1"
-                    />
+                    />}
+                    {showActions && <Tab
+                      label="Change Avl construction"
+                      value="1"
+                      onClick={handleHideActions}
+                    />}
+                  </TabList>
+                  {showActions && <TabList
+                    onChange={handleChange}
+                    aria-label="algorithms and actions"
+                    centered
+                  >
                     <Tab
                       label="Min / Max"
                       value="2"
@@ -231,7 +256,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                       label="Delete"
                       value="DeleteNode"
                     />
-                  </TabList>
+                  </TabList>}
                 </Box>
                 <TabPanel
                   value="1"

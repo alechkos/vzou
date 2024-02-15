@@ -8,7 +8,7 @@ type Props = {
 };
 
 const MediumCard: React.FC<Props> = ({ children, isSmaller, maxWidth }) => (
-  <div className="flex min-h-full items-center justify-center py-10  sm:px-4 lg:px-8 ">
+  <div className="flex min-h-full items-center justify-center py-10 sm:px-4 lg:px-8 ">
     <div
       className={`${maxWidth || "max-w-xl"} w-full ${
         isSmaller ? "p-3" : "p-10"
