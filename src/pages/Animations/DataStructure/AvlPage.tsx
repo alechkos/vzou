@@ -29,6 +29,18 @@ const AvlPage: FC = () => {
   const controller = AvlAnimationController.getController(root, useDispatch());
   const [ viewportWidth, setViewportWidth ] = useState(window.innerWidth);
 
+  const [ showActions, setShowActions ] = useState(false);
+  const [ editingConstruction, setEditingConstruction ] = useState(false);
+
+  const handleShowActions = () => {
+    setShowActions(true);
+  };
+
+  const handleHideActions = () => {
+    setShowActions(false);
+    setEditingConstruction(true);
+  };
+
   useEffect(() => {
     function handleResize() {
       setViewportWidth(window.innerWidth);
@@ -49,8 +61,12 @@ const AvlPage: FC = () => {
           <AvlControlsPanel
             isButtonDisabled={isPlaying}
             controller={controller}
+            showActions={showActions}
+            handleShowActions={handleShowActions}
+            handleHideActions={handleHideActions}
+            editingConstruction={editingConstruction}
           />
-          <div className="container mx-auto max-w-7xl p-52">
+          {(showActions || editingConstruction) && <div className="container mx-auto max-w-7xl p-52">
             <BinaryTree
               viewportWidth={viewportWidth}
               root={root}
@@ -63,7 +79,7 @@ const AvlPage: FC = () => {
               visitedNodes={visitedNodes}
               passedNodes={passedNodes}
             />
-          </div>
+          </div>}
           {traversalResults.length > 0 && (
             <div className="container mx-auto max-w-7xl px-0 py-0 mt-72">
               <p className="mr-56">
@@ -76,10 +92,11 @@ const AvlPage: FC = () => {
               />
             </div>
           )}
-          <PlayerControlsPanel
+          {showActions && <PlayerControlsPanel
             controller={controller}
             isPlaying={isPlaying}
-          />
+          />}
+
           <div className="flex justify-end mr-5">
             <div className=" w-fit">
               <PseudoCodeContainer

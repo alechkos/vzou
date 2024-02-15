@@ -22,6 +22,10 @@ import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/
 interface Props {
   controller: AvlAnimationController;
   isButtonDisabled: boolean;
+  showActions: boolean;
+  editingConstruction: boolean;
+  handleShowActions: () => void;
+  handleHideActions: () => void;
 }
 
 const buttonClassname =
@@ -34,7 +38,7 @@ const buttonClassname =
  * @param {boolean} props.isButtonDisabled - Determines if the button is disabled.
  * @return {JSX.Element} The BSTreeControlsPanel component.
  */
-const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
+const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideActions, handleShowActions, showActions, editingConstruction }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
@@ -42,15 +46,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   const [ regsterActivity ] = useRegisterActivityMutation();
 
   const [ value, setValue ] = useState("1");
-  const [ showActions, setShowActions ] = useState(false);
 
-  const handleShowActions = () => {
-    setShowActions(true);
-  };
-
-  const handleHideActions = () => {
-    setShowActions(false);
-  };
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -213,11 +209,11 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     aria-label="algorithms and actions"
                     centered
                   >
-                    {!showActions && <Tab
+                    {!showActions && !editingConstruction && <Tab
                       label="Create AVL construction"
                       value="1"
                     />}
-                    {showActions && <Tab
+                    {(showActions || editingConstruction) && <Tab
                       label="Change Avl construction"
                       value="1"
                       onClick={handleHideActions}
