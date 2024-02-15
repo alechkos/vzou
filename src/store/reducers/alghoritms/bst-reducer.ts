@@ -82,6 +82,10 @@ const bstSlice = createSlice({
     setRoles(state, action: PayloadAction<NodeRole[]>) {
       state.currentRoles = action.payload;
     },
+    setCurrentAlg(state, action: PayloadAction<BSTAlgNames>) {
+      state.currentAlg = action.payload;
+      return state;
+    },
   },
 });
 
@@ -98,4 +102,5 @@ export const {
   setVisited,
   setPassedNodes,
   setTraversalResults,
+  setCurrentAlg,
 } = bstSlice.actions;

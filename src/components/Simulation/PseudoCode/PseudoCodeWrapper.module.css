@@ -7,10 +7,11 @@
 .aside-side {
   background-color: #ecfccb;
   min-width: fit-content;
+  padding-right: 24px;
 }
 .button-div {
   position: absolute;
-  top: 0;
+  top: 2px;
   right: 0;
   z-index: 10;
 }

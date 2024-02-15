@@ -9,7 +9,7 @@ import React, { FC, useEffect, useState } from "react";
 
 import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setError, setInput, setInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
+import { setError, setInput, setInputArray, setCurrentAlg } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
@@ -17,6 +17,7 @@ import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { randomBuildTree } from "../AVL/AVL_Algorithms";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+
 
 
 interface Props {
@@ -206,6 +207,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     <Tab
                       label="Min / Max"
                       value="2"
+                      onClick={() => { dispatch(setCurrentAlg("Min")); }}
                     />
                     <Tab
                       label="Traversals"
