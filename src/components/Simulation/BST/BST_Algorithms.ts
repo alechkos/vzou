@@ -1,5 +1,13 @@
+import authWrapper from "components/Auth/AuthWrapper";
+
 import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
+import {
+  checkIfValueExist,
+  getBalance,
+  leftRotateWithAnimation,
+  rightRotateWithAnimation,
+} from "../../Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
 
@@ -100,7 +108,9 @@ export function insertWithAnimations(
   root: BSTreeNode | undefined,
   new_node: BSTreeNode,
   memento: BSTreeMemento,
-): BSTreeNode {
+  isAvl = false,
+):  BSTreeNode {
+  let valueExist = false;
   const passedIds: number[] = [];
   function insertNode(root: BSTreeNode | undefined, new_node: BSTreeNode, memento: BSTreeMemento) {
     // pseudo for y
@@ -108,7 +118,13 @@ export function insertWithAnimations(
     let y = undefined as BSTreeNode | undefined;
 
     if (root) {
-      // pseudo for x = root
+      if (isAvl) {
+        valueExist = checkIfValueExist(new_node.value, root);
+        if (valueExist) {
+          throw new Error(`The node with value ${new_node.value} is exist!`);
+        }
+      }
+      // pseudo for x = roo
       memento.addSnapshot(
         { line: 2, name: "Insert" },
         root,
@@ -141,10 +157,12 @@ export function insertWithAnimations(
       if (new_node.value < x.value) {
         // pseudo for if
         memento.addBlank({ line: 5, name: "Insert" }, root, undefined, [], [], passedIds);
+        x.height += 1;
         x = x.left;
         // pseudo for left
         memento.addBlank({ line: 6, name: "Insert" }, root, undefined, [], [], passedIds);
       } else {
+        x.height += 1;
         x = x.right;
         memento.addBlank({ line: 7, name: "Insert" }, root, undefined, [], [], passedIds);
       }
@@ -156,7 +174,7 @@ export function insertWithAnimations(
       memento.addSnapshot(
         { line: 8, name: "Insert" },
         root,
-        y!.id,
+        y.id,
         ActionType.HIGHLIGHT_LIGHT,
         [],
         [],

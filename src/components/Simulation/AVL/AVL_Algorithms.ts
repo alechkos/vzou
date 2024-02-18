@@ -1,15 +1,25 @@
+import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
+import { ActionType } from "../../Simulation/BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
 
 // A utility function to get height of the tree
-function height(N: BSTreeNode | undefined): number {
+export function height(N: BSTreeNode | undefined): number {
   if (N === undefined) return 0;
   return N.height;
 }
 
 // A utility function to get maximum of two integers
-function max(a: number, b: number) {
+export function max(a: number, b: number) {
   return a > b ? a : b;
+}
+
+// A utility function to check if value exist in Avl tree
+export function checkIfValueExist(value: number, node: BSTreeNode | undefined): boolean {
+  if (node === undefined) return false;
+  if (value < node.value) return checkIfValueExist(value, node.left);
+  else if (value > node.value) return checkIfValueExist(value, node.right);
+  else return true;
 }
 
 // A utility function to right rotate subtree rooted with y
@@ -32,6 +42,20 @@ function rightRotate(y: BSTreeNode) {
   return x;
 }
 
+export function rightRotateWithAnimation(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento) {
+  function rotate(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+    //y = x
+    memento.addSnapshot( { line: 1, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 2, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 3, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 4, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 5, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    return root!;
+  }
+  return rotate(root, node, memento);
+}
+
+
 // A utility function to left rotate subtree rooted with x
 // See the diagram given above.
 function leftRotate(x: BSTreeNode) {
@@ -51,10 +75,57 @@ function leftRotate(x: BSTreeNode) {
   return y;
 }
 
+export function leftRotateWithAnimation(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+  function rotate(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+    //y = x
+    memento.addSnapshot( { line: 1, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 2, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 3, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 4, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot( { line: 5, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    return root!;
+  }
+  return rotate(root, node, memento);
+}
+
 // Get Balance factor of node N
-function getBalance(N: BSTreeNode | undefined): number {
+export function getBalance(N: BSTreeNode | undefined): number {
   if (N === undefined) return 0;
   return height(N.left) - height(N.right);
+}
+
+export function getRotateSignal(node: BSTreeNode | undefined): any {
+  if (node === undefined) return true;
+
+  const balance = getBalance(node);
+
+  // Check for unbalanced subtrees first
+  const leftSignal = getRotateSignal(node.left);
+  if (leftSignal !== true) return leftSignal;
+
+  const rightSignal = getRotateSignal(node.right);
+  if (rightSignal !== true) return rightSignal;
+
+  // Detect imbalance and determine rotation type
+  if (balance > 1) {
+    if (getBalance(node.left) >= 0) {
+      // Left-Left Case
+      return { node, rotate: "Right" };
+    } else {
+      // Left-Right Case
+      return { node, rotate: "Left-Right" };
+    }
+  } else if (balance < -1) {
+    if (getBalance(node.right) <= 0) {
+      // Right-Right Case
+      return { node, rotate: "Left" };
+    } else {
+      // Right-Left Case
+      return { node, rotate: "Right-Left" };
+    }
+  }
+
+  return true; // The subtree rooted at 'node' is balanced
 }
 
 export function insert(
@@ -63,7 +134,7 @@ export function insert(
   root: BSTreeNode | undefined,
 ): BSTreeNode {
   /* 1. Perform the normal BST rotation */
-  if (node === undefined) return BSTreeNode.createNewNode(root, key, 1);
+  if (node === undefined) return BSTreeNode.createNewNode(root, key, 0);
 
   if (key < node.value) {
     node.left = insert(node.left, key, root);
@@ -83,7 +154,9 @@ export function insert(
   if (node.left && balance > 1 && key < node.left.value) return rightRotate(node);
 
   // Right Right Case
-  if (node.right && balance < -1 && key >= node.right.value) return leftRotate(node);
+  if (node.right && balance < -1 && key >= node.right.value) {
+    return leftRotate(node);
+  }
 
   // Left Right Case
   if (node.left && balance > 1 && key >= node.left.value) {
@@ -96,7 +169,6 @@ export function insert(
     node.right = rightRotate(node.right);
     return leftRotate(node);
   }
-
   /* return the (unchanged) node pointer */
   return node;
 }

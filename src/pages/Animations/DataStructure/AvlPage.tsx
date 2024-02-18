@@ -96,7 +96,6 @@ const AvlPage: FC = () => {
             controller={controller}
             isPlaying={isPlaying}
           />}
-
           <div className="flex justify-end mr-5">
             <div className=" w-fit">
               <PseudoCodeContainer

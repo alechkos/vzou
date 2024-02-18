@@ -98,6 +98,22 @@ export const BSTPseudoCode = {
     { text: "Postorder(𝑥.𝑟𝑖𝑔ℎ𝑡)", tabAmount: 2 }, // 3
     { text: "visit(x.value)", tabAmount: 2 }, // 4
   ],
+  RotateLeft: [
+    { text: "𝑳𝒆𝒇𝒕 − 𝑹𝒐𝒕𝒂𝒕𝒆(𝑻,𝒙)", tabAmount: 0 }, // 0
+    { text: "𝑦 ← 𝑥.𝑟𝑖𝑔ℎ𝒕", tabAmount: 1 }, // 1
+    { text: "𝑥.𝑟𝑖𝑔ℎ𝑡 ← 𝑦.𝑙𝑒𝑓𝒕", tabAmount: 1 }, // 2
+    { text: "if 𝑦.𝑙𝑒𝑓𝑡 ≠ 𝑁𝑈𝐿𝐿", tabAmount: 1 }, // 3
+    { text: "(𝑦.𝑙𝑒𝑓𝑡).𝑝𝑎𝑟𝑒𝑛𝑡 ← 𝒙", tabAmount: 2 }, // 4
+    { text: "𝑦.𝑝𝑎𝑟𝑒𝑛𝑡 ← 𝑥.𝑝𝑎𝑟𝑒𝑛𝑡", tabAmount: 1 }, //5
+    { text: "if 𝑥. 𝑝𝑎𝑟𝑒𝑛𝑡 = 𝑁𝑈𝐿𝐿", tabAmount: 1 }, //6
+    { text: "𝑇.𝑟𝑜𝑜𝑡 ← 𝑦", tabAmount: 2 }, // 7
+    { text: "else if 𝑥 = (𝑥.𝑝𝑎𝑟𝑒𝑛𝑡).𝑙𝑒𝑓𝑡", tabAmount: 1 }, //8
+    { text: "(𝑥.𝑝𝑎𝑟𝑒𝑛𝑡).𝑙𝑒𝑓𝑡 ← 𝑦", tabAmount: 2 }, //9,
+    { text: "else", tabAmount: 1 }, //10
+    { text: "(𝑥.𝑝𝑎𝑟𝑒𝑛𝑡).𝑟𝑖𝑔ℎ𝑡 ← 𝑦", tabAmount: 2 }, // 11
+    { text: "𝑦.𝑙𝑒𝑓𝑡 ← 𝒙", tabAmount: 1 }, //12
+    { text: "𝑥.𝑝𝑎𝑟𝑒𝑛𝑡 ← 𝑦", tabAmount: 1 }, //13
+  ] as PseudoItem[],
 };
 export const BSTPseudoCodeList = {
   Search: [ "Search" ] as BSTAlgNames[],
@@ -108,7 +124,9 @@ export const BSTPseudoCodeList = {
   Inorder: [ "Inorder" ] as BSTAlgNames[],
   Min: [ "Min" ] as BSTAlgNames[],
   Max: [ "Max" ] as BSTAlgNames[],
+  RotateLeft: [ "RotateLeft" ] as BSTAlgNames[],
   Successor: [ "Successor", "Min" ] as BSTAlgNames[],
   Predecessor: [ "Predecessor", "Max" ] as BSTAlgNames[],
+
 };
 export type BSTPseudoCodeKeys = keyof typeof BSTPseudoCodeList;

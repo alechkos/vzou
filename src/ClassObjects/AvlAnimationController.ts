@@ -1,9 +1,21 @@
+import { BSTreeMemento } from "ClassObjects/BSTreeMemento";
+
 import BSTreeAnimationController from "./BSTreeAnimationController";
 import { BSTreeNode } from "./BSTreeNode";
 
-import { build, deleteNode, insert } from "../components/Simulation/AVL/AVL_Algorithms";
+import {
+  build,
+  deleteNode,
+  getBalance, getRotateSignal,
+  insert,
+  leftRotateWithAnimation, rightRotateWithAnimation,
+} from "../components/Simulation/AVL/AVL_Algorithms";
 import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
+import { insertWithAnimations } from "../components/Simulation/BST/BST_Algorithms";
 import { AppDispatch } from "../store/store";
+
+
+
 
 
 export class AvlAnimationController extends BSTreeAnimationController {
@@ -30,7 +42,67 @@ export class AvlAnimationController extends BSTreeAnimationController {
     if (calculateHeight(tempRoot) > 6) {
       throw new Error("Tree is too big, max height is 6");
     }
-    this.setTreeFromInput([], tempRoot);
+    const newNode: BSTreeNode =  BSTreeNode.createNewNode(data, value, 0);
+    await this.playAlgorithm(
+      insertWithAnimations,
+      newNode,
+      this.memento as BSTreeMemento,
+      true,
+    );
+
+    const signal = getRotateSignal(data);
+    if  (signal !== true) {
+      const { node, rotate } = signal;
+      console.log(node, rotate);
+
+
+      // If this node(y -> accessor of new node) becomes unbalanced, then there are 4 cases
+      // 1.Left Left Case
+      if ( rotate === "Right" ) {
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 2.Right right case
+      if (rotate === "Left") {
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 3.Left Right case
+      if (rotate === "Left-Right") {
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node.left,
+          this.memento as BSTreeMemento,
+        );
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 4.Right Left case
+      if (rotate === "Right-Left") {
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node.right,
+          this.memento as BSTreeMemento,
+        );
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+    }
+
+
+    // this.setTreeFromInput([], tempRoot);
   }
 
   async deleteNode(key: number) {

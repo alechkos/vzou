@@ -180,6 +180,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
     controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap()));
     handleShowActions();
     setValue("2");
+    dispatch(setCurrentAlg("Min"));
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
@@ -233,26 +234,32 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
                     <Tab
                       label="Traversals"
                       value="3"
+                      onClick={() => { dispatch(setCurrentAlg("Inorder")); }}
                     />
                     <Tab
                       label="Successor"
                       value="Successor"
+                      onClick={() => { dispatch(setCurrentAlg("Successor")); }}
                     />
                     <Tab
                       label="Predecessor"
                       value="Predecessor"
+                      onClick={() => { dispatch(setCurrentAlg("Predecessor")); }}
                     />
                     <Tab
                       label="Search"
                       value="Search"
+                      onClick={() => { dispatch(setCurrentAlg("Search")); }}
                     />
                     <Tab
                       label="Insert"
                       value="Insert"
+                      onClick={() => { dispatch(setCurrentAlg("Insert")); }}
                     />
                     <Tab
                       label="Delete"
                       value="DeleteNode"
+                      onClick={() => { dispatch(setCurrentAlg("Delete")); }}
                     />
                   </TabList>}
                 </Box>
