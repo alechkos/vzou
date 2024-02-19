@@ -76,13 +76,32 @@ function leftRotate(x: BSTreeNode) {
 }
 
 export function leftRotateWithAnimation(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+  const passedIds: number[] = [];
   function rotate(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+    let y = undefined as BSTreeNode | undefined;
+    y = node;
     //y = x
-    memento.addSnapshot( { line: 1, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 2, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 3, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 4, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 5, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
+    memento.addSnapshot({ line: 1, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+
+    //x.right <- y.left
+    node.right = y.left;
+    memento.addSnapshot({ line: 2, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+
+    // if y.left !== null
+    memento.addBlank({ line: 3, name: "RotateLeft" }, root, undefined, [], [], passedIds);
+    if (y.left) {
+      //(y.left).parent = node
+      y.left.parent = node;
+      memento.addSnapshot({ line: 4, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+    }
+    //y.parent = x.parent
+    y.parent = node.parent;
+    memento.addSnapshot({ line: 5, "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+
+
+
+
+
     return root!;
   }
   return rotate(root, node, memento);

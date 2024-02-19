@@ -114,6 +114,22 @@ export const BSTPseudoCode = {
     { text: "𝑦.𝑙𝑒𝑓𝑡 ← 𝒙", tabAmount: 1 }, //12
     { text: "𝑥.𝑝𝑎𝑟𝑒𝑛𝑡 ← 𝑦", tabAmount: 1 }, //13
   ] as PseudoItem[],
+  RotateRight: [
+    { text: "𝘙𝘪𝘨𝘩𝘵-𝘙𝘰𝘵𝘢𝘵𝘦(𝘛, 𝘺)", tabAmount: 0 }, // 0
+    { text: "𝘹 ← 𝘺.𝘭𝘦𝘧𝘵", tabAmount: 1 }, // 1
+    { text: "𝘺.𝘭𝘦𝘧𝘵 ← 𝘹.𝘳𝘪𝘨𝘩𝘵", tabAmount: 1 }, // 2
+    { text: "𝘪𝘧 𝘹.𝘳𝘪𝘨𝘩𝘵 ≠ 𝘕𝘜𝘓𝘓", tabAmount: 1 }, // 3
+    { text: "(𝘹.𝘳𝘪𝘨𝘩𝘵).𝘱𝘢𝘳𝘦𝘯𝘵 ← 𝘺", tabAmount: 2 }, // 4
+    { text: "𝘹.𝘱𝘢𝘳𝘦𝘯𝘵 ← 𝘺.𝘱𝘢𝘳𝘦𝘯𝘵", tabAmount: 1 }, //5
+    { text: "𝘪𝘧 𝘺.𝘱𝘢𝘳𝘦𝘯𝘵 = 𝘕𝘜𝘓𝘓", tabAmount: 1 }, //6
+    { text: "𝘛.𝘳𝘰𝘰𝘵 ← 𝘹", tabAmount: 2 }, // 7
+    { text: "𝘦𝘭𝘴𝘦 𝘪𝘧 𝘺 = (𝘺.𝘱𝘢𝘳𝘦𝘯𝘵).𝘳𝘪𝘨𝘩𝘵", tabAmount: 1 }, //8
+    { text: "(𝘺.𝘱𝘢𝘳𝘦𝘯𝘵).𝘳𝘪𝘨𝘩𝘵 ← 𝘹", tabAmount: 2 }, //9,
+    { text: "𝘦𝘭𝘴𝘦", tabAmount: 1 }, //10
+    { text: "(𝘺.𝘱𝘢𝘳𝘦𝘯𝘵).𝘭𝘦𝘧𝘵 ← 𝘹", tabAmount: 2 }, // 11
+    { text: "𝘹.𝘳𝘪𝘨𝘩𝘵 ← 𝘺", tabAmount: 1 }, //12
+    { text: " 𝘺.𝘱𝘢𝘳𝘦𝘯𝘵 ← 𝘹", tabAmount: 1 }, //13
+  ] as PseudoItem[],
 };
 export const BSTPseudoCodeList = {
   Search: [ "Search" ] as BSTAlgNames[],
@@ -125,6 +141,7 @@ export const BSTPseudoCodeList = {
   Min: [ "Min" ] as BSTAlgNames[],
   Max: [ "Max" ] as BSTAlgNames[],
   RotateLeft: [ "RotateLeft" ] as BSTAlgNames[],
+  RotateRight: [ "RotateRight" ] as BSTAlgNames[],
   Successor: [ "Successor", "Min" ] as BSTAlgNames[],
   Predecessor: [ "Predecessor", "Max" ] as BSTAlgNames[],
 

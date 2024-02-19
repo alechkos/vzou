@@ -53,7 +53,6 @@ export class AvlAnimationController extends BSTreeAnimationController {
     const signal = getRotateSignal(data);
     if  (signal !== true) {
       const { node, rotate } = signal;
-      console.log(node, rotate);
 
 
       // If this node(y -> accessor of new node) becomes unbalanced, then there are 4 cases

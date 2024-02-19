@@ -62,6 +62,7 @@ abstract class AnimationController<T, Y> {
    *  If at any point the stopFlag is set to true, the animation is stopped, and the data array is set to the last relevant data.
    *  If the pauseFlag is set to true, the animation simply pauses.
    */
+
   async playAnimation(...args: any[]) {
     this.setPlaying(true);
     this.pauseFlag = false;
