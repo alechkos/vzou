@@ -1,15 +1,15 @@
 import { BSTreeMemento } from "ClassObjects/BSTreeMemento";
 
+
 import BSTreeAnimationController from "./BSTreeAnimationController";
 import { BSTreeNode } from "./BSTreeNode";
 
 import {
   build,
-  deleteNode,
-  getBalance, getRotateSignal,
+  deleteNode, getRotateSignal,
   insert,
-  leftRotateWithAnimation, rightRotateWithAnimation,
 } from "../components/Simulation/AVL/AVL_Algorithms";
+import { leftRotateWithAnimation, rightRotateWithAnimation } from "../components/Simulation/AVL/RotationAnimation";
 import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
 import { insertWithAnimations } from "../components/Simulation/BST/BST_Algorithms";
 import { AppDispatch } from "../store/store";

@@ -4,9 +4,6 @@ import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
 import {
   checkIfValueExist,
-  getBalance,
-  leftRotateWithAnimation,
-  rightRotateWithAnimation,
 } from "../../Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
