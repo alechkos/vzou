@@ -22,6 +22,14 @@ export function checkIfValueExist(value: number, node: BSTreeNode | undefined): 
   else return true;
 }
 
+//Utility function to get a node in the tree by value
+function getNodeInTree(root: BSTreeNode | undefined, value: number): BSTreeNode | undefined {
+  if (root === undefined) return root;
+  if (value < root.value) return getNodeInTree(root.left, value);
+  else if (value > root.value) return getNodeInTree(root.right, value);
+  else return root;
+}
+
 // A utility function to right rotate subtree rooted with y
 // See the diagram given above.
 function rightRotate(y: BSTreeNode) {
@@ -42,19 +50,21 @@ function rightRotate(y: BSTreeNode) {
   return x;
 }
 
-export function rightRotateWithAnimation(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento) {
-  function rotate(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
+export function rightRotateWithAnimation(
+  root: BSTreeNode | undefined,
+  node: BSTreeNode,
+  memento: BSTreeMemento,
+) {
+  function rotate(
+    root: BSTreeNode | undefined,
+    node: BSTreeNode,
+    memento: BSTreeMemento,
+  ): BSTreeNode {
     //y = x
-    memento.addSnapshot( { line: 1, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 2, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 3, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 4, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
-    memento.addSnapshot( { line: 5, name: "RotateLeft" }, root, root!.id, ActionType.HIGHLIGHT_LIGHT, [], [], []);
     return root!;
   }
   return rotate(root, node, memento);
 }
-
 
 // A utility function to left rotate subtree rooted with x
 // See the diagram given above.
@@ -75,36 +85,195 @@ function leftRotate(x: BSTreeNode) {
   return y;
 }
 
-export function leftRotateWithAnimation(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
-  const passedIds: number[] = [];
-  function rotate(root: BSTreeNode | undefined, node: BSTreeNode, memento: BSTreeMemento): BSTreeNode {
-    let y = undefined as BSTreeNode | undefined;
-    y = node;
-    //y = x
-    memento.addSnapshot({ line: 1, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+export function leftRotateWithAnimation(
+  root: BSTreeNode | undefined,
+  node: BSTreeNode,
+  memento: BSTreeMemento,
+): BSTreeNode {
+  const nodeInTheTree = getNodeInTree(root, node.value);
 
-    //x.right <- y.left
-    node.right = y.left;
-    memento.addSnapshot({ line: 2, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+  function rotate(
+    root: BSTreeNode | undefined,
+    node: BSTreeNode,
+    memento: BSTreeMemento,
+  ): BSTreeNode {
+    let y = undefined as BSTreeNode | undefined;
+    let temp = undefined as BSTreeNode | undefined;
+    y = node.right;
+    if (!y) {
+      throw new Error(`y is null ${y}`);
+    }
+
+    temp = root;
+
+    //y = x.right
+    memento.addSnapshot(
+      {
+        line: 1,
+        name: "RotateLeft",
+      },
+      temp,
+      node.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [
+        {
+          id: node.id,
+          role: "X",
+        },
+      ],
+    );
+
+    memento.addSnapshot(
+      {
+        line: 1,
+        name: "RotateLeft",
+      },
+      temp,
+      node.right!.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: node.right!.id, role: "R" }],
+    );
+
+    memento.addSnapshot(
+      {
+        line: 1,
+        name: "RotateLeft",
+      },
+      temp,
+      node.right!.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: node.right!.id, role: "Y" }],
+    );
+
+    if (y.left) {
+      //x.right <- y.left
+      memento.addSnapshot(
+        {
+          line: 2,
+          name: "RotateLeft",
+        },
+        temp,
+        node.right!.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: node.right!.id, role: "Y" }],
+      );
+      node.right = y.left;
+
+      memento.addSnapshot(
+        {
+          line: 2,
+          name: "RotateLeft",
+        },
+        temp,
+        y.left.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: y.left.id, role: "^" }],
+      );
+    } else {
+      memento.addBlank({ line: 2, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
+      node.right = undefined;
+    }
 
     // if y.left !== null
-    memento.addBlank({ line: 3, name: "RotateLeft" }, root, undefined, [], [], passedIds);
+    memento.addBlank({ line: 3, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
     if (y.left) {
-      //(y.left).parent = node
+      //(y.left).parent = x
       y.left.parent = node;
-      memento.addSnapshot({ line: 4, name: "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+      memento.addSnapshot(
+        { line: 4, name: "RotateLeft" },
+        temp,
+        y.left.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [
+          { id: y.left.id, role: "^" },
+          { id: node.id, role: "X" },
+        ],
+      );
     }
-    //y.parent = x.parent
-    y.parent = node.parent;
-    memento.addSnapshot({ line: 5, "RotateLeft" }, root, node.id, ActionType.HIGHLIGHT_LIGHT, [], [], passedIds);
+    if (temp !== undefined) {
+      //y.parent = x.parent
+      y.parent = node.parent;
+      memento.addSnapshot(
+        { line: 5, name: "RotateLeft" },
+        temp,
+        temp.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [
+          {
+            id: y.id,
+            role: "^",
+          },
+          { id: node.parent!.id, role: "P" },
+        ],
+      );
+    }
 
+    if (node.parent !== undefined) {
+      //if x.parent = null
+      memento.addBlank({ line: 6, name: "RotateLeft" }, temp, undefined, [
+        { id: node.id, role: "X" },
+        { id: node.parent.id, role: "P" },
+      ]);
+    }
 
+    if (node.parent === undefined) {
+      //root <- y
+      root = y;
+      memento.addBlank({ line: 7, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
+    } else if (node === node.parent?.left) {
+      //else if x = (x.parent).left
+      memento.addBlank({ line: 8, name: "RotateLeft" }, temp, undefined, [
+        { id: node.id, role: "X" },
+      ]);
+      //(x.parent).left <- y
+      node.parent!.left = y;
+      memento.addSnapshot({ line: 9, name: "RotateLeft" }, temp, y.id, ActionType.HIGHLIGHT_LIGHT, [
+        { id: y.id, role: "Y" },
+      ]);
+    } else {
+      //else
+      memento.addBlank({ line: 10, name: "RotateLeft" }, temp, undefined, [
+        { id: node.id, role: "X" },
+      ]);
+      //(x.parent).right <- y
+      node.parent!.right = y;
+      memento.addSnapshot(
+        { line: 11, name: "RotateLeft" },
+        temp,
+        y.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: y.id, role: "Y" }],
+      );
+    }
+    //y.left <- x
+    memento.addSnapshot({ line: 12, name: "RotateLeft" }, temp, y.id, ActionType.HIGHLIGHT_LIGHT, [
+      { id: y.id, role: "Y" },
+    ]);
+    y.left = node;
+    //x.parent = y
+    memento.addSnapshot(
+      { line: 13, name: "RotateLeft" },
+      temp,
+      node.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [
+        { id: node.id, role: "X" },
+        { id: y.id, role: "Y" },
+      ],
+    );
+    node.parent = y;
 
+    //Update heights
+    node.height = max(height(node.left), height(node.right)) + 1;
+    y.height = max(height(y.left), height(y.right)) + 1;
+    y.parent!.height = max(height(y.parent?.left), height(y.parent?.right)) + 1;
+    temp!.height = max(height(root!.left), height(root!.right)) + 1;
 
-
-    return root!;
+    memento.addBlank({ line: 13, name: "RotateLeft" }, temp);
+    return temp!;
   }
-  return rotate(root, node, memento);
+
+  return rotate(root, nodeInTheTree!, memento);
 }
 
 // Get Balance factor of node N

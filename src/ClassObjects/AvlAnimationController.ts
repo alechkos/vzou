@@ -99,9 +99,6 @@ export class AvlAnimationController extends BSTreeAnimationController {
         );
       }
     }
-
-
-    // this.setTreeFromInput([], tempRoot);
   }
 
   async deleteNode(key: number) {

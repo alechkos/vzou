@@ -157,17 +157,34 @@ export function insertWithAnimations(
       if (new_node.value < x.value) {
         // pseudo for if
         memento.addBlank({ line: 5, name: "Insert" }, root, undefined, [], [], passedIds);
-        x.height += 1;
         x = x.left;
         // pseudo for left
         memento.addBlank({ line: 6, name: "Insert" }, root, undefined, [], [], passedIds);
       } else {
-        x.height += 1;
         x = x.right;
         memento.addBlank({ line: 7, name: "Insert" }, root, undefined, [], [], passedIds);
       }
     }
     new_node.parent = y;
+
+    //Update the heights for AVL Tree
+    if (isAvl && y && !y.left && !y.right) {
+      x = root;
+      while (x) {
+        if (new_node.value < x.value) {
+          if (x.left?.height === x.height - 1) {
+            x.height++;
+          }
+          x = x.left;
+        } else {
+          if (x.right?.height === x.height - 1) {
+            x.height++;
+          }
+          x = x.right;
+        }
+      }
+      y.height++;
+    }
 
     if (y) {
       // pseudo for new_node.parent = y
