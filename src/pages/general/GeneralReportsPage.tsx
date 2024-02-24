@@ -1,10 +1,8 @@
 import { useState } from "react";
 
 import headlinePhoto from "../../assets/GeneralReport.png";
-import BarChart from "../../components/Charts/BarChart";
 import DoughnutChart from "../../components/Charts/Doughnut";
 import ExportExcel from "../../components/Charts/ExportExcel";
-import LineChart from "../../components/Charts/Line";
 import DropDown from "../../components/UI/DropDown";
 import FloatUpContainer from "../../components/UI/FloatUpContainer";
 import MediumCard from "../../components/UI/MediumCard";
@@ -89,13 +87,13 @@ function GeneralReportsPage() {
               />
             )}
             {graphChoosen === Choices.USERS_AUTH && (
-              <BarChart
+              <DoughnutChart
                 items={data.accountsData}
                 title="Information"
               />
             )}
             {graphChoosen === Choices.USERS_AGE && (
-              <LineChart
+              <DoughnutChart
                 items={data.usersData.usersGroupedByAge}
                 title="Information about the age"
               />
