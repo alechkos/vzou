@@ -164,17 +164,17 @@ export function insertWithAnimations(
     }
     new_node.parent = y;
 
-    //Update the heights for AVL Tree
+    // Update the heights for AVL Tree
     if (isAvl && y && !y.left && !y.right) {
       x = root;
       while (x) {
         if (new_node.value < x.value) {
-          if (x.left?.height === x.height - 1) {
+          if (x.left && x.left.height === x.height - 1) {
             x.height++;
           }
           x = x.left;
         } else {
-          if (x.right?.height === x.height - 1) {
+          if (x.right && x.right.height === x.height - 1) {
             x.height++;
           }
           x = x.right;

@@ -5,9 +5,8 @@ import BSTreeAnimationController from "./BSTreeAnimationController";
 import { BSTreeNode } from "./BSTreeNode";
 
 import {
-  build,
   deleteNode, getRotateSignal,
-  insert,
+  insert, buildTree,
 } from "../components/Simulation/AVL/AVL_Algorithms";
 import { leftRotateWithAnimation, rightRotateWithAnimation } from "../components/Simulation/AVL/RotationAnimation";
 import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
@@ -42,64 +41,64 @@ export class AvlAnimationController extends BSTreeAnimationController {
     if (calculateHeight(tempRoot) > 6) {
       throw new Error("Tree is too big, max height is 6");
     }
-    // const newNode: BSTreeNode =  BSTreeNode.createNewNode(data, value, 0);
-    // await this.playAlgorithm(
-    //   insertWithAnimations,
-    //   newNode,
-    //   this.memento as BSTreeMemento,
-    //   true,
-    // );
-    //
-    // const signal = getRotateSignal(data);
-    // if  (signal !== true) {
-    //   const { node, rotate } = signal;
-    //
-    //
-    //   // If this node(y -> accessor of new node) becomes unbalanced, then there are 4 cases
-    //   // 1.Left Left Case
-    //   if ( rotate === "Right" ) {
-    //     await this.playAlgorithm(
-    //       rightRotateWithAnimation,
-    //       node,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //   }
-    //   // 2.Right right case
-    //   if (rotate === "Left") {
-    //     await this.playAlgorithm(
-    //       leftRotateWithAnimation,
-    //       node,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //   }
-    //   // 3.Left Right case
-    //   if (rotate === "Left-Right") {
-    //     await this.playAlgorithm(
-    //       leftRotateWithAnimation,
-    //       node.left,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //     await this.playAlgorithm(
-    //       rightRotateWithAnimation,
-    //       node,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //   }
-    //   // 4.Right Left case
-    //   if (rotate === "Right-Left") {
-    //     await this.playAlgorithm(
-    //       rightRotateWithAnimation,
-    //       node.right,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //     await this.playAlgorithm(
-    //       leftRotateWithAnimation,
-    //       node,
-    //       this.memento as BSTreeMemento,
-    //     );
-    //   }
-    // }
-    this.setTreeFromInput([], tempRoot);
+
+    const newNode: BSTreeNode =  BSTreeNode.createNewNode(data, value, 1);
+    await this.playAlgorithm(
+      insertWithAnimations,
+      newNode,
+      this.memento as BSTreeMemento,
+      true,
+    );
+
+    const signal = getRotateSignal(data);
+    if  (signal !== true) {
+      const { node, rotate } = signal;
+
+
+      // If this node(y -> accessor of new node) becomes unbalanced, then there are 4 cases
+      // 1.Left Left Case
+      if ( rotate === "Right" ) {
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 2.Right right case
+      if (rotate === "Left") {
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 3.Left Right case
+      if (rotate === "Left-Right") {
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node.left,
+          this.memento as BSTreeMemento,
+        );
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+      // 4.Right Left case
+      if (rotate === "Right-Left") {
+        await this.playAlgorithm(
+          rightRotateWithAnimation,
+          node.right,
+          this.memento as BSTreeMemento,
+        );
+        await this.playAlgorithm(
+          leftRotateWithAnimation,
+          node,
+          this.memento as BSTreeMemento,
+        );
+      }
+    }
   }
 
   async deleteNode(key: number) {
@@ -112,7 +111,7 @@ export class AvlAnimationController extends BSTreeAnimationController {
     if (newRoot) {
       root = newRoot;
     } else {
-      root = build(arr);
+      root = buildTree(arr);
     }
     this.data = root;
     this.memento.clearSnapshots();

@@ -15,7 +15,7 @@ import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
-import { randomBuildTree } from "../AVL/AVL_Algorithms";
+import { buildTree } from "../AVL/AVL_Algorithms";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 
 
@@ -177,7 +177,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
     }
   };
   const randomizeInput = () => {
-    controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap()));
+    controller.setTreeFromInput([], buildTree(generateRandomArrForHeap()));
     handleShowActions();
     setValue("2");
     dispatch(setCurrentAlg("Min"));

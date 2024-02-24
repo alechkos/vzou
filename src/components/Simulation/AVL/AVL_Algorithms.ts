@@ -111,7 +111,7 @@ export function insert(
   root: BSTreeNode | undefined,
 ): BSTreeNode {
   /* 1. Perform the normal BST rotation */
-  if (node === undefined) return BSTreeNode.createNewNode(root, key, -1);
+  if (node === undefined) return BSTreeNode.createNewNode(root, key, 1);
 
   if (key < node.value) {
     node.left = insert(node.left, key, root);
@@ -232,19 +232,8 @@ export function deleteNode(root: BSTreeNode | undefined, key: number): BSTreeNod
 
   return root;
 }
-export function build(input: number[]): BSTreeNode | undefined {
-  let root: BSTreeNode | undefined;
-  for (let i = 0; i < input.length; i++) {
-    root = insert(root, input[i], root);
-  }
-  const height = calculateHeight(root);
-  if (height > 6) {
-    throw new Error("Tree is too big, max height is 6");
-  }
-  return root;
-}
 
-export function randomBuildTree(input: number[]): BSTreeNode | undefined {
+export function buildTree(input: number[]): BSTreeNode | undefined {
   let root: BSTreeNode | undefined;
   let temp: BSTreeNode | undefined;
   for (let i = 0; i < input.length; i++) {
@@ -255,6 +244,5 @@ export function randomBuildTree(input: number[]): BSTreeNode | undefined {
       root = BSTreeNode.deepCopy(temp);
     }
   }
-  console.log(root);
   return root;
 }

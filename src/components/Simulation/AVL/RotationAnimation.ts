@@ -62,7 +62,7 @@ export function leftRotateWithAnimation(
       temp,
       node.right!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.right!.id, role: "R" }],
+      [{ id: node.id, role: "X" }, { id: node.right!.id, role: "R" }],
     );
 
     memento.addSnapshot(
@@ -73,7 +73,7 @@ export function leftRotateWithAnimation(
       temp,
       node.right!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.right!.id, role: "Y" }],
+      [{ id: node.id, role: "X" }, { id: node.right!.id, role: "Y" }],
     );
 
     if (y.left) {
@@ -86,7 +86,7 @@ export function leftRotateWithAnimation(
         temp,
         node.right!.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.right!.id, role: "Y" }],
+        [{ id: node.id, role: "X" }, { id: node.right!.id, role: "Y" }],
       );
       node.right = y.left;
 
@@ -98,10 +98,10 @@ export function leftRotateWithAnimation(
         temp,
         y.left.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: y.left.id, role: "^" }],
+        [{ id: node.id, role: "X" }, { id: y.left.id, role: "^" }],
       );
     } else {
-      memento.addBlank({ line: 2, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
+      memento.addBlank({ line: 2, name: "RotateLeft" }, temp, undefined, [{ id: node.id, role: "X" }, { id: y.id, role: "Y" }]);
       node.right = undefined;
     }
 
@@ -127,14 +127,14 @@ export function leftRotateWithAnimation(
       memento.addSnapshot(
         { line: 5, name: "RotateLeft" },
         temp,
-        temp.id,
+        node.parent ? node.parent.id : node.id,
         ActionType.HIGHLIGHT_LIGHT,
         [
           {
             id: y.id,
             role: "^",
           },
-          { id: node.parent!.id, role: "P" },
+          { id: node.parent ? node.parent.id : node.id, role: "P" },
         ],
       );
     }
@@ -148,8 +148,9 @@ export function leftRotateWithAnimation(
     }
 
     if (node.parent === undefined) {
+      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: temp!.id, role: "P" }]);
       //root <- y
-      root = y;
+      temp = y;
       memento.addBlank({ line: 7, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
     } else if (node === node.parent?.left) {
       //else if x = (x.parent).left
@@ -197,7 +198,9 @@ export function leftRotateWithAnimation(
     //Update heights
     node.height = max(height(node.left), height(node.right)) + 1;
     y.height = max(height(y.left), height(y.right)) + 1;
-    y.parent!.height = max(height(y.parent?.left), height(y.parent?.right)) + 1;
+    if (y.parent) {
+      y.parent.height = max(height(y.parent?.left), height(y.parent?.right)) + 1;
+    }
     temp!.height = max(height(root!.left), height(root!.right)) + 1;
 
     memento.addBlank({ line: 13, name: "RotateLeft" }, temp);
@@ -254,8 +257,8 @@ export function rightRotateWithAnimation(
       },
       temp,
       node.left!.id,
-      ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.left!.id, role: "L" }],
+      ActionType.HIGHLIGHT_FULL,
+      [{ id: node.id, role: "X" }, { id: node.left!.id, role: "L" }],
     );
 
     memento.addSnapshot(
@@ -266,7 +269,7 @@ export function rightRotateWithAnimation(
       temp,
       node.left!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.left!.id, role: "Y" }],
+      [{ id: node.id, role: "X" }, { id: node.left!.id, role: "Y" }],
     );
 
     if (y.right) {
@@ -279,7 +282,7 @@ export function rightRotateWithAnimation(
         temp,
         node.left!.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.left!.id, role: "Y" }],
+        [{ id: node.id, role: "X" }, { id: node.left!.id, role: "Y" }],
       );
       node.left = y.right;
 
@@ -291,10 +294,10 @@ export function rightRotateWithAnimation(
         temp,
         y.right.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: y.right.id, role: "^" }],
+        [{ id: node.id, role: "X" }, { id: y.right.id, role: "^" }],
       );
     } else {
-      memento.addBlank({ line: 2, name: "RotateRight" }, temp, undefined, [{ id: y.id, role: "Y" }]);
+      memento.addBlank({ line: 2, name: "RotateRight" }, temp, undefined, [{ id: node.id, role: "X" }, { id: y.id, role: "Y" }]);
       node.left = undefined;
     }
 
@@ -320,14 +323,14 @@ export function rightRotateWithAnimation(
       memento.addSnapshot(
         { line: 5, name: "RotateRight" },
         temp,
-        temp.id,
+        node.parent ? node.parent.id : node.id,
         ActionType.HIGHLIGHT_LIGHT,
         [
           {
             id: y.id,
             role: "^",
           },
-          { id: node.parent!.id, role: "P" },
+          { id: node.parent ? node.parent!.id : node.id, role: "P" },
         ],
       );
     }
@@ -341,8 +344,9 @@ export function rightRotateWithAnimation(
     }
 
     if (node.parent === undefined) {
+      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: temp!.id, role: "P" }]);
       //root <- y
-      root = y;
+      temp = y;
       memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: y.id, role: "Y" }]);
     } else if (node === node.parent?.right) {
       //else if x = (x.parent).right
@@ -390,7 +394,10 @@ export function rightRotateWithAnimation(
     //Update heights
     node.height = max(height(node.left), height(node.right)) + 1;
     y.height = max(height(y.left), height(y.right)) + 1;
-    y.parent!.height = max(height(y.parent?.left), height(y.parent?.right)) + 1;
+    if (y.parent) {
+      y.parent.height = max(height(y.parent?.left), height(y.parent?.right)) + 1;
+    }
+
     temp!.height = max(height(root!.left), height(root!.right)) + 1;
 
     memento.addBlank({ line: 13, name: "RotateRight" }, temp);
