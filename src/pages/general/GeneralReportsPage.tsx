@@ -16,7 +16,7 @@ import { makeTable } from "../../utils/helper-functions";
 
 enum Choices {
   USERS_GENDER = "Gender",
-  USERS_AUTH = "Login & Registeration",
+  USERS_AUTH = "Login & Registration",
   USERS_AGE = "Age",
 }
 
