@@ -10,7 +10,7 @@ import {
 } from "../components/Simulation/AVL/AVL_Algorithms";
 import { leftRotateWithAnimation, rightRotateWithAnimation } from "../components/Simulation/AVL/RotationAnimation";
 import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
-import { insertWithAnimations } from "../components/Simulation/BST/BST_Algorithms";
+import { deleteNodeWrapper, insertWithAnimations } from "../components/Simulation/BST/BST_Algorithms";
 import { AppDispatch } from "../store/store";
 
 
@@ -50,6 +50,42 @@ export class AvlAnimationController extends BSTreeAnimationController {
       true,
     );
 
+    await this.makeRotation(data);
+
+  }
+
+  async deleteNode(key: number) {
+    let data;
+    if (this.memento.getLength()) {
+      data = this.memento.getLastData();
+    } else {
+      data = this.data;
+    }
+    await this.playAlgorithm(deleteNodeWrapper, key, this.memento as BSTreeMemento);
+
+    await this.makeRotation(data);
+    // const node = deleteNode(BSTreeNode.deepCopy(this.data), key);
+    // this.setTreeFromInput([], node);
+  }
+
+  setTreeFromInput(arr: number[], newRoot?: BSTreeNode) {
+    let root: BSTreeNode | undefined;
+    if (newRoot) {
+      root = newRoot;
+    } else {
+      root = buildTree(arr);
+    }
+    this.data = root;
+    this.memento.clearSnapshots();
+    this.setRoot(root);
+    this.setCurrentActions([]);
+    this.setCurrentRoles([]);
+    this.setVisitedNodes([]);
+    this.setPassedNodes([]);
+    this.setTraversalResult([]);
+  }
+
+  async makeRotation(data: BSTreeNode | undefined) {
     const signal = getRotateSignal(data);
     if  (signal !== true) {
       const { node, rotate } = signal;
@@ -99,27 +135,5 @@ export class AvlAnimationController extends BSTreeAnimationController {
         );
       }
     }
-  }
-
-  async deleteNode(key: number) {
-    const node = deleteNode(BSTreeNode.deepCopy(this.data), key);
-    this.setTreeFromInput([], node);
-  }
-
-  setTreeFromInput(arr: number[], newRoot?: BSTreeNode) {
-    let root: BSTreeNode | undefined;
-    if (newRoot) {
-      root = newRoot;
-    } else {
-      root = buildTree(arr);
-    }
-    this.data = root;
-    this.memento.clearSnapshots();
-    this.setRoot(root);
-    this.setCurrentActions([]);
-    this.setCurrentRoles([]);
-    this.setVisitedNodes([]);
-    this.setPassedNodes([]);
-    this.setTraversalResult([]);
   }
 }
