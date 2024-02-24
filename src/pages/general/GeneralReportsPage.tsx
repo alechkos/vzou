@@ -83,19 +83,19 @@ function GeneralReportsPage() {
             {graphChoosen === Choices.USERS_GENDER && (
               <DoughnutChart
                 items={data.usersData.usersGroupedByGender}
-                title="Users Gender"
+                title="Registered users by gender"
               />
             )}
             {graphChoosen === Choices.USERS_AUTH && (
               <DoughnutChart
                 items={data.accountsData}
-                title="Information"
+                title="Registered and logged in users"
               />
             )}
             {graphChoosen === Choices.USERS_AGE && (
               <DoughnutChart
                 items={data.usersData.usersGroupedByAge}
-                title="Information about the age"
+                title="Registered users' age"
               />
             )}
             <ExportExcel
