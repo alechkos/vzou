@@ -76,13 +76,22 @@ function AlgorithmsReportPage() {
                     labels: GetLabels(data.dataByAlgAndSubject[selectedSubject]),
                     datasets: [
                       {
-                        label: `${selectedSubject} details`,
+                        label: "Data",
                         data: GetData(data.dataByAlgAndSubject[selectedSubject]),
                         ...datasetConfig,
                       },
                     ],
                   }}
-                  options={{ 
+                  options={{
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: `${selectedSubject} details`,
+                        font: {
+                          size: 16,
+                        },
+                      },
+                    },
                     scales: {
                       y: {
                         ticks: {
