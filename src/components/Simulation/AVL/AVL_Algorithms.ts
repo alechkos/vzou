@@ -111,7 +111,7 @@ export function insert(
   root: BSTreeNode | undefined,
 ): BSTreeNode {
   /* 1. Perform the normal BST rotation */
-  if (node === undefined) return BSTreeNode.createNewNode(root, key, 0);
+  if (node === undefined) return BSTreeNode.createNewNode(root, key, -1);
 
   if (key < node.value) {
     node.left = insert(node.left, key, root);
@@ -255,5 +255,6 @@ export function randomBuildTree(input: number[]): BSTreeNode | undefined {
       root = BSTreeNode.deepCopy(temp);
     }
   }
+  console.log(root);
   return root;
 }
