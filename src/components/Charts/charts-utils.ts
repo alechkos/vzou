@@ -21,6 +21,7 @@ export const datasetConfig = {
     "rgb(201, 203, 207)",
   ],
   borderWidth: 2,
+  maxBarThickness: 50,
 };
 
 export const DUMMY: ChartItem[] = [
