@@ -71,8 +71,6 @@ function AlgorithmsReportPage() {
               Object.prototype.hasOwnProperty.call(data.dataByAlgAndSubject, selectedSubject) && (
               <>
                 <br />
-                <br />
-                <br />
                 <Bar
                   data={{
                     labels: GetLabels(data.dataByAlgAndSubject[selectedSubject]),
@@ -83,6 +81,15 @@ function AlgorithmsReportPage() {
                         ...datasetConfig,
                       },
                     ],
+                  }}
+                  options={{ 
+                    scales: {
+                      y: {
+                        ticks: {
+                          stepSize: 1,
+                        },
+                      },
+                    },
                   }}
                 />
                 <ExportExcel
