@@ -23,6 +23,9 @@ const bar = {
       title: {
         display: true,
         text: "Bar Chart",
+        font: {
+          size: 16,
+        },
       },
     },
   },
