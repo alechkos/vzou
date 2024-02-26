@@ -27,7 +27,7 @@ const data = {
   ],
 };
 
-function LineChrat(props: ChartProps) {
+function LineChart(props: ChartProps) {
   data.datasets[0].label = props.title;
   data.labels = GetLabels(props.items);
   data.datasets[0].data = GetData(props.items);
@@ -39,4 +39,4 @@ function LineChrat(props: ChartProps) {
   );
 }
 
-export default LineChrat;
+export default LineChart;

@@ -1,10 +1,8 @@
 import { useState } from "react";
 
 import headlinePhoto from "../../assets/GeneralReport.png";
-import BarChart from "../../components/Charts/BarChart";
 import DoughnutChart from "../../components/Charts/Doughnut";
 import ExportExcel from "../../components/Charts/ExportExcel";
-import LineChrat from "../../components/Charts/Line";
 import DropDown from "../../components/UI/DropDown";
 import FloatUpContainer from "../../components/UI/FloatUpContainer";
 import MediumCard from "../../components/UI/MediumCard";
@@ -16,7 +14,7 @@ import { makeTable } from "../../utils/helper-functions";
 
 enum Choices {
   USERS_GENDER = "Gender",
-  USERS_AUTH = "Login & Registeration",
+  USERS_AUTH = "Login & Registration",
   USERS_AGE = "Age",
 }
 
@@ -85,19 +83,19 @@ function GeneralReportsPage() {
             {graphChoosen === Choices.USERS_GENDER && (
               <DoughnutChart
                 items={data.usersData.usersGroupedByGender}
-                title="Users Gender"
+                title="Registered users by gender"
               />
             )}
             {graphChoosen === Choices.USERS_AUTH && (
-              <BarChart
+              <DoughnutChart
                 items={data.accountsData}
-                title="Information"
+                title="Registered and logged in users"
               />
             )}
             {graphChoosen === Choices.USERS_AGE && (
-              <LineChrat
+              <DoughnutChart
                 items={data.usersData.usersGroupedByAge}
-                title="Information about the age"
+                title="Registered users' age"
               />
             )}
             <ExportExcel

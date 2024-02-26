@@ -33,6 +33,9 @@ function DoughnutChart(props: ChartProps) {
             title: {
               display: true,
               text: props.title,
+              font: {
+                size: 16,
+              },
             },
           },
         }}

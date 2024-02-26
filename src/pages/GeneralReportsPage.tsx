@@ -3,7 +3,7 @@ import { useState } from "react";
 import BarChart from "../components/Charts/BarChart";
 import DoughnutChart from "../components/Charts/Doughnut";
 import ExportExcel from "../components/Charts/ExportExcel";
-import LineChrat from "../components/Charts/Line";
+import LineChart from "../components/Charts/Line";
 import DropDown from "../components/UI/DropDown";
 import FloatUpContainer from "../components/UI/FloatUpContainer";
 import MediumCard from "../components/UI/MediumCard";
@@ -66,7 +66,7 @@ function GeneralReportsPage() {
             />
           )}
           {graphChoosen === Choices.USERS_AGE && (
-            <LineChrat
+            <LineChart
               items={data.usersData.usersGroupedByAge}
               title="Information about the age"
             />
