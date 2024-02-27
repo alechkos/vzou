@@ -1,4 +1,3 @@
-import authWrapper from "components/Auth/AuthWrapper";
 
 import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
