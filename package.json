@@ -42,22 +42,9 @@
     "@types/react-dom": "^18.2.18",
     "@types/react-redux": "^7.1.24",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.13",
-    "eslint": "^8.2.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-import-resolver-typescript": "^3.5.1",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^5.1.0",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
     "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
     "postcss": "^8.4.19",
-    "prettier": "^3.1.1",
     "tailwindcss": "^3.2.4"
   },
   "scripts": {
@@ -65,11 +52,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:check": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
-    "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "lint:fix-quiet": "eslint --quiet --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "format:check": "prettier --check \"src/**/*.{css,md,json}\"",
-    "format:fix": "prettier --write \"src/**/*.{css,md,json}\"",
     "prepare": "husky install"
   },
   "browserslist": {
@@ -86,12 +68,7 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "node .husky/commit-msg",
-      "pre-commit": "lint-staged"
+      "commit-msg": "node .husky/commit-msg"
     }
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": "tsc-files --noEmit --pretty",
-    "src/**/*.{css,scss,md}": "npm run format:fix"
   }
 }

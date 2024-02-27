@@ -1,5 +1,5 @@
-import { BSTreeMemento } from "ClassObjects/BSTreeMemento";
-import { BSTreeNode } from "ClassObjects/BSTreeNode";
+import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
+import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
 
 import { height, max } from "../../../components/Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";

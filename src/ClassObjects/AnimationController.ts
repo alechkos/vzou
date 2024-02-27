@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/ban-types: warn */
-
 import { Memento } from "./Memento";
 
 import { NodeRole } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
