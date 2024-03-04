@@ -429,19 +429,19 @@ export function getMinWrapper(
       mainRoot = root;
     }
     passedIds.push(root.id);
-    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [ {id: root.id, role: "X"} ], [], passedIds);
     let temp = root;
     while (temp.left) {
       passedIds.push(temp.left.id);
-      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [ {id: temp.left.id, role: "X"} ], [], passedIds);
       temp = temp.left;
-      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [ {id: temp.id, role: "X"} ], [], passedIds);
     }
     memento.addBlank(
       { line: gap + 3, name: currentAlg },
       mainRoot,
       undefined,
-      [],
+      [{id: temp.id, role: "X"}],
       [ temp.id ],
       passedIds,
     );
