@@ -19,7 +19,14 @@ export function searchWrapper(
     mainRoot: BSTreeNode | undefined
   ): BSTreeNode | undefined {
     // pseudo for if (!root || root.value === k)
-    memento.addBlank({ line: 1, name: "Search" }, mainRoot, undefined, [], [], passedIds);
+    memento.addBlank(
+      { line: 1, name: "Search" },
+      mainRoot,
+      undefined,
+      [{ id: root ? root.id : mainRoot!.id, role: "X" }],
+      [],
+      passedIds
+    );
     if (!root || root.value === k) {
       // pseudo for return root;
       if (root && root.value === k) {
@@ -28,7 +35,7 @@ export function searchWrapper(
           { line: 2, name: "Search" },
           mainRoot,
           undefined,
-          [],
+          [{ id: root.id, role: "X" }],
           [root.id],
           passedIds
         );
@@ -38,12 +45,33 @@ export function searchWrapper(
       return root;
     }
     passedIds.push(root.id);
-    memento.addBlank({ line: 3, name: "Search" }, mainRoot, undefined, [], [], passedIds);
+    memento.addBlank(
+      { line: 3, name: "Search" },
+      mainRoot,
+      undefined,
+      [{ id: root.id, role: "X" }],
+      [],
+      passedIds
+    );
     if (k < root.value) {
-      memento.addBlank({ line: 4, name: "Search" }, mainRoot, undefined, [], [], passedIds);
+      memento.addBlank(
+        { line: 4, name: "Search" },
+        mainRoot,
+        undefined,
+        [{ id: root.left ? root.left.id : root.id, role: "X" }],
+        [],
+        passedIds
+      );
       return search(root.left, k, memento, mainRoot);
     }
-    memento.addBlank({ line: 5, name: "Search" }, mainRoot, undefined, [], [], passedIds);
+    memento.addBlank(
+      { line: 5, name: "Search" },
+      mainRoot,
+      undefined,
+      [{ id: root.right ? root.right.id : root.id, role: "X" }],
+      [],
+      passedIds
+    );
     return search(root.right, k, memento, mainRoot);
   }
 
