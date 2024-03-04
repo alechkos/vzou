@@ -480,19 +480,19 @@ export function getMaxWrapper(
       mainRoot = root;
     }
     passedIds.push(root.id);
-    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [{id: root.id, role: "X"}], [], passedIds);
     let temp = root;
     while (temp.right) {
       passedIds.push(temp.right.id);
-      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [{id: temp.right.id, role: "X"}], [], passedIds);
       temp = temp.right;
-      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [], [], passedIds);
+      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [{id: temp.id, role: "X"}], [], passedIds);
     }
     memento.addBlank(
       { line: gap + 3, name: currentAlg },
       mainRoot,
       undefined,
-      [],
+      [{id: temp.id, role: "X"}],
       [ temp.id ],
       passedIds,
     );
