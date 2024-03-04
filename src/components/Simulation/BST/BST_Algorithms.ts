@@ -1,18 +1,14 @@
-
 import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
-import {
-  checkIfValueExist,
-} from "../../Simulation/AVL/AVL_Algorithms";
+import { checkIfValueExist } from "../../Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
-
 
 export function searchWrapper(
   root: BSTreeNode | undefined,
   k: number,
   memento: BSTreeMemento,
-  mainRoot: BSTreeNode | undefined,
+  mainRoot: BSTreeNode | undefined
 ) {
   const passedIds: number[] = [];
 
@@ -20,7 +16,7 @@ export function searchWrapper(
     root: BSTreeNode | undefined,
     k: number,
     memento: BSTreeMemento,
-    mainRoot: BSTreeNode | undefined,
+    mainRoot: BSTreeNode | undefined
   ): BSTreeNode | undefined {
     // pseudo for if (!root || root.value === k)
     memento.addBlank({ line: 1, name: "Search" }, mainRoot, undefined, [], [], passedIds);
@@ -33,8 +29,8 @@ export function searchWrapper(
           mainRoot,
           undefined,
           [],
-          [ root.id ],
-          passedIds,
+          [root.id],
+          passedIds
         );
       } else {
         memento.addBlank({ line: 2, name: "Search" }, mainRoot, undefined, [], [], passedIds);
@@ -59,7 +55,7 @@ export function searchWrapper(
       `Node with value ${k} not found`,
       [],
       [],
-      passedIds,
+      passedIds
     );
   }
 }
@@ -104,8 +100,8 @@ export function insertWithAnimations(
   root: BSTreeNode | undefined,
   new_node: BSTreeNode,
   memento: BSTreeMemento,
-  isAvl = false,
-):  BSTreeNode {
+  isAvl = false
+): BSTreeNode {
   let valueExist = false;
   const passedIds: number[] = [];
   function insertNode(root: BSTreeNode | undefined, new_node: BSTreeNode, memento: BSTreeMemento) {
@@ -128,7 +124,7 @@ export function insertWithAnimations(
         ActionType.HIGHLIGHT_LIGHT,
         [],
         [],
-        passedIds,
+        passedIds
       );
     } else {
       memento.addBlank({ line: 2, name: "Insert" }, root, undefined, [], [], passedIds);
@@ -147,7 +143,7 @@ export function insertWithAnimations(
         ActionType.HIGHLIGHT_LIGHT,
         [],
         [],
-        passedIds,
+        passedIds
       );
       y = x;
       if (new_node.value < x.value) {
@@ -191,7 +187,7 @@ export function insertWithAnimations(
         ActionType.HIGHLIGHT_LIGHT,
         [],
         [],
-        passedIds,
+        passedIds
       );
     } else {
       memento.addBlank({ line: 8, name: "Insert" }, root, undefined, [], [], passedIds);
@@ -207,7 +203,7 @@ export function insertWithAnimations(
         ActionType.HIGHLIGHT_LIGHT,
         [],
         [],
-        passedIds,
+        passedIds
       );
       return new_node;
     }
@@ -223,8 +219,8 @@ export function insertWithAnimations(
         new_node.id,
         ActionType.ADD,
         [],
-        [ new_node.id ],
-        passedIds,
+        [new_node.id],
+        passedIds
       );
     } else {
       y.right = new_node;
@@ -235,8 +231,8 @@ export function insertWithAnimations(
         new_node.id,
         ActionType.ADD,
         [],
-        [ new_node.id ],
-        passedIds,
+        [new_node.id],
+        passedIds
       );
     }
     return root!;
@@ -248,7 +244,7 @@ export function deleteNode(
   root: BSTreeNode | undefined,
   key: number,
   memento: BSTreeMemento,
-  mainRoot: BSTreeNode | undefined,
+  mainRoot: BSTreeNode | undefined
 ) {
   if (!root) {
     memento.addBlank({ line: 1, name: "Delete" }, mainRoot);
@@ -273,7 +269,7 @@ export function deleteNode(
         mainRoot,
         root.left.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: root.id, role: "^" }],
+        [{ id: root.id, role: "^" }]
       );
     } else {
       memento.addBlank({ line: 4, name: "Delete" }, mainRoot, undefined, [
@@ -294,7 +290,7 @@ export function deleteNode(
         mainRoot,
         root.right.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: root.id, role: "^" }],
+        [{ id: root.id, role: "^" }]
       );
     } else {
       memento.addBlank({ line: 6, name: "Delete" }, mainRoot, undefined, [
@@ -319,7 +315,7 @@ export function deleteNode(
           mainRoot,
           root.right.id,
           ActionType.HIGHLIGHT_FULL,
-          [{ id: root.id, role: "^" }],
+          [{ id: root.id, role: "^" }]
         );
       } else {
         memento.addBlank({ line: 9, name: "Delete" }, mainRoot, undefined, [
@@ -341,7 +337,7 @@ export function deleteNode(
           mainRoot,
           root.left.id,
           ActionType.HIGHLIGHT_LIGHT,
-          [{ id: root.id, role: "^" }],
+          [{ id: root.id, role: "^" }]
         );
       } else {
         memento.addBlank({ line: 11, name: "Delete" }, mainRoot, undefined, [
@@ -365,7 +361,7 @@ export function deleteNode(
           id: successorNode.id,
           role: "M",
         },
-      ],
+      ]
     );
     root.value = successorNode.value;
     memento.addSnapshot(
@@ -376,7 +372,7 @@ export function deleteNode(
       mainRoot,
       successorNode.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: root.id, role: "^" }],
+      [{ id: root.id, role: "^" }]
     );
     root.id = BSTreeNode.getNextId(memento.getLastData());
     memento.addSnapshot(
@@ -387,7 +383,7 @@ export function deleteNode(
       mainRoot,
       successorNode.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: root.id, role: "^" }],
+      [{ id: root.id, role: "^" }]
     );
     root.right = deleteNode(root.right, successorNode.value, memento, mainRoot);
   }
@@ -398,7 +394,7 @@ export function deleteNode(
 export function deleteNodeWrapper(
   root: BSTreeNode | undefined,
   key: number,
-  memento: BSTreeMemento,
+  memento: BSTreeMemento
 ) {
   const x = shadowSearch(root, key);
   if (!x) {
@@ -412,7 +408,7 @@ export function getMinWrapper(
   memento: BSTreeMemento,
   mainRoot?: BSTreeNode,
   currentAlg = "Min",
-  gap = 0,
+  gap = 0
 ): BSTreeNode | undefined {
   const passedIds: number[] = [];
   function min(
@@ -420,7 +416,7 @@ export function getMinWrapper(
     memento: BSTreeMemento,
     mainRoot?: BSTreeNode,
     currentAlg = "Min",
-    gap = 0,
+    gap = 0
   ): BSTreeNode | undefined {
     if (!root) {
       return root;
@@ -429,21 +425,42 @@ export function getMinWrapper(
       mainRoot = root;
     }
     passedIds.push(root.id);
-    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [ {id: root.id, role: "X"} ], [], passedIds);
+    memento.addBlank(
+      { line: gap + 1, name: currentAlg },
+      mainRoot,
+      undefined,
+      [{ id: root.id, role: "X" }],
+      [],
+      passedIds
+    );
     let temp = root;
     while (temp.left) {
       passedIds.push(temp.left.id);
-      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [ {id: temp.left.id, role: "X"} ], [], passedIds);
+      memento.addBlank(
+        { line: gap + 2, name: currentAlg },
+        mainRoot,
+        undefined,
+        [{ id: temp.left.id, role: "X" }],
+        [],
+        passedIds
+      );
       temp = temp.left;
-      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [ {id: temp.id, role: "X"} ], [], passedIds);
+      memento.addBlank(
+        { line: gap + 1, name: currentAlg },
+        mainRoot,
+        undefined,
+        [{ id: temp.id, role: "X" }],
+        [],
+        passedIds
+      );
     }
     memento.addBlank(
       { line: gap + 3, name: currentAlg },
       mainRoot,
       undefined,
-      [{id: temp.id, role: "X"}],
-      [ temp.id ],
-      passedIds,
+      [{ id: temp.id, role: "X" }],
+      [temp.id],
+      passedIds
     );
     return temp;
   }
@@ -463,7 +480,7 @@ export function getMaxWrapper(
   memento: BSTreeMemento,
   mainRoot?: BSTreeNode,
   currentAlg = "Max",
-  gap = 0,
+  gap = 0
 ): BSTreeNode | undefined {
   const passedIds: number[] = [];
   function max(
@@ -471,7 +488,7 @@ export function getMaxWrapper(
     memento: BSTreeMemento,
     mainRoot?: BSTreeNode,
     currentAlg = "Max",
-    gap = 0,
+    gap = 0
   ): BSTreeNode | undefined {
     if (!root) {
       return root;
@@ -480,21 +497,42 @@ export function getMaxWrapper(
       mainRoot = root;
     }
     passedIds.push(root.id);
-    memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [{id: root.id, role: "X"}], [], passedIds);
+    memento.addBlank(
+      { line: gap + 1, name: currentAlg },
+      mainRoot,
+      undefined,
+      [{ id: root.id, role: "X" }],
+      [],
+      passedIds
+    );
     let temp = root;
     while (temp.right) {
       passedIds.push(temp.right.id);
-      memento.addBlank({ line: gap + 2, name: currentAlg }, mainRoot, undefined, [{id: temp.right.id, role: "X"}], [], passedIds);
+      memento.addBlank(
+        { line: gap + 2, name: currentAlg },
+        mainRoot,
+        undefined,
+        [{ id: temp.right.id, role: "X" }],
+        [],
+        passedIds
+      );
       temp = temp.right;
-      memento.addBlank({ line: gap + 1, name: currentAlg }, mainRoot, undefined, [{id: temp.id, role: "X"}], [], passedIds);
+      memento.addBlank(
+        { line: gap + 1, name: currentAlg },
+        mainRoot,
+        undefined,
+        [{ id: temp.id, role: "X" }],
+        [],
+        passedIds
+      );
     }
     memento.addBlank(
       { line: gap + 3, name: currentAlg },
       mainRoot,
       undefined,
-      [{id: temp.id, role: "X"}],
-      [ temp.id ],
-      passedIds,
+      [{ id: temp.id, role: "X" }],
+      [temp.id],
+      passedIds
     );
     return temp;
   }
@@ -504,7 +542,7 @@ export function getMaxWrapper(
 export function successor(
   root: BSTreeNode | undefined,
   k: number,
-  memento: BSTreeMemento,
+  memento: BSTreeMemento
 ): BSTreeNode | undefined {
   if (!root) {
     return root;
@@ -513,24 +551,39 @@ export function successor(
   if (!foundNode) {
     throw new Error("Node not found");
   }
-  memento.addBlank({ line: 1, name: "Successor" }, root);
+  memento.addBlank({ line: 1, name: "Successor" }, root, undefined, [
+    { id: foundNode.id, role: "X" },
+  ]);
   if (foundNode.right) {
+    memento.addBlank({ line: 1, name: "Successor" }, root, undefined, [
+      { id: foundNode.id, role: "X" },
+    ]);
     memento.addSnapshot(
       { line: 2, name: "Successor" },
       root,
       foundNode.right.id,
       ActionType.HIGHLIGHT_LIGHT,
+      [{ id: foundNode.right.id, role: "R" }]
     );
     return getMinWrapper(foundNode.right, memento, root, "Successor", 8);
   }
   let y = foundNode.parent;
   if (y) {
-    memento.addSnapshot({ line: 3, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT);
+    memento.addSnapshot({ line: 3, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT, [
+      { id: y.id, role: "Y" },
+      { id: foundNode.id, role: "X" },
+    ]);
   } else {
-    memento.addBlank({ line: 3, name: "Successor" }, root);
+    memento.addBlank({ line: 3, name: "Successor" }, root, undefined, [
+      { id: root.id, role: "Y" },
+      { id: foundNode.id, role: "X" },
+    ]);
   }
   let x = foundNode;
-  memento.addBlank({ line: 4, name: "Successor" }, root);
+  memento.addBlank({ line: 4, name: "Successor" }, root, undefined, [
+    { id: x.id, role: "X" },
+    { id: y!.id, role: "Y" },
+  ]);
   while (y && x === y.right) {
     memento.addDoubleSnapShot(
       { line: 5, name: "Successor" },
@@ -538,19 +591,30 @@ export function successor(
       y.id,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [],
+      [{ id: y.id, role: "X" }]
     );
     x = y;
     y = y.parent;
     if (y) {
-      memento.addSnapshot({ line: 6, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT);
+      memento.addSnapshot({ line: 6, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT, [
+        { id: y.id, role: "Y" },
+        { id: x.id, role: "X" },
+      ]);
     } else {
-      memento.addBlank({ line: 6, name: "Successor" }, root);
+      memento.addBlank({ line: 6, name: "Successor" }, root, undefined, [
+        { id: root.id, role: "Y" },
+        { id: x.id, role: "X" },
+      ]);
     }
-    memento.addBlank({ line: 4, name: "Successor" }, root);
+    memento.addBlank({ line: 4, name: "Successor" }, root, undefined, [
+      { id: x.id, role: "X" },
+      { id: y!.id, role: "Y" },
+    ]);
   }
   if (y) {
-    memento.addSnapshot({ line: 7, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_FULL);
+    memento.addSnapshot({ line: 7, name: "Successor" }, root, y.id, ActionType.HIGHLIGHT_FULL, [
+      { id: y.id, role: "Y" },
+    ]);
   } else {
     memento.addError({ line: 7, name: "Successor" }, root, "Successor not found");
   }
@@ -560,7 +624,7 @@ export function successor(
 export function predecessor(
   root: BSTreeNode | undefined,
   k: number,
-  memento: BSTreeMemento,
+  memento: BSTreeMemento
 ): BSTreeNode | undefined {
   if (!root) {
     return root;
@@ -575,7 +639,7 @@ export function predecessor(
       { line: 2, name: "Predecessor" },
       root,
       foundNode.left.id,
-      ActionType.HIGHLIGHT_LIGHT,
+      ActionType.HIGHLIGHT_LIGHT
     );
     return getMaxWrapper(foundNode.left, memento, root, "Predecessor", 8);
   }
@@ -594,7 +658,7 @@ export function predecessor(
       y.id,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [],
+      []
     );
     x = y;
     memento.addBlank({ line: 1, name: "Predecessor" }, root);
@@ -652,7 +716,7 @@ export function preorderTraversal(node: BSTreeNode | undefined, memento: BSTreeM
   function traversal(
     node: BSTreeNode | undefined,
     mainRoot: BSTreeNode | undefined,
-    memento: BSTreeMemento,
+    memento: BSTreeMemento
   ) {
     memento.addBlank(
       { line: 1, name: "Preorder" },
@@ -661,7 +725,7 @@ export function preorderTraversal(node: BSTreeNode | undefined, memento: BSTreeM
       [],
       idResult,
       passedNodes,
-      valResult,
+      valResult
     );
     if (node) {
       passedNodes.push(node.id);
@@ -677,7 +741,7 @@ export function preorderTraversal(node: BSTreeNode | undefined, memento: BSTreeM
         [{ id: node.id, role: "x" }],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       memento.addBlank(
         { line: 3, name: "Preorder" },
@@ -691,7 +755,7 @@ export function preorderTraversal(node: BSTreeNode | undefined, memento: BSTreeM
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       traversal(node.left, mainRoot, memento);
       memento.addBlank(
@@ -706,7 +770,7 @@ export function preorderTraversal(node: BSTreeNode | undefined, memento: BSTreeM
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
 
       traversal(node.right, mainRoot, memento);
@@ -725,7 +789,7 @@ export function inorderTraversal(node: BSTreeNode | undefined, memento: BSTreeMe
   function traversal(
     node: BSTreeNode | undefined,
     mainRoot: BSTreeNode | undefined,
-    memento: BSTreeMemento,
+    memento: BSTreeMemento
   ) {
     memento.addBlank(
       { line: 1, name: "Inorder" },
@@ -734,7 +798,7 @@ export function inorderTraversal(node: BSTreeNode | undefined, memento: BSTreeMe
       [],
       idResult,
       passedNodes,
-      valResult,
+      valResult
     );
 
     if (node) {
@@ -751,7 +815,7 @@ export function inorderTraversal(node: BSTreeNode | undefined, memento: BSTreeMe
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       traversal(node.left, mainRoot, memento);
       idResult.push(node.id);
@@ -768,7 +832,7 @@ export function inorderTraversal(node: BSTreeNode | undefined, memento: BSTreeMe
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       memento.addBlank(
         { line: 4, name: "Inorder" },
@@ -782,7 +846,7 @@ export function inorderTraversal(node: BSTreeNode | undefined, memento: BSTreeMe
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
 
       traversal(node.right, mainRoot, memento);
@@ -802,7 +866,7 @@ export function postorderTraversal(node: BSTreeNode | undefined, memento: BSTree
   function traversal(
     node: BSTreeNode | undefined,
     mainRoot: BSTreeNode | undefined,
-    memento: BSTreeMemento,
+    memento: BSTreeMemento
   ) {
     memento.addBlank(
       { line: 1, name: "Postorder" },
@@ -811,7 +875,7 @@ export function postorderTraversal(node: BSTreeNode | undefined, memento: BSTree
       [],
       idResult,
       passedNodes,
-      valResult,
+      valResult
     );
     if (node) {
       passedNodes.push(node.id);
@@ -827,7 +891,7 @@ export function postorderTraversal(node: BSTreeNode | undefined, memento: BSTree
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       traversal(node.left, mainRoot, memento);
       memento.addBlank(
@@ -842,7 +906,7 @@ export function postorderTraversal(node: BSTreeNode | undefined, memento: BSTree
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
       traversal(node.right, mainRoot, memento);
       idResult.push(node.id);
@@ -862,7 +926,7 @@ export function postorderTraversal(node: BSTreeNode | undefined, memento: BSTree
         ],
         idResult,
         passedNodes,
-        valResult,
+        valResult
       );
     }
   }
