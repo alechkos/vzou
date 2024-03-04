@@ -19,7 +19,6 @@ import { FC } from "react";
 
 import AnimationController from "../../../ClassObjects/AnimationController";
 
-
 interface Props {
   controller: AnimationController<any, any>;
   isPlaying: boolean;
@@ -39,7 +38,7 @@ const PlayerControlsPanel: FC<Props> = ({ controller, isPlaying }) => (
   <ButtonGroup
     variant="outlined"
     aria-label="outlined button group"
-    className="mt-10"
+    className="my-10 fixed bottom-0"
   >
     <ThemeProvider theme={theme}>
       <Tooltip
