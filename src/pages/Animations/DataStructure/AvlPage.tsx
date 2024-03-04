@@ -66,7 +66,7 @@ const AvlPage: FC = () => {
             handleHideActions={handleHideActions}
             editingConstruction={editingConstruction}
           />
-          {(showActions || editingConstruction) && <div className="container mx-auto max-w-7xl p-52">
+          {(showActions || editingConstruction) && <div className="container mx-auto max-w-7xl my-[150px]">
             <BinaryTree
               viewportWidth={viewportWidth}
               root={root}
@@ -81,7 +81,7 @@ const AvlPage: FC = () => {
             />
           </div>}
           {traversalResults.length > 0 && (
-            <div className="container mx-auto max-w-7xl px-0 py-0 mt-72">
+            <div className="container mx-auto max-w-7xl px-0 py-0">
               <p className="mr-56">
                 <b>Traversal Results</b>
               </p>
