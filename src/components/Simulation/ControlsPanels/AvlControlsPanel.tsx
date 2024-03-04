@@ -9,7 +9,12 @@ import React, { FC, useEffect, useState } from "react";
 
 import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setError, setInput, setInputArray, setCurrentAlg } from "../../../store/reducers/alghoritms/bst-reducer";
+import {
+  setError,
+  setInput,
+  setInputArray,
+  setCurrentAlg,
+} from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
@@ -17,8 +22,6 @@ import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { buildTree } from "../AVL/AVL_Algorithms";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
-
-
 
 interface Props {
   controller: AvlAnimationController;
@@ -39,14 +42,21 @@ const buttonClassname =
  * @param {boolean} props.isButtonDisabled - Determines if the button is disabled.
  * @return {JSX.Element} The BSTreeControlsPanel component.
  */
-const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideActions, handleShowActions, showActions, editingConstruction }) => {
+const AvlControlsPanel: FC<Props> = ({
+  controller,
+  isButtonDisabled,
+  handleHideActions,
+  handleShowActions,
+  showActions,
+  editingConstruction,
+}) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
-  const [ regsterActivity ] = useRegisterActivityMutation();
+  const [regsterActivity] = useRegisterActivityMutation();
 
-  const [ value, setValue ] = useState("1");
+  const [value, setValue] = useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -184,7 +194,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
-    controller.setTreeFromInput([ 2, 1, 3 ]);
+    controller.setTreeFromInput([2, 1, 3]);
   }, []);
 
   return (
@@ -211,57 +221,86 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
                     aria-label="algorithms and actions"
                     centered
                   >
-                    {!showActions && !editingConstruction && <Tab
-                      label="Create AVL construction"
-                      value="1"
-                    />}
-                    {(showActions || editingConstruction) && <Tab
-                      label="Change Avl construction"
-                      value="1"
-                      onClick={handleHideActions}
-                    />}
+                    {!showActions && !editingConstruction && (
+                      <Tab
+                        label="Create AVL construction"
+                        value="1"
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                    {(showActions || editingConstruction) && (
+                      <Tab
+                        label="Change Avl construction"
+                        value="1"
+                        onClick={handleHideActions}
+                        disabled={isButtonDisabled}
+                      />
+                    )}
                   </TabList>
-                  {showActions && <TabList
-                    onChange={handleChange}
-                    aria-label="algorithms and actions"
-                    centered
-                  >
-                    <Tab
-                      label="Min / Max"
-                      value="2"
-                      onClick={() => { dispatch(setCurrentAlg("Min")); }}
-                    />
-                    <Tab
-                      label="Traversals"
-                      value="3"
-                      onClick={() => { dispatch(setCurrentAlg("Inorder")); }}
-                    />
-                    <Tab
-                      label="Successor"
-                      value="Successor"
-                      onClick={() => { dispatch(setCurrentAlg("Successor")); }}
-                    />
-                    <Tab
-                      label="Predecessor"
-                      value="Predecessor"
-                      onClick={() => { dispatch(setCurrentAlg("Predecessor")); }}
-                    />
-                    <Tab
-                      label="Search"
-                      value="Search"
-                      onClick={() => { dispatch(setCurrentAlg("Search")); }}
-                    />
-                    <Tab
-                      label="Insert"
-                      value="Insert"
-                      onClick={() => { dispatch(setCurrentAlg("Insert")); }}
-                    />
-                    <Tab
-                      label="Delete"
-                      value="DeleteNode"
-                      onClick={() => { dispatch(setCurrentAlg("Delete")); }}
-                    />
-                  </TabList>}
+                  {showActions && (
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="algorithms and actions"
+                      centered
+                    >
+                      <Tab
+                        label="Min / Max"
+                        value="2"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Min"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Traversals"
+                        value="3"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Inorder"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Successor"
+                        value="Successor"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Successor"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Predecessor"
+                        value="Predecessor"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Predecessor"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Search"
+                        value="Search"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Search"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Insert"
+                        value="Insert"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Insert"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Delete"
+                        value="DeleteNode"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Delete"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                    </TabList>
+                  )}
                 </Box>
                 <TabPanel
                   value="1"
@@ -303,7 +342,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
                   value="2"
                   className={value === "2" ? "flex flex-row justify-center " : "hidden"}
                 >
-                  {[ "Min", "Max" ].map((text) => (
+                  {["Min", "Max"].map((text) => (
                     <div
                       className="py-2 px-6"
                       key={text}
@@ -322,7 +361,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
                   value="3"
                   className={value === "3" ? "flex flex-row justify-center " : "hidden"}
                 >
-                  {[ "Inorder", "Preorder", "Postorder" ].map((text) => (
+                  {["Inorder", "Preorder", "Postorder"].map((text) => (
                     <div
                       className="py-2 px-2"
                       key={text}
@@ -337,7 +376,7 @@ const AvlControlsPanel: FC<Props> = ({ controller, isButtonDisabled, handleHideA
                     </div>
                   ))}
                 </TabPanel>
-                {[ "Successor", "Predecessor", "Search", "Insert", "DeleteNode" ].map((text) => (
+                {["Successor", "Predecessor", "Search", "Insert", "DeleteNode"].map((text) => (
                   <TabPanel
                     key={text}
                     value={text}
