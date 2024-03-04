@@ -633,24 +633,36 @@ export function predecessor(
   if (!foundNode) {
     throw new Error("Node not found");
   }
-  memento.addBlank({ line: 1, name: "Predecessor" }, root);
+  memento.addBlank({ line: 1, name: "Predecessor" }, root, undefined, [
+    { id: foundNode.id, role: "X" },
+  ]);
   if (foundNode.left) {
     memento.addSnapshot(
       { line: 2, name: "Predecessor" },
       root,
       foundNode.left.id,
-      ActionType.HIGHLIGHT_LIGHT
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: foundNode.left.id, role: "X" }]
     );
     return getMaxWrapper(foundNode.left, memento, root, "Predecessor", 8);
   }
   let y = foundNode.parent;
   if (y) {
-    memento.addSnapshot({ line: 3, name: "Predecessor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT);
+    memento.addSnapshot({ line: 3, name: "Predecessor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT, [
+      { id: foundNode.id, role: "X" },
+      { id: y.id, role: "Y" },
+    ]);
   } else {
-    memento.addBlank({ line: 3, name: "Predecessor" }, root);
+    memento.addBlank({ line: 3, name: "Predecessor" }, root, undefined, [
+      { id: root.id, role: "Y" },
+      { id: foundNode.id, role: "X" },
+    ]);
   }
   let x = foundNode;
-  memento.addBlank({ line: 4, name: "Predecessor" }, root);
+  memento.addBlank({ line: 4, name: "Predecessor" }, root, undefined, [
+    { id: y!.id, role: "Y" },
+    { id: x.id, role: "X" },
+  ]);
   while (y && x === y.left) {
     memento.addDoubleSnapShot(
       { line: 5, name: "Predecessor" },
@@ -658,20 +670,40 @@ export function predecessor(
       y.id,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
-      []
+      [
+        { id: y.id, role: "Y" },
+        { id: x.id, role: "X" },
+      ]
     );
     x = y;
-    memento.addBlank({ line: 1, name: "Predecessor" }, root);
+    memento.addBlank({ line: 1, name: "Predecessor" }, root, undefined, [{ id: y.id, role: "X" }]);
     y = y.parent;
     if (y) {
-      memento.addSnapshot({ line: 6, name: "Predecessor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT);
+      memento.addSnapshot(
+        { line: 6, name: "Predecessor" },
+        root,
+        y.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [
+          { id: y.id, role: "Y" },
+          { id: x.id, role: "X" },
+        ]
+      );
     } else {
-      memento.addBlank({ line: 6, name: "Predecessor" }, root);
+      memento.addBlank({ line: 6, name: "Predecessor" }, root, undefined, [
+        { id: root.id, role: "Y" },
+        { id: x.id, role: "X" },
+      ]);
     }
-    memento.addBlank({ line: 4, name: "Predecessor" }, root);
+    memento.addBlank({ line: 4, name: "Predecessor" }, root, undefined, [
+      { id: y!.id, role: "Y" },
+      { id: x.id, role: "X" },
+    ]);
   }
   if (y) {
-    memento.addSnapshot({ line: 7, name: "Predecessor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT);
+    memento.addSnapshot({ line: 7, name: "Predecessor" }, root, y.id, ActionType.HIGHLIGHT_LIGHT, [
+      { id: y.id, role: "Y" },
+    ]);
   } else {
     memento.addError({ line: 7, name: "Successor" }, root, "Predecessor not found");
   }
