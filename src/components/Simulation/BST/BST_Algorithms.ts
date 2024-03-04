@@ -144,13 +144,13 @@ export function insertWithAnimations(
           throw new Error(`The node with value ${new_node.value} is exist!`);
         }
       }
-      // pseudo for x = roo
+      // pseudo for x = root
       memento.addSnapshot(
         { line: 2, name: "Insert" },
         root,
         root.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [],
+        [{ id: root.id, role: "X" }],
         [],
         passedIds
       );
@@ -161,7 +161,14 @@ export function insertWithAnimations(
     while (x) {
       // pseudo for while
       passedIds.push(x.id);
-      memento.addBlank({ line: 3, name: "Insert" }, root, undefined, [], [], passedIds);
+      memento.addBlank(
+        { line: 3, name: "Insert" },
+        root,
+        undefined,
+        [{ id: x.id, role: "X" }],
+        [],
+        passedIds
+      );
 
       // pseudo for y = x
       memento.addSnapshot(
@@ -169,20 +176,47 @@ export function insertWithAnimations(
         root,
         x.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [],
+        [{ id: x.id, role: "Y" }],
         [],
         passedIds
       );
       y = x;
       if (new_node.value < x.value) {
         // pseudo for if
-        memento.addBlank({ line: 5, name: "Insert" }, root, undefined, [], [], passedIds);
+        memento.addBlank(
+          { line: 5, name: "Insert" },
+          root,
+          undefined,
+          [{ id: x.id, role: "Y" }],
+          [],
+          passedIds
+        );
         x = x.left;
         // pseudo for left
-        memento.addBlank({ line: 6, name: "Insert" }, root, undefined, [], [], passedIds);
+        memento.addBlank(
+          { line: 6, name: "Insert" },
+          root,
+          undefined,
+          [
+            { id: y.id, role: "Y" },
+            { id: x ? x.id : y.id, role: x ? "X" : "Y" },
+          ],
+          [],
+          passedIds
+        );
       } else {
         x = x.right;
-        memento.addBlank({ line: 7, name: "Insert" }, root, undefined, [], [], passedIds);
+        memento.addBlank(
+          { line: 7, name: "Insert" },
+          root,
+          undefined,
+          [
+            { id: y.id, role: "Y" },
+            { id: x ? x.id : y.id, role: x ? "X" : "Y" },
+          ],
+          [],
+          passedIds
+        );
       }
     }
     new_node.parent = y;
@@ -213,7 +247,16 @@ export function insertWithAnimations(
         root,
         y.id,
         ActionType.HIGHLIGHT_LIGHT,
+        [{ id: y.id, role: "Y" }],
         [],
+        passedIds
+      );
+      memento.addSnapshot(
+        { line: 8, name: "Insert" },
+        root,
+        y.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: y.id, role: "P" }],
         [],
         passedIds
       );
@@ -221,7 +264,14 @@ export function insertWithAnimations(
       memento.addBlank({ line: 8, name: "Insert" }, root, undefined, [], [], passedIds);
     }
     // pseudo for if(!y)
-    memento.addBlank({ line: 9, name: "Insert" }, root, undefined, [], [], passedIds);
+    memento.addBlank(
+      { line: 9, name: "Insert" },
+      root,
+      undefined,
+      [{ id: y ? y.id : 0, role: y ? "Y" : "" }],
+      [],
+      passedIds
+    );
     if (!y) {
       // pseudo for return
       memento.addSnapshot(
@@ -229,14 +279,21 @@ export function insertWithAnimations(
         new_node,
         new_node.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [],
+        [{ id: new_node.id, role: "X" }],
         [],
         passedIds
       );
       return new_node;
     }
     // pseudo for if
-    memento.addBlank({ line: 11, name: "Insert" }, root, undefined, [], [], passedIds);
+    memento.addBlank(
+      { line: 11, name: "Insert" },
+      root,
+      undefined,
+      [{ id: y.id, role: "Y" }],
+      [],
+      passedIds
+    );
     passedIds.push(new_node.id);
     if (new_node.value < y.value) {
       y.left = new_node;
@@ -246,7 +303,10 @@ export function insertWithAnimations(
         root,
         new_node.id,
         ActionType.ADD,
-        [],
+        [
+          { id: y.id, role: "Y" },
+          { id: y.left.id, role: "Z" },
+        ],
         [new_node.id],
         passedIds
       );
@@ -258,11 +318,26 @@ export function insertWithAnimations(
         root,
         new_node.id,
         ActionType.ADD,
-        [],
+        [
+          { id: y.id, role: "Y" },
+          { id: y.right.id, role: "Z" },
+        ],
         [new_node.id],
         passedIds
       );
     }
+    memento.addSnapshot(
+      { line: 13, name: "Insert" },
+      root,
+      new_node.id,
+      ActionType.ADD,
+      [
+        { id: y.id, role: "Y" },
+        { id: new_node.id, role: "Z" },
+      ],
+      [new_node.id],
+      passedIds
+    );
     return root!;
   }
   return insertNode(root, new_node, memento);
