@@ -14,6 +14,7 @@ import {
   setInput,
   setInputArray,
   setCurrentAlg,
+  clearInputArray,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
@@ -157,6 +158,7 @@ const AvlControlsPanel: FC<Props> = ({
           return;
         case "Clear":
           controller.setTreeFromInput([]);
+          dispatch(clearInputArray());
           return;
         case "Inorder":
           regsterActivity({
@@ -187,14 +189,17 @@ const AvlControlsPanel: FC<Props> = ({
     }
   };
   const randomizeInput = () => {
-    controller.setTreeFromInput([], buildTree(generateRandomArrForHeap()));
+    const randomArray = generateRandomArrForHeap();
+    controller.setTreeFromInput([], buildTree(randomArray));
     handleShowActions();
     setValue("2");
     dispatch(setCurrentAlg("Min"));
+    dispatch(clearInputArray());
+    dispatch(setInputArray(randomArray));
   };
+
   useEffect(() => {
-    // create a random array whenever the page is loaded.
-    controller.setTreeFromInput([2, 1, 3]);
+    dispatch(clearInputArray());
   }, []);
 
   return (
