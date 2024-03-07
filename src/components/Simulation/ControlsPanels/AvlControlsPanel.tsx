@@ -386,10 +386,9 @@ const AvlControlsPanel: FC<Props> = ({
                       sx={{ width: "100px" }}
                       name={text as "Search" | "Insert" | "DeleteNode"}
                       size="small"
-                      value={inputValues[text as "Search" | "Insert" | "DeleteNode"]}
                       type="text"
                       variant="outlined"
-                      label={text}
+                      label={"Value"}
                       inputProps={{
                         min: 0,
                         max: 999,

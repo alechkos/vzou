@@ -6,7 +6,6 @@ import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/Bina
 import { BSTAlgNames } from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 
-
 const initialState = {
   currentActions: [] as Events,
   currentRoot: undefined as BSTreeNode | undefined,
@@ -20,11 +19,11 @@ const initialState = {
   passedNodes: [] as number[],
   traversalResults: [] as number[],
   inputValues: {
-    Successor: 1,
-    Predecessor: 2,
-    Search: 3,
-    Insert: 4,
-    DeleteNode: 5,
+    Successor: +"",
+    Predecessor: +"",
+    Search: +"",
+    Insert: +"",
+    DeleteNode: +"",
   },
 };
 
@@ -69,7 +68,7 @@ const bstSlice = createSlice({
       action: PayloadAction<{
         val: number;
         key: "Successor" | "Predecessor" | "Search" | "Insert" | "DeleteNode";
-      }>,
+      }>
     ) {
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
