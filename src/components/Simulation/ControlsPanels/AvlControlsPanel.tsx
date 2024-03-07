@@ -383,7 +383,7 @@ const AvlControlsPanel: FC<Props> = ({
                     className={value === text ? "justify-start " : "hidden"}
                   >
                     <TextField
-                      sx={{ width: "100px" }}
+                      sx={{ width: "138px" }}
                       name={text as "Search" | "Insert" | "DeleteNode"}
                       size="small"
                       type="text"
