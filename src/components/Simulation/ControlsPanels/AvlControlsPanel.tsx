@@ -10,10 +10,10 @@ import React, { FC, useEffect, useState } from "react";
 import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
+  setCurrentAlg,
   setError,
   setInput,
   setInputArray,
-  setCurrentAlg,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
@@ -388,7 +388,7 @@ const AvlControlsPanel: FC<Props> = ({
                       size="small"
                       type="text"
                       variant="outlined"
-                      label={"Value"}
+                      label={"Your value here"}
                       inputProps={{
                         min: 0,
                         max: 999,
