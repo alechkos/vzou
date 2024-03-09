@@ -59,9 +59,22 @@ const bstSlice = createSlice({
       state.visitedNodes = action.payload;
       return state;
     },
-    setInputArray(state, action: PayloadAction<string>) {
-      state.inputArray = action.payload;
+    setInputArray(state, action: PayloadAction<string | number[]>) {
+      if (typeof action.payload === "string") {
+        state.inputArray = action.payload;
+      } else {
+        action.payload.forEach((num, index) => {
+          if (index !== action.payload.length - 1) {
+            state.inputArray += num + ", ";
+          } else {
+            state.inputArray += num;
+          }
+        });
+      }
       return state;
+    },
+    clearInputArray(state) {
+      state.inputArray = "";
     },
     setInput(
       state,
@@ -102,4 +115,5 @@ export const {
   setPassedNodes,
   setTraversalResults,
   setCurrentAlg,
+  clearInputArray,
 } = bstSlice.actions;
