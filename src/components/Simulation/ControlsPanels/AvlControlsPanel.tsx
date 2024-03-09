@@ -10,7 +10,6 @@ import React, { FC, useEffect, useState } from "react";
 import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
-  setCurrentAlg,
   setError,
   setInput,
   setInputArray,
