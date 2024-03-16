@@ -22,6 +22,20 @@ export function checkIfValueExist(value: number, node: BSTreeNode | undefined): 
   else return true;
 }
 
+// A utility function to update heights in tree
+
+export function updateHeights(root: BSTreeNode | undefined) {
+  if (root === undefined) return;
+  if (root.left) {
+    updateHeights(root.left);
+  }
+  if (root.right) {
+    updateHeights(root.right);
+  }
+  root.height = max(height(root.left), height(root.right)) + 1;
+  return;
+}
+
 // A utility function to right rotate subtree rooted with y
 // See the diagram given above.
 function rightRotate(y: BSTreeNode) {
@@ -42,8 +56,6 @@ function rightRotate(y: BSTreeNode) {
   return x;
 }
 
-
-
 // A utility function to left rotate subtree rooted with x
 // See the diagram given above.
 function leftRotate(x: BSTreeNode) {
@@ -62,8 +74,6 @@ function leftRotate(x: BSTreeNode) {
   // Return new root
   return y;
 }
-
-
 
 // Get Balance factor of node N
 export function getBalance(N: BSTreeNode | undefined): number {
@@ -108,7 +118,7 @@ export function getRotateSignal(node: BSTreeNode | undefined): any {
 export function insert(
   node: BSTreeNode | undefined,
   key: number,
-  root: BSTreeNode | undefined,
+  root: BSTreeNode | undefined
 ): BSTreeNode {
   /* 1. Perform the normal BST rotation */
   if (node === undefined) return BSTreeNode.createNewNode(root, key, 1);

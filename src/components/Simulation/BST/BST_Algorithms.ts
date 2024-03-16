@@ -1,8 +1,9 @@
 import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
-import { checkIfValueExist } from "../../Simulation/AVL/AVL_Algorithms";
+import { checkIfValueExist, updateHeights } from "../../Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
+import { checkForRotation } from "../AVL/RotationAnimation";
 
 export function searchWrapper(
   root: BSTreeNode | undefined,
@@ -338,6 +339,9 @@ export function insertWithAnimations(
       [new_node.id],
       passedIds
     );
+    if (isAvl) {
+      checkForRotation(root, memento);
+    }
     return root!;
   }
   return insertNode(root, new_node, memento);
@@ -347,7 +351,8 @@ export function deleteNode(
   root: BSTreeNode | undefined,
   key: number,
   memento: BSTreeMemento,
-  mainRoot: BSTreeNode | undefined
+  mainRoot: BSTreeNode | undefined,
+  isAvl: boolean
 ) {
   if (!root) {
     memento.addBlank({ line: 1, name: "Delete" }, mainRoot);
@@ -379,7 +384,7 @@ export function deleteNode(
         { id: root.id, role: "^" },
       ]);
     }
-    root.left = deleteNode(root.left, key, memento, mainRoot);
+    root.left = deleteNode(root.left, key, memento, mainRoot, isAvl);
   } else if (key > root.value) {
     memento.addBlank({ line: 5, name: "Delete" }, mainRoot, undefined, [
       { id: root.id, role: "^" },
@@ -400,7 +405,7 @@ export function deleteNode(
         { id: root.id, role: "^" },
       ]);
     }
-    root.right = deleteNode(root.right, key, memento, mainRoot);
+    root.right = deleteNode(root.right, key, memento, mainRoot, isAvl);
   } else {
     memento.addBlank({ line: 7, name: "Delete" }, mainRoot, undefined, [
       { id: root.id, role: "^" },
@@ -488,22 +493,29 @@ export function deleteNode(
       ActionType.HIGHLIGHT_LIGHT,
       [{ id: root.id, role: "^" }]
     );
-    root.right = deleteNode(root.right, successorNode.value, memento, mainRoot);
+    root.right = deleteNode(root.right, successorNode.value, memento, mainRoot, isAvl);
   }
   memento.addBlank({ line: 15, name: "Delete" }, mainRoot, undefined, [{ id: root.id, role: "^" }]);
+
   return root;
 }
 
 export function deleteNodeWrapper(
   root: BSTreeNode | undefined,
   key: number,
-  memento: BSTreeMemento
+  memento: BSTreeMemento,
+  isAvl: boolean
 ) {
   const x = shadowSearch(root, key);
   if (!x) {
     throw new Error("Node not found");
   }
-  return deleteNode(root, key, memento, root);
+  deleteNode(root, key, memento, root, isAvl);
+  if (isAvl) {
+    updateHeights(root);
+    console.log(root);
+    checkForRotation(root, memento);
+  }
 }
 
 export function getMinWrapper(

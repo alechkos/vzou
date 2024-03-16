@@ -1,10 +1,8 @@
 import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
 import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
 
-import { height, max } from "../../../components/Simulation/AVL/AVL_Algorithms";
+import { getRotateSignal, height, max } from "../../../components/Simulation/AVL/AVL_Algorithms";
 import { ActionType } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
-
-
 
 //Utility function to get a node in the tree by value
 function getNodeInTree(root: BSTreeNode | undefined, value: number): BSTreeNode | undefined {
@@ -14,19 +12,18 @@ function getNodeInTree(root: BSTreeNode | undefined, value: number): BSTreeNode 
   else return root;
 }
 
-
 //Animation of left rotation
 export function leftRotateWithAnimation(
   root: BSTreeNode | undefined,
   node: BSTreeNode,
-  memento: BSTreeMemento,
+  memento: BSTreeMemento
 ): BSTreeNode {
   const nodeInTheTree = getNodeInTree(root, node.value);
 
   function rotate(
     root: BSTreeNode | undefined,
     node: BSTreeNode,
-    memento: BSTreeMemento,
+    memento: BSTreeMemento
   ): BSTreeNode {
     let y = undefined as BSTreeNode | undefined;
     let temp = undefined as BSTreeNode | undefined;
@@ -51,7 +48,7 @@ export function leftRotateWithAnimation(
           id: node.id,
           role: "X",
         },
-      ],
+      ]
     );
 
     memento.addSnapshot(
@@ -62,7 +59,10 @@ export function leftRotateWithAnimation(
       temp,
       node.right!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.id, role: "X" }, { id: node.right!.id, role: "R" }],
+      [
+        { id: node.id, role: "X" },
+        { id: node.right!.id, role: "R" },
+      ]
     );
 
     memento.addSnapshot(
@@ -73,7 +73,10 @@ export function leftRotateWithAnimation(
       temp,
       node.right!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.id, role: "X" }, { id: node.right!.id, role: "Y" }],
+      [
+        { id: node.id, role: "X" },
+        { id: node.right!.id, role: "Y" },
+      ]
     );
 
     if (y.left) {
@@ -86,7 +89,10 @@ export function leftRotateWithAnimation(
         temp,
         node.right!.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.id, role: "X" }, { id: node.right!.id, role: "Y" }],
+        [
+          { id: node.id, role: "X" },
+          { id: node.right!.id, role: "Y" },
+        ]
       );
       node.right = y.left;
 
@@ -98,10 +104,16 @@ export function leftRotateWithAnimation(
         temp,
         y.left.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.id, role: "X" }, { id: y.left.id, role: "^" }],
+        [
+          { id: node.id, role: "X" },
+          { id: y.left.id, role: "^" },
+        ]
       );
     } else {
-      memento.addBlank({ line: 2, name: "RotateLeft" }, temp, undefined, [{ id: node.id, role: "X" }, { id: y.id, role: "Y" }]);
+      memento.addBlank({ line: 2, name: "RotateLeft" }, temp, undefined, [
+        { id: node.id, role: "X" },
+        { id: y.id, role: "Y" },
+      ]);
       node.right = undefined;
     }
 
@@ -118,7 +130,7 @@ export function leftRotateWithAnimation(
         [
           { id: y.left.id, role: "^" },
           { id: node.id, role: "X" },
-        ],
+        ]
       );
     }
     if (temp !== undefined) {
@@ -135,7 +147,7 @@ export function leftRotateWithAnimation(
             role: "^",
           },
           { id: node.parent ? node.parent.id : node.id, role: "P" },
-        ],
+        ]
       );
     }
 
@@ -148,7 +160,9 @@ export function leftRotateWithAnimation(
     }
 
     if (node.parent === undefined) {
-      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: temp!.id, role: "P" }]);
+      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [
+        { id: temp!.id, role: "P" },
+      ]);
       //root <- y
       temp = y;
       memento.addBlank({ line: 7, name: "RotateLeft" }, temp, undefined, [{ id: y.id, role: "Y" }]);
@@ -174,7 +188,7 @@ export function leftRotateWithAnimation(
         temp,
         y.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: y.id, role: "Y" }],
+        [{ id: y.id, role: "Y" }]
       );
     }
     //y.left <- x
@@ -191,7 +205,7 @@ export function leftRotateWithAnimation(
       [
         { id: node.id, role: "X" },
         { id: y.id, role: "Y" },
-      ],
+      ]
     );
     node.parent = y;
 
@@ -210,19 +224,18 @@ export function leftRotateWithAnimation(
   return rotate(root, nodeInTheTree!, memento);
 }
 
-
 //Animation of right rotation
 export function rightRotateWithAnimation(
   root: BSTreeNode | undefined,
   node: BSTreeNode,
-  memento: BSTreeMemento,
+  memento: BSTreeMemento
 ) {
   const nodeInTheTree = getNodeInTree(root, node.value);
 
   function rotate(
     root: BSTreeNode | undefined,
     node: BSTreeNode,
-    memento: BSTreeMemento,
+    memento: BSTreeMemento
   ): BSTreeNode {
     let y = undefined as BSTreeNode | undefined;
     let temp = undefined as BSTreeNode | undefined;
@@ -247,7 +260,7 @@ export function rightRotateWithAnimation(
           id: node.id,
           role: "X",
         },
-      ],
+      ]
     );
 
     memento.addSnapshot(
@@ -258,7 +271,10 @@ export function rightRotateWithAnimation(
       temp,
       node.left!.id,
       ActionType.HIGHLIGHT_FULL,
-      [{ id: node.id, role: "X" }, { id: node.left!.id, role: "L" }],
+      [
+        { id: node.id, role: "X" },
+        { id: node.left!.id, role: "L" },
+      ]
     );
 
     memento.addSnapshot(
@@ -269,7 +285,10 @@ export function rightRotateWithAnimation(
       temp,
       node.left!.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.id, role: "X" }, { id: node.left!.id, role: "Y" }],
+      [
+        { id: node.id, role: "X" },
+        { id: node.left!.id, role: "Y" },
+      ]
     );
 
     if (y.right) {
@@ -282,7 +301,10 @@ export function rightRotateWithAnimation(
         temp,
         node.left!.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.id, role: "X" }, { id: node.left!.id, role: "Y" }],
+        [
+          { id: node.id, role: "X" },
+          { id: node.left!.id, role: "Y" },
+        ]
       );
       node.left = y.right;
 
@@ -294,10 +316,16 @@ export function rightRotateWithAnimation(
         temp,
         y.right.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: node.id, role: "X" }, { id: y.right.id, role: "^" }],
+        [
+          { id: node.id, role: "X" },
+          { id: y.right.id, role: "^" },
+        ]
       );
     } else {
-      memento.addBlank({ line: 2, name: "RotateRight" }, temp, undefined, [{ id: node.id, role: "X" }, { id: y.id, role: "Y" }]);
+      memento.addBlank({ line: 2, name: "RotateRight" }, temp, undefined, [
+        { id: node.id, role: "X" },
+        { id: y.id, role: "Y" },
+      ]);
       node.left = undefined;
     }
 
@@ -314,7 +342,7 @@ export function rightRotateWithAnimation(
         [
           { id: y.right.id, role: "^" },
           { id: node.id, role: "X" },
-        ],
+        ]
       );
     }
     if (temp !== undefined) {
@@ -331,7 +359,7 @@ export function rightRotateWithAnimation(
             role: "^",
           },
           { id: node.parent ? node.parent!.id : node.id, role: "P" },
-        ],
+        ]
       );
     }
 
@@ -344,10 +372,14 @@ export function rightRotateWithAnimation(
     }
 
     if (node.parent === undefined) {
-      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: temp!.id, role: "P" }]);
+      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [
+        { id: temp!.id, role: "P" },
+      ]);
       //root <- y
       temp = y;
-      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [{ id: y.id, role: "Y" }]);
+      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [
+        { id: y.id, role: "Y" },
+      ]);
     } else if (node === node.parent?.right) {
       //else if x = (x.parent).right
       memento.addBlank({ line: 8, name: "RotateRight" }, temp, undefined, [
@@ -355,9 +387,13 @@ export function rightRotateWithAnimation(
       ]);
       //(x.parent).right <- y
       node.parent!.right = y;
-      memento.addSnapshot({ line: 9, name: "RotateRight" }, temp, y.id, ActionType.HIGHLIGHT_LIGHT, [
-        { id: y.id, role: "Y" },
-      ]);
+      memento.addSnapshot(
+        { line: 9, name: "RotateRight" },
+        temp,
+        y.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: y.id, role: "Y" }]
+      );
     } else {
       //else
       memento.addBlank({ line: 10, name: "RotateRight" }, temp, undefined, [
@@ -370,7 +406,7 @@ export function rightRotateWithAnimation(
         temp,
         y.id,
         ActionType.HIGHLIGHT_LIGHT,
-        [{ id: y.id, role: "Y" }],
+        [{ id: y.id, role: "Y" }]
       );
     }
     //y.right <- x
@@ -387,7 +423,7 @@ export function rightRotateWithAnimation(
       [
         { id: node.id, role: "X" },
         { id: y.id, role: "Y" },
-      ],
+      ]
     );
     node.parent = y;
 
@@ -405,4 +441,25 @@ export function rightRotateWithAnimation(
   }
 
   return rotate(root, nodeInTheTree!, memento);
+}
+
+export function checkForRotation(root: BSTreeNode | undefined, memento: BSTreeMemento) {
+  const { node, rotate } = getRotateSignal(root);
+  if (rotate === "Right") {
+    rightRotateWithAnimation(root, node, memento);
+  }
+  // 2.Right right case
+  if (rotate === "Left") {
+    leftRotateWithAnimation(root, node, memento);
+  }
+  // 3.Left Right case
+  if (rotate === "Left-Right") {
+    leftRotateWithAnimation(root, node, memento);
+    rightRotateWithAnimation(root, node, memento);
+  }
+  // 4.Right Left case
+  if (rotate === "Right-Left") {
+    rightRotateWithAnimation(root, node, memento);
+    leftRotateWithAnimation(root, node, memento);
+  }
 }
