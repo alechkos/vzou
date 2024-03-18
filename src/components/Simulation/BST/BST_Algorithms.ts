@@ -130,7 +130,7 @@ export function insertWithAnimations(
   new_node: BSTreeNode,
   memento: BSTreeMemento,
   isAvl = false
-): BSTreeNode {
+) {
   let valueExist = false;
   const passedIds: number[] = [];
   function insertNode(root: BSTreeNode | undefined, new_node: BSTreeNode, memento: BSTreeMemento) {

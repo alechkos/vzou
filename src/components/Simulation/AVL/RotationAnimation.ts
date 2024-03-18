@@ -454,12 +454,12 @@ export function checkForRotation(root: BSTreeNode | undefined, memento: BSTreeMe
   }
   // 3.Left Right case
   if (rotate === "Left-Right") {
-    leftRotateWithAnimation(root, node, memento);
+    leftRotateWithAnimation(root, node.left, memento);
     rightRotateWithAnimation(root, node, memento);
   }
   // 4.Right Left case
   if (rotate === "Right-Left") {
-    rightRotateWithAnimation(root, node, memento);
+    rightRotateWithAnimation(root, node.right, memento);
     leftRotateWithAnimation(root, node, memento);
   }
 }
