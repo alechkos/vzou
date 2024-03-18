@@ -513,7 +513,6 @@ export function deleteNodeWrapper(
   deleteNode(root, key, memento, root, isAvl);
   if (isAvl) {
     updateHeights(root);
-    console.log(root);
     checkForRotation(root, memento);
   }
 }
