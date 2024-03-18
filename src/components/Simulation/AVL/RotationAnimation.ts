@@ -160,7 +160,7 @@ export function leftRotateWithAnimation(
     }
 
     if (node.parent === undefined) {
-      memento.addBlank({ line: 7, name: "RotateRight" }, temp, undefined, [
+      memento.addBlank({ line: 7, name: "RotateLeft" }, temp, undefined, [
         { id: temp!.id, role: "P" },
       ]);
       //root <- y
