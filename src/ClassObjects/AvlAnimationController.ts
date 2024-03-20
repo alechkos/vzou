@@ -10,7 +10,7 @@ import {
   insertWithAnimations,
 } from "../components/Simulation/BST/BST_Algorithms";
 import { AppDispatch } from "../store/store";
-import { addToInputArray } from "../store/reducers/alghoritms/bst-reducer";
+import { addToInputArray, deleteFromInputArray } from "../store/reducers/alghoritms/bst-reducer";
 
 export class AvlAnimationController extends BSTreeAnimationController {
   private static avlController: null | AvlAnimationController = null;
@@ -50,6 +50,7 @@ export class AvlAnimationController extends BSTreeAnimationController {
       data = this.data;
     }
     await this.playAlgorithm(deleteNodeWrapper, key, this.memento as BSTreeMemento, true);
+    this.dispatch(deleteFromInputArray(key));
   }
 
   setTreeFromInput(arr: number[], newRoot?: BSTreeNode) {
