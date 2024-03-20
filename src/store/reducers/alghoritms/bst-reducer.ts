@@ -73,6 +73,9 @@ const bstSlice = createSlice({
       }
       return state;
     },
+    addToInputArray(state, action: PayloadAction<number>) {
+      state.inputArray += ", " + action.payload.toString();
+    },
     clearInputArray(state) {
       state.inputArray = "";
     },
@@ -116,4 +119,5 @@ export const {
   setTraversalResults,
   setCurrentAlg,
   clearInputArray,
+  addToInputArray,
 } = bstSlice.actions;
