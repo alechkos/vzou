@@ -78,9 +78,7 @@ const bstSlice = createSlice({
     },
     deleteFromInputArray(state, action: PayloadAction<number>) {
       const inputArray = state.inputArray.split(",");
-      const filteredArray = inputArray
-        .filter((num) => +num !== action.payload)
-        .map(String);
+      const filteredArray = inputArray.filter((num) => +num !== action.payload);
       state.inputArray = "";
       filteredArray.forEach((num, index) => {
         if (index !== filteredArray.length - 1) {
