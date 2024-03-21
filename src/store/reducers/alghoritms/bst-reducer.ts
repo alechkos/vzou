@@ -78,12 +78,12 @@ const bstSlice = createSlice({
     },
     deleteFromInputArray(state, action: PayloadAction<number>) {
       const inputArray = state.inputArray.split(",");
-      const arrayOfNumbers = inputArray.map((num) => +num);
-      const filteredArray = arrayOfNumbers.filter((num) => num !== action.payload);
-      const backToArrayOfStrings = filteredArray.map(String);
+      const filteredArray = inputArray
+        .filter((num) => +num !== action.payload)
+        .map(String);
       state.inputArray = "";
-      backToArrayOfStrings.forEach((num, index) => {
-        if (index !== backToArrayOfStrings.length - 1) {
+      filteredArray.forEach((num, index) => {
+        if (index !== filteredArray.length - 1) {
           state.inputArray += num + ", ";
         } else {
           state.inputArray += num;
