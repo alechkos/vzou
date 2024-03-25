@@ -76,13 +76,14 @@ const AvlControlsPanel: FC<Props> = ({
    * @return {Promise<void>} Returns nothing.
    */
   const createBSTreeHandler = async () => {
-    setShowPseudoCode(true); //after build
     const res = getArrFromInputForHeap(15, inputArray);
     if (typeof res !== "string") {
       try {
         controller.setTreeFromInput(res);
         handleShowActions();
         setValue("2");
+        dispatch(setCurrentAlg("Min"));
+        setShowPseudoCode(true); //after build
       } catch (e: any) {
         setCurrentError(e.message);
       }
