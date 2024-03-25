@@ -15,7 +15,6 @@ import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
 
-
 const AvlPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
   const currentActions = useAppSelector((state) => state.bst.currentActions);
@@ -27,10 +26,11 @@ const AvlPage: FC = () => {
   const traversalResults = useAppSelector((state) => state.bst.traversalResults);
   const isPlaying = useAppSelector((state) => state.bst.isPlaying);
   const controller = AvlAnimationController.getController(root, useDispatch());
-  const [ viewportWidth, setViewportWidth ] = useState(window.innerWidth);
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
-  const [ showActions, setShowActions ] = useState(false);
-  const [ editingConstruction, setEditingConstruction ] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+  const [editingConstruction, setEditingConstruction] = useState(false);
+  const [showPseudoCode, setShowPseudoCode] = useState(false); //we will show pseudocode only if we have biult our tree
 
   const handleShowActions = () => {
     setShowActions(true);
@@ -65,21 +65,24 @@ const AvlPage: FC = () => {
             handleShowActions={handleShowActions}
             handleHideActions={handleHideActions}
             editingConstruction={editingConstruction}
+            setShowPseudoCode={setShowPseudoCode}
           />
-          {(showActions || editingConstruction) && <div className="container mx-auto max-w-7xl my-[150px]">
-            <BinaryTree
-              viewportWidth={viewportWidth}
-              root={root}
-              level={0}
-              height={calculateHeight(root)}
-              speed={controller.speed}
-              actions={currentActions}
-              roles={currentRoles}
-              isBST
-              visitedNodes={visitedNodes}
-              passedNodes={passedNodes}
-            />
-          </div>}
+          {(showActions || editingConstruction) && (
+            <div className="container mx-auto max-w-7xl my-[150px]">
+              <BinaryTree
+                viewportWidth={viewportWidth}
+                root={root}
+                level={0}
+                height={calculateHeight(root)}
+                speed={controller.speed}
+                actions={currentActions}
+                roles={currentRoles}
+                isBST
+                visitedNodes={visitedNodes}
+                passedNodes={passedNodes}
+              />
+            </div>
+          )}
           {traversalResults.length > 0 && (
             <div className="container mx-auto max-w-7xl px-0 py-0">
               <p className="mr-56">
@@ -92,18 +95,22 @@ const AvlPage: FC = () => {
               />
             </div>
           )}
-          {showActions && <PlayerControlsPanel
-            controller={controller}
-            isPlaying={isPlaying}
-          />}
-          <div className="flex justify-end mr-5">
-            <div className=" w-fit">
-              <PseudoCodeContainer
-                line={currentLine}
-                code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}
-              />
+          {showActions && (
+            <PlayerControlsPanel
+              controller={controller}
+              isPlaying={isPlaying}
+            />
+          )}
+          {showPseudoCode && (
+            <div className="flex justify-end mr-5">
+              <div className=" w-fit">
+                <PseudoCodeContainer
+                  line={currentLine}
+                  code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ) : (
         <div className="relative grid place-content-center place-items-center gap-2 before:bg-gradient-to-t before:from-teal-500/70 before:via-fuchsia-600 before:to-transparent before:blur-xl before:filter">

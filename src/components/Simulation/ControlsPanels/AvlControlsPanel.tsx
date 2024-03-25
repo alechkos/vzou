@@ -31,6 +31,7 @@ interface Props {
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
+  setShowPseudoCode: (show: boolean) => void; //pseudo code only after building
 }
 
 const buttonClassname =
@@ -50,6 +51,7 @@ const AvlControlsPanel: FC<Props> = ({
   handleShowActions,
   showActions,
   editingConstruction,
+  setShowPseudoCode, //add to here in order to our component will know this function
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
@@ -74,6 +76,7 @@ const AvlControlsPanel: FC<Props> = ({
    * @return {Promise<void>} Returns nothing.
    */
   const createBSTreeHandler = async () => {
+    setShowPseudoCode(true); //after build
     const res = getArrFromInputForHeap(15, inputArray);
     if (typeof res !== "string") {
       try {
