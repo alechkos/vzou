@@ -200,6 +200,7 @@ const AvlControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlg("Min"));
     dispatch(clearInputArray());
     dispatch(setInputArray(randomArray));
+    setShowPseudoCode(true); //after build
   };
 
   useEffect(() => {

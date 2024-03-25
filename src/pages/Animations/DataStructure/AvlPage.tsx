@@ -39,6 +39,7 @@ const AvlPage: FC = () => {
   const handleHideActions = () => {
     setShowActions(false);
     setEditingConstruction(true);
+    setShowPseudoCode(false);
   };
 
   useEffect(() => {
