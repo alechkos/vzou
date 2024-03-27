@@ -82,7 +82,7 @@ const bstSlice = createSlice({
       state.inputArray = "";
       filteredArray.forEach((num, index) => {
         if (index !== filteredArray.length - 1) {
-          state.inputArray += num + ", ";
+          state.inputArray += num + ",";
         } else {
           state.inputArray += num;
         }
