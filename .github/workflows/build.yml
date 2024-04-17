@@ -21,7 +21,7 @@ jobs:
         working-directory: backend
 
       - name: Build Source
-        run: CI='' npm run start
+        run: CI='' npm run build
         working-directory: backend
 
   build-frontend:
