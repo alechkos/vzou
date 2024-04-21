@@ -4,8 +4,29 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build
+  build-backend:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version: '18.x'
+
+      - name: Install Dependencies
+        run: npm install --force
+        working-directory: backend
+
+      - name: Build Source
+        run: CI='' npm run build
+        working-directory: backend
+
+  build-frontend:
+    name: Build Frontend
+    needs: build-backend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
