@@ -20,9 +20,9 @@ export const mailer = (subject:string, text:string, to:string) => {
     text
   };
 
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
+  transporter.sendMail(mailOptions, function(e, info){
+    if (e) {
+      console.log(e);
     } else {
       console.log('Email sent: ' + info.response);
     }
