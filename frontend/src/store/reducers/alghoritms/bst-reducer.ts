@@ -9,7 +9,7 @@ import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPse
 const initialState = {
   currentActions: [] as Events,
   currentRoot: undefined as BSTreeNode | undefined,
-  isPlaying: false,
+  isPlaying: !1,
   inputArray: "",
   error: "", // TODO:error in search in bst
   currentAlg: "Search" as BSTAlgNames,
