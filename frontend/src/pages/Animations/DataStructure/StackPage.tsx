@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { stackActions } from "../../../store/reducers/stackReducer";
 import { sleep } from "../../../utils/animation-helpers";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const MAX_ELEMENTS = 10;
@@ -78,6 +79,7 @@ function StackPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Queue"

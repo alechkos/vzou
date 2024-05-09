@@ -13,6 +13,7 @@ import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/P
 import HeapArray from "../../../components/Simulation/Heap/HeapArray/HeapArray";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const HeapPage: FC = () => {
@@ -41,6 +42,7 @@ const HeapPage: FC = () => {
 
   return (
     <>
+      <SideBar />
       {fitsAnimation ? (
         <>
           <HeapControlsPanel

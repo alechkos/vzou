@@ -14,6 +14,7 @@ import HeapArray from "../../../components/Simulation/Heap/HeapArray/HeapArray";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const HeapPage: FC = () => {
@@ -44,6 +45,7 @@ const HeapPage: FC = () => {
 
   return (
     <>
+      <SideBar />
       {fitsAnimation ? (
         <>
           <BSTreeControlsPanel

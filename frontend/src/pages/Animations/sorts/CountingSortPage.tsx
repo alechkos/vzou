@@ -13,6 +13,7 @@ import { SubjectImg } from "../../../components/UI/SubjectImg";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { init } from "../../../store/reducers/sorts/countingSortReducer";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const MAX_ELEMENTS = 10;
@@ -44,6 +45,7 @@ function CountingSortPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Counting Sort"

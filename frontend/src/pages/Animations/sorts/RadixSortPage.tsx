@@ -13,14 +13,14 @@ import { SubjectImg } from "../../../components/UI/SubjectImg";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { radixSortActions as actions } from "../../../store/reducers/sorts/radixSortReducer";
-
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 const MAX_ELEMENTS = 10;
 
 function RadixSortPage() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.radixSort);
-  const [ regsterActivity ] = useRegisterActivityMutation();
+  const [regsterActivity] = useRegisterActivityMutation();
   const controller = RadixSortController.getController(dispatch);
 
   const Sort = async () => {
@@ -28,7 +28,7 @@ function RadixSortPage() {
       algorithm: "Radix",
       subject: "Sorts",
     });
-    const opArr: RadixSortOperation[] = radixSort([ ...state.data ]);
+    const opArr: RadixSortOperation[] = radixSort([...state.data]);
     await controller.sort(opArr);
   };
 
@@ -43,6 +43,7 @@ function RadixSortPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Insertion Sort"

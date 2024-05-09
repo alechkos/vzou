@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { queueActions } from "../../../store/reducers/queueReducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { sleep } from "../../../utils/animation-helpers";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const MAX_ELEMENTS = 10;
@@ -79,6 +80,7 @@ function QueuePage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Queue"

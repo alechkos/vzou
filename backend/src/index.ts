@@ -11,8 +11,8 @@ import UserRouter from './routes/UserRoutes.js'
 dotenv.config()
 
 // uncomment 3 next lines for production
-// const privateKey = fs.readFileSync(process.env.PRIVATE_KEY_PATH || '../certificate/STAR_sce-fpm_com.key', 'utf8')
-// const certificate = fs.readFileSync(process.env.CERT_KEY_PATH || '../certificate/STAR_sce-fpm_com.crt', 'utf8')
+// const privateKey = fs.readFileSync(process..env.PRIVATE_KEY_PATH || '../certificate/STAR_sce-fpm_com.key', 'utf8')
+// const certificate = fs.readFileSync(process..env.CERT_KEY_PATH || '../certificate/STAR_sce-fpm_com.crt', 'utf8')
 // const credentials = { key: privateKey, cert: certificate }
 const app = express()
 const PORT = process.env.PORT || 3001

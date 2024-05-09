@@ -24,4 +24,4 @@ jobs:
           user: ${{ steps.get-manager.outputs.manager }}
           project_id: 8
           resource_node_id: ${{ github.event.issue.node_id }}
-          status_value: ${{ env.to_do }}
+          status_value: ${{ .env.to_do }}
