@@ -28,7 +28,7 @@ import ProfilePage from "../pages/ProfilePage";
 import RegisterLecturerPage from "../pages/RegisterLecturerPage";
 import RegistrationPage from "../pages/RegistrationPage";
 import TwoFactorAuthPage from "../pages/TwoFactorAuthPage";
-
+import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
 
 export interface RouteItem {
   path: string;
@@ -59,6 +59,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.HEAP, element: HeapPage },
   { path: RoutePaths.BST, element: BSTreePage },
   { path: RoutePaths.AVL, element: AvlPage },
+  { path: RoutePaths.LINKED_LIST, element: LinkedListPage },
   { path: RoutePaths.QUICK_SORT, element: QuickSortPage },
   { path: RoutePaths.INSERTION_SORT, element: InsertionSortPage },
   { path: RoutePaths.COUNTING_SORT, element: CountingSortPage },

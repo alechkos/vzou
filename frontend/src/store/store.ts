@@ -15,7 +15,7 @@ import mergeSortReducer from "./reducers/sorts/mergeSortReducer";
 import quickSortReducer from "./reducers/sorts/quickSortReducer";
 import radixSortReducer from "./reducers/sorts/radixSortReducer";
 import stackReducer from "./reducers/stackReducer";
-
+import linkedListReducer from "./reducers/alghoritms/linkedList-reducer";
 
 const store = configureStore({
   reducer: {
@@ -25,6 +25,7 @@ const store = configureStore({
     queue: queueReducer,
     heap: heapReducer,
     bst: bstReducer,
+    linkedList: linkedListReducer,
     countingSort: countingSortReducer,
     quickSort: quickSortReducer,
     insertionSort: insertionSortReducer,

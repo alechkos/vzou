@@ -24,6 +24,7 @@ export enum RoutePaths {
   HEAP = "/heap",
   BST = "/bst",
   AVL = "/avl",
+  LINKED_LIST = "/linkedList",
   QUICK_SORT = "/quicksort",
   INSERTION_SORT = "/insertionsort",
   COUNTING_SORT = "/countingsort",

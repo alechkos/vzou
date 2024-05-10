@@ -8,8 +8,9 @@ import stackGif from "../../assets/Gallery/stackGif.gif";
 import stackPhoto from "../../assets/Gallery/stackPhoto.png";
 import treeGif from "../../assets/Gallery/treeGif.gif";
 import treePhoto from "../../assets/Gallery/treePhoto.png";
+import linkedListPhoto from "../../assets/Gallery/LinkedListPhoto.png";
+import linkedListGif from "../../assets/Gallery/LinkedListGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
-
 
 const sortTypes = [
   {
@@ -77,6 +78,12 @@ const HomePageData = [
     gif: heapGif,
     image: heapPhoto,
     url: "/heap",
+  },
+  {
+    title: "Linked List",
+    gif: linkedListGif,
+    image: linkedListPhoto,
+    url: RoutePaths.LINKED_LIST,
   },
   /*
   TODO:

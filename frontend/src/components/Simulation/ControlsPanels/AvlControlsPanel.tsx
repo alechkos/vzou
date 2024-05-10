@@ -36,6 +36,7 @@ interface Props {
 
 const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
+
 /**
  * Renders the controls panel for the binary search tree.
  *
