@@ -14,7 +14,12 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   setError,
   setCurrentAlgorithm,
+  setInput,
+  setInputArray,
+  clearInputArray,
 } from "../../../store/reducers/alghoritms/linkedList-reducer";
+import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 
 interface Props {
   isButtonDisabled: boolean;
@@ -37,7 +42,10 @@ const LinkedListControlsPanel: FC<Props> = ({
   setShowPseudoCode,
 }) => {
   const inputArray = useAppSelector((state) => state.linkedList.inputArray);
+  const inputValues = useAppSelector((state) => state.linkedList.inputValues);
   const error = useAppSelector((state) => state.linkedList.error);
+
+  const [regsterActivity] = useRegisterActivityMutation();
 
   const dispatch = useAppDispatch();
 
@@ -52,6 +60,79 @@ const LinkedListControlsPanel: FC<Props> = ({
     setTimeout(() => {
       dispatch(setError(""));
     }, 5000);
+  };
+
+  const handleInput = (e: any) => {
+    const val = Number(e.target.value);
+    const key = e.target.name;
+    if (val < 1000 && val > -1) {
+      dispatch(setInput({ val, key }));
+    } else {
+      setCurrentError("Please enter a number between 0 and 999");
+    }
+  };
+
+  const createLinkedListHandler = () => {
+    const res = getArrFromInputForHeap(15, inputArray);
+    if (typeof res !== "string") {
+      try {
+        // controller.setTreeFromInput(res);
+        handleShowActions();
+        setValue("2");
+        dispatch(setCurrentAlgorithm("Search"));
+        setShowPseudoCode(true); //after build
+      } catch (e: any) {
+        setCurrentError(e.message);
+      }
+    } else {
+      setCurrentError(res);
+    }
+  };
+
+  const randomizeInput = () => {
+    const randomArray = generateRandomArrForHeap();
+    // controller.setTreeFromInput([], buildTree(randomArray));
+    handleShowActions();
+    setValue("2");
+    dispatch(setCurrentAlgorithm("Search"));
+    dispatch(clearInputArray());
+    dispatch(setInputArray(randomArray));
+    setShowPseudoCode(true); //after build
+  };
+
+  const Animate = async (animation: string) => {
+    try {
+      switch (animation) {
+        case "Search":
+          regsterActivity({
+            subject: "LinkedList",
+            algorithm: "Search",
+          });
+          // await controller.search(inputValues.Search);
+          return;
+        case "Insert":
+          regsterActivity({
+            subject: "LinkedList",
+            algorithm: "Insert",
+          });
+          // await controller.insert(inputValues.Insert);
+          return;
+        case "Delete":
+          regsterActivity({
+            subject: "LinkedList",
+            algorithm: "Delete",
+          });
+          // await controller.deleteNode(inputValues.DeleteNode);
+          return;
+        case "Clear":
+          dispatch(clearInputArray());
+          return;
+        default:
+          return;
+      }
+    } catch (e: any) {
+      setCurrentError(e.message);
+    }
   };
 
   return (
@@ -135,22 +216,22 @@ const LinkedListControlsPanel: FC<Props> = ({
                     placeholder="e.g 1,2,3,4,..."
                     size="small"
                     sx={{ width: "150px" }}
-                    // value={inputArray}
+                    value={inputArray}
                     label="Build-Linked-List"
                     variant="outlined"
-                    // onChange={(e) => dispatch(setInputArray(e.target.value))}
+                    onChange={(e) => dispatch(setInputArray(e.target.value))}
                   />
                   <button
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[40px] h-[40px]`}
-                    // onClick={createBSTreeHandler}
+                    onClick={createLinkedListHandler}
                   >
                     Go
                   </button>
                   <button
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
-                    // onClick={randomizeInput}
+                    onClick={randomizeInput}
                   >
                     <CasinoIcon />
                     Randomize
@@ -181,7 +262,7 @@ const LinkedListControlsPanel: FC<Props> = ({
                         max: 999,
                         style: { textAlign: "center" },
                       }}
-                      // onChange={handleInput}
+                      onChange={handleInput}
                     />
                     <button
                       disabled={isButtonDisabled}
