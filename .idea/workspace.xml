@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d05f11c1-2f5e-4c81-bd24-1e7ce56eb290" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/ClassObjects/LinkedList/LinkedListAnimationController.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/ClassObjects/LinkedList/LinkedListItemObj.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/ClassObjects/LinkedList/LinkedListMemento.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/ClassObjects/LinkedList/LinkedListNode.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Simulation/ControlsPanels/LinkedListControlsPanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Simulation/ControlsPanels/LinkedListControlsPanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/store/reducers/alghoritms/linkedList-reducer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/reducers/alghoritms/linkedList-reducer.ts" afterDir="false" />
-    </list>
+    <list default="true" id="d05f11c1-2f5e-4c81-bd24-1e7ce56eb290" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +62,7 @@
       <workItem from="1715278695438" duration="193000" />
       <workItem from="1715278895736" duration="4141000" />
       <workItem from="1715340851592" duration="10865000" />
-      <workItem from="1715428457782" duration="22243000" />
+      <workItem from="1715428457782" duration="22376000" />
     </task>
     <servers />
   </component>
