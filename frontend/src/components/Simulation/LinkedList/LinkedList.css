@@ -1,0 +1,41 @@
+.branch {
+    margin-top: 50px;
+    position: absolute;
+    height: 2px;
+    background-color: black;
+    transform-origin: left center;
+    z-index: 0;
+}
+
+.node-selected::before {
+    content: attr(data-id);
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 9px);
+    background-color: #83cb16;
+    color: #000;
+    padding-top: 2px;
+    clip-path: polygon(0% 40%, 20% 40%, 20% 100%, 80% 100%, 80% 40%, 100% 40%, 50% 0%);
+    height: 24px;
+    width: 24px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 999;
+}
+.node {
+    display: flex;
+    position: absolute;
+    margin-top: 50px;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 20%;
+    border: 2px solid #84cc16;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #ffffe0ff;
+    z-index: 2;
+}

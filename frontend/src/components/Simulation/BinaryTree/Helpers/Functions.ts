@@ -1,7 +1,7 @@
 import { AnimationProps } from "framer-motion";
 import React from "react";
 
-import { BSTreeNode } from "../../../../ClassObjects/BSTreeNode";
+import { BSTreeNode } from "../../../../ClassObjects/BST/BSTreeNode";
 import {
   BSTPseudoCode,
   BSTPseudoCodeKeys,
@@ -14,14 +14,13 @@ import {
 } from "../../PseudoCode/HeapPseudoCodeData";
 import { ActionType, NodeRole, TreeNode } from "../BinaryTreeTypes";
 
-
 export function arrayToBinaryTree(arr: number[]): TreeNode | undefined {
   if (!arr.length) {
     return undefined;
   }
 
   const root: TreeNode = { value: arr[0], id: 0 };
-  const queue: TreeNode[] = [ root ];
+  const queue: TreeNode[] = [root];
   let i = 1;
   while (i < arr.length) {
     const node = queue.shift()!;
@@ -45,12 +44,12 @@ export function arrayToBinaryTree(arr: number[]): TreeNode | undefined {
 export function getAnimationsAndStyles(
   action: ActionType,
   nodeInteractionPosition: { y: number; x: number } | null,
-  myPosition?: { y: number; x: number },
+  myPosition?: { y: number; x: number }
 ): {
-    initial: AnimationProps["initial"];
-    animate: AnimationProps["animate"];
-    style: React.CSSProperties;
-  } {
+  initial: AnimationProps["initial"];
+  animate: AnimationProps["animate"];
+  style: React.CSSProperties;
+} {
   let initial = {};
   let animate = {};
   const style = {};
@@ -112,12 +111,12 @@ export function getAnimationsAndStyles(
 export function getHeapArrayAnimationsAndStyles(
   action: ActionType,
   myPosition: number,
-  nodeInteractionPosition: number | null,
+  nodeInteractionPosition: number | null
 ): {
-    initial: AnimationProps["initial"];
-    animate: AnimationProps["animate"];
-    style: React.CSSProperties;
-  } {
+  initial: AnimationProps["initial"];
+  animate: AnimationProps["animate"];
+  style: React.CSSProperties;
+} {
   let initial = {};
   let animate = {};
   const style = {};
@@ -192,7 +191,7 @@ export const getNodeRolesForIter = (
   left: number | null,
   right: number | null,
   i: number,
-  heapSize: number,
+  heapSize: number
 ) => {
   const roles = [] as NodeRole[];
   if (left && left < heapSize) {
@@ -219,7 +218,7 @@ export const combineHeapPseudoCodes = (currentAlg: HeapPseudoCodeKeys) => {
     const alg2 = HeapPseudoCodeList[currentAlg][1];
     const code1 = HeapPseudoCode[alg1];
     const code2 = HeapPseudoCode[alg2];
-    return [ ...code1, { text: "", tabAmount: 1 }, ...code2 ];
+    return [...code1, { text: "", tabAmount: 1 }, ...code2];
   }
   return HeapPseudoCode[currentAlg];
 };
@@ -229,7 +228,7 @@ export const combineBSTPseudoCodes = (currentAlg: BSTPseudoCodeKeys) => {
     const alg2 = BSTPseudoCodeList[currentAlg][1];
     const code1 = BSTPseudoCode[alg1];
     const code2 = BSTPseudoCode[alg2];
-    return [ ...code1, { text: "", tabAmount: 1 }, ...code2 ];
+    return [...code1, { text: "", tabAmount: 1 }, ...code2];
   }
   return BSTPseudoCode[currentAlg];
 };

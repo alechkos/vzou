@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import React, { FC, useEffect, useState } from "react";
 
-import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
+import { AvlAnimationController } from "../../../ClassObjects/BST/AvlAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import {
   setError,

@@ -1,9 +1,13 @@
-import AnimationController from "./AnimationController";
+import AnimationController from "../AnimationController";
 import { BSTreeMemento } from "./BSTreeMemento";
 import { BSTreeNode } from "./BSTreeNode";
 
-import { ActionType, Events, NodeRole } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
+import {
+  ActionType,
+  Events,
+  NodeRole,
+} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { calculateHeight } from "../../components/Simulation/BinaryTree/Helpers/Functions";
 import {
   build,
   deleteNodeWrapper,
@@ -17,7 +21,7 @@ import {
   preorderTraversal,
   searchWrapper,
   successor,
-} from "../components/Simulation/BST/BST_Algorithms";
+} from "../../components/Simulation/BST/BST_Algorithms";
 import {
   setActions,
   setCodeRef,
@@ -28,8 +32,8 @@ import {
   setRoot,
   setTraversalResults,
   setVisited,
-} from "../store/reducers/alghoritms/bst-reducer";
-import { AppDispatch } from "../store/store";
+} from "../../store/reducers/alghoritms/bst-reducer";
+import { AppDispatch } from "../../store/store";
 
 /** The animation controller for the BST page.
  *  The major addition here, is the reference to the controller is treated as a Singleton object,
@@ -195,7 +199,7 @@ class BSTreeAnimationController extends AnimationController<BSTreeNode | undefin
     await this.playAlgorithm(
       insertWithAnimations,
       BSTreeNode.createNewNode(data, value),
-      this.memento as BSTreeMemento,
+      this.memento as BSTreeMemento
     );
   }
 

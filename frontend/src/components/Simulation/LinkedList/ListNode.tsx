@@ -1,23 +1,28 @@
-import "./BinaryTree.css";
+import "./LinkedList.css";
 
-import { motion } from "framer-motion";
+import { LinkedListItemObj } from "../../../ClassObjects/LinkedList/LinkedListItemObj";
 import { FC } from "react";
+import { getAnimationsAndStyles } from "../BinaryTree/Helpers/Functions";
+import { motion } from "framer-motion";
+import Branch from "../BinaryTree/Branch";
 
-import Branch from "./Branch";
-import { getAnimationsAndStyles } from "./Helpers/Functions";
-
-import { NodeObj } from "../../../ClassObjects/NodeObj";
-
-interface BinaryTreeNodeProps {
-  nodeObj: NodeObj;
+interface Props {
+  nodeObj: LinkedListItemObj;
 }
 
-const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
-  const { initial, animate, style } = getAnimationsAndStyles(
-    nodeObj.action,
-    nodeObj.swapPosition,
-    nodeObj.position
-  );
+const ListNode: FC<Props> = ({ nodeObj }) => {
+  // const { initial, animate, style } = getAnimationsAndStyles(
+  //   nodeObj.position,
+  //   nodeObj.swapPosition,
+  //   nodeObj.position
+  // );
+  const initial = {
+    opacity: 0,
+  };
+  const animate = {
+    opacity: 1,
+  };
+  const style = {};
   let animateObj;
   if (nodeObj.isPassed || nodeObj.isVisited) {
     animateObj = {
@@ -31,7 +36,7 @@ const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
   return (
     <div>
       <motion.span
-        data-id={nodeObj.nodeRole}
+        data-id={nodeObj.id}
         transition={{
           ease: "easeIn",
           duration: 0.4 * nodeObj.speed,
@@ -47,7 +52,7 @@ const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
           top: nodeObj.position.y,
           left: nodeObj.position.x,
         }}
-        className={nodeObj.nodeRole ? "node node-selected" : "node"}
+        className={"node"}
       >
         {nodeObj.value === -Infinity ? "−∞" : nodeObj.value}
       </motion.span>
@@ -63,4 +68,4 @@ const BinaryTreeNode: FC<BinaryTreeNodeProps> = ({ nodeObj }) => {
   );
 };
 
-export default BinaryTreeNode;
+export default ListNode;

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import PhoneRotate from "../../../assets/rotateTablet.svg";
-import BSTreeAnimationController from "../../../ClassObjects/BSTreeAnimationController";
+import BSTreeAnimationController from "../../../ClassObjects/BST/BSTreeAnimationController";
 import BinaryTree from "../../../components/Simulation/BinaryTree/BinaryTree";
 import {
   calculateHeight,
@@ -15,7 +15,6 @@ import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
 
-
 const HeapPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
   const currentActions = useAppSelector((state) => state.bst.currentActions);
@@ -27,7 +26,7 @@ const HeapPage: FC = () => {
   const traversalResults = useAppSelector((state) => state.bst.traversalResults);
   const isPlaying = useAppSelector((state) => state.bst.isPlaying);
   const controller = BSTreeAnimationController.getController(root, useDispatch());
-  const [ viewportWidth, setViewportWidth ] = useState(window.innerWidth);
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     function handleResize() {

@@ -1,19 +1,19 @@
-import AnimationController from "./AnimationController";
+import AnimationController from "../AnimationController";
 import { HeapMemento } from "./HeapMemento";
 
-import { Events, NodeRole, TreeNode } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { arrayToBinaryTree } from "../components/Simulation/BinaryTree/Helpers/Functions";
+import { Events, NodeRole, TreeNode } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { arrayToBinaryTree } from "../../components/Simulation/BinaryTree/Helpers/Functions";
 import {
   buildMaxHeap,
   heapExtractMax,
   heapMax,
   maxHeapInsert,
   maxHeapSort,
-} from "../components/Simulation/Heap/HeapAlgorithms";
+} from "../../components/Simulation/Heap/HeapAlgorithms";
 import {
   CodeReference,
   HeapAlgNames,
-} from "../components/Simulation/PseudoCode/HeapPseudoCodeData";
+} from "../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import {
   setActions,
   setArray,
@@ -21,8 +21,8 @@ import {
   setPlaying,
   setRoles,
   setRoot,
-} from "../store/reducers/alghoritms/heap-reducer";
-import { AppDispatch } from "../store/store";
+} from "../../store/reducers/alghoritms/heap-reducer";
+import { AppDispatch } from "../../store/store";
 
 /** The animation controller for the Heap page.
  *  The major addition here, is the reference to the controller is treated as a Singleton object,
@@ -37,7 +37,7 @@ class HeapAnimationController extends AnimationController<number[], HeapAlgNames
 
   private constructor(arr: number[], dispatch: AppDispatch) {
     super(dispatch, new HeapMemento(), arr);
-    buildMaxHeap([ ...this.data ], this.memento as HeapMemento);
+    buildMaxHeap([...this.data], this.memento as HeapMemento);
   }
 
   /** Singleton approach to accessing the controller.
@@ -111,7 +111,7 @@ class HeapAnimationController extends AnimationController<number[], HeapAlgNames
     this.setRoot(arrayToBinaryTree(this.memento.getData(frame)));
     this.setCurrentArr(
       this.memento.getData(frame),
-      (this.memento as HeapMemento).getHeapSize(frame),
+      (this.memento as HeapMemento).getHeapSize(frame)
     );
   }
 

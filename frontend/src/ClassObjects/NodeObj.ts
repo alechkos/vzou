@@ -1,5 +1,5 @@
 import { BranchObj } from "./BranchObj";
-import { BSTreeNode } from "./BSTreeNode";
+import { BSTreeNode } from "./BST/BSTreeNode";
 
 import {
   ActionType,
@@ -7,28 +7,13 @@ import {
   NodeRole,
   TreeNode,
 } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { BaseObj } from "./BaseObj";
 
 /** Self-implementation of a Node object, has the classic attributes like position, id, value...
  *  Used in tree-like objects (AVL, BST, etc)
  */
-export class NodeObj {
-  static availableSpace = 600; // Used to calculate where to place the node.
-
-  static gapY = 65; // Gap from the top of the screen
-
-  position: { x: number; y: number }; // Tuple to store the exact position.
-
-  speed: number;
-
-  id: number;
-
-  value: number;
-
-  branch: BranchObj | null; // The node obj keeps a reference to its branch.
-
+export class NodeObj extends BaseObj {
   action: ActionType;
-
-  parent: NodeObj | undefined;
 
   swapPosition: { x: number; y: number } | null; // for swaps between nodes
 
@@ -36,17 +21,11 @@ export class NodeObj {
 
   height: number;
 
-  viewportWidth: number;
-
-  type: "root" | "left" | "right";
+  parent: NodeObj | undefined;
 
   nodeRole?: string;
 
   isBST: boolean;
-
-  isVisited: boolean;
-
-  isPassed: boolean;
 
   /*
     Genuinely, so much of the following code was trial-and-error with different page sizes, different edge cases
@@ -65,25 +44,17 @@ export class NodeObj {
     level: number,
     height: number,
     type: "root" | "left" | "right",
-    isBST?: boolean,
+    isBST?: boolean
   ) {
-    this.position = position;
-    this.speed = speed;
-    this.id = id;
-    this.value = value;
+    super(position, speed, id, value, type, viewportWidth, parent);
     this.action = ActionType.NONE;
     this.swapPosition = null;
-    this.branch = null;
-    this.parent = parent;
     this.level = level;
     this.height = Math.max(5, height);
-    this.viewportWidth = viewportWidth;
-    this.type = type;
     this.isBST = !!isBST;
+    this.parent = parent;
     this.calculatePosition();
     this.createBranch();
-    this.isVisited = false;
-    this.isPassed = false;
   }
 
   getXGap() {
@@ -119,21 +90,6 @@ export class NodeObj {
     }
   }
 
-  createBranch() {
-    if (this.type === "root") {
-      // waht have to be here?
-    } else if (this.parent === undefined || this.parent.position === undefined) {
-      throw new Error("parent is null or parent position is null");
-    } else {
-      this.branch = new BranchObj({
-        x1: this.parent.position.x,
-        x2: this.position.x,
-        y1: this.parent.position.y,
-        y2: this.position.y,
-      });
-    }
-  }
-
   setAction(action: ActionType, swapPosition: { x: number; y: number } | null) {
     this.action = action;
     this.swapPosition = swapPosition;
@@ -150,7 +106,7 @@ export class NodeObj {
     root: TreeNode | undefined | BSTreeNode,
     level: number,
     currentHeapSize?: number,
-    isBST?: boolean,
+    isBST?: boolean
   ): NodeObj[] {
     if (!root) {
       return [];
@@ -169,7 +125,7 @@ export class NodeObj {
           level,
           height,
           "root",
-          isBST,
+          isBST
         ),
       },
     ];
@@ -194,7 +150,7 @@ export class NodeObj {
             nodeObj.level + 1,
             height,
             "right",
-            isBST,
+            isBST
           ),
         });
       }
@@ -211,7 +167,7 @@ export class NodeObj {
             nodeObj.level + 1,
             height,
             "left",
-            isBST,
+            isBST
           ),
         });
       }

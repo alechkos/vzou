@@ -1,16 +1,16 @@
-import { BSTreeMemento } from "../ClassObjects/BSTreeMemento";
+import { BSTreeMemento } from "./BSTreeMemento";
 
 import BSTreeAnimationController from "./BSTreeAnimationController";
 import { BSTreeNode } from "./BSTreeNode";
 
-import { buildTree, insert } from "../components/Simulation/AVL/AVL_Algorithms";
-import { calculateHeight } from "../components/Simulation/BinaryTree/Helpers/Functions";
+import { buildTree, insert } from "../../components/Simulation/AVL/AVL_Algorithms";
+import { calculateHeight } from "../../components/Simulation/BinaryTree/Helpers/Functions";
 import {
   deleteNodeWrapper,
   insertWithAnimations,
-} from "../components/Simulation/BST/BST_Algorithms";
-import { AppDispatch } from "../store/store";
-import { addToInputArray, deleteFromInputArray } from "../store/reducers/alghoritms/bst-reducer";
+} from "../../components/Simulation/BST/BST_Algorithms";
+import { AppDispatch } from "../../store/store";
+import { addToInputArray, deleteFromInputArray } from "../../store/reducers/alghoritms/bst-reducer";
 
 export class AvlAnimationController extends BSTreeAnimationController {
   private static avlController: null | AvlAnimationController = null;

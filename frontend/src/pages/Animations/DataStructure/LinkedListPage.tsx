@@ -11,8 +11,17 @@ import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/Pseud
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PhoneRotate from "../../../assets/rotateTablet.svg";
 import LinkedListControlsPanel from "../../../components/Simulation/ControlsPanels/LinkedListControlsPanel";
+import LinkedList from "../../../components/Simulation/LinkedList/LinkedList";
+import { useAppSelector } from "../../../store/hooks";
+import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
+import { useDispatch } from "react-redux";
 
 const LinkedListPage: FC = () => {
+  const head = useAppSelector((state) => state.linkedList.head);
+  const isPlaying = useAppSelector((state) => state.linkedList.isPlaying);
+
+  const controller = LinkedListAnimationController.getController(head, useDispatch());
+
   const [showActions, setShowActions] = useState(false);
   const [editingConstruction, setEditingConstruction] = useState(false);
   const [showPseudoCode, setShowPseudoCode] = useState(false); //we will show pseudocode only if we have built data structure
@@ -48,8 +57,8 @@ const LinkedListPage: FC = () => {
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           <LinkedListControlsPanel
-            // isButtonDisabled={isPlaying}
-            isButtonDisabled={false}
+            controller={controller}
+            isButtonDisabled={isPlaying}
             showActions={showActions}
             handleShowActions={handleShowActions}
             handleHideActions={handleHideActions}
@@ -58,7 +67,11 @@ const LinkedListPage: FC = () => {
           />
           {(showActions || editingConstruction) && (
             <div className="container mx-auto max-w-7xl my-[150px]">
-              {/*linked list construction*/}
+              <LinkedList
+                head={head}
+                speed={controller.speed}
+                viewportWidth={viewportWidth}
+              />
             </div>
           )}
           {/*{showActions && (*/}

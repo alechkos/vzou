@@ -20,8 +20,10 @@ import {
 } from "../../../store/reducers/alghoritms/linkedList-reducer";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
+import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
 
 interface Props {
+  controller: LinkedListAnimationController;
   isButtonDisabled: boolean;
   showActions: boolean;
   editingConstruction: boolean;
@@ -34,6 +36,7 @@ const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
 const LinkedListControlsPanel: FC<Props> = ({
+  controller,
   isButtonDisabled,
   showActions,
   editingConstruction,
@@ -76,9 +79,9 @@ const LinkedListControlsPanel: FC<Props> = ({
     const res = getArrFromInputForHeap(15, inputArray);
     if (typeof res !== "string") {
       try {
-        // controller.setTreeFromInput(res);
+        controller.setListFromInput(res);
         handleShowActions();
-        setValue("2");
+        setValue("Search");
         dispatch(setCurrentAlgorithm("Search"));
         setShowPseudoCode(true); //after build
       } catch (e: any) {
@@ -91,9 +94,9 @@ const LinkedListControlsPanel: FC<Props> = ({
 
   const randomizeInput = () => {
     const randomArray = generateRandomArrForHeap();
-    // controller.setTreeFromInput([], buildTree(randomArray));
+    controller.setListFromInput(randomArray);
     handleShowActions();
-    setValue("2");
+    setValue("Search");
     dispatch(setCurrentAlgorithm("Search"));
     dispatch(clearInputArray());
     dispatch(setInputArray(randomArray));
@@ -244,7 +247,7 @@ const LinkedListControlsPanel: FC<Props> = ({
                     Clear
                   </button>
                 </TabPanel>
-                {["Insert, Delete, Search"].map((text) => (
+                {["Insert", "Delete", "Search"].map((text) => (
                   <TabPanel
                     key={text}
                     value={text}

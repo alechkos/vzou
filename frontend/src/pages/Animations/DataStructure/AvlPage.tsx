@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import PhoneRotate from "../../../assets/rotateTablet.svg";
-import { AvlAnimationController } from "../../../ClassObjects/AvlAnimationController";
+import { AvlAnimationController } from "../../../ClassObjects/BST/AvlAnimationController";
 import BinaryTree from "../../../components/Simulation/BinaryTree/BinaryTree";
 import {
   calculateHeight,
