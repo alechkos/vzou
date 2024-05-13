@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import React, { FC, useEffect, useState } from "react";
 
-import BSTreeAnimationController from "../../../ClassObjects/BSTreeAnimationController";
+import BSTreeAnimationController from "../../../ClassObjects/BST/BSTreeAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setError, setInput, setInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
@@ -17,7 +17,6 @@ import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import { randomBuildTree } from "../BST/BST_Algorithms";
-
 
 interface Props {
   controller: BSTreeAnimationController;
@@ -35,12 +34,12 @@ const buttonClassname =
  * @return {JSX.Element} The BSTreeControlsPanel component.
  */
 const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
-  const [ regsterActivity ] = useRegisterActivityMutation();
+  const [regsterActivity] = useRegisterActivityMutation();
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
-  const [ value, setValue ] = useState("1");
+  const [value, setValue] = useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -173,7 +172,7 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
-    controller.setTreeFromInput([ 2, 1, 3 ]);
+    controller.setTreeFromInput([2, 1, 3]);
   }, []);
 
   return (
@@ -274,7 +273,7 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                   value="2"
                   className={value === "2" ? "flex flex-row justify-center " : "hidden"}
                 >
-                  {[ "Min", "Max" ].map((text) => (
+                  {["Min", "Max"].map((text) => (
                     <div
                       className="py-2 px-6"
                       key={text}
@@ -293,7 +292,7 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                   value="3"
                   className={value === "3" ? "flex flex-row justify-center " : "hidden"}
                 >
-                  {[ "Inorder", "Preorder", "Postorder" ].map((text) => (
+                  {["Inorder", "Preorder", "Postorder"].map((text) => (
                     <div
                       className="py-2 px-2"
                       key={text}
@@ -308,7 +307,7 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     </div>
                   ))}
                 </TabPanel>
-                {[ "Successor", "Predecessor", "Search", "Insert", "DeleteNode" ].map((text) => (
+                {["Successor", "Predecessor", "Search", "Insert", "DeleteNode"].map((text) => (
                   <TabPanel
                     key={text}
                     value={text}

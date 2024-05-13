@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
+import { BSTreeNode } from "../../../ClassObjects/BST/BSTreeNode";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { BSTAlgNames } from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";

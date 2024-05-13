@@ -1,5 +1,5 @@
-import { BSTreeMemento } from "../../../ClassObjects/BSTreeMemento";
-import { BSTreeNode } from "../../../ClassObjects/BSTreeNode";
+import { BSTreeMemento } from "../../../ClassObjects/BST/BSTreeMemento";
+import { BSTreeNode } from "../../../ClassObjects/BST/BSTreeNode";
 import { ActionType } from "../../Simulation/BinaryTree/BinaryTreeTypes";
 import { calculateHeight } from "../BinaryTree/Helpers/Functions";
 

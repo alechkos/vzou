@@ -3,6 +3,7 @@ import { LinkedListNode } from "./LinkedListNode";
 import { AppDispatch } from "../../store/store";
 import { LinkedListMemento } from "./LinkedListMemento";
 import { setHead, setPlaying } from "../../store/reducers/alghoritms/linkedList-reducer";
+import { buildLinkedList } from "../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 
 export class LinkedListAnimationController extends AnimationController<
   LinkedListNode | undefined,
@@ -29,5 +30,11 @@ export class LinkedListAnimationController extends AnimationController<
 
   setHead(head: LinkedListNode | undefined) {
     this.dispatch(setHead(head));
+  }
+
+  setListFromInput(arr: number[]) {
+    const head = buildLinkedList(arr);
+    this.data = head;
+    this.setHead(head);
   }
 }

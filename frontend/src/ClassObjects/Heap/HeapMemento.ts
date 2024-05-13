@@ -1,11 +1,10 @@
-import { Memento } from "./Memento";
+import { Memento } from "../Memento";
 
-import { ActionType, NodeRole } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { ActionType, NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import {
   CodeReference,
   HeapAlgNames,
-} from "../components/Simulation/PseudoCode/HeapPseudoCodeData";
-
+} from "../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 
 export class HeapMemento extends Memento<number[], HeapAlgNames> {
   heapSizeData: (number | undefined)[];
@@ -19,7 +18,7 @@ export class HeapMemento extends Memento<number[], HeapAlgNames> {
     codeRef: CodeReference<HeapAlgNames>,
     array: number[],
     heapSize?: number,
-    nodeRoles: NodeRole[] = [],
+    nodeRoles: NodeRole[] = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -50,11 +49,11 @@ export class HeapMemento extends Memento<number[], HeapAlgNames> {
     index1: number,
     index2: number,
     heapSize?: number,
-    nodeRoles: NodeRole[] = [],
+    nodeRoles: NodeRole[] = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.SWAP, item: index1, item2: index2 }],
-      data: [ ...array ],
+      data: [...array],
       codeRef,
       roles: nodeRoles,
     });
@@ -81,7 +80,7 @@ export class HeapMemento extends Memento<number[], HeapAlgNames> {
     index: number,
     action: ActionType,
     heapSize?: number,
-    nodeRoles: NodeRole[] = [],
+    nodeRoles: NodeRole[] = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],
@@ -110,21 +109,21 @@ export class HeapMemento extends Memento<number[], HeapAlgNames> {
       if (runtimeArr.length === 0) {
         return [];
       }
-      return [ ...runtimeArr ];
+      return [...runtimeArr];
     }
     try {
       const lastArr = memento.getLastData();
       // check if runtimeArr is the same as the last runtimeArr
       for (let i = 0; i < runtimeArr.length; i++) {
         if (runtimeArr[i] !== lastArr[i]) {
-          return [ ...runtimeArr ];
+          return [...runtimeArr];
         }
       }
       return lastArr;
     } catch (e) {
       // Should never happen
       console.log(e);
-      return [ ...runtimeArr ];
+      return [...runtimeArr];
     }
   }
 }

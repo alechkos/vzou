@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import React, { FC, useState } from "react";
 
-import HeapAnimationController from "../../../ClassObjects/HeapAnimationController";
+import HeapAnimationController from "../../../ClassObjects/Heap/HeapAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setInputArray, setInputKey } from "../../../store/reducers/alghoritms/heap-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
@@ -16,7 +16,6 @@ import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
-
 
 interface Props {
   controller: HeapAnimationController;
@@ -28,10 +27,10 @@ const buttonClassname =
 const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   const inputArray = useAppSelector((state) => state.heap.inputArray);
   const inputKey = useAppSelector((state) => state.heap.inputKey);
-  const [ error, setError ] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useAppDispatch();
-  const [ regsterActivity ] = useRegisterActivityMutation();
-  const [ value, setValue ] = useState("1");
+  const [regsterActivity] = useRegisterActivityMutation();
+  const [value, setValue] = useState("1");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
@@ -186,7 +185,7 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                   value="2"
                   className={value === "2" ? "flex flex-row justify-center " : "hidden"}
                 >
-                  {[ "Heap-Max", "Extract-Max", "Heap-Sort" ].map((text) => (
+                  {["Heap-Max", "Extract-Max", "Heap-Sort"].map((text) => (
                     <div
                       className="px-2"
                       key={text}

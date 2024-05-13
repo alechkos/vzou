@@ -1,8 +1,7 @@
 import { BSTreeNode } from "./BSTreeNode";
-import { Memento } from "./Memento";
+import { Memento } from "../Memento";
 
-import { ActionType, NodeRole } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
-
+import { ActionType, NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
   visitedNodesSnapshots: number[][];
@@ -32,7 +31,7 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = [],
+    traversalResults: number[] = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -40,9 +39,9 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
       codeRef,
       roles: nodeRoles,
     });
-    this.visitedNodesSnapshots.push([ ...visitedNodes ]);
-    this.passedNodesSnapshots.push([ ...passedNodes ]);
-    this.traversalResultsSnapshots.push([ ...traversalResults ]);
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+    this.traversalResultsSnapshots.push([...traversalResults]);
   }
 
   addSwap(
@@ -54,7 +53,7 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = [],
+    traversalResults: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.SWAP, item: index1, item2: index2 }],
@@ -62,9 +61,9 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
       codeRef,
       roles: nodeRoles,
     });
-    this.visitedNodesSnapshots.push([ ...visitedNodes ]);
-    this.passedNodesSnapshots.push([ ...passedNodes ]);
-    this.traversalResultsSnapshots.push([ ...traversalResults ]);
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+    this.traversalResultsSnapshots.push([...traversalResults]);
   }
 
   addError(
@@ -74,7 +73,7 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = [],
+    traversalResults: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.ERROR, item: -1, error }],
@@ -82,9 +81,9 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
       codeRef,
       roles: nodeRoles,
     });
-    this.visitedNodesSnapshots.push([ ...visitedNodes ]);
-    this.passedNodesSnapshots.push([ ...passedNodes ]);
-    this.traversalResultsSnapshots.push([ ...traversalResults ]);
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+    this.traversalResultsSnapshots.push([...traversalResults]);
   }
 
   getLength() {
@@ -99,7 +98,7 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = [],
+    traversalResults: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],
@@ -107,9 +106,9 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
       codeRef,
       roles: nodeRoles,
     });
-    this.visitedNodesSnapshots.push([ ...visitedNodes ]);
-    this.passedNodesSnapshots.push([ ...passedNodes ]);
-    this.traversalResultsSnapshots.push([ ...traversalResults ]);
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+    this.traversalResultsSnapshots.push([...traversalResults]);
   }
 
   addDoubleSnapShot(
@@ -121,7 +120,7 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = [],
+    traversalResults: number[] = []
   ) {
     this.snapshots.push({
       actions: [
@@ -132,9 +131,9 @@ export class BSTreeMemento extends Memento<BSTreeNode | undefined, string> {
       codeRef,
       roles: nodeRoles,
     });
-    this.visitedNodesSnapshots.push([ ...visitedNodes ]);
-    this.passedNodesSnapshots.push([ ...passedNodes ]);
-    this.traversalResultsSnapshots.push([ ...traversalResults ]);
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+    this.traversalResultsSnapshots.push([...traversalResults]);
   }
 
   getVisitedNodes(index: number) {

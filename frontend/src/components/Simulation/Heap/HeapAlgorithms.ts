@@ -1,8 +1,7 @@
-import { HeapMemento } from "../../../ClassObjects/HeapMemento";
+import { HeapMemento } from "../../../ClassObjects/Heap/HeapMemento";
 import { ActionType } from "../BinaryTree/BinaryTreeTypes";
 import { getNodeRolesForIter } from "../BinaryTree/Helpers/Functions";
 import { HeapPseudoCodeKeys } from "../PseudoCode/HeapPseudoCodeData";
-
 
 const gaps = {
   buildMaxHeap: 5,
@@ -30,7 +29,7 @@ export function maxHeapify(
   heapSize: number,
   memento: HeapMemento,
   currentAlg: HeapPseudoCodeKeys,
-  gap = 0,
+  gap = 0
 ): void {
   const left = 2 * i + 1;
   const right = 2 * i + 2;
@@ -39,7 +38,7 @@ export function maxHeapify(
     { line: 1 + gap, name: currentAlg },
     A,
     heapSize,
-    getNodeRolesForIter(left, null, i, heapSize),
+    getNodeRolesForIter(left, null, i, heapSize)
   );
   memento.addBlank({ line: 2 + gap, name: currentAlg }, A, heapSize, roles);
   let largest = i;
@@ -51,7 +50,7 @@ export function maxHeapify(
       left,
       ActionType.HIGHLIGHT_LIGHT,
       heapSize,
-      roles,
+      roles
     );
     largest = left;
   } else {
@@ -65,7 +64,7 @@ export function maxHeapify(
       right,
       ActionType.HIGHLIGHT_LIGHT,
       heapSize,
-      roles,
+      roles
     );
     largest = right;
   }
@@ -77,10 +76,10 @@ export function maxHeapify(
       largest,
       ActionType.HIGHLIGHT_FULL,
       heapSize,
-      roles,
+      roles
     );
     roles = [];
-    [ A[i], A[largest] ] = [ A[largest], A[i] ];
+    [A[i], A[largest]] = [A[largest], A[i]];
     memento.addSwap({ line: 9 + gap, name: currentAlg }, A, i, largest, heapSize, roles);
     memento.addBlank({ line: 10 + gap, name: currentAlg }, A, heapSize, roles);
     maxHeapify(A, largest, heapSize, memento, currentAlg, gap);
@@ -129,7 +128,7 @@ export function heapIncreaseKey(
   key: number,
   memento: HeapMemento,
   currentAlg: HeapPseudoCodeKeys,
-  gap = 0,
+  gap = 0
 ): void {
   memento.addBlank({ line: 1 + gap, name: currentAlg }, A);
   if (key < A[i]) {
@@ -141,7 +140,7 @@ export function heapIncreaseKey(
   memento.addBlank({ line: 4 + gap, name: currentAlg }, A);
   while (i > 0 && A[Math.floor((i - 1) / 2)] < A[i]) {
     const j = Math.floor((i - 1) / 2);
-    [ A[i], A[j] ] = [ A[j], A[i] ];
+    [A[i], A[j]] = [A[j], A[i]];
     memento.addSwap({ line: 5 + gap, name: currentAlg }, A, i, j);
     i = Math.floor((i - 1) / 2);
     memento.addSnapshot({ line: 6 + gap, name: currentAlg }, A, i, ActionType.HIGHLIGHT_LIGHT);
@@ -153,7 +152,7 @@ export function maxHeapSort(A: number[], memento: HeapMemento): number[] {
   let heapSize = A.length;
   memento.addBlank({ line: 2, name: "MaxHeapSort" }, A, heapSize);
   for (let i = A.length - 1; i > 0; i--) {
-    [ A[0], A[i] ] = [ A[i], A[0] ];
+    [A[0], A[i]] = [A[i], A[0]];
     memento.addSwap({ line: 3, name: "MaxHeapSort" }, A, 0, i, heapSize);
     heapSize--;
     memento.addBlank({ line: 5, name: "MaxHeapSort" }, A, heapSize);

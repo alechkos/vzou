@@ -1,0 +1,11 @@
+import { LinkedListNode } from "../../../../ClassObjects/LinkedList/LinkedListNode";
+
+export function buildLinkedList(arr: number[]) {
+  let head = new LinkedListNode(arr[0], 0, undefined, undefined);
+  let tempNode = head;
+  for (let i = 1; i < arr.length; ++i) {
+    tempNode.next = new LinkedListNode(arr[i], i, tempNode, undefined);
+    tempNode = tempNode.next;
+  }
+  return head;
+}
