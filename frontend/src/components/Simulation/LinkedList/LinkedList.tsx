@@ -13,6 +13,7 @@ interface LinkedListProps {
 
 const LinkedList: FC<LinkedListProps> = ({ head, speed, viewportWidth }) => {
   const linkedListObjects = LinkedListItemObj.generateLinkedListObjects(viewportWidth, speed, head);
+  console.log(linkedListObjects);
   return (
     <div>
       <AnimatePresence>

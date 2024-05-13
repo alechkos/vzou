@@ -93,7 +93,7 @@ const LinkedListControlsPanel: FC<Props> = ({
   };
 
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap();
+    const randomArray = generateRandomArrForHeap(7, 1);
     controller.setListFromInput(randomArray);
     handleShowActions();
     setValue("Search");

@@ -194,7 +194,7 @@ const AvlControlsPanel: FC<Props> = ({
     }
   };
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap();
+    const randomArray = generateRandomArrForHeap(9, 7);
     controller.setTreeFromInput([], buildTree(randomArray));
     handleShowActions();
     setValue("2");

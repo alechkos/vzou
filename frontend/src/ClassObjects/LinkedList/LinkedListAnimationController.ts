@@ -36,5 +36,6 @@ export class LinkedListAnimationController extends AnimationController<
     const head = buildLinkedList(arr);
     this.data = head;
     this.setHead(head);
+    this.memento.clearSnapshots();
   }
 }

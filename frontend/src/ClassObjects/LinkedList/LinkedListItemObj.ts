@@ -6,11 +6,15 @@ import { BaseObj } from "../BaseObj";
 import { LinkedListNodeType } from "../../components/Simulation/LinkedList/LinkedListTypes";
 
 export class LinkedListItemObj extends BaseObj {
-  static width = 6; //Used to calculate X gap
+  static width = 4; //Used to calculate X gap
 
   static gapY = 0;
 
   parent: LinkedListItemObj | undefined;
+
+  topLineForArrow: BranchObj | null;
+
+  botLineForArrow: BranchObj | null;
 
   constructor(
     position: { x: number; y: number },
@@ -23,8 +27,12 @@ export class LinkedListItemObj extends BaseObj {
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parent = parent;
+    this.topLineForArrow = null;
+    this.botLineForArrow = null;
     this.calculatePosition();
+    this.createLineForArrow(10, "top");
     this.createBranch();
+    this.createLineForArrow(10, "bot");
   }
 
   getXGap() {
@@ -55,7 +63,7 @@ export class LinkedListItemObj extends BaseObj {
       {
         node: head,
         nodeObj: new LinkedListItemObj(
-          { x: viewportWidth / 2 - 120, y: 325 },
+          { x: viewportWidth / 2 - 600, y: 325 },
           speed,
           head.id,
           head.value,
@@ -87,7 +95,49 @@ export class LinkedListItemObj extends BaseObj {
       linkedListObjects.push(nodeObj);
     }
 
+    linkedListObjects.push(
+      new LinkedListItemObj(
+        { x: 0, y: 0 }, // will be calculated according to the previous item
+        speed,
+        -1,
+        -1,
+        linkedListObjects[linkedListObjects.length - 1],
+        "node",
+        viewportWidth
+      )
+    );
+
     linkedListObjects.sort((a, b) => a.id - b.id);
     return linkedListObjects;
+  }
+
+  createLineForArrow(gapY: number, place: string) {
+    if (this.type === "root" || this.type === "head") {
+      // waht have to be here?
+    } else if (this.parent === undefined || this.parent.position === undefined) {
+      throw new Error("parent is null or parent position is null");
+    } else {
+      if (place === "top") {
+        this.botLineForArrow = new BranchObj(
+          {
+            x1: this.parent.position.x + 100,
+            x2: this.position.x,
+            y1: this.parent.position.y - gapY,
+            y2: this.position.y,
+          },
+          true
+        );
+      } else if (place === "bot") {
+        this.topLineForArrow = new BranchObj(
+          {
+            x1: this.parent.position.x + 100,
+            x2: this.position.x,
+            y1: this.parent.position.y + gapY,
+            y2: this.position.y,
+          },
+          true
+        );
+      }
+    }
   }
 }

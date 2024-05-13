@@ -166,7 +166,7 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
                     onClick={async () => {
-                      controller.setArrFromInput(generateRandomArrForHeap());
+                      controller.setArrFromInput(generateRandomArrForHeap(9, 7));
                       await Animate("Build-Max-Heap");
                     }}
                   >

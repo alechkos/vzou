@@ -4,7 +4,7 @@ import { LinkedListItemObj } from "../../../ClassObjects/LinkedList/LinkedListIt
 import { FC } from "react";
 import { getAnimationsAndStyles } from "../BinaryTree/Helpers/Functions";
 import { motion } from "framer-motion";
-import Branch from "../BinaryTree/Branch";
+import Arrow from "./Arrow";
 
 interface Props {
   nodeObj: LinkedListItemObj;
@@ -35,29 +35,56 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
   }
   return (
     <div>
-      <motion.span
-        data-id={nodeObj.id}
-        transition={{
-          ease: "easeIn",
-          duration: 0.4 * nodeObj.speed,
-          delay: nodeObj.isPassed ? 0.5 * nodeObj.speed : 0,
-        }}
-        layout="position"
-        initial={initial}
-        animate={animateObj}
-        key={`${nodeObj.id},${nodeObj.value}`}
-        exit={{ opacity: 0, scale: 0.5 }}
-        style={{
-          ...style,
-          top: nodeObj.position.y,
-          left: nodeObj.position.x,
-        }}
-        className={"node"}
-      >
-        {nodeObj.value === -Infinity ? "−∞" : nodeObj.value}
-      </motion.span>
-      {nodeObj.branch && (
-        <Branch
+      {nodeObj.id === -1 && (
+        <motion.span
+          data-id={nodeObj.id}
+          transition={{
+            ease: "easeIn",
+            duration: 0.4 * nodeObj.speed,
+            delay: nodeObj.isPassed ? 0.5 * nodeObj.speed : 0,
+          }}
+          layout="position"
+          initial={initial}
+          animate={animateObj}
+          key={`${nodeObj.id},${nodeObj.value}`}
+          exit={{ opacity: 0, scale: 0.5 }}
+          style={{
+            ...style,
+            top: nodeObj.position.y,
+            left: nodeObj.position.x,
+          }}
+          className={"node-of-list"}
+        />
+      )}
+      {nodeObj.id !== -1 && (
+        <motion.span
+          data-id={nodeObj.id}
+          transition={{
+            ease: "easeIn",
+            duration: 0.4 * nodeObj.speed,
+            delay: nodeObj.isPassed ? 0.5 * nodeObj.speed : 0,
+          }}
+          layout="position"
+          initial={initial}
+          animate={animateObj}
+          key={`${nodeObj.id},${nodeObj.value}`}
+          exit={{ opacity: 0, scale: 0.5 }}
+          style={{
+            ...style,
+            top: nodeObj.position.y,
+            left: nodeObj.position.x,
+          }}
+          className={"node-of-list"}
+        >
+          <p className={"half"}>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
+          <p className={"half2"}>{"Next"}</p>
+        </motion.span>
+      )}
+      {nodeObj.branch && nodeObj.topLineForArrow && nodeObj.botLineForArrow && (
+        <Arrow
+          className={"branch-of-list"}
+          topLineArrow={nodeObj.topLineForArrow}
+          botLineArrow={nodeObj.botLineForArrow}
           branch={nodeObj.branch}
           key={`${nodeObj.id},${nodeObj.value}-Branch`}
           isPassed={nodeObj.isPassed}

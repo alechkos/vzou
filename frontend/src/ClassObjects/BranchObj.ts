@@ -13,15 +13,22 @@ export class BranchObj {
 
   y2: number;
 
-  constructor(position: { x1: number; y1: number; x2: number; y2: number }) {
+  isArrow?: boolean;
+
+  constructor(position: { x1: number; y1: number; x2: number; y2: number }, isArrow?: boolean) {
     const { x1, x2, y1, y2 } = position;
     this.x1 = x1 + BranchObj.baseSize;
     this.x2 = x2 + BranchObj.baseSize;
     this.y1 = y1 + BranchObj.baseSize;
     this.y2 = y2 + BranchObj.baseSize;
+    this.isArrow = isArrow;
   }
 
   getBranchLength() {
+    if (this.isArrow) {
+      this.x1 = this.x1 + 19;
+      return Math.sqrt((this.x2 - this.x1) ** 2 + (this.y2 - this.y1) ** 2);
+    }
     return Math.sqrt((this.x2 - this.x1) ** 2 + (this.y2 - this.y1) ** 2);
   }
 

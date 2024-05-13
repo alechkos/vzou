@@ -168,7 +168,7 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
     }
   };
   const randomizeInput = () => {
-    controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap()));
+    controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap(9, 7)));
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.

@@ -1,5 +1,5 @@
-.branch {
-    margin-top: 50px;
+.branch-of-list {
+    margin-top: 150px;
     position: absolute;
     height: 2px;
     background-color: black;
@@ -24,18 +24,35 @@
     font-size: 14px;
     z-index: 999;
 }
-.node {
+.node-of-list {
     display: flex;
     position: absolute;
-    margin-top: 50px;
+    margin-top: 150px;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 20%;
+    width: 100px;
+    height: 40px;
+    border-radius: 5%;
     border: 2px solid #84cc16;
     font-size: 16px;
     font-weight: bold;
     background-color: #ffffe0ff;
     z-index: 2;
 }
+
+.half {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 8px;
+    height: 100%;
+    border-right: #65a30d solid;
+}
+
+.half2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 8px;
+}
+
