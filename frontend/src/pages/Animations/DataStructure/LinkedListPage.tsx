@@ -1,11 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import AvlControlsPanel from "../../../components/Simulation/ControlsPanels/AvlControlsPanel";
-import BinaryTree from "../../../components/Simulation/BinaryTree/BinaryTree";
-import {
-  calculateHeight,
-  combineBSTPseudoCodes,
-} from "../../../components/Simulation/BinaryTree/Helpers/Functions";
-import HeapArray from "../../../components/Simulation/Heap/HeapArray/HeapArray";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
@@ -15,10 +8,17 @@ import LinkedList from "../../../components/Simulation/LinkedList/LinkedList";
 import { useAppSelector } from "../../../store/hooks";
 import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
 import { useDispatch } from "react-redux";
+import linkedList from "../../../components/Simulation/LinkedList/LinkedList";
+import {combineLinkedListPseudoCode} from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 
 const LinkedListPage: FC = () => {
   const head = useAppSelector((state) => state.linkedList.head);
   const isPlaying = useAppSelector((state) => state.linkedList.isPlaying);
+  const currentLine = useAppSelector(state => state.linkedList.currentLine);
+  const currentAlg = useAppSelector(state => state.linkedList.currentAlg);
+  const currentRoles = useAppSelector(state => state.linkedList.currentRoles);
+  const passedNodes = useAppSelector(state => state.linkedList.passedNodes);
+  const currentActions = useAppSelector(state => state.linkedList.currentActions);
 
   const controller = LinkedListAnimationController.getController(head, useDispatch());
 
@@ -71,25 +71,28 @@ const LinkedListPage: FC = () => {
                 head={head}
                 speed={controller.speed}
                 viewportWidth={viewportWidth}
+                passedNodes={passedNodes}
+                roles={currentRoles}
+                actions={currentActions}
               />
             </div>
           )}
-          {/*{showActions && (*/}
-          {/*  // <PlayerControlsPanel*/}
-          {/*  //   controller={controller}*/}
-          {/*  //   isPlaying={isPlaying}*/}
-          {/*  // />*/}
-          {/*)}*/}
-          {/*{showPseudoCode && (*/}
-          {/*  <div className="flex justify-end mr-5">*/}
-          {/*    <div className=" w-fit">*/}
-          {/*      <PseudoCodeContainer*/}
-          {/*        line={currentLine}*/}
-          {/*        code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}*/}
-          {/*      />*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*)}*/}
+          {showActions && (
+            <PlayerControlsPanel
+              controller={controller}
+              isPlaying={isPlaying}
+            />
+          )}
+          {showPseudoCode && (
+            <div className="flex justify-end mr-5">
+              <div className=" w-fit">
+                <PseudoCodeContainer
+                  line={currentLine}
+                  code={combineLinkedListPseudoCode(currentAlg) as PseudoItem[]}
+                />
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="relative grid place-content-center place-items-center gap-2 before:bg-gradient-to-t before:from-teal-500/70 before:via-fuchsia-600 before:to-transparent before:blur-xl before:filter">

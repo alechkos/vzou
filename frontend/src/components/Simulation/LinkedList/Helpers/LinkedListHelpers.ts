@@ -1,4 +1,5 @@
 import { LinkedListNode } from "../../../../ClassObjects/LinkedList/LinkedListNode";
+import {LinkedListPseudoCode, LinkedListPseudoCodeKeys} from "../../PseudoCode/LinkedListPseudoCodeData";
 
 export function buildLinkedList(arr: number[]) {
   let head = new LinkedListNode(arr[0], 0, undefined, undefined);
@@ -8,4 +9,8 @@ export function buildLinkedList(arr: number[]) {
     tempNode = tempNode.next;
   }
   return head;
+}
+
+export const combineLinkedListPseudoCode = (currentAlg: LinkedListPseudoCodeKeys) => {
+  return LinkedListPseudoCode[currentAlg];
 }

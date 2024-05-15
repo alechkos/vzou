@@ -1,4 +1,5 @@
-import { BranchObj } from "./BranchObj";
+import {BranchObj} from "./BranchObj";
+import {ActionType} from "../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 /*
  * The base class for objects for data structures vizualization
@@ -29,6 +30,10 @@ export abstract class BaseObj {
 
   parent: BaseObj | undefined;
 
+  action: ActionType;
+
+  nodeRole?: string;
+
   protected constructor(
     position: { x: number; y: number },
     speed: number,
@@ -38,6 +43,7 @@ export abstract class BaseObj {
     viewportWidth: number,
     parent: BaseObj | undefined
   ) {
+    this.action = ActionType.NONE;
     this.position = position;
     this.speed = speed;
     this.id = id;

@@ -56,3 +56,34 @@
     padding-left: 8px;
 }
 
+.null-node {
+    display: flex;
+    position: absolute;
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #84cc16;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #ffffe0ff;
+    z-index: 2;
+
+}
+
+.line-for-null {
+    position: absolute;
+    width: 80px;
+    height: 3px;
+    background-color: black;
+    z-index: 0;
+    transform: rotate(-45deg);
+}
+
+.head-of-list {
+    position: absolute;
+    bottom: 40px;
+}
+

@@ -1,9 +1,10 @@
 /** Self-implementation of a LinkedListItem object, has the classic attributes like position, id, value...
  *  Used in LinkedList data type
  */
-import { BranchObj } from "../BranchObj";
-import { BaseObj } from "../BaseObj";
-import { LinkedListNodeType } from "../../components/Simulation/LinkedList/LinkedListTypes";
+import {BranchObj} from "../BranchObj";
+import {BaseObj} from "../BaseObj";
+import {LinkedListNodeType} from "../../components/Simulation/LinkedList/LinkedListTypes";
+import {ActionType, Events, NodeRole} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 export class LinkedListItemObj extends BaseObj {
   static width = 4; //Used to calculate X gap
@@ -138,6 +139,48 @@ export class LinkedListItemObj extends BaseObj {
           true
         );
       }
+    }
+  }
+
+  setAction(action: ActionType) {
+    this.action = action;
+  }
+
+  setRole(role?: string) {
+    this.nodeRole = role;
+  }
+
+  static setActions(listObjects: LinkedListItemObj[], actions: Events | null) {
+    if(actions) {
+      for (const action of actions) {
+        if(action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
+        else {
+          for (const list of listObjects) {
+            if(list.id === action.item) {
+              list.setAction(action.action);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  static setRoles(listObjects: LinkedListItemObj[], roles: NodeRole[]) {
+    if(!listObjects.length) return;
+    else {
+      for (const role of roles) {
+        for (const list of listObjects) {
+          if(list.id === role.id) {
+            list.setRole(role.role);
+          }
+        }
+      }
+    }
+  }
+
+  static setPassed(listObjects: LinkedListItemObj[], passedNodes: number[]) {
+    for (const node of listObjects) {
+      node.isPassed = passedNodes.includes(node.id);
     }
   }
 }

@@ -1,4 +1,3 @@
-import { BranchObj } from "./BranchObj";
 import { BSTreeNode } from "./BST/BSTreeNode";
 
 import {
@@ -13,7 +12,6 @@ import { BaseObj } from "./BaseObj";
  *  Used in tree-like objects (AVL, BST, etc)
  */
 export class NodeObj extends BaseObj {
-  action: ActionType;
 
   swapPosition: { x: number; y: number } | null; // for swaps between nodes
 
@@ -22,8 +20,6 @@ export class NodeObj extends BaseObj {
   height: number;
 
   parent: NodeObj | undefined;
-
-  nodeRole?: string;
 
   isBST: boolean;
 
@@ -47,7 +43,6 @@ export class NodeObj extends BaseObj {
     isBST?: boolean
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
-    this.action = ActionType.NONE;
     this.swapPosition = null;
     this.level = level;
     this.height = Math.max(5, height);

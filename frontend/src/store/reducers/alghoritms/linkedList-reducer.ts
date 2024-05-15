@@ -1,18 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LinkedListNode } from "../../../ClassObjects/LinkedList/LinkedListNode";
+import {LinkedListAlgNames} from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
+import {Events, NodeRole} from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import {CodeReference} from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import {BSTAlgNames} from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 
 const initialState = {
   head: undefined as LinkedListNode | undefined,
   isPlaying: false,
   inputArray: "",
   error: "",
-  currentAlg: "",
+  currentAlg: "Search" as LinkedListAlgNames,
   currentLine: 0,
   inputValues: {
     Search: +"",
     Insert: +"",
     Delete: +"",
   },
+  currentActions: [] as Events,
+  currentRoles: [] as NodeRole[],
+  passedNodes: [] as number[],
 };
 
 const linkedListSlice = createSlice({
@@ -23,7 +30,7 @@ const linkedListSlice = createSlice({
       state.error = action.payload;
       return state;
     },
-    setCurrentAlgorithm(state, action: PayloadAction<string>) {
+    setCurrentAlgorithm(state, action: PayloadAction<LinkedListAlgNames>) {
       state.currentAlg = action.payload;
       return state;
     },
@@ -54,6 +61,22 @@ const linkedListSlice = createSlice({
     setHead(state, action: PayloadAction<LinkedListNode | undefined>) {
       state.head = action.payload;
     },
+    setActions(state, action: PayloadAction<Events>) {
+      state.currentActions = action.payload;
+      return state;
+    },
+    setRoles(state, action: PayloadAction<NodeRole[]>) {
+      state.currentRoles = action.payload;
+    },
+    setCodeRef(state, action: PayloadAction<CodeReference<LinkedListAlgNames>>) {
+      state.currentAlg = action.payload.name;
+      state.currentLine = action.payload.line;
+      return state;
+    },
+    setPassedNodes(state, action: PayloadAction<number[]>) {
+      state.passedNodes = action.payload;
+      return state;
+    },
   },
 });
 
@@ -67,4 +90,8 @@ export const {
   clearInputArray,
   setPlaying,
   setHead,
+    setPassedNodes,
+    setCodeRef,
+    setActions,
+    setRoles
 } = linkedListSlice.actions;

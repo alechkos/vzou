@@ -8,21 +8,15 @@ import Arrow from "./Arrow";
 
 interface Props {
   nodeObj: LinkedListItemObj;
+  length: number;
 }
 
-const ListNode: FC<Props> = ({ nodeObj }) => {
-  // const { initial, animate, style } = getAnimationsAndStyles(
-  //   nodeObj.position,
-  //   nodeObj.swapPosition,
-  //   nodeObj.position
-  // );
-  const initial = {
-    opacity: 0,
-  };
-  const animate = {
-    opacity: 1,
-  };
-  const style = {};
+const ListNode: FC<Props> = ({ nodeObj, length }) => {
+  const { initial, animate, style } = getAnimationsAndStyles(
+      nodeObj.action,
+      null,
+      nodeObj.position
+  );
   let animateObj;
   if (nodeObj.isPassed || nodeObj.isVisited) {
     animateObj = {
@@ -53,8 +47,10 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
             top: nodeObj.position.y,
             left: nodeObj.position.x,
           }}
-          className={"node-of-list"}
-        />
+          className={"null-node"}
+        >
+          <span className={"line-for-null"} />
+        </motion.span>
       )}
       {nodeObj.id !== -1 && (
         <motion.span
@@ -76,6 +72,15 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
           }}
           className={"node-of-list"}
         >
+          {length === 2 && <span className={"head-of-list"}>
+            {"Head | Tail"}
+          </span>}
+          {nodeObj.id === 0 && length !== 2 && <span className={"head-of-list"}>
+            {"Head"}
+          </span>}
+          {nodeObj.id === length - 2 && length !== 2 && <span className={"head-of-list"}>
+            {"Tail"}
+          </span>}
           <p className={"half"}>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
           <p className={"half2"}>{"Next"}</p>
         </motion.span>
