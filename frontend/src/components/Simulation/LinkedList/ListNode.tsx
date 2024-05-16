@@ -13,9 +13,9 @@ interface Props {
 
 const ListNode: FC<Props> = ({ nodeObj, length }) => {
   const { initial, animate, style } = getAnimationsAndStyles(
-      nodeObj.action,
-      null,
-      nodeObj.position
+    nodeObj.action,
+    null,
+    nodeObj.position
   );
   let animateObj;
   if (nodeObj.isPassed || nodeObj.isVisited) {
@@ -31,7 +31,7 @@ const ListNode: FC<Props> = ({ nodeObj, length }) => {
     <div>
       {nodeObj.id === -1 && (
         <motion.span
-          data-id={nodeObj.id}
+          data-id={nodeObj.nodeRole}
           transition={{
             ease: "easeIn",
             duration: 0.4 * nodeObj.speed,
@@ -49,12 +49,12 @@ const ListNode: FC<Props> = ({ nodeObj, length }) => {
           }}
           className={"null-node"}
         >
-          <span className={"line-for-null"} />
+          <span className={nodeObj.nodeRole ? "node-of-list node-selected" : "line-for-null"} />
         </motion.span>
       )}
       {nodeObj.id !== -1 && (
         <motion.span
-          data-id={nodeObj.id}
+          data-id={nodeObj.nodeRole}
           transition={{
             ease: "easeIn",
             duration: 0.4 * nodeObj.speed,
@@ -70,17 +70,13 @@ const ListNode: FC<Props> = ({ nodeObj, length }) => {
             top: nodeObj.position.y,
             left: nodeObj.position.x,
           }}
-          className={"node-of-list"}
+          className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
         >
-          {length === 2 && <span className={"head-of-list"}>
-            {"Head | Tail"}
-          </span>}
-          {nodeObj.id === 0 && length !== 2 && <span className={"head-of-list"}>
-            {"Head"}
-          </span>}
-          {nodeObj.id === length - 2 && length !== 2 && <span className={"head-of-list"}>
-            {"Tail"}
-          </span>}
+          {length === 2 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
+          {nodeObj.id === 0 && length !== 2 && <span className={"head-of-list"}>{"Head"}</span>}
+          {nodeObj.id === length - 2 && length !== 2 && (
+            <span className={"head-of-list"}>{"Tail"}</span>
+          )}
           <p className={"half"}>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
           <p className={"half2"}>{"Next"}</p>
         </motion.span>

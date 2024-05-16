@@ -2,9 +2,23 @@ import AnimationController from "../AnimationController";
 import { LinkedListNode } from "./LinkedListNode";
 import { AppDispatch } from "../../store/store";
 import { LinkedListMemento } from "./LinkedListMemento";
-import {setHead, setPlaying, setRoles, setCodeRef, setPassedNodes, setActions} from "../../store/reducers/alghoritms/linkedList-reducer";
+import {
+  setHead,
+  setPlaying,
+  setRoles,
+  setCodeRef,
+  setPassedNodes,
+  setActions,
+  setError,
+} from "../../store/reducers/alghoritms/linkedList-reducer";
 import { buildLinkedList } from "../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
-import {Events, NodeRole} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import {
+  ActionType,
+  Events,
+  NodeRole,
+} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { searchWithAnimations } from "./LinkedListAlgorithms";
+import { BSTreeMemento } from "../BST/BSTreeMemento";
 
 export class LinkedListAnimationController extends AnimationController<
   LinkedListNode | undefined,
@@ -59,5 +73,33 @@ export class LinkedListAnimationController extends AnimationController<
     this.setPassedNodes([]);
   }
 
+  initData(data: LinkedListNode | undefined) {
+    this.setReference({ name: this.memento.getCurrentAlg(), line: 0 });
+    this.setHead(data);
+    this.setCurrentActions([]);
+    this.setCurrentRoles([]);
+    this.setPassedNodes([]);
+  }
 
+  setAllData(index: number) {
+    const actions = this.memento.getActions(index);
+    this.setHead(this.memento.getData(index));
+    this.setCurrentActions(actions);
+    this.setCurrentRoles(this.memento.getRoles(index));
+    this.setReference(this.memento.getCodeRef(index));
+    this.setPassedNodes((this.memento as LinkedListMemento).getPassedNodes(index));
+    if (actions.length > 0 && actions[0].action === ActionType.ERROR) {
+      this.setError(actions[0]?.error || "ERROR");
+    }
+  }
+
+  setError(error: string) {
+    this.dispatch(setError(error));
+  }
+
+  //---------------Algorithms-----------
+
+  async search(value: number) {
+    await this.playAlgorithm(searchWithAnimations, this.memento, value);
+  }
 }

@@ -1,9 +1,9 @@
 import { Memento } from "../Memento";
 import { LinkedListNode } from "./LinkedListNode";
-import {ActionType, NodeRole} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { ActionType, NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { BSTreeNode } from "../BST/BSTreeNode";
 
 export class LinkedListMemento extends Memento<LinkedListNode | undefined, string> {
-
   visitedNodesSnapshots: number[][];
 
   passedNodesSnapshots: number[][];
@@ -21,11 +21,11 @@ export class LinkedListMemento extends Memento<LinkedListNode | undefined, strin
   }
 
   addBlank(
-      codeRef: any,
-      head: LinkedListNode | undefined,
-      nodeRoles: NodeRole[] = [],
-      visitedNodes: number[] = [],
-      passedNodes: number[] = [],
+    codeRef: any,
+    head: LinkedListNode | undefined,
+    nodeRoles: NodeRole[] = [],
+    visitedNodes: number[] = [],
+    passedNodes: number[] = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -38,16 +38,34 @@ export class LinkedListMemento extends Memento<LinkedListNode | undefined, strin
   }
 
   addSnapshot(
-      codeRef: any,
-      head: LinkedListNode | undefined,
-      index: number,
-      action: ActionType,
-      nodeRoles: NodeRole[] = [],
-      visitedNodes: number[] = [],
-      passedNodes: number[] = [],
+    codeRef: any,
+    head: LinkedListNode | undefined,
+    index: number,
+    action: ActionType,
+    nodeRoles: NodeRole[] = [],
+    visitedNodes: number[] = [],
+    passedNodes: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],
+      data: head,
+      codeRef,
+      roles: nodeRoles,
+    });
+    this.visitedNodesSnapshots.push([...visitedNodes]);
+    this.passedNodesSnapshots.push([...passedNodes]);
+  }
+
+  addError(
+    codeRef: any,
+    head: LinkedListNode | undefined,
+    error: string,
+    nodeRoles: NodeRole[] = [],
+    visitedNodes: number[] = [],
+    passedNodes: number[] = []
+  ) {
+    this.snapshots.push({
+      actions: [{ action: ActionType.ERROR, item: -1, error }],
       data: head,
       codeRef,
       roles: nodeRoles,

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { LinkedListNode } from "../../../ClassObjects/LinkedList/LinkedListNode";
-import {LinkedListAlgNames} from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
-import {Events, NodeRole} from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import {CodeReference} from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
-import {BSTAlgNames} from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
+import { LinkedListAlgNames } from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
+import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import { BSTAlgNames } from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 
 const initialState = {
   head: undefined as LinkedListNode | undefined,
@@ -90,8 +90,8 @@ export const {
   clearInputArray,
   setPlaying,
   setHead,
-    setPassedNodes,
-    setCodeRef,
-    setActions,
-    setRoles
+  setPassedNodes,
+  setCodeRef,
+  setActions,
+  setRoles,
 } = linkedListSlice.actions;

@@ -8,7 +8,6 @@ import LinkedList from "../../../components/Simulation/LinkedList/LinkedList";
 import { useAppSelector } from "../../../store/hooks";
 import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
 import { useDispatch } from "react-redux";
-import linkedList from "../../../components/Simulation/LinkedList/LinkedList";
 import {combineLinkedListPseudoCode} from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 
 const LinkedListPage: FC = () => {

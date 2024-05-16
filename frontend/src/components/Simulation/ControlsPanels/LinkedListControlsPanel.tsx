@@ -111,7 +111,7 @@ const LinkedListControlsPanel: FC<Props> = ({
             subject: "LinkedList",
             algorithm: "Search",
           });
-          // await controller.search(inputValues.Search);
+          await controller.search(inputValues.Search);
           return;
         case "Insert":
           regsterActivity({
@@ -270,11 +270,11 @@ const LinkedListControlsPanel: FC<Props> = ({
                     <button
                       disabled={isButtonDisabled}
                       className={`${buttonClassname} w-[40px] h-[40px]`}
-                      // onClick={async () =>
-                      //   Animate(text).catch((e) => {
-                      //     setCurrentError(e.message);
-                      //   })
-                      // }
+                      onClick={async () =>
+                        Animate(text).catch((e) => {
+                          setCurrentError(e.message);
+                        })
+                      }
                     >
                       Go
                     </button>

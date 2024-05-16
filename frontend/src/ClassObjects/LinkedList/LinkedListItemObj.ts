@@ -1,10 +1,14 @@
 /** Self-implementation of a LinkedListItem object, has the classic attributes like position, id, value...
  *  Used in LinkedList data type
  */
-import {BranchObj} from "../BranchObj";
-import {BaseObj} from "../BaseObj";
-import {LinkedListNodeType} from "../../components/Simulation/LinkedList/LinkedListTypes";
-import {ActionType, Events, NodeRole} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { BranchObj } from "../BranchObj";
+import { BaseObj } from "../BaseObj";
+import { LinkedListNodeType } from "../../components/Simulation/LinkedList/LinkedListTypes";
+import {
+  ActionType,
+  Events,
+  NodeRole,
+} from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 export class LinkedListItemObj extends BaseObj {
   static width = 4; //Used to calculate X gap
@@ -151,12 +155,12 @@ export class LinkedListItemObj extends BaseObj {
   }
 
   static setActions(listObjects: LinkedListItemObj[], actions: Events | null) {
-    if(actions) {
+    if (actions) {
       for (const action of actions) {
-        if(action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
+        if (action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
         else {
           for (const list of listObjects) {
-            if(list.id === action.item) {
+            if (list.id === action.item) {
               list.setAction(action.action);
             }
           }
@@ -166,11 +170,11 @@ export class LinkedListItemObj extends BaseObj {
   }
 
   static setRoles(listObjects: LinkedListItemObj[], roles: NodeRole[]) {
-    if(!listObjects.length) return;
+    if (!listObjects.length) return;
     else {
       for (const role of roles) {
         for (const list of listObjects) {
-          if(list.id === role.id) {
+          if (list.id === role.id) {
             list.setRole(role.role);
           }
         }
