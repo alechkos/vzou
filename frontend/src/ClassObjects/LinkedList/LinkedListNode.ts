@@ -28,32 +28,35 @@ export class LinkedListNode {
     return length;
   }
 
-  static addNodeToHead(head: LinkedListNode, value: number) {
+  static addNodeToHead(head: LinkedListNode | undefined, value: number) {
+    if (head === undefined) return;
     head.prev = new LinkedListNode(value, 0, undefined, head);
     let tempNode = head;
-    while (tempNode.next) {
+    while (tempNode.next !== undefined) {
       tempNode.id++;
       tempNode = tempNode.next;
     }
+    tempNode.id++;
     return head.prev;
+  }
+
+  static deleteNodeFromHead(head: LinkedListNode | undefined) {
+    if (head === undefined) return;
+    if (head.next && head.next.id !== -1) {
+      head = head.next;
+      let tempNode = head;
+      while (tempNode.next) {
+        tempNode.id--;
+        tempNode = tempNode.next;
+      }
+      tempNode.id--;
+      return head;
+    } else return undefined;
   }
 
   static addNodeToTail(head: LinkedListNode, tail: LinkedListNode, value: number) {
     tail.next = new LinkedListNode(value, tail.id + 1, tail, undefined);
     return head;
-  }
-
-  static deleteNodeFromHead(head: LinkedListNode) {
-    if (head.next) {
-      head = head.next;
-      head.id = 0;
-      let tempNode = head;
-      while (tempNode.next) {
-        tempNode.next.id--;
-        tempNode = tempNode.next;
-      }
-      return head;
-    }
   }
 
   static deleteNodeFromTail(head: LinkedListNode, tail: LinkedListNode) {
@@ -62,5 +65,17 @@ export class LinkedListNode {
       prev.next = undefined;
     }
     return head;
+  }
+
+  static getLengthOfList(head: LinkedListNode | undefined) {
+    if (head !== undefined) {
+      let tempNode = head;
+      let count = 0;
+      while (tempNode.next !== undefined) {
+        count++;
+        tempNode = tempNode.next;
+      }
+      return count;
+    }
   }
 }

@@ -10,6 +10,7 @@ import {
   setPassedNodes,
   setActions,
   setError,
+  setLength,
 } from "../../store/reducers/alghoritms/linkedList-reducer";
 import { buildLinkedList } from "../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 import {
@@ -17,8 +18,11 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { searchWithAnimations } from "./LinkedListAlgorithms";
-import { BSTreeMemento } from "../BST/BSTreeMemento";
+import {
+  searchWithAnimations,
+  insertWithAnimations,
+  deleteWithAnimations,
+} from "./LinkedListAlgorithms";
 
 export class LinkedListAnimationController extends AnimationController<
   LinkedListNode | undefined,
@@ -63,6 +67,10 @@ export class LinkedListAnimationController extends AnimationController<
     this.dispatch(setPassedNodes(passedNodes));
   }
 
+  setLengthOfList(length: number) {
+    this.dispatch(setLength(length));
+  }
+
   setListFromInput(arr: number[]) {
     const head = buildLinkedList(arr);
     this.data = head;
@@ -101,5 +109,15 @@ export class LinkedListAnimationController extends AnimationController<
 
   async search(value: number) {
     await this.playAlgorithm(searchWithAnimations, this.memento, value);
+  }
+
+  async insert(value: number) {
+    await this.playAlgorithm(insertWithAnimations, this.memento, value);
+    setLength(LinkedListNode.getLengthOfList(this.data));
+  }
+
+  async delete(value: number) {
+    await this.playAlgorithm(deleteWithAnimations, this.memento, this);
+    setLength(LinkedListNode.getLengthOfList(this.data));
   }
 }

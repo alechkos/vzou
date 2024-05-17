@@ -8,7 +8,7 @@ import Arrow from "./Arrow";
 
 interface Props {
   nodeObj: LinkedListItemObj;
-  length: number;
+  length: number | undefined;
 }
 
 const ListNode: FC<Props> = ({ nodeObj, length }) => {
@@ -72,9 +72,9 @@ const ListNode: FC<Props> = ({ nodeObj, length }) => {
           }}
           className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
         >
-          {length === 2 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
-          {nodeObj.id === 0 && length !== 2 && <span className={"head-of-list"}>{"Head"}</span>}
-          {nodeObj.id === length - 2 && length !== 2 && (
+          {length === 0 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
+          {nodeObj.id === 0 && length !== 0 && <span className={"head-of-list"}>{"Head"}</span>}
+          {length !== undefined && nodeObj.id === length && length !== 0 && (
             <span className={"head-of-list"}>{"Tail"}</span>
           )}
           <p className={"half"}>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>

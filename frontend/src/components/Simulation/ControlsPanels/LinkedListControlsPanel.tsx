@@ -118,14 +118,14 @@ const LinkedListControlsPanel: FC<Props> = ({
             subject: "LinkedList",
             algorithm: "Insert",
           });
-          // await controller.insert(inputValues.Insert);
+          await controller.insert(inputValues.Insert);
           return;
         case "Delete":
           regsterActivity({
             subject: "LinkedList",
             algorithm: "Delete",
           });
-          // await controller.deleteNode(inputValues.DeleteNode);
+          await controller.delete(inputValues.Delete);
           return;
         case "Clear":
           dispatch(clearInputArray());

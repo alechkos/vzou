@@ -20,6 +20,7 @@ const initialState = {
   currentActions: [] as Events,
   currentRoles: [] as NodeRole[],
   passedNodes: [] as number[],
+  currentLength: 0,
 };
 
 const linkedListSlice = createSlice({
@@ -77,6 +78,12 @@ const linkedListSlice = createSlice({
       state.passedNodes = action.payload;
       return state;
     },
+    setLength(state, action: PayloadAction<number | undefined>) {
+      if (action.payload !== undefined) {
+        state.currentLength = action.payload;
+        return state;
+      }
+    },
   },
 });
 
@@ -94,4 +101,5 @@ export const {
   setCodeRef,
   setActions,
   setRoles,
+  setLength,
 } = linkedListSlice.actions;

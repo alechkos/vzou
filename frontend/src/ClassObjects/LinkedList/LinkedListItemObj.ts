@@ -9,6 +9,7 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { LinkedListNode } from "./LinkedListNode";
 
 export class LinkedListItemObj extends BaseObj {
   static width = 4; //Used to calculate X gap
@@ -60,7 +61,7 @@ export class LinkedListItemObj extends BaseObj {
   static generateLinkedListObjects(
     viewportWidth: number,
     speed: number,
-    head: LinkedListNodeType | undefined
+    head: LinkedListNode | undefined
   ) {
     if (!head) return [];
     const linkedListObjects = [];
