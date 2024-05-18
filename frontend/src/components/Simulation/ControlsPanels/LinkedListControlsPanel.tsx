@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
 import { TextField, ThemeProvider } from "@mui/material";
@@ -113,21 +113,36 @@ const LinkedListControlsPanel: FC<Props> = ({
           });
           await controller.search(inputValues.Search);
           return;
-        case "Insert":
+        case "InsertToHead":
           regsterActivity({
             subject: "LinkedList",
-            algorithm: "Insert",
+            algorithm: "Insert to Head",
           });
-          await controller.insert(inputValues.Insert);
+          await controller.insertToHead(inputValues.InsertToHead);
           return;
-        case "Delete":
+        case "InsertToTail":
+          regsterActivity({
+            subject: "LinkedList",
+            algorithm: "Insert to Tail",
+          });
+          await controller.insertToTail(inputValues.InsertToTail);
+          return;
+        case "DeleteFromHead":
           regsterActivity({
             subject: "LinkedList",
             algorithm: "Delete",
           });
-          await controller.delete(inputValues.Delete);
+          await controller.deleteFromHead(inputValues.DeleteFromHead);
+          return;
+        case "DeleteFromTail":
+          regsterActivity({
+            subject: "LinkedList",
+            algorithm: "Delete",
+          });
+          // await controller.delete(inputValues.DeleteFromTail);
           return;
         case "Clear":
+          controller.setListFromInput([]);
           dispatch(clearInputArray());
           return;
         default:
@@ -137,6 +152,10 @@ const LinkedListControlsPanel: FC<Props> = ({
       setCurrentError(e.message);
     }
   };
+
+  useEffect(() => {
+    dispatch(clearInputArray());
+  }, []);
 
   return (
     <>
@@ -193,18 +212,34 @@ const LinkedListControlsPanel: FC<Props> = ({
                         disabled={isButtonDisabled}
                       />
                       <Tab
-                        label="Insert"
-                        value="Insert"
+                        label="Insert to Head"
+                        value="InsertToHead"
                         onClick={() => {
-                          dispatch(setCurrentAlgorithm("Insert"));
+                          dispatch(setCurrentAlgorithm("InsertToHead"));
                         }}
                         disabled={isButtonDisabled}
                       />
                       <Tab
-                        label="Delete"
-                        value="Delete"
+                        label="Insert to Tail"
+                        value="InsertToTail"
                         onClick={() => {
-                          dispatch(setCurrentAlgorithm("Delete"));
+                          dispatch(setCurrentAlgorithm("InsertToTail"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Delete from Head"
+                        value="DeleteFromHead"
+                        onClick={() => {
+                          dispatch(setCurrentAlgorithm("DeleteFromHead"));
+                        }}
+                        disabled={isButtonDisabled}
+                      />
+                      <Tab
+                        label="Delete from Tail"
+                        value="DeleteFromTail"
+                        onClick={() => {
+                          dispatch(setCurrentAlgorithm("DeleteFromTail"));
                         }}
                         disabled={isButtonDisabled}
                       />
@@ -242,44 +277,53 @@ const LinkedListControlsPanel: FC<Props> = ({
                   <button
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
-                    // onClick={async () => Animate("Clear")}
+                    onClick={async () => Animate("Clear")}
                   >
                     Clear
                   </button>
                 </TabPanel>
-                {["Insert", "Delete", "Search"].map((text) => (
-                  <TabPanel
-                    key={text}
-                    value={text}
-                    className={value === text ? "justify-start " : "hidden"}
-                  >
-                    <TextField
-                      sx={{ width: "138px" }}
-                      name={text as "Search" | "Insert" | "Delete"}
-                      size="small"
-                      type="text"
-                      variant="outlined"
-                      label={"Your value here"}
-                      inputProps={{
-                        min: 0,
-                        max: 999,
-                        style: { textAlign: "center" },
-                      }}
-                      onChange={handleInput}
-                    />
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px]`}
-                      onClick={async () =>
-                        Animate(text).catch((e) => {
-                          setCurrentError(e.message);
-                        })
-                      }
+                {["InsertToHead", "InsertToTail", "DeleteFromHead", "DeleteFromTail", "Search"].map(
+                  (text) => (
+                    <TabPanel
+                      key={text}
+                      value={text}
+                      className={value === text ? "justify-start " : "hidden"}
                     >
-                      Go
-                    </button>
-                  </TabPanel>
-                ))}
+                      <TextField
+                        sx={{ width: "138px" }}
+                        name={
+                          text as
+                            | "Search"
+                            | "InsertToHead"
+                            | "InsertToTail"
+                            | "DeleteFromHead"
+                            | "DeleteFromTail"
+                        }
+                        size="small"
+                        type="text"
+                        variant="outlined"
+                        label={"Your value here"}
+                        inputProps={{
+                          min: 0,
+                          max: 999,
+                          style: { textAlign: "center" },
+                        }}
+                        onChange={handleInput}
+                      />
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-[40px] h-[40px]`}
+                        onClick={async () =>
+                          Animate(text).catch((e) => {
+                            setCurrentError(e.message);
+                          })
+                        }
+                      >
+                        Go
+                      </button>
+                    </TabPanel>
+                  )
+                )}
               </TabContext>
             </Box>
           </ControlsToolTip>

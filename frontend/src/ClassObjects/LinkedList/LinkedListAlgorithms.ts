@@ -68,7 +68,7 @@ export function searchWithAnimations(
   }
 }
 
-export function insertWithAnimations(
+export function insertToHeadWithAnimations(
   head: LinkedListNode | undefined,
   memento: LinkedListMemento,
   value: number
@@ -76,7 +76,7 @@ export function insertWithAnimations(
   head = LinkedListNode.addNodeToHead(head, value);
   if (head !== undefined) {
     memento.addSnapshot(
-      { line: 1, name: "Insert" },
+      { line: 1, name: "InsertToHead" },
       head,
       head.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -85,7 +85,7 @@ export function insertWithAnimations(
       undefined
     );
     memento.addSnapshot(
-      { line: 2, name: "Insert" },
+      { line: 2, name: "InsertToHead" },
       head,
       head.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -97,14 +97,44 @@ export function insertWithAnimations(
   return head;
 }
 
-export function deleteWithAnimations(
+export function insertToTailWithAnimations(
+  head: LinkedListNode | undefined,
+  memento: LinkedListMemento,
+  value: number
+) {
+  let tail = LinkedListNode.getTailOfList(head);
+  LinkedListNode.addNodeToTail(head, tail, value);
+  if (tail) {
+    memento.addSnapshot(
+      { line: 1, name: "InsertToTail" },
+      head,
+      tail.id,
+      ActionType.CHANGE,
+      [{ id: tail.id, role: "X" }],
+      undefined,
+      undefined
+    );
+    if (tail.next)
+      memento.addSnapshot(
+        { line: 1, name: "InsertToTail" },
+        head,
+        tail.next.id,
+        ActionType.CHANGE,
+        [{ id: tail.next.id, role: "X" }],
+        undefined,
+        undefined
+      );
+  }
+}
+
+export function deleteFromHeadWithAnimations(
   head: LinkedListNode | undefined,
   memento: LinkedListMemento,
   controller: LinkedListAnimationController
 ) {
   if (head !== undefined) {
     memento.addSnapshot(
-      { line: 1, name: "Delete" },
+      { line: 1, name: "DeleteFromHead" },
       head,
       head.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -113,7 +143,7 @@ export function deleteWithAnimations(
       undefined
     );
     memento.addSnapshot(
-      { line: 2, name: "Delete" },
+      { line: 2, name: "DeleteFromHead" },
       head,
       head.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -124,7 +154,7 @@ export function deleteWithAnimations(
     head = LinkedListNode.deleteNodeFromHead(head);
     if (head)
       memento.addSnapshot(
-        { line: 3, name: "Delete" },
+        { line: 3, name: "DeleteFromHead" },
         head,
         head.id,
         ActionType.CHANGE,
@@ -133,6 +163,13 @@ export function deleteWithAnimations(
         undefined
       );
     else controller.setListFromInput([]);
+    memento.addBlank(
+      { line: 4, name: "DeleteFromHead" },
+      head,
+      [{ id: head ? head.id : 0, role: "X" }],
+      undefined,
+      undefined
+    );
   }
   return head;
 }

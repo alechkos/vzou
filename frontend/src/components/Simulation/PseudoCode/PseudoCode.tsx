@@ -8,9 +8,8 @@ import styles from "./PseudoCodeWrapper.module.css";
 import headlinePhoto from "../../../assets/Algorithms/PseudoCode.png";
 import { SubjectImg } from "../../UI/SubjectImg";
 
-
 export function PseudoCode(props: PseudoProps) {
-  const [ open, setOpen ] = useState(true);
+  const [open, setOpen] = useState(true);
   // const [open, cycleOpen] = useCycle(true, false);
   return (
     <div className={"z-50 " + styles["div-side"]}>
@@ -76,7 +75,7 @@ export function PseudoCode(props: PseudoProps) {
                   </span>
                   {
                     // this section responsable for the tabs before each line
-                    [ ...Array(l.tabAmount) ].map((x, i) => (
+                    [...Array(l.tabAmount)].map((x, i) => (
                       <span key={i}>&emsp;</span>
                     ))
                   }

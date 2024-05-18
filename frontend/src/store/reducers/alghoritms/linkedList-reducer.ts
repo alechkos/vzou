@@ -3,7 +3,6 @@ import { LinkedListNode } from "../../../ClassObjects/LinkedList/LinkedListNode"
 import { LinkedListAlgNames } from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
-import { BSTAlgNames } from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 
 const initialState = {
   head: undefined as LinkedListNode | undefined,
@@ -14,8 +13,10 @@ const initialState = {
   currentLine: 0,
   inputValues: {
     Search: +"",
-    Insert: +"",
-    Delete: +"",
+    InsertToHead: +"",
+    InsertToTail: +"",
+    DeleteFromHead: +"",
+    DeleteFromTail: +"",
   },
   currentActions: [] as Events,
   currentRoles: [] as NodeRole[],
@@ -35,7 +36,13 @@ const linkedListSlice = createSlice({
       state.currentAlg = action.payload;
       return state;
     },
-    setInput(state, action: PayloadAction<{ val: number; key: "Search" | "Insert" | "Delete" }>) {
+    setInput(
+      state,
+      action: PayloadAction<{
+        val: number;
+        key: "Search" | "InsertToHead" | "InsertToTail" | "DeleteFromTail" | "DeleteFromHead";
+      }>
+    ) {
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
     },
@@ -84,6 +91,23 @@ const linkedListSlice = createSlice({
         return state;
       }
     },
+    addNodeToHead(state, action: PayloadAction<number>) {
+      state.inputArray = action.payload.toString() + ", " + state.inputArray;
+      return state;
+    },
+    deleteNodeFromHead(state) {
+      const newArray = state.inputArray.split(",");
+      state.inputArray = "";
+      newArray.forEach((num, index) => {
+        if (index === 0) {
+        } else if (index !== newArray.length - 1) {
+          state.inputArray += num + ", ";
+        } else {
+          state.inputArray += num;
+        }
+      });
+      return state;
+    },
   },
 });
 
@@ -102,4 +126,6 @@ export const {
   setActions,
   setRoles,
   setLength,
+  addNodeToHead,
+  deleteNodeFromHead,
 } = linkedListSlice.actions;
