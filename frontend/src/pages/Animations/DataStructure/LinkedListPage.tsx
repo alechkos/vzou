@@ -8,16 +8,17 @@ import LinkedList from "../../../components/Simulation/LinkedList/LinkedList";
 import { useAppSelector } from "../../../store/hooks";
 import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
 import { useDispatch } from "react-redux";
-import {combineLinkedListPseudoCode} from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
+import { combineLinkedListPseudoCode } from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 const LinkedListPage: FC = () => {
   const head = useAppSelector((state) => state.linkedList.head);
   const isPlaying = useAppSelector((state) => state.linkedList.isPlaying);
-  const currentLine = useAppSelector(state => state.linkedList.currentLine);
-  const currentAlg = useAppSelector(state => state.linkedList.currentAlg);
-  const currentRoles = useAppSelector(state => state.linkedList.currentRoles);
-  const passedNodes = useAppSelector(state => state.linkedList.passedNodes);
-  const currentActions = useAppSelector(state => state.linkedList.currentActions);
+  const currentLine = useAppSelector((state) => state.linkedList.currentLine);
+  const currentAlg = useAppSelector((state) => state.linkedList.currentAlg);
+  const currentRoles = useAppSelector((state) => state.linkedList.currentRoles);
+  const passedNodes = useAppSelector((state) => state.linkedList.passedNodes);
+  const currentActions = useAppSelector((state) => state.linkedList.currentActions);
 
   const controller = LinkedListAnimationController.getController(head, useDispatch());
 
@@ -53,6 +54,7 @@ const LinkedListPage: FC = () => {
 
   return (
     <>
+      <SideBar />
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           <LinkedListControlsPanel

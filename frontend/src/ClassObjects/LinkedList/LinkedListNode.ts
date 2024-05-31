@@ -67,12 +67,15 @@ export class LinkedListNode {
     return head;
   }
 
-  static deleteNodeFromTail(head: LinkedListNode, tail: LinkedListNode) {
-    const prev = tail.prev;
-    if (prev && prev.next) {
-      prev.next = undefined;
+  static deleteNodeFromTail(head: LinkedListNode | undefined, tail: LinkedListNode | undefined) {
+    if (tail && tail.prev) {
+      const prev = tail.prev;
+      if (prev && prev.next) {
+        prev.next = undefined;
+      }
+      return head;
     }
-    return head;
+    return undefined;
   }
 
   static getLengthOfList(head: LinkedListNode | undefined) {

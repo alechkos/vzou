@@ -13,6 +13,8 @@ import {
   setLength,
   addNodeToHead,
   deleteNodeFromHead,
+  addNodeToTail,
+  deleteNodeFromTail,
 } from "../../store/reducers/alghoritms/linkedList-reducer";
 import { buildLinkedList } from "../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 import {
@@ -25,6 +27,7 @@ import {
   insertToHeadWithAnimations,
   deleteFromHeadWithAnimations,
   insertToTailWithAnimations,
+  deleteFromTailWithAnimations,
 } from "./LinkedListAlgorithms";
 
 export class LinkedListAnimationController extends AnimationController<
@@ -123,12 +126,18 @@ export class LinkedListAnimationController extends AnimationController<
   async insertToTail(value: number) {
     await this.playAlgorithm(insertToTailWithAnimations, this.memento, value);
     setLength(LinkedListNode.getLengthOfList(this.data));
-    //TODO dispatch insert to tail in the inputarray
+    this.dispatch(addNodeToTail(value));
   }
 
   async deleteFromHead(value: number) {
     await this.playAlgorithm(deleteFromHeadWithAnimations, this.memento, this);
     setLength(LinkedListNode.getLengthOfList(this.data));
     this.dispatch(deleteNodeFromHead());
+  }
+
+  async deleteFromTail(value: number) {
+    await this.playAlgorithm(deleteFromTailWithAnimations, this.memento, this);
+    setLength(LinkedListNode.getLengthOfList(this.data));
+    this.dispatch(deleteNodeFromTail());
   }
 }

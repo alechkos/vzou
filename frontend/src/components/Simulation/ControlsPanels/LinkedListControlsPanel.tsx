@@ -130,16 +130,16 @@ const LinkedListControlsPanel: FC<Props> = ({
         case "DeleteFromHead":
           regsterActivity({
             subject: "LinkedList",
-            algorithm: "Delete",
+            algorithm: "DeleteFromHead",
           });
           await controller.deleteFromHead(inputValues.DeleteFromHead);
           return;
         case "DeleteFromTail":
           regsterActivity({
             subject: "LinkedList",
-            algorithm: "Delete",
+            algorithm: "DeleteFromTail",
           });
-          // await controller.delete(inputValues.DeleteFromTail);
+          await controller.deleteFromTail(inputValues.DeleteFromTail);
           return;
         case "Clear":
           controller.setListFromInput([]);

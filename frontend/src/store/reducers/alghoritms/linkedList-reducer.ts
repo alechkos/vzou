@@ -108,6 +108,16 @@ const linkedListSlice = createSlice({
       });
       return state;
     },
+    addNodeToTail(state, action: PayloadAction<number>) {
+      state.inputArray = state.inputArray + ", " + action.payload.toString();
+      return state;
+    },
+    deleteNodeFromTail(state) {
+      const newArray = state.inputArray.split(",");
+      newArray.pop();
+      if (newArray) state.inputArray = newArray.toString();
+      else state.inputArray = "";
+    },
   },
 });
 
@@ -128,4 +138,6 @@ export const {
   setLength,
   addNodeToHead,
   deleteNodeFromHead,
+  addNodeToTail,
+  deleteNodeFromTail,
 } = linkedListSlice.actions;

@@ -173,3 +173,57 @@ export function deleteFromHeadWithAnimations(
   }
   return head;
 }
+
+export function deleteFromTailWithAnimations(
+  head: LinkedListNode | undefined,
+  memento: LinkedListMemento,
+  controller: LinkedListAnimationController
+) {
+  let tail = LinkedListNode.getTailOfList(head);
+  if (tail !== undefined) {
+    memento.addSnapshot(
+      { line: 1, name: "DeleteFromTail" },
+      head,
+      tail.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: tail.id, role: "X" }],
+      undefined,
+      undefined
+    );
+  }
+  head = LinkedListNode.deleteNodeFromTail(head, tail);
+  if (head === undefined) {
+    controller.setListFromInput([]);
+    memento.addBlank({ line: 3, name: "DeleteFromTail" }, head, [], undefined, undefined);
+    return head;
+  }
+  tail = LinkedListNode.getTailOfList(head);
+  if (tail !== undefined) {
+    memento.addSnapshot(
+      { line: 2, name: "DeleteFromTail" },
+      head,
+      tail.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: tail.id, role: "X" }],
+      undefined,
+      undefined
+    );
+    memento.addSnapshot(
+      { line: 3, name: "DeleteFromTail" },
+      head,
+      tail.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: tail.id, role: "X" }],
+      undefined,
+      undefined
+    );
+  } else controller.setListFromInput([]);
+  memento.addBlank(
+    { line: 3, name: "DeleteFromTail" },
+    head,
+    [{ id: tail ? tail.id : 0, role: "X" }],
+    undefined,
+    undefined
+  );
+  return head;
+}
