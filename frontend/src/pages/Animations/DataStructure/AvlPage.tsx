@@ -14,6 +14,7 @@ import HeapArray from "../../../components/Simulation/Heap/HeapArray/HeapArray";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 const AvlPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
@@ -57,6 +58,7 @@ const AvlPage: FC = () => {
 
   return (
     <>
+      <SideBar />
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           <AvlControlsPanel

@@ -13,7 +13,7 @@ import { SubjectImg } from "../../../components/UI/SubjectImg";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { quickSortActions as ActionKind } from "../../../store/reducers/sorts/quickSortReducer";
-
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 const MAX_ELEMENTS = 10;
 
@@ -26,7 +26,7 @@ export interface Position {
 function QuickSortPage() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.quickSort);
-  const [ regsterActivity ] = useRegisterActivityMutation();
+  const [regsterActivity] = useRegisterActivityMutation();
   const controller = QuickSortController.getController(dispatch);
   const isSortStarted = useAppSelector((s) => s.animationController.isSortStarted);
   const Sort = async () => {
@@ -34,7 +34,7 @@ function QuickSortPage() {
       algorithm: "Quick",
       subject: "Sorts",
     });
-    const opArr: QuickSortOperation[] = quickSort([ ...state.data ]);
+    const opArr: QuickSortOperation[] = quickSort([...state.data]);
     await controller.sort(opArr);
   };
 
@@ -49,6 +49,7 @@ function QuickSortPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Quick Sort"

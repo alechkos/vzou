@@ -30,7 +30,7 @@ export const TWO_FA_verifier = async (code: string, type: CODE_TYPES, email: str
   }
   // Use Date library to get the current time, and compare it to time the last code was sent to the user.
   // If the difference is more than 5 minutes, the code is considered expired.
-  const diffInMinutes = Math.floor(((Date.now() - match.updatedAt.valueOf()) / 1000) / 60)
+  const diffInMinutes = Math.floor((Date.now() - match.updatedAt.valueOf()) / 1000 / 60)
   if (diffInMinutes > 5) {
     throw new ApiError(401, '2FA Code expired')
   }
@@ -40,7 +40,8 @@ export const TWO_FA_verifier = async (code: string, type: CODE_TYPES, email: str
  *  and sends an email with either an email confirmation token, or a 2FA / password-reset code.
  */
 export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
-  if (type !== 'VERIFY_EMAIL') { // For 2FAs or password resets, send a new code and update the database.
+  if (type !== 'VERIFY_EMAIL') {
+    // For 2FAs or password resets, send a new code and update the database.
     const code = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000) // Randomize a code
     await TWOFA.upsert({ email, code: code.toString(), type }) // Update or create a new 2FA code for the user.
     mailer(`${type} Code`, code.toString(), email) // Send the mail with the code
@@ -49,10 +50,11 @@ export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
   // For email confirmations, validate the data received and send a confirmation email to the user.
   const user = await User.findOne({ where: { email } })
   if (!user) {
-    throw(ApiError.forbidden('Error sending email'))
+    throw ApiError.forbidden('Error sending email')
   }
   const token = generateConfirmMailToken(email)
-  mailer(// Send the email with the token
+  mailer(
+    // Send the email with the token
     `Email verification`,
     `To verify the email follow the link : 
     ${process.env.FRONT_IP || 'http://localhost:3000'}/verify-email/${token}`,
@@ -71,7 +73,7 @@ export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
  *  The controller is used to handle all the requests to the /2fa route.
  */
 class TwoFactorAuthController {
-  async send2FA_Code(req: TypedRequestBody<{ type: CODE_TYPES, email: string }>, res: Response, next: NextFunction) {
+  async send2FA_Code(req: TypedRequestBody<{ type: CODE_TYPES; email: string }>, res: Response, next: NextFunction) {
     const { type, email } = req.body
     try {
       await ServiceSendCode(type, email)
@@ -128,8 +130,6 @@ class TwoFactorAuthController {
       const message = e?.message || 'Unknown error'
       return res.status(401).json({ message })
     }
-
-
   }
 
   async resetPassword(req: TypedRequestBody<RESET_PW_2FA_BODY>, res: Response, next: NextFunction) {
@@ -148,7 +148,6 @@ class TwoFactorAuthController {
     }
   }
 
-
   async verifyEmail(req: TypedRequestBody<{ token: string }>, res: Response, next: NextFunction) {
     try {
       const { token } = req.body
@@ -156,14 +155,13 @@ class TwoFactorAuthController {
         return res.status(401).json({ message: 'Verify token is required' })
       }
       // Decode the token, and get the email from it. Check JWT documentations for more info.
-      const decoded = verify(token, process.env.JWT_SECRET_KEY as string) as { email: string, type: CODE_TYPES }
+      const decoded = verify(token, process.env.JWT_SECRET_KEY as string) as { email: string; type: CODE_TYPES }
       await User.update({ isEmailConfirmed: true }, { where: { email: decoded.email } })
       res.json({ status: 'OK' })
     } catch (e) {
       console.log(e)
       return res.status(401).json({ message: 'Error verifying the email' })
     }
-
   }
 }
 

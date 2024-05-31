@@ -11,6 +11,7 @@ import { SubjectImg } from "../../../components/UI/SubjectImg";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { mergeSortActions as ActionKind } from "../../../store/reducers/sorts/mergeSortReducer";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const MAX_ELEMENTS = 8;
@@ -41,6 +42,7 @@ function MergeSortPage() {
 
   return (
     <>
+        <SideBar />
       {/* top section */}
 
       <SubjectImg

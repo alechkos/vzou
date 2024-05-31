@@ -16,6 +16,7 @@ import {
   insertionSortActions as actions,
   ItemColor,
 } from "../../../store/reducers/sorts/insertionSortReducer";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 const MAX_ELEMENTS = 10;
@@ -46,6 +47,7 @@ function InsertionSortPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Insertion Sort"

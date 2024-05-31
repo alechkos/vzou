@@ -14,6 +14,7 @@ import { SubjectImg } from "../../../components/UI/SubjectImg";
 import { useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { bucketSortActions as actions } from "../../../store/reducers/sorts/bucketSortReducer";
+import SideBar from "../../../components/Layout/SideBar/SideBar";
 
 
 export function BucketSortPage() {
@@ -43,6 +44,7 @@ export function BucketSortPage() {
 
   return (
     <>
+      <SideBar />
       {/* top section */}
       <SubjectImg
         name="Bucket Sort"
