@@ -282,48 +282,58 @@ const LinkedListControlsPanel: FC<Props> = ({
                     Clear
                   </button>
                 </TabPanel>
-                {["InsertToHead", "InsertToTail", "DeleteFromHead", "DeleteFromTail", "Search"].map(
-                  (text) => (
-                    <TabPanel
-                      key={text}
-                      value={text}
-                      className={value === text ? "justify-start " : "hidden"}
+                {["InsertToHead", "InsertToTail", "Search"].map((text) => (
+                  <TabPanel
+                    key={text}
+                    value={text}
+                    className={value === text ? "justify-start " : "hidden"}
+                  >
+                    <TextField
+                      sx={{ width: "138px" }}
+                      name={text as "Search" | "InsertToHead" | "InsertToTail"}
+                      size="small"
+                      type="text"
+                      variant="outlined"
+                      label={"Your value here"}
+                      inputProps={{
+                        min: 0,
+                        max: 999,
+                        style: { textAlign: "center" },
+                      }}
+                      onChange={handleInput}
+                    />
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname} w-[40px] h-[40px]`}
+                      onClick={async () =>
+                        Animate(text).catch((e) => {
+                          setCurrentError(e.message);
+                        })
+                      }
                     >
-                      <TextField
-                        sx={{ width: "138px" }}
-                        name={
-                          text as
-                            | "Search"
-                            | "InsertToHead"
-                            | "InsertToTail"
-                            | "DeleteFromHead"
-                            | "DeleteFromTail"
-                        }
-                        size="small"
-                        type="text"
-                        variant="outlined"
-                        label={"Your value here"}
-                        inputProps={{
-                          min: 0,
-                          max: 999,
-                          style: { textAlign: "center" },
-                        }}
-                        onChange={handleInput}
-                      />
-                      <button
-                        disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-[40px] h-[40px]`}
-                        onClick={async () =>
-                          Animate(text).catch((e) => {
-                            setCurrentError(e.message);
-                          })
-                        }
-                      >
-                        Go
-                      </button>
-                    </TabPanel>
-                  )
-                )}
+                      Go
+                    </button>
+                  </TabPanel>
+                ))}
+                {["DeleteFromHead", "DeleteFromTail"].map((text) => (
+                  <TabPanel
+                    key={text}
+                    value={text}
+                    className={value === text ? "justify-start " : "hidden"}
+                  >
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname}`}
+                      onClick={async () =>
+                        Animate(text).catch((e) => {
+                          setCurrentError(e.message);
+                        })
+                      }
+                    >
+                      Delete
+                    </button>
+                  </TabPanel>
+                ))}
               </TabContext>
             </Box>
           </ControlsToolTip>
