@@ -60,6 +60,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.BST, element: BSTreePage },
   { path: RoutePaths.AVL, element: AvlPage },
   { path: RoutePaths.LINKED_LIST, element: LinkedListPage },
+  { path: RoutePaths.HASH_TABLE, element: LinkedListPage },
   { path: RoutePaths.QUICK_SORT, element: QuickSortPage },
   { path: RoutePaths.INSERTION_SORT, element: InsertionSortPage },
   { path: RoutePaths.COUNTING_SORT, element: CountingSortPage },

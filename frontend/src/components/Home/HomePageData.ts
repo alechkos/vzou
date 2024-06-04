@@ -10,6 +10,8 @@ import treeGif from "../../assets/Gallery/treeGif.gif";
 import treePhoto from "../../assets/Gallery/treePhoto.png";
 import linkedListPhoto from "../../assets/Gallery/LinkedListPhoto.png";
 import linkedListGif from "../../assets/Gallery/LinkedListGif.gif";
+import hashTablePhoto from "../../assets/Gallery/HashTablePhoto.png";
+import hashTableGif from "../../assets/Gallery/HashTableGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
 
 const sortTypes = [
@@ -85,16 +87,12 @@ const HomePageData = [
     image: linkedListPhoto,
     url: RoutePaths.LINKED_LIST,
   },
-  /*
-  TODO:
-  
   {
-    title: "Hash table",
-    gif: hashGif,
-    image: hashPhoto,
-    url: "/login",
+    title: "Hash Table",
+    gif: hashTableGif,
+    image: hashTablePhoto,
+    url: RoutePaths.HASH_TABLE,
   },
-  */
 ];
 
 export default HomePageData;
