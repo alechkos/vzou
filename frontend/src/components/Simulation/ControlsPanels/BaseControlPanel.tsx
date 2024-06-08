@@ -1,0 +1,257 @@
+import React, { FC, useState } from "react";
+import { AlertError } from "../../UI/Controls/AlertError";
+import MediumCard from "../../UI/MediumCard";
+import { TextField, ThemeProvider } from "@mui/material";
+import { theme } from "../../UI/Controls/ControlsTheme";
+import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
+import Box from "@mui/material/Box";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import Tab from "@mui/material/Tab";
+import TabPanel from "@mui/lab/TabPanel";
+import CasinoIcon from "@mui/icons-material/Casino";
+
+interface Props {
+  error: string;
+  setCurrentError: (error: string) => void;
+  isButtonDisabled: boolean;
+  showActions: boolean;
+  editingConstruction: boolean;
+  handleHideActions: () => void;
+  handleShowActions: () => void;
+  setAlgorithm: (name: string) => void;
+  algorithms: string[];
+  inputArray: string;
+  setInputArray: (event: any) => void;
+  createStructure: () => void;
+  randomizeStructure: () => void;
+  animate: (text: string) => Promise<void>;
+  handleInput: (e: any) => void;
+  value: string;
+  handleChange: (event: any, value: string) => void;
+}
+
+const BaseControlPanel: FC<Props> = ({
+  error,
+  setCurrentError,
+  isButtonDisabled,
+  showActions,
+  editingConstruction,
+  handleShowActions,
+  handleHideActions,
+  setAlgorithm,
+  algorithms,
+  inputArray,
+  setInputArray,
+  createStructure,
+  randomizeStructure,
+  animate,
+  handleInput,
+  value,
+  handleChange,
+}) => {
+  const buttonClassname =
+    "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
+
+  return (
+    <>
+      {error && (
+        <AlertError
+          error={error}
+          onClose={() => {
+            setCurrentError("");
+          }}
+        />
+      )}
+      <MediumCard
+        isSmaller
+        maxWidth="max-w-5xl"
+      >
+        <ThemeProvider theme={theme}>
+          <ControlsToolTip isButtonDisabled={isButtonDisabled}>
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="algorithms and actions"
+                    centered
+                  >
+                    {!showActions && !editingConstruction && (
+                      <Tab
+                        label="Create AVL construction"
+                        value="1"
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                    {(showActions || editingConstruction) && (
+                      <Tab
+                        label="Change Avl construction"
+                        value="1"
+                        onClick={handleHideActions}
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                  </TabList>
+                  {showActions && (
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="algorithms and actions"
+                      centered
+                    >
+                      {algorithms.map((alg) => {
+                        if (alg.includes("Min")) {
+                          return (
+                            <Tab
+                              label="Min / Max"
+                              value="2"
+                              onClick={() => {
+                                setAlgorithm("Min");
+                              }}
+                              disabled={isButtonDisabled}
+                            />
+                          );
+                        } else if (alg.includes("Traversals")) {
+                          return (
+                            <Tab
+                              label="Traversals"
+                              value="3"
+                              onClick={() => {
+                                setAlgorithm("Inorder");
+                              }}
+                              disabled={isButtonDisabled}
+                            />
+                          );
+                        } else {
+                          return (
+                            <Tab
+                              label={alg}
+                              value={alg}
+                              onClick={() => {
+                                setAlgorithm(alg);
+                              }}
+                              disabled={isButtonDisabled}
+                            />
+                          );
+                        }
+                      })}
+                    </TabList>
+                  )}
+                </Box>
+                <TabPanel
+                  value="1"
+                  className={value === "1" ? "justify-start " : "hidden"}
+                >
+                  <TextField
+                    placeholder="e.g 1,2,3,4,..."
+                    size="small"
+                    sx={{ width: "150px" }}
+                    value={inputArray}
+                    label="Build-AVL-Tree"
+                    variant="outlined"
+                    onChange={(e) => setInputArray(e)}
+                  />
+                  <button
+                    disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-[40px] h-[40px]`}
+                    onClick={createStructure}
+                  >
+                    Go
+                  </button>
+                  <button
+                    disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
+                    onClick={randomizeStructure}
+                  >
+                    <CasinoIcon />
+                    Randomize
+                  </button>
+                  <button
+                    disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
+                    onClick={async () => animate("Clear")}
+                  >
+                    Clear
+                  </button>
+                </TabPanel>
+                <TabPanel
+                  value="2"
+                  className={value === "2" ? "flex flex-row justify-center " : "hidden"}
+                >
+                  {["Min", "Max"].map((text) => (
+                    <div
+                      className="py-2 px-6"
+                      key={text}
+                    >
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-[60px] h-[40px]`}
+                        onClick={async () => animate(text)}
+                      >
+                        {text}
+                      </button>
+                    </div>
+                  ))}
+                </TabPanel>
+                <TabPanel
+                  value="3"
+                  className={value === "3" ? "flex flex-row justify-center " : "hidden"}
+                >
+                  {["Inorder", "Preorder", "Postorder"].map((text) => (
+                    <div
+                      className="py-2 px-2"
+                      key={text}
+                    >
+                      <button
+                        disabled={isButtonDisabled}
+                        className={buttonClassname}
+                        onClick={async () => animate(text)}
+                      >
+                        {text}
+                      </button>
+                    </div>
+                  ))}
+                </TabPanel>
+                {["Successor", "Predecessor", "Search", "Insert", "Delete"].map((text) => (
+                  <TabPanel
+                    key={text}
+                    value={text}
+                    className={value === text ? "justify-start " : "hidden"}
+                  >
+                    <TextField
+                      sx={{ width: "138px" }}
+                      name={text as "Search" | "Insert" | "DeleteNode"}
+                      size="small"
+                      type="text"
+                      variant="outlined"
+                      label={"Your value here"}
+                      inputProps={{
+                        min: 0,
+                        max: 999,
+                        style: { textAlign: "center" },
+                      }}
+                      onChange={handleInput}
+                    />
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname} w-[40px] h-[40px]`}
+                      onClick={async () =>
+                        animate(text).catch((e) => {
+                          setCurrentError(e.message);
+                        })
+                      }
+                    >
+                      Go
+                    </button>
+                  </TabPanel>
+                ))}
+              </TabContext>
+            </Box>
+          </ControlsToolTip>
+        </ThemeProvider>
+      </MediumCard>
+    </>
+  );
+};
+
+export default BaseControlPanel;
