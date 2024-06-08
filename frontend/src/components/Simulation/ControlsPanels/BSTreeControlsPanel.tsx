@@ -9,7 +9,12 @@ import React, { FC, useEffect, useState } from "react";
 
 import BSTreeAnimationController from "../../../ClassObjects/BST/BSTreeAnimationController";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setError, setInput, setInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
+import {
+  setError,
+  setInput,
+  setInputArray,
+  setCurrentAlg,
+} from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
@@ -21,6 +26,10 @@ import { randomBuildTree } from "../BST/BST_Algorithms";
 interface Props {
   controller: BSTreeAnimationController;
   isButtonDisabled: boolean;
+  showActions: boolean;
+  editingConstruction: boolean;
+  handleShowActions: () => void;
+  handleHideActions: () => void;
 }
 
 const buttonClassname =
@@ -33,7 +42,14 @@ const buttonClassname =
  * @param {boolean} props.isButtonDisabled - Determines if the button is disabled.
  * @return {JSX.Element} The BSTreeControlsPanel component.
  */
-const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
+const BSTreeControlsPanel: FC<Props> = ({
+  controller,
+  isButtonDisabled,
+  showActions,
+  editingConstruction,
+  handleShowActions,
+  handleHideActions,
+}) => {
   const [regsterActivity] = useRegisterActivityMutation();
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
@@ -60,6 +76,9 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
     if (typeof res !== "string") {
       try {
         controller.setTreeFromInput(res);
+        handleShowActions();
+        setValue("2");
+        dispatch(setCurrentAlg("Min"));
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -169,6 +188,9 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
   };
   const randomizeInput = () => {
     controller.setTreeFromInput([], randomBuildTree(generateRandomArrForHeap(9, 7)));
+    handleShowActions();
+    setValue("2");
+    dispatch(setCurrentAlg("Min"));
   };
   useEffect(() => {
     // create a random array whenever the page is loaded.
@@ -199,39 +221,79 @@ const BSTreeControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     aria-label="algorithms and actions"
                     centered
                   >
-                    <Tab
-                      label="BST construction"
-                      value="1"
-                    />
-                    <Tab
-                      label="Min / Max"
-                      value="2"
-                    />
-                    <Tab
-                      label="Traversals"
-                      value="3"
-                    />
-                    <Tab
-                      label="Successor"
-                      value="Successor"
-                    />
-                    <Tab
-                      label="Predecessor"
-                      value="Predecessor"
-                    />
-                    <Tab
-                      label="Search"
-                      value="Search"
-                    />
-                    <Tab
-                      label="Insert"
-                      value="Insert"
-                    />
-                    <Tab
-                      label="Delete"
-                      value="DeleteNode"
-                    />
+                    {!showActions && !editingConstruction && (
+                      <Tab
+                        label="Create Binary Search Tree"
+                        value="1"
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                    {(showActions || editingConstruction) && (
+                      <Tab
+                        label="Change Binary Search Tree"
+                        value="1"
+                        onClick={handleHideActions}
+                        disabled={isButtonDisabled}
+                      />
+                    )}
                   </TabList>
+                  {showActions && (
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="algorithms and actions"
+                      centered
+                    >
+                      <Tab
+                        label="Min / Max"
+                        value="2"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Min"));
+                        }}
+                      />
+                      <Tab
+                        label="Traversals"
+                        value="3"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Inorder"));
+                        }}
+                      />
+                      <Tab
+                        label="Successor"
+                        value="Successor"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Successor"));
+                        }}
+                      />
+                      <Tab
+                        label="Predecessor"
+                        value="Predecessor"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Predecessor"));
+                        }}
+                      />
+                      <Tab
+                        label="Search"
+                        value="Search"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Search"));
+                        }}
+                      />
+                      <Tab
+                        label="Insert"
+                        value="Insert"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Insert"));
+                        }}
+                      />
+                      <Tab
+                        label="Delete"
+                        value="DeleteNode"
+                        onClick={() => {
+                          dispatch(setCurrentAlg("Delete"));
+                        }}
+                      />
+                    </TabList>
+                  )}
                 </Box>
                 <TabPanel
                   value="1"

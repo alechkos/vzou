@@ -43,9 +43,9 @@ const HashTableControlPanel: FC<Props> = ({
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
-  const inputArray = useAppSelector((state) => state.linkedList.inputArray);
-  const inputValues = useAppSelector((state) => state.linkedList.inputValues);
-  const error = useAppSelector((state) => state.linkedList.error);
+  const inputArray = useAppSelector((state) => state.hashTable.inputArray);
+  const inputValues = useAppSelector((state) => state.hashTable.inputValues);
+  const error = useAppSelector((state) => state.hashTable.error);
 
   const [regsterActivity] = useRegisterActivityMutation();
 
@@ -81,7 +81,7 @@ const HashTableControlPanel: FC<Props> = ({
         // controller.setListFromInput(res);
         handleShowActions();
         setValue("Search");
-        dispatch(setCurrentAlgorithm("Search"));
+        // dispatch(setCurrentAlgorithm("Search"));
         setShowPseudoCode(true); //after build
       } catch (e: any) {
         setCurrentError(e.message);
@@ -182,14 +182,14 @@ const HashTableControlPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label="Create Linked List"
+                        label="Create Hash Table"
                         value="1"
                         disabled={isButtonDisabled}
                       />
                     )}
                     {(showActions || editingConstruction) && (
                       <Tab
-                        label="Change Linked List"
+                        label="Change Hash Table"
                         value="1"
                         onClick={handleHideActions}
                         disabled={isButtonDisabled}

@@ -29,7 +29,6 @@ interface Props {
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
-  setShowPseudoCode: (show: boolean) => void; //pseudo code only after building
 }
 
 const buttonClassname =
@@ -42,7 +41,6 @@ const LinkedListControlsPanel: FC<Props> = ({
   editingConstruction,
   handleShowActions,
   handleHideActions,
-  setShowPseudoCode,
 }) => {
   const inputArray = useAppSelector((state) => state.linkedList.inputArray);
   const inputValues = useAppSelector((state) => state.linkedList.inputValues);
@@ -83,7 +81,6 @@ const LinkedListControlsPanel: FC<Props> = ({
         handleShowActions();
         setValue("Search");
         dispatch(setCurrentAlgorithm("Search"));
-        setShowPseudoCode(true); //after build
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -100,7 +97,6 @@ const LinkedListControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlgorithm("Search"));
     dispatch(clearInputArray());
     dispatch(setInputArray(randomArray));
-    setShowPseudoCode(true); //after build
   };
 
   const Animate = async (animation: string) => {
