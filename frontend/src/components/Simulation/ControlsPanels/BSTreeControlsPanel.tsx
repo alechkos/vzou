@@ -1,10 +1,3 @@
-import CasinoIcon from "@mui/icons-material/Casino";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import { TextField, ThemeProvider } from "@mui/material";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
 import React, { FC, useEffect, useState } from "react";
 
 import BSTreeAnimationController from "../../../ClassObjects/BST/BSTreeAnimationController";
@@ -16,12 +9,9 @@ import {
   setCurrentAlg,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
-import { AlertError } from "../../UI/Controls/AlertError";
-import { theme } from "../../UI/Controls/ControlsTheme";
-import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
-import MediumCard from "../../UI/MediumCard";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import { randomBuildTree } from "../BST/BST_Algorithms";
+import BaseControlPanel from "./BaseControlPanel";
 
 interface Props {
   controller: BSTreeAnimationController;
@@ -56,6 +46,16 @@ const BSTreeControlsPanel: FC<Props> = ({
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
   const [value, setValue] = useState("1");
+
+  const algorithms = [
+    "Min / Max",
+    "Traversals",
+    "Successor",
+    "Predecessor",
+    "Search",
+    "Insert",
+    "Delete",
+  ];
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -120,12 +120,12 @@ const BSTreeControlsPanel: FC<Props> = ({
           });
           await controller.insert(inputValues.Insert);
           return;
-        case "DeleteNode":
+        case "Delete":
           regsterActivity({
             subject: "BST",
-            algorithm: "DeleteNode",
+            algorithm: "Delete",
           });
-          await controller.deleteNode(inputValues.DeleteNode);
+          await controller.deleteNode(inputValues.Delete);
           return;
         case "Min":
           regsterActivity({
@@ -192,223 +192,41 @@ const BSTreeControlsPanel: FC<Props> = ({
     setValue("2");
     dispatch(setCurrentAlg("Min"));
   };
+
+  const setAlgorithm = (name: any) => {
+    dispatch(setCurrentAlg(name));
+  };
+
   useEffect(() => {
     // create a random array whenever the page is loaded.
     controller.setTreeFromInput([2, 1, 3]);
   }, []);
 
   return (
-    <>
-      {error && (
-        <AlertError
-          error={error}
-          onClose={() => {
-            setCurrentError("");
-          }}
-        />
-      )}
-      <MediumCard
-        isSmaller
-        maxWidth="max-w-5xl"
-      >
-        <ThemeProvider theme={theme}>
-          <ControlsToolTip isButtonDisabled={isButtonDisabled}>
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="algorithms and actions"
-                    centered
-                  >
-                    {!showActions && !editingConstruction && (
-                      <Tab
-                        label="Create Binary Search Tree"
-                        value="1"
-                        disabled={isButtonDisabled}
-                      />
-                    )}
-                    {(showActions || editingConstruction) && (
-                      <Tab
-                        label="Change Binary Search Tree"
-                        value="1"
-                        onClick={handleHideActions}
-                        disabled={isButtonDisabled}
-                      />
-                    )}
-                  </TabList>
-                  {showActions && (
-                    <TabList
-                      onChange={handleChange}
-                      aria-label="algorithms and actions"
-                      centered
-                    >
-                      <Tab
-                        label="Min / Max"
-                        value="2"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Min"));
-                        }}
-                      />
-                      <Tab
-                        label="Traversals"
-                        value="3"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Inorder"));
-                        }}
-                      />
-                      <Tab
-                        label="Successor"
-                        value="Successor"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Successor"));
-                        }}
-                      />
-                      <Tab
-                        label="Predecessor"
-                        value="Predecessor"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Predecessor"));
-                        }}
-                      />
-                      <Tab
-                        label="Search"
-                        value="Search"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Search"));
-                        }}
-                      />
-                      <Tab
-                        label="Insert"
-                        value="Insert"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Insert"));
-                        }}
-                      />
-                      <Tab
-                        label="Delete"
-                        value="DeleteNode"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Delete"));
-                        }}
-                      />
-                    </TabList>
-                  )}
-                </Box>
-                <TabPanel
-                  value="1"
-                  className={value === "1" ? "justify-start " : "hidden"}
-                >
-                  <TextField
-                    placeholder="e.g 1,2,3,4,..."
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={inputArray}
-                    label="Build-BST"
-                    variant="outlined"
-                    onChange={(e) => dispatch(setInputArray(e.target.value))}
-                  />
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[40px] h-[40px]`}
-                    onClick={createBSTreeHandler}
-                  >
-                    Go
-                  </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
-                    onClick={randomizeInput}
-                  >
-                    <CasinoIcon />
-                    Randomize
-                  </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
-                    onClick={async () => Animate("Clear")}
-                  >
-                    Clear
-                  </button>
-                </TabPanel>
-                <TabPanel
-                  value="2"
-                  className={value === "2" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Min", "Max"].map((text) => (
-                    <div
-                      className="py-2 px-6"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-[60px] h-[40px]`}
-                        onClick={async () => Animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                <TabPanel
-                  value="3"
-                  className={value === "3" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Inorder", "Preorder", "Postorder"].map((text) => (
-                    <div
-                      className="py-2 px-2"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={buttonClassname}
-                        onClick={async () => Animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                {["Successor", "Predecessor", "Search", "Insert", "DeleteNode"].map((text) => (
-                  <TabPanel
-                    key={text}
-                    value={text}
-                    className={value === text ? "justify-start " : "hidden"}
-                  >
-                    <TextField
-                      sx={{ width: "100px" }}
-                      name={text as "Search" | "Insert" | "DeleteNode"}
-                      size="small"
-                      value={inputValues[text as "Search" | "Insert" | "DeleteNode"]}
-                      type="text"
-                      variant="outlined"
-                      label={text}
-                      inputProps={{
-                        min: 0,
-                        max: 999,
-                        style: { textAlign: "center" },
-                      }}
-                      onChange={handleInput}
-                    />
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px]`}
-                      onClick={async () =>
-                        Animate(text).catch((e) => {
-                          setCurrentError(e.message);
-                        })
-                      }
-                    >
-                      Go
-                    </button>
-                  </TabPanel>
-                ))}
-              </TabContext>
-            </Box>
-          </ControlsToolTip>
-        </ThemeProvider>
-      </MediumCard>
-    </>
+    <BaseControlPanel
+      error={error}
+      setCurrentError={setCurrentError}
+      isButtonDisabled={isButtonDisabled}
+      showActions={showActions}
+      editingConstruction={editingConstruction}
+      handleHideActions={handleHideActions}
+      handleShowActions={handleShowActions}
+      setAlgorithm={setAlgorithm}
+      algorithms={algorithms}
+      inputArray={inputArray}
+      setInputArray={(e) => {
+        dispatch(setInputArray(e.target.value));
+      }}
+      createStructure={createBSTreeHandler}
+      randomizeStructure={randomizeInput}
+      animate={Animate}
+      handleInput={handleInput}
+      value={value}
+      handleChange={handleChange}
+      dataLabel={"BST"}
+      minMax={["Min", "Max"]}
+      traversals={["Inorder", "Preorder", "Postorder"]}
+    />
   );
 };
 

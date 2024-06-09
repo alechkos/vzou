@@ -120,12 +120,12 @@ const AvlControlsPanel: FC<Props> = ({
           });
           await controller.insert(inputValues.Insert);
           return;
-        case "DeleteNode":
+        case "Delete":
           regsterActivity({
             subject: "AVL",
-            algorithm: "DeleteNode",
+            algorithm: "Delete",
           });
-          await controller.deleteNode(inputValues.DeleteNode);
+          await controller.deleteNode(inputValues.Delete);
           return;
         case "Min":
           regsterActivity({
@@ -226,6 +226,9 @@ const AvlControlsPanel: FC<Props> = ({
       handleInput={handleInput}
       value={value}
       handleChange={handleChange}
+      minMax={["Min", "Max"]}
+      traversals={["Inorder", "Preorder", "Postorder"]}
+      dataLabel={"Avl"}
     />
   );
 };

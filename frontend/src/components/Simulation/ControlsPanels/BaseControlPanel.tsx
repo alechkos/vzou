@@ -29,6 +29,9 @@ interface Props {
   handleInput: (e: any) => void;
   value: string;
   handleChange: (event: any, value: string) => void;
+  minMax?: string[];
+  traversals?: string[];
+  dataLabel: string;
 }
 
 const BaseControlPanel: FC<Props> = ({
@@ -49,6 +52,9 @@ const BaseControlPanel: FC<Props> = ({
   handleInput,
   value,
   handleChange,
+  minMax,
+  traversals,
+  dataLabel,
 }) => {
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
@@ -79,14 +85,14 @@ const BaseControlPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label="Create AVL construction"
+                        label={`Create ${dataLabel} construction`}
                         value="1"
                         disabled={isButtonDisabled}
                       />
                     )}
                     {(showActions || editingConstruction) && (
                       <Tab
-                        label="Change Avl construction"
+                        label={`Change ${dataLabel} construction`}
                         value="1"
                         onClick={handleHideActions}
                         disabled={isButtonDisabled}
@@ -174,77 +180,83 @@ const BaseControlPanel: FC<Props> = ({
                     Clear
                   </button>
                 </TabPanel>
-                <TabPanel
-                  value="2"
-                  className={value === "2" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Min", "Max"].map((text) => (
-                    <div
-                      className="py-2 px-6"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-[60px] h-[40px]`}
-                        onClick={async () => animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                <TabPanel
-                  value="3"
-                  className={value === "3" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Inorder", "Preorder", "Postorder"].map((text) => (
-                    <div
-                      className="py-2 px-2"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={buttonClassname}
-                        onClick={async () => animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                {["Successor", "Predecessor", "Search", "Insert", "Delete"].map((text) => (
+                {minMax && (
                   <TabPanel
-                    key={text}
-                    value={text}
-                    className={value === text ? "justify-start " : "hidden"}
+                    value="2"
+                    className={value === "2" ? "flex flex-row justify-center " : "hidden"}
                   >
-                    <TextField
-                      sx={{ width: "138px" }}
-                      name={text as "Search" | "Insert" | "DeleteNode"}
-                      size="small"
-                      type="text"
-                      variant="outlined"
-                      label={"Your value here"}
-                      inputProps={{
-                        min: 0,
-                        max: 999,
-                        style: { textAlign: "center" },
-                      }}
-                      onChange={handleInput}
-                    />
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px]`}
-                      onClick={async () =>
-                        animate(text).catch((e) => {
-                          setCurrentError(e.message);
-                        })
-                      }
-                    >
-                      Go
-                    </button>
+                    {minMax.map((text) => (
+                      <div
+                        className="py-2 px-6"
+                        key={text}
+                      >
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[60px] h-[40px]`}
+                          onClick={async () => animate(text)}
+                        >
+                          {text}
+                        </button>
+                      </div>
+                    ))}
                   </TabPanel>
-                ))}
+                )}
+                {traversals && (
+                  <TabPanel
+                    value="3"
+                    className={value === "3" ? "flex flex-row justify-center " : "hidden"}
+                  >
+                    {traversals.map((text) => (
+                      <div
+                        className="py-2 px-2"
+                        key={text}
+                      >
+                        <button
+                          disabled={isButtonDisabled}
+                          className={buttonClassname}
+                          onClick={async () => animate(text)}
+                        >
+                          {text}
+                        </button>
+                      </div>
+                    ))}
+                  </TabPanel>
+                )}
+                {algorithms
+                  .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))
+                  .map((text) => (
+                    <TabPanel
+                      key={text}
+                      value={text}
+                      className={value === text ? "justify-start " : "hidden"}
+                    >
+                      <TextField
+                        sx={{ width: "138px" }}
+                        name={text}
+                        size="small"
+                        type="text"
+                        variant="outlined"
+                        label={"Your value here"}
+                        inputProps={{
+                          min: 0,
+                          max: 999,
+                          style: { textAlign: "center" },
+                        }}
+                        onChange={handleInput}
+                      />
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-[40px] h-[40px]`}
+                        onClick={async () =>
+                          animate(text).catch((e) => {
+                            setCurrentError(e.message);
+                          })
+                        }
+                      >
+                        Go
+                      </button>
+                    </TabPanel>
+                  ))}
               </TabContext>
             </Box>
           </ControlsToolTip>

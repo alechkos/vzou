@@ -16,7 +16,7 @@ const initialState = {
     Predecessor: +"",
     Search: +"",
     Insert: +"",
-    DeleteNode: +"",
+    Delete: +"",
   },
 };
 
@@ -88,7 +88,7 @@ const bstSlice = createSlice({
       state,
       action: PayloadAction<{
         val: number;
-        key: "Successor" | "Predecessor" | "Search" | "Insert" | "DeleteNode";
+        key: "Successor" | "Predecessor" | "Search" | "Insert" | "Delete";
       }>
     ) {
       state.inputValues[action.payload.key] = action.payload.val;
