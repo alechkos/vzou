@@ -43,6 +43,17 @@ const LinkedListControlsPanel: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+
+  const handleRandomNodes = (e: any) => {
+    const val = Number(e.target.value);
+    if (val < 1 || val > 8) {
+      setCurrentError("Please enter a value between 1-8");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    setNumberOfRandomNodes(val);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -66,7 +77,7 @@ const LinkedListControlsPanel: FC<Props> = ({
   };
 
   const createLinkedListHandler = () => {
-    const res = getArrFromInputForHeap(15, inputArray);
+    const res = getArrFromInputForHeap(8, inputArray);
     if (typeof res !== "string") {
       try {
         controller.setListFromInput(res);
@@ -82,7 +93,11 @@ const LinkedListControlsPanel: FC<Props> = ({
   };
 
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap(7, 1);
+    if (numberOfRandomNodes < 1 || numberOfRandomNodes > 8) {
+      setCurrentError("Please enter the number of nodes to randomize.");
+      return;
+    }
+    const randomArray = generateRandomArrForHeap(numberOfRandomNodes, 1, numberOfRandomNodes);
     controller.setListFromInput(randomArray);
     handleShowActions();
     setValue("Search");
