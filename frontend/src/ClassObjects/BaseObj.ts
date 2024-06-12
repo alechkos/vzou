@@ -1,5 +1,5 @@
-import {BranchObj} from "./BranchObj";
-import {ActionType} from "../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { BranchObj } from "./BranchObj";
+import { ActionType } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 /*
  * The base class for objects for data structures vizualization
@@ -20,7 +20,7 @@ export abstract class BaseObj {
 
   branch: BranchObj | null;
 
-  type: string;
+  type?: string;
 
   isVisited: boolean;
 
@@ -28,7 +28,7 @@ export abstract class BaseObj {
 
   viewportWidth: number;
 
-  parent: BaseObj | undefined;
+  parent?: BaseObj | undefined;
 
   action: ActionType;
 

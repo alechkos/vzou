@@ -16,7 +16,7 @@ import quickSortReducer from "./reducers/sorts/quickSortReducer";
 import radixSortReducer from "./reducers/sorts/radixSortReducer";
 import stackReducer from "./reducers/stackReducer";
 import linkedListReducer from "./reducers/alghoritms/linkedList-reducer";
-import hashTableReducer from "./reducers/alghoritms/hashTable";
+import hashTableReducer from "./reducers/alghoritms/hashTable-reducer";
 import basePageReducer from "./reducers/basePage-reducer";
 
 const store = configureStore({

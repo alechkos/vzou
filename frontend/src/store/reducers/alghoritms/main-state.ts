@@ -12,6 +12,4 @@ const mainState = {
   traversalResults: [] as number[],
 };
 
-//TODO: make methods as main state!!
-
 export default mainState;

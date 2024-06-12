@@ -1,0 +1,99 @@
+import mainState from "./main-state";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { LinkedListAlgNames } from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
+import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
+
+const initialState = {
+  ...mainState,
+  head: undefined as HashTableNode | undefined,
+  currentAlg: "",
+  inputValues: {
+    Search: +"",
+    InsertToHead: +"",
+    InsertToTail: +"",
+    DeleteFromHead: +"",
+    DeleteFromTail: +"",
+  },
+};
+
+const hashTableSlice = createSlice({
+  name: "hashTable",
+  initialState,
+  reducers: {
+    setError(state, action: PayloadAction<string>) {
+      state.error = action.payload;
+      return state;
+    },
+    setCurrentAlgorithm(state, action: PayloadAction<LinkedListAlgNames>) {
+      state.currentAlg = action.payload;
+      return state;
+    },
+    setInput(
+      state,
+      action: PayloadAction<{
+        val: number;
+        key: "Search" | "InsertToHead" | "InsertToTail" | "DeleteFromTail" | "DeleteFromHead";
+      }>
+    ) {
+      state.inputValues[action.payload.key] = action.payload.val;
+      return state;
+    },
+    setInputArray(state, action: PayloadAction<string | number[]>) {
+      if (typeof action.payload === "string") {
+        state.inputArray = action.payload;
+      } else {
+        action.payload.forEach((num, index) => {
+          if (index !== action.payload.length - 1) {
+            state.inputArray += num + ", ";
+          } else {
+            state.inputArray += num;
+          }
+        });
+      }
+      return state;
+    },
+    clearInputArray(state) {
+      state.inputArray = "";
+    },
+    setPlaying(state, action: PayloadAction<boolean>) {
+      state.isPlaying = action.payload;
+    },
+    setHead(state, action: PayloadAction<HashTableNode | undefined>) {
+      state.head = action.payload;
+    },
+    setActions(state, action: PayloadAction<Events>) {
+      state.currentActions = action.payload;
+      return state;
+    },
+    setRoles(state, action: PayloadAction<NodeRole[]>) {
+      state.currentRoles = action.payload;
+    },
+    setCodeRef(state, action: PayloadAction<CodeReference<LinkedListAlgNames>>) {
+      state.currentAlg = action.payload.name;
+      state.currentLine = action.payload.line;
+      return state;
+    },
+    setPassedNodes(state, action: PayloadAction<number[]>) {
+      state.passedNodes = action.payload;
+      return state;
+    },
+  },
+});
+
+export default hashTableSlice.reducer;
+
+export const {
+  setError,
+  setInput,
+  setInputArray,
+  setHead,
+  setActions,
+  setRoles,
+  setCodeRef,
+  setPlaying,
+  setPassedNodes,
+  setCurrentAlgorithm,
+  clearInputArray,
+} = hashTableSlice.actions;

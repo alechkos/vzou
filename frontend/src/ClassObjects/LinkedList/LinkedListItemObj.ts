@@ -3,7 +3,6 @@
  */
 import { BranchObj } from "../BranchObj";
 import { BaseObj } from "../BaseObj";
-import { LinkedListNodeType } from "../../components/Simulation/LinkedList/LinkedListTypes";
 import {
   ActionType,
   Events,
