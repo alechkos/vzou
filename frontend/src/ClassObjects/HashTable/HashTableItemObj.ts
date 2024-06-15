@@ -88,12 +88,12 @@ export class HashTableItemObj extends BaseObj {
     this.nodeRole = role;
   }
 
-  static setActions(listObjects: HashTableItemObj[], actions: Events | null) {
+  static setActions(hashObjects: HashTableItemObj[], actions: Events | null) {
     if (actions) {
       for (const action of actions) {
         if (action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
         else {
-          for (const list of listObjects) {
+          for (const list of hashObjects) {
             if (list.id === action.item) {
               list.setAction(action.action);
             }
@@ -103,11 +103,11 @@ export class HashTableItemObj extends BaseObj {
     }
   }
 
-  static setRoles(listObjects: HashTableItemObj[], roles: NodeRole[]) {
-    if (!listObjects.length) return;
+  static setRoles(hashObjects: HashTableItemObj[], roles: NodeRole[]) {
+    if (!hashObjects.length) return;
     else {
       for (const role of roles) {
-        for (const list of listObjects) {
+        for (const list of hashObjects) {
           if (list.id === role.id) {
             list.setRole(role.role);
           }
@@ -116,9 +116,15 @@ export class HashTableItemObj extends BaseObj {
     }
   }
 
-  static setPassed(listObjects: HashTableItemObj[], passedNodes: number[]) {
-    for (const node of listObjects) {
+  static setPassed(hashObjects: HashTableItemObj[], passedNodes: number[]) {
+    for (const node of hashObjects) {
       node.isPassed = passedNodes.includes(node.id);
+    }
+  }
+
+  static setVisited(hashObjects: HashTableItemObj[], visitedNodes: number[]) {
+    for (const node of hashObjects) {
+      node.isVisited = visitedNodes.includes(node.id);
     }
   }
 }

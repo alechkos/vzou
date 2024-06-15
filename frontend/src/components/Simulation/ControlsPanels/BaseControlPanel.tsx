@@ -32,6 +32,7 @@ interface Props {
   minMax?: string[];
   traversals?: string[];
   dataLabel: string;
+  handleRandomNodes: (e: any) => void;
 }
 
 const BaseControlPanel: FC<Props> = ({
@@ -55,6 +56,7 @@ const BaseControlPanel: FC<Props> = ({
   minMax,
   traversals,
   dataLabel,
+  handleRandomNodes,
 }) => {
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
@@ -146,7 +148,7 @@ const BaseControlPanel: FC<Props> = ({
                 </Box>
                 <TabPanel
                   value="1"
-                  className={value === "1" ? "justify-start " : "hidden"}
+                  className={value === "1" ? "justify-start flex " : "hidden"}
                 >
                   <TextField
                     placeholder="e.g 1,2,3,4,..."
@@ -164,14 +166,30 @@ const BaseControlPanel: FC<Props> = ({
                   >
                     Go
                   </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
-                    onClick={randomizeStructure}
-                  >
-                    <CasinoIcon />
-                    Randomize
-                  </button>
+                  <div className={"ml-10"}>
+                    <TextField
+                      sx={{ width: "150px" }}
+                      name={"NumberOfRandom"}
+                      size="small"
+                      type="text"
+                      variant="outlined"
+                      label={"Number of nodes"}
+                      inputProps={{
+                        min: 0,
+                        max: 999,
+                        style: { textAlign: "center" },
+                      }}
+                      onChange={handleRandomNodes}
+                    />
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname} w-[140px] h-[40px]`}
+                      onClick={randomizeStructure}
+                    >
+                      <CasinoIcon />
+                      Randomize
+                    </button>
+                  </div>
                   <button
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[60px] h-[40px] ml-8`}

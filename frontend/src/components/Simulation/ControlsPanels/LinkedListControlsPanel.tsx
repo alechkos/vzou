@@ -186,6 +186,7 @@ const LinkedListControlsPanel: FC<Props> = ({
       value={value}
       handleChange={handleChange}
       dataLabel={"Linked List"}
+      handleRandomNodes={handleRandomNodes}
     />
   );
 };

@@ -56,6 +56,17 @@ const AvlControlsPanel: FC<Props> = ({
   ];
 
   const [value, setValue] = useState("1");
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+
+  const handleRandomNodes = (e: any) => {
+    const val = Number(e.target.value);
+    if (val < 1 || val > 20) {
+      setCurrentError("Please enter a value between 1-20");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    setNumberOfRandomNodes(val);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -188,7 +199,11 @@ const AvlControlsPanel: FC<Props> = ({
     }
   };
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap(9, 7);
+    if (numberOfRandomNodes < 1 || numberOfRandomNodes > 20) {
+      setCurrentError("Please enter the number of nodes to randomize.");
+      return;
+    }
+    const randomArray = generateRandomArrForHeap(numberOfRandomNodes, 1, numberOfRandomNodes);
     controller.setTreeFromInput([], buildTree(randomArray));
     handleShowActions();
     setValue("2");
@@ -229,6 +244,7 @@ const AvlControlsPanel: FC<Props> = ({
       minMax={["Min", "Max"]}
       traversals={["Inorder", "Preorder", "Postorder"]}
       dataLabel={"Avl"}
+      handleRandomNodes={handleRandomNodes}
     />
   );
 };

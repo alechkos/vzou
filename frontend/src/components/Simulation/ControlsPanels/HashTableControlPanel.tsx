@@ -20,15 +20,17 @@ import CasinoIcon from "@mui/icons-material/Casino";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+import { HashTableAnimationController } from "../../../ClassObjects/HashTable/HashTableAnimationController";
+import BaseControlPanel from "./BaseControlPanel";
+import { setCurrentAlg } from "../../../store/reducers/alghoritms/bst-reducer";
 
 interface Props {
-  controller: string;
+  controller: HashTableAnimationController;
   isButtonDisabled: boolean;
   showActions: boolean;
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
-  setShowPseudoCode: (show: boolean) => void; //pseudo code only after building
 }
 
 const HashTableControlPanel: FC<Props> = ({
@@ -38,7 +40,6 @@ const HashTableControlPanel: FC<Props> = ({
   editingConstruction,
   handleShowActions,
   handleHideActions,
-  setShowPseudoCode,
 }) => {
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
@@ -52,6 +53,20 @@ const HashTableControlPanel: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
+
+  const algorithms = ["1", "2", "3", "4", "5"];
+
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+
+  const handleRandomNodes = (e: any) => {
+    const val = Number(e.target.value);
+    if (val < 1 || val > 20) {
+      setCurrentError("Please enter a value between 1-20");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    setNumberOfRandomNodes(val);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -82,7 +97,6 @@ const HashTableControlPanel: FC<Props> = ({
         handleShowActions();
         setValue("Search");
         // dispatch(setCurrentAlgorithm("Search"));
-        setShowPseudoCode(true); //after build
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -99,7 +113,6 @@ const HashTableControlPanel: FC<Props> = ({
     dispatch(setCurrentAlgorithm("Search"));
     dispatch(clearInputArray());
     dispatch(setInputArray(randomArray));
-    setShowPseudoCode(true); //after build
   };
 
   const Animate = async (animation: string) => {
@@ -152,11 +165,39 @@ const HashTableControlPanel: FC<Props> = ({
     }
   };
 
+  const setAlgorithm = (name: any) => {
+    dispatch(setCurrentAlg(name));
+  };
+
   useEffect(() => {
     dispatch(clearInputArray());
   }, []);
 
-  return <div></div>;
+  return (
+    <BaseControlPanel
+      error={error}
+      setCurrentError={setCurrentError}
+      isButtonDisabled={isButtonDisabled}
+      showActions={showActions}
+      editingConstruction={editingConstruction}
+      handleHideActions={handleHideActions}
+      handleShowActions={handleShowActions}
+      setAlgorithm={setAlgorithm}
+      algorithms={algorithms}
+      inputArray={inputArray}
+      setInputArray={(e) => {
+        dispatch(setInputArray(e.target.value));
+      }}
+      createStructure={createLinkedListHandler}
+      randomizeStructure={randomizeInput}
+      animate={Animate}
+      handleInput={handleInput}
+      value={value}
+      handleChange={handleChange}
+      dataLabel={"Hash Table"}
+      handleRandomNodes={handleRandomNodes}
+    />
+  );
 };
 
 export default HashTableControlPanel;

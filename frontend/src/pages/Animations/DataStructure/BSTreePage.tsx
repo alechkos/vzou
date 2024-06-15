@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import PhoneRotate from "../../../assets/rotateTablet.svg";
 import BSTreeAnimationController from "../../../ClassObjects/BST/BSTreeAnimationController";
 import BinaryTree from "../../../components/Simulation/BinaryTree/BinaryTree";
 import {
@@ -14,13 +13,13 @@ import HeapArray from "../../../components/Simulation/Heap/HeapArray/HeapArray";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
-import SideBar from "../../../components/Layout/SideBar/SideBar";
 import BasePage from "./BasePage";
 import {
   setEditingConstruction,
   setShowActions,
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
+import { clearInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
 
 const HeapPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
@@ -50,6 +49,10 @@ const HeapPage: FC = () => {
     dispatch(setEditingConstruction(true));
     dispatch(setShowPseudoCode(false));
   };
+
+  useEffect(() => {
+    dispatch(clearInputArray());
+  }, []);
 
   return (
     <BasePage
