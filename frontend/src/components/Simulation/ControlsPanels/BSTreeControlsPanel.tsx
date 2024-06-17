@@ -243,6 +243,7 @@ const BSTreeControlsPanel: FC<Props> = ({
       value={value}
       handleChange={handleChange}
       dataLabel={"BST"}
+      dataForInput={"Build-BST-Tree"}
       minMax={["Min", "Max"]}
       traversals={["Inorder", "Preorder", "Postorder"]}
       handleRandomNodes={handleRandomNodes}

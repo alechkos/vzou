@@ -2,7 +2,6 @@ import AnimationController from "../AnimationController";
 import { HashTableNode } from "./HashTableNode";
 import { AppDispatch } from "../../store/store";
 import { HashTableMemento } from "./HashTableMemento";
-import { LinkedListNode } from "../LinkedList/LinkedListNode";
 import {
   ActionType,
   Events,
@@ -17,8 +16,7 @@ import {
   setPassedNodes,
   setError,
 } from "../../store/reducers/alghoritms/hashTable-reducer";
-import { buildLinkedList } from "../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
-import { LinkedListMemento } from "../LinkedList/LinkedListMemento";
+import { buildHashTable } from "../../components/Simulation/HashTable/Helpers/HashTableHelpers";
 
 export class HashTableAnimationController extends AnimationController<
   HashTableNode | undefined,
@@ -44,7 +42,7 @@ export class HashTableAnimationController extends AnimationController<
     this.dispatch(setPlaying(value));
   }
 
-  setHead(head: LinkedListNode | undefined) {
+  setHead(head: HashTableNode | undefined) {
     this.dispatch(setHead(head));
   }
 
@@ -64,8 +62,8 @@ export class HashTableAnimationController extends AnimationController<
     this.dispatch(setPassedNodes(passedNodes));
   }
 
-  setListFromInput(arr: number[]) {
-    const head = buildLinkedList(arr);
+  setHashFromInput(arr: number[]) {
+    const head = buildHashTable(arr);
     this.data = head;
     this.setHead(head);
     this.memento.clearSnapshots();
@@ -74,7 +72,7 @@ export class HashTableAnimationController extends AnimationController<
     this.setPassedNodes([]);
   }
 
-  initData(data: LinkedListNode | undefined) {
+  initData(data: HashTableNode | undefined) {
     this.setReference({ name: this.memento.getCurrentAlg(), line: 0 });
     this.setHead(data);
     this.setCurrentActions([]);
@@ -88,7 +86,7 @@ export class HashTableAnimationController extends AnimationController<
     this.setCurrentActions(actions);
     this.setCurrentRoles(this.memento.getRoles(index));
     this.setReference(this.memento.getCodeRef(index));
-    this.setPassedNodes((this.memento as LinkedListMemento).getPassedNodes(index));
+    this.setPassedNodes((this.memento as HashTableMemento).getPassedNodes(index));
     if (actions.length > 0 && actions[0].action === ActionType.ERROR) {
       this.setError(actions[0]?.error || "ERROR");
     }

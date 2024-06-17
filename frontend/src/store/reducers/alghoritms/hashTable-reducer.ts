@@ -5,6 +5,8 @@ import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/Bina
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
 
+const inputArray: Array<{ id: number; listValues: number[] }> = [{ id: 0, listValues: [] }];
+
 const initialState = {
   ...mainState,
   head: undefined as HashTableNode | undefined,
@@ -16,6 +18,7 @@ const initialState = {
     DeleteFromHead: +"",
     DeleteFromTail: +"",
   },
+  inputArray,
 };
 
 const hashTableSlice = createSlice({
@@ -40,22 +43,12 @@ const hashTableSlice = createSlice({
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
     },
-    setInputArray(state, action: PayloadAction<string | number[]>) {
-      if (typeof action.payload === "string") {
-        state.inputArray = action.payload;
-      } else {
-        action.payload.forEach((num, index) => {
-          if (index !== action.payload.length - 1) {
-            state.inputArray += num + ", ";
-          } else {
-            state.inputArray += num;
-          }
-        });
-      }
+    setInputArray(state, action: PayloadAction<Array<{ id: number; listValues: number[] }>>) {
+      state.inputArray = [...action.payload];
       return state;
     },
     clearInputArray(state) {
-      state.inputArray = "";
+      state.inputArray = [];
     },
     setPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;

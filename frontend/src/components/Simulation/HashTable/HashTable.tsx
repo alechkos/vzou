@@ -3,7 +3,7 @@ import { Events, NodeRole } from "../BinaryTree/BinaryTreeTypes";
 import { FC } from "react";
 import { HashTableItemObj } from "../../../ClassObjects/HashTable/HashTableItemObj";
 import { AnimatePresence } from "framer-motion";
-import ListNode from "../LinkedList/ListNode";
+import HashNode from "./HashNode";
 
 interface Props {
   head: HashTableNodeType | undefined;
@@ -37,12 +37,10 @@ const HashTable: FC<Props> = ({
     <div>
       <AnimatePresence>
         {hashTableObjects.map((nodeObj) => (
-          <div></div>
-          // <ListNode
-          //   nodeObj={nodeObj}
-          //   length={length > 0 ? length : linkedListObjects.length - 2}
-          //   key={nodeObj.id}
-          // />
+          <HashNode
+            nodeObj={nodeObj}
+            key={nodeObj.id}
+          />
         ))}
       </AnimatePresence>
     </div>

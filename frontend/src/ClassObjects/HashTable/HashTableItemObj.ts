@@ -5,13 +5,16 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { LinkedListNode } from "../LinkedList/LinkedListNode";
+import { LinkedListItemObj } from "../LinkedList/LinkedListItemObj";
 
 export class HashTableItemObj extends BaseObj {
   static width = 4;
 
-  static gapY = 2;
+  static gapY = 40;
 
-  //TODO: think about how to change the super constructor
+  valuesForList?: LinkedListItemObj[];
+
   constructor(
     position: { x: number; y: number },
     speed: number,
@@ -19,9 +22,13 @@ export class HashTableItemObj extends BaseObj {
     value: number,
     type: string,
     viewportWidth: number,
-    parent: HashTableItemObj | undefined
+    parent: HashTableItemObj | undefined,
+    valuesForList?: LinkedListItemObj[]
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
+    this.parent = parent;
+    this.calculatePosition();
+    this.valuesForList = valuesForList;
   }
 
   calculatePosition() {
@@ -39,17 +46,25 @@ export class HashTableItemObj extends BaseObj {
   ) {
     if (!firstNode) return [];
     const hashTableObjects = [];
+    const valuesForList = firstNode.valuesForList
+      ? LinkedListItemObj.generateLinkedListObjects(
+          viewportWidth,
+          speed,
+          firstNode.valuesForList[0]
+        )
+      : undefined;
     const stack = [
       {
         node: firstNode,
         nodeObj: new HashTableItemObj(
-          { x: viewportWidth / 2 - 600, y: 325 },
+          { x: viewportWidth / 2 - 600, y: 200 },
           speed,
           firstNode.id,
           firstNode.value,
           "head",
           viewportWidth,
-          undefined
+          undefined,
+          valuesForList
         ),
       },
     ];
@@ -59,6 +74,9 @@ export class HashTableItemObj extends BaseObj {
       if (!item) break;
 
       const { node, nodeObj } = item;
+      const valuesForList = node.valuesForList
+        ? LinkedListItemObj.generateLinkedListObjects(viewportWidth, speed, node.valuesForList[0])
+        : undefined;
       if (node.next) {
         stack.push({
           node: node.next,
@@ -69,7 +87,8 @@ export class HashTableItemObj extends BaseObj {
             node.next.value,
             "node",
             viewportWidth,
-            nodeObj
+            nodeObj,
+            valuesForList
           ),
         });
         hashTableObjects.push(nodeObj);

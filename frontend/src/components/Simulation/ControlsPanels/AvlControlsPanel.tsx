@@ -244,6 +244,7 @@ const AvlControlsPanel: FC<Props> = ({
       minMax={["Min", "Max"]}
       traversals={["Inorder", "Preorder", "Postorder"]}
       dataLabel={"Avl"}
+      dataForInput={"Build-Avl-Tree"}
       handleRandomNodes={handleRandomNodes}
     />
   );

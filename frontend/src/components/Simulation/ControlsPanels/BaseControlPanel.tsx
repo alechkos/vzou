@@ -21,7 +21,7 @@ interface Props {
   handleShowActions: () => void;
   setAlgorithm: (name: string) => void;
   algorithms: string[];
-  inputArray: string;
+  inputArray: string | any;
   setInputArray: (event: any) => void;
   createStructure: () => void;
   randomizeStructure: () => void;
@@ -32,6 +32,7 @@ interface Props {
   minMax?: string[];
   traversals?: string[];
   dataLabel: string;
+  dataForInput: string;
   handleRandomNodes: (e: any) => void;
 }
 
@@ -56,6 +57,7 @@ const BaseControlPanel: FC<Props> = ({
   minMax,
   traversals,
   dataLabel,
+  dataForInput,
   handleRandomNodes,
 }) => {
   const buttonClassname =
@@ -155,7 +157,7 @@ const BaseControlPanel: FC<Props> = ({
                     size="small"
                     sx={{ width: "150px" }}
                     value={inputArray}
-                    label="Build-AVL-Tree"
+                    label={dataForInput}
                     variant="outlined"
                     onChange={(e) => setInputArray(e)}
                   />
@@ -240,41 +242,42 @@ const BaseControlPanel: FC<Props> = ({
                     ))}
                   </TabPanel>
                 )}
-                {algorithms
-                  .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))
-                  .map((text) => (
-                    <TabPanel
-                      key={text}
-                      value={text}
-                      className={value === text ? "justify-start " : "hidden"}
-                    >
-                      <TextField
-                        sx={{ width: "138px" }}
-                        name={text}
-                        size="small"
-                        type="text"
-                        variant="outlined"
-                        label={"Your value here"}
-                        inputProps={{
-                          min: 0,
-                          max: 999,
-                          style: { textAlign: "center" },
-                        }}
-                        onChange={handleInput}
-                      />
-                      <button
-                        disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-[40px] h-[40px]`}
-                        onClick={async () =>
-                          animate(text).catch((e) => {
-                            setCurrentError(e.message);
-                          })
-                        }
+                {showActions &&
+                  algorithms
+                    .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))
+                    .map((text) => (
+                      <TabPanel
+                        key={text}
+                        value={text}
+                        className={value === text ? "justify-start " : "hidden"}
                       >
-                        Go
-                      </button>
-                    </TabPanel>
-                  ))}
+                        <TextField
+                          sx={{ width: "138px" }}
+                          name={text}
+                          size="small"
+                          type="text"
+                          variant="outlined"
+                          label={"Your value here"}
+                          inputProps={{
+                            min: 0,
+                            max: 999,
+                            style: { textAlign: "center" },
+                          }}
+                          onChange={handleInput}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[40px] h-[40px]`}
+                          onClick={async () =>
+                            animate(text).catch((e) => {
+                              setCurrentError(e.message);
+                            })
+                          }
+                        >
+                          Go
+                        </button>
+                      </TabPanel>
+                    ))}
               </TabContext>
             </Box>
           </ControlsToolTip>

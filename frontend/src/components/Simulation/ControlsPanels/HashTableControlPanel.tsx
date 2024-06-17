@@ -1,4 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
+import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+import { HashTableAnimationController } from "../../../ClassObjects/HashTable/HashTableAnimationController";
+import {
+  setError,
+  setInputArray,
+  clearInputArray,
+  setInput,
+  setCurrentAlgorithm,
+} from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
 import { TextField, ThemeProvider } from "@mui/material";
@@ -8,21 +20,8 @@ import Box from "@mui/material/Box";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import Tab from "@mui/material/Tab";
-import {
-  clearInputArray,
-  setCurrentAlgorithm,
-  setError,
-  setInput,
-  setInputArray,
-} from "../../../store/reducers/alghoritms/linkedList-reducer";
 import TabPanel from "@mui/lab/TabPanel";
 import CasinoIcon from "@mui/icons-material/Casino";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
-import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
-import { HashTableAnimationController } from "../../../ClassObjects/HashTable/HashTableAnimationController";
-import BaseControlPanel from "./BaseControlPanel";
-import { setCurrentAlg } from "../../../store/reducers/alghoritms/bst-reducer";
 
 interface Props {
   controller: HashTableAnimationController;
@@ -89,11 +88,12 @@ const HashTableControlPanel: FC<Props> = ({
     }
   };
 
-  const createLinkedListHandler = () => {
-    const res = getArrFromInputForHeap(15, inputArray);
+  const createHashTableHandler = () => {
+    const res: number[] = [];
+    // const res = getArrFromInputForHeap(15, inputArray);
     if (typeof res !== "string") {
       try {
-        // controller.setListFromInput(res);
+        controller.setHashFromInput(res);
         handleShowActions();
         setValue("Search");
         // dispatch(setCurrentAlgorithm("Search"));
@@ -107,12 +107,12 @@ const HashTableControlPanel: FC<Props> = ({
 
   const randomizeInput = () => {
     const randomArray = generateRandomArrForHeap(7, 1);
-    // controller.setListFromInput(randomArray);
+    controller.setHashFromInput(randomArray);
     handleShowActions();
     setValue("Search");
     dispatch(setCurrentAlgorithm("Search"));
     dispatch(clearInputArray());
-    dispatch(setInputArray(randomArray));
+    dispatch(setInputArray([]));
   };
 
   const Animate = async (animation: string) => {
@@ -166,7 +166,7 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const setAlgorithm = (name: any) => {
-    dispatch(setCurrentAlg(name));
+    dispatch(setCurrentAlgorithm(name));
   };
 
   useEffect(() => {
@@ -174,29 +174,169 @@ const HashTableControlPanel: FC<Props> = ({
   }, []);
 
   return (
-    <BaseControlPanel
-      error={error}
-      setCurrentError={setCurrentError}
-      isButtonDisabled={isButtonDisabled}
-      showActions={showActions}
-      editingConstruction={editingConstruction}
-      handleHideActions={handleHideActions}
-      handleShowActions={handleShowActions}
-      setAlgorithm={setAlgorithm}
-      algorithms={algorithms}
-      inputArray={inputArray}
-      setInputArray={(e) => {
-        dispatch(setInputArray(e.target.value));
-      }}
-      createStructure={createLinkedListHandler}
-      randomizeStructure={randomizeInput}
-      animate={Animate}
-      handleInput={handleInput}
-      value={value}
-      handleChange={handleChange}
-      dataLabel={"Hash Table"}
-      handleRandomNodes={handleRandomNodes}
-    />
+    <>
+      {error && (
+        <AlertError
+          error={error}
+          onClose={() => {
+            setCurrentError("");
+          }}
+        />
+      )}
+      <MediumCard
+        isSmaller
+        maxWidth="max-w-5xl"
+      >
+        <ThemeProvider theme={theme}>
+          <ControlsToolTip isButtonDisabled={isButtonDisabled}>
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="algorithms and actions"
+                    centered
+                  >
+                    {!showActions && !editingConstruction && (
+                      <Tab
+                        label={`Create Hash Table construction`}
+                        value="1"
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                    {(showActions || editingConstruction) && (
+                      <Tab
+                        label={`Change Hash Table construction`}
+                        value="1"
+                        onClick={handleHideActions}
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                  </TabList>
+                  {showActions && (
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="algorithms and actions"
+                      centered
+                    >
+                      {algorithms.map((alg) => {
+                        return (
+                          <Tab
+                            label={alg}
+                            value={alg}
+                            onClick={() => {
+                              setAlgorithm(alg);
+                            }}
+                            disabled={isButtonDisabled}
+                          />
+                        );
+                      })}
+                    </TabList>
+                  )}
+                </Box>
+                <TabPanel
+                  value="1"
+                  className={value === "1" ? "justify-start flex " : "hidden"}
+                >
+                  <TextField
+                    placeholder="e.g 1,2,3,4,..."
+                    size="small"
+                    sx={{ width: "100px" }}
+                    value={inputArray}
+                    label="Enter Id"
+                    variant="outlined"
+                    onChange={(e) => setInputArray([])}
+                  />
+                  <TextField
+                    placeholder="e.g 1,2,3,4,..."
+                    size="small"
+                    sx={{ width: "150px" }}
+                    value={inputArray}
+                    label="Enter Values"
+                    variant="outlined"
+                    onChange={(e) => setInputArray([])}
+                  />
+                  <button
+                    disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-[60px] h-[40px]`}
+                    onClick={createHashTableHandler}
+                  >
+                    Add
+                  </button>
+                  <div className={"ml-10"}>
+                    <TextField
+                      sx={{ width: "150px" }}
+                      name={"NumberOfRandom"}
+                      size="small"
+                      type="text"
+                      variant="outlined"
+                      label={"Number of nodes"}
+                      inputProps={{
+                        min: 0,
+                        max: 999,
+                        style: { textAlign: "center" },
+                      }}
+                      onChange={handleRandomNodes}
+                    />
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname} w-[140px] h-[40px]`}
+                      onClick={randomizeInput}
+                    >
+                      <CasinoIcon />
+                      Randomize
+                    </button>
+                  </div>
+                  <button
+                    disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
+                    onClick={async () => Animate("Clear")}
+                  >
+                    Clear
+                  </button>
+                </TabPanel>
+                {showActions &&
+                  algorithms
+                    .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))
+                    .map((text) => (
+                      <TabPanel
+                        key={text}
+                        value={text}
+                        className={value === text ? "justify-start " : "hidden"}
+                      >
+                        <TextField
+                          sx={{ width: "138px" }}
+                          name={text}
+                          size="small"
+                          type="text"
+                          variant="outlined"
+                          label={"Your value here"}
+                          inputProps={{
+                            min: 0,
+                            max: 999,
+                            style: { textAlign: "center" },
+                          }}
+                          onChange={handleInput}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[40px] h-[40px]`}
+                          onClick={async () =>
+                            Animate(text).catch((e) => {
+                              setCurrentError(e.message);
+                            })
+                          }
+                        >
+                          Go
+                        </button>
+                      </TabPanel>
+                    ))}
+              </TabContext>
+            </Box>
+          </ControlsToolTip>
+        </ThemeProvider>
+      </MediumCard>
+    </>
   );
 };
 
