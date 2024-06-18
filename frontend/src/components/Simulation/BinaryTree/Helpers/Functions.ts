@@ -172,9 +172,15 @@ export function getHeapArrayAnimationsAndStyles(
   return { initial, animate, style };
 }
 
-export function getArrFromInputForHeap(maxSize: number, data: string, maxNum = 999, minNum = 0) {
+export function getArrFromInputForHeap(
+  maxSize: number,
+  data: string,
+  isHash?: boolean,
+  maxNum = 999,
+  minNum = 0
+) {
   const list = data.split(",");
-  if (list.includes("")) return "Input must be numbers that seperated by comma";
+  if (list.includes("") && !isHash) return "Input must be numbers that seperated by comma";
   if (list.length > maxSize) return `Max array size is ${maxSize}`;
   const newData: number[] = [];
   for (const item of list) {

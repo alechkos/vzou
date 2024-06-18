@@ -67,6 +67,20 @@ export abstract class BaseObj {
   createBranch() {
     if (this.type === "root" || this.type === "head") {
       // waht have to be here?
+    } else if (this.type === "hashNodeHead") {
+      this.branch = new BranchObj({
+        x1: this.position.x - 280,
+        x2: this.position.x - 190,
+        y1: this.position.y - 250,
+        y2: this.position.y - 250,
+      });
+    } else if (this.type === "hashNode") {
+      this.branch = new BranchObj({
+        x1: this.position.x - 280,
+        x2: this.position.x - 190,
+        y1: (this.position.y - 5500) / 100,
+        y2: (this.position.y - 5500) / 100,
+      });
     } else if (this.parent === undefined || this.parent.position === undefined) {
       throw new Error("parent is null or parent position is null");
     } else {

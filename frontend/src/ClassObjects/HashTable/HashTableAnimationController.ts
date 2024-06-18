@@ -62,7 +62,7 @@ export class HashTableAnimationController extends AnimationController<
     this.dispatch(setPassedNodes(passedNodes));
   }
 
-  setHashFromInput(arr: number[]) {
+  setHashFromInput(arr: Array<{ id: number; listValues: number[] }>) {
     const head = buildHashTable(arr);
     this.data = head;
     this.setHead(head);

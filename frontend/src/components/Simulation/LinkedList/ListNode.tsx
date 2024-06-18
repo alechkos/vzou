@@ -9,9 +9,10 @@ import Arrow from "./Arrow";
 interface Props {
   nodeObj: LinkedListItemObj;
   length: number | undefined;
+  forHash: boolean;
 }
 
-const ListNode: FC<Props> = ({ nodeObj, length }) => {
+const ListNode: FC<Props> = ({ nodeObj, length, forHash }) => {
   const { initial, animate, style } = getAnimationsAndStyles(
     nodeObj.action,
     null,
@@ -72,9 +73,11 @@ const ListNode: FC<Props> = ({ nodeObj, length }) => {
           }}
           className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
         >
-          {length === 0 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
-          {nodeObj.id === 0 && length !== 0 && <span className={"head-of-list"}>{"Head"}</span>}
-          {length !== undefined && nodeObj.id === length && length !== 0 && (
+          {!forHash && length === 0 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
+          {!forHash && nodeObj.id === 0 && length !== 0 && (
+            <span className={"head-of-list"}>{"Head"}</span>
+          )}
+          {!forHash && length !== undefined && nodeObj.id === length && length !== 0 && (
             <span className={"head-of-list"}>{"Tail"}</span>
           )}
           <p className={"half"}>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>

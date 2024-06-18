@@ -1,8 +1,10 @@
 import { FC } from "react";
 import { getAnimationsAndStyles } from "../BinaryTree/Helpers/Functions";
 import { motion } from "framer-motion";
-import Arrow from "../LinkedList/Arrow";
 import { HashTableItemObj } from "../../../ClassObjects/HashTable/HashTableItemObj";
+import ListNode from "../LinkedList/ListNode";
+import Branch from "../BinaryTree/Branch";
+import Arrow from "../LinkedList/Arrow";
 
 interface Props {
   nodeObj: HashTableItemObj;
@@ -45,6 +47,23 @@ const HashNode: FC<Props> = ({ nodeObj }) => {
         className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
       >
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
+
+        {nodeObj.branch && (
+          <Branch
+            branch={nodeObj.branch}
+            isPassed={nodeObj.isPassed}
+            speed={nodeObj.speed}
+          />
+        )}
+        {nodeObj.valuesForList &&
+          nodeObj.valuesForList.length > 0 &&
+          nodeObj.valuesForList.map((value) => (
+            <ListNode
+              nodeObj={value}
+              length={nodeObj.valuesForList?.length}
+              forHash={true}
+            />
+          ))}
       </motion.span>
     </div>
   );

@@ -5,13 +5,12 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { LinkedListNode } from "../LinkedList/LinkedListNode";
 import { LinkedListItemObj } from "../LinkedList/LinkedListItemObj";
 
 export class HashTableItemObj extends BaseObj {
   static width = 4;
 
-  static gapY = 40;
+  static gapY = 45;
 
   valuesForList?: LinkedListItemObj[];
 
@@ -29,14 +28,16 @@ export class HashTableItemObj extends BaseObj {
     this.parent = parent;
     this.calculatePosition();
     this.valuesForList = valuesForList;
+    if (valuesForList && valuesForList.length > 0) this.createBranch();
   }
 
   calculatePosition() {
-    if (this.parent)
+    if (this.parent) {
       this.position = {
         x: this.parent.position.x,
         y: this.parent.position.y + HashTableItemObj.gapY,
       };
+    }
   }
 
   static generateHashTableObjects(
@@ -46,12 +47,10 @@ export class HashTableItemObj extends BaseObj {
   ) {
     if (!firstNode) return [];
     const hashTableObjects = [];
-    const valuesForList = firstNode.valuesForList
-      ? LinkedListItemObj.generateLinkedListObjects(
-          viewportWidth,
-          speed,
-          firstNode.valuesForList[0]
-        )
+    let x = viewportWidth / 2 - 775;
+    let y = -150;
+    const valuesForList = firstNode.listHead
+      ? LinkedListItemObj.generateLinkedListObjects(viewportWidth, speed, firstNode.listHead, x, y)
       : undefined;
     const stack = [
       {
@@ -61,7 +60,7 @@ export class HashTableItemObj extends BaseObj {
           speed,
           firstNode.id,
           firstNode.value,
-          "head",
+          "hashNodeHead",
           viewportWidth,
           undefined,
           valuesForList
@@ -74,10 +73,17 @@ export class HashTableItemObj extends BaseObj {
       if (!item) break;
 
       const { node, nodeObj } = item;
-      const valuesForList = node.valuesForList
-        ? LinkedListItemObj.generateLinkedListObjects(viewportWidth, speed, node.valuesForList[0])
-        : undefined;
       if (node.next) {
+        let valuesForList = node.next.listHead
+          ? LinkedListItemObj.generateLinkedListObjects(
+              viewportWidth,
+              speed,
+              node.next.listHead,
+              x,
+              y
+            )
+          : undefined;
+
         stack.push({
           node: node.next,
           nodeObj: new HashTableItemObj(
@@ -85,14 +91,14 @@ export class HashTableItemObj extends BaseObj {
             speed,
             node.next.id,
             node.next.value,
-            "node",
+            "hashNode",
             viewportWidth,
             nodeObj,
-            valuesForList
+            valuesForList ? valuesForList : undefined
           ),
         });
-        hashTableObjects.push(nodeObj);
       }
+      hashTableObjects.push(nodeObj);
     }
 
     hashTableObjects.sort((a, b) => a.id - b.id);

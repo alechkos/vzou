@@ -5,7 +5,7 @@ import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/Bina
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
 
-const inputArray: Array<{ id: number; listValues: number[] }> = [{ id: 0, listValues: [] }];
+const inputArray: Array<{ id: number; listValues: number[] }> = [];
 
 const initialState = {
   ...mainState,
@@ -43,8 +43,8 @@ const hashTableSlice = createSlice({
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
     },
-    setInputArray(state, action: PayloadAction<Array<{ id: number; listValues: number[] }>>) {
-      state.inputArray = [...action.payload];
+    setInputArray(state, action: PayloadAction<{ id: number; listValues: number[] }>) {
+      state.inputArray.push(action.payload);
       return state;
     },
     clearInputArray(state) {

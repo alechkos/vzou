@@ -9,20 +9,20 @@ export class HashTableNode {
 
   prev?: HashTableNode;
 
-  valuesForList?: LinkedListNode[];
+  listHead?: LinkedListNode;
 
   constructor(
     id: number,
     value: number,
     next: HashTableNode | undefined,
     prev: HashTableNode | undefined,
-    valuesForList?: LinkedListNode[]
+    listHead?: LinkedListNode
   ) {
     this.id = id;
     this.value = value;
     this.next = next;
     this.prev = prev;
-    this.valuesForList = valuesForList;
+    this.listHead = listHead;
   }
 
   //Functions for visualization!

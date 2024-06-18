@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
@@ -32,6 +32,8 @@ interface Props {
   handleHideActions: () => void;
 }
 
+let count = 1;
+
 const HashTableControlPanel: FC<Props> = ({
   controller,
   isButtonDisabled,
@@ -52,10 +54,62 @@ const HashTableControlPanel: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+
+  const [inputCount, setInputCount] = useState<number[]>([count]);
+  const [idForHashTable, setIdForHashTable] = useState<number>(0);
+  const [valuesForId, setValuesForId] = useState<string>("");
+
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   const algorithms = ["1", "2", "3", "4", "5"];
 
-  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+  const addInfoForHashHandler = () => {
+    if (isNaN(idForHashTable)) {
+      setCurrentError("Please enter a numeric value!");
+      return;
+    }
+    if (valuesForId !== "") {
+      const res = getArrFromInputForHeap(15, valuesForId, true);
+      if (typeof res !== "string") {
+        try {
+          const inpArr = {
+            id: idForHashTable,
+            listValues: res,
+          };
+          dispatch(setInputArray(inpArr));
+
+          setIdForHashTable(0);
+          setValuesForId("");
+        } catch (e: any) {
+          setCurrentError(e.message);
+        }
+      } else {
+        setCurrentError(res);
+      }
+    } else {
+      dispatch(setInputArray({ id: idForHashTable, listValues: [] }));
+    }
+    count++;
+    setInputCount([...inputCount, count]);
+
+    if (btnRef && btnRef.current) {
+      btnRef.current.setAttribute("disabled", "disabled");
+    }
+  };
+
+  const addIdsHandler = (e: any) => {
+    const val = Number(e.target.value);
+    if (isNaN(val)) {
+      setCurrentError("Please enter a numeric value for Id!");
+      return;
+    }
+    setIdForHashTable(val);
+  };
+
+  const addValuesHandler = (e: any) => {
+    setValuesForId(e.target.value);
+  };
 
   const handleRandomNodes = (e: any) => {
     const val = Number(e.target.value);
@@ -89,30 +143,20 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const createHashTableHandler = () => {
-    const res: number[] = [];
-    // const res = getArrFromInputForHeap(15, inputArray);
-    if (typeof res !== "string") {
-      try {
-        controller.setHashFromInput(res);
-        handleShowActions();
-        setValue("Search");
-        // dispatch(setCurrentAlgorithm("Search"));
-      } catch (e: any) {
-        setCurrentError(e.message);
-      }
-    } else {
-      setCurrentError(res);
-    }
+    controller.setHashFromInput(inputArray);
+    handleShowActions();
+    setValue("Search");
+    // dispatch(setCurrentAlgorithm("Search"));
   };
 
   const randomizeInput = () => {
     const randomArray = generateRandomArrForHeap(7, 1);
-    controller.setHashFromInput(randomArray);
+    // controller.setHashFromInput(randomArray);
     handleShowActions();
     setValue("Search");
     dispatch(setCurrentAlgorithm("Search"));
     dispatch(clearInputArray());
-    dispatch(setInputArray([]));
+    // dispatch(setInputArray([]));
   };
 
   const Animate = async (animation: string) => {
@@ -238,31 +282,44 @@ const HashTableControlPanel: FC<Props> = ({
                   value="1"
                   className={value === "1" ? "justify-start flex " : "hidden"}
                 >
-                  <TextField
-                    placeholder="e.g 1,2,3,4,..."
-                    size="small"
-                    sx={{ width: "100px" }}
-                    value={inputArray}
-                    label="Enter Id"
-                    variant="outlined"
-                    onChange={(e) => setInputArray([])}
-                  />
-                  <TextField
-                    placeholder="e.g 1,2,3,4,..."
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={inputArray}
-                    label="Enter Values"
-                    variant="outlined"
-                    onChange={(e) => setInputArray([])}
-                  />
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[60px] h-[40px]`}
-                    onClick={createHashTableHandler}
-                  >
-                    Add
-                  </button>
+                  <div className={"flex flex-col"}>
+                    {inputCount.map((count) => (
+                      <div key={count}>
+                        <TextField
+                          placeholder="1 or 2 or .."
+                          size="small"
+                          sx={{ width: "100px", marginBottom: "10px" }}
+                          label="Enter Id"
+                          variant="outlined"
+                          onChange={addIdsHandler}
+                        />
+                        <TextField
+                          placeholder="e.g 1,2,3,4,..."
+                          size="small"
+                          sx={{ width: "150px" }}
+                          label="Enter Values"
+                          variant="outlined"
+                          onChange={addValuesHandler}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[60px] h-[40px]`}
+                          onClick={addInfoForHashHandler}
+                          ref={btnRef}
+                        >
+                          Add
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      disabled={isButtonDisabled}
+                      className={`${buttonClassname} w-[40px] h-[40px]`}
+                      onClick={createHashTableHandler}
+                    >
+                      Go
+                    </button>
+                  </div>
+
                   <div className={"ml-10"}>
                     <TextField
                       sx={{ width: "150px" }}
