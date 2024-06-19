@@ -56,7 +56,7 @@ export class HashTableItemObj extends BaseObj {
       {
         node: firstNode,
         nodeObj: new HashTableItemObj(
-          { x: viewportWidth / 2 - 600, y: 200 },
+          { x: viewportWidth / 2 - 600, y: 300 },
           speed,
           firstNode.id,
           firstNode.value,

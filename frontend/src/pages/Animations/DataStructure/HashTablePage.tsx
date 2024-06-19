@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { combineLinkedListPseudoCode } from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
@@ -30,17 +30,25 @@ const HashTablePage: FC = () => {
   const showActions = useAppSelector((state) => state.basePage.showActions);
   const editingConstruction = useAppSelector((state) => state.basePage.editingConstruction);
 
+  const [changing, setChanging] = useState(false);
+
   const dispatch = useDispatch();
+
+  const setChangingHandler = () => {
+    setChanging(false);
+  };
 
   const handleShowActions = () => {
     dispatch(setShowActions(true));
     dispatch(setShowPseudoCode(true));
+    setChanging(false);
   };
 
   const handleHideActions = () => {
     dispatch(setShowActions(false));
-    dispatch(setEditingConstruction(true));
+    dispatch(setEditingConstruction(false));
     dispatch(setShowPseudoCode(false));
+    setChanging(true);
   };
 
   return (
@@ -49,10 +57,12 @@ const HashTablePage: FC = () => {
         <HashTableControlPanel
           controller={controller}
           showActions={showActions}
-          handleShowActions={handleHideActions}
+          handleShowActions={handleShowActions}
           editingConstruction={editingConstruction}
           handleHideActions={handleHideActions}
           isButtonDisabled={isPlaying}
+          changing={changing}
+          setChanging={setChangingHandler}
         />
       }
       visualization={

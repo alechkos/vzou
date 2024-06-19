@@ -71,8 +71,8 @@ export abstract class BaseObj {
       this.branch = new BranchObj({
         x1: this.position.x - 280,
         x2: this.position.x - 190,
-        y1: this.position.y - 250,
-        y2: this.position.y - 250,
+        y1: this.position.y - 350,
+        y2: this.position.y - 350,
       });
     } else if (this.type === "hashNode") {
       this.branch = new BranchObj({

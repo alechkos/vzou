@@ -10,6 +10,7 @@ import {
   clearInputArray,
   setInput,
   setCurrentAlgorithm,
+  changeInputArray,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
@@ -30,9 +31,11 @@ interface Props {
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
+  setChanging: () => void;
+  changing: boolean;
 }
 
-let count = 1;
+let count = 0;
 
 const HashTableControlPanel: FC<Props> = ({
   controller,
@@ -41,6 +44,8 @@ const HashTableControlPanel: FC<Props> = ({
   editingConstruction,
   handleShowActions,
   handleHideActions,
+  changing,
+  setChanging,
 }) => {
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
@@ -63,6 +68,24 @@ const HashTableControlPanel: FC<Props> = ({
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const algorithms = ["1", "2", "3", "4", "5"];
+
+  const changeInfoForHashHandler = (id: number, listValues: string, index: number) => {
+    const res = getArrFromInputForHeap(15, listValues, true);
+    if (typeof res !== "string") {
+      try {
+        const inpArr = {
+          id,
+          listValues: res,
+          index,
+        };
+        dispatch(changeInputArray(inpArr));
+      } catch (e: any) {
+        setCurrentError(e.message);
+      }
+    } else {
+      setCurrentError(res);
+    }
+  };
 
   const addInfoForHashHandler = () => {
     if (isNaN(idForHashTable)) {
@@ -200,6 +223,9 @@ const HashTableControlPanel: FC<Props> = ({
         case "Clear":
           // controller.setListFromInput([]);
           dispatch(clearInputArray());
+          count = 0;
+          setInputCount([count]);
+          setChanging();
           return;
         default:
           return;
@@ -283,37 +309,70 @@ const HashTableControlPanel: FC<Props> = ({
                   className={value === "1" ? "justify-start flex " : "hidden"}
                 >
                   <div className={"flex flex-col"}>
-                    {inputCount.map((count) => (
-                      <div key={count}>
-                        <TextField
-                          placeholder="1 or 2 or .."
-                          size="small"
-                          sx={{ width: "100px", marginBottom: "10px" }}
-                          label="Enter Id"
-                          variant="outlined"
-                          onChange={addIdsHandler}
-                        />
-                        <TextField
-                          placeholder="e.g 1,2,3,4,..."
-                          size="small"
-                          sx={{ width: "150px" }}
-                          label="Enter Values"
-                          variant="outlined"
-                          onChange={addValuesHandler}
-                        />
-                        <button
-                          disabled={isButtonDisabled}
-                          className={`${buttonClassname} w-[60px] h-[40px]`}
-                          onClick={addInfoForHashHandler}
-                          ref={btnRef}
-                        >
-                          Add
-                        </button>
-                      </div>
-                    ))}
+                    {!changing &&
+                      inputCount.map((count) => (
+                        <div key={count}>
+                          <TextField
+                            placeholder="1 or 2 or .."
+                            size="small"
+                            sx={{ width: "100px", marginBottom: "10px" }}
+                            label="Enter Id"
+                            variant="outlined"
+                            onChange={addIdsHandler}
+                          />
+                          <TextField
+                            placeholder="e.g 1,2,3,4,..."
+                            size="small"
+                            sx={{ width: "150px" }}
+                            label="Enter Values"
+                            variant="outlined"
+                            onChange={addValuesHandler}
+                          />
+                          <button
+                            disabled={isButtonDisabled}
+                            className={`${buttonClassname} w-[60px] h-[40px]`}
+                            onClick={addInfoForHashHandler}
+                            ref={btnRef}
+                          >
+                            Add
+                          </button>
+                        </div>
+                      ))}
+                    {changing &&
+                      inputArray.map((hashNode, index) => (
+                        <div key={hashNode.id}>
+                          <TextField
+                            placeholder="1 or 2 or .."
+                            size="small"
+                            sx={{ width: "100px", marginBottom: "10px" }}
+                            label="Enter Id"
+                            variant="outlined"
+                            onChange={addIdsHandler}
+                            value={hashNode.id}
+                          />
+                          <TextField
+                            placeholder="e.g 1,2,3,4,..."
+                            size="small"
+                            sx={{ width: "150px" }}
+                            label="Enter Values"
+                            variant="outlined"
+                            onChange={(e) =>
+                              changeInfoForHashHandler(hashNode.id, e.target.value, index)
+                            }
+                            value={hashNode.listValues.toString()}
+                          />
+                          <button
+                            disabled={isButtonDisabled}
+                            className={`${buttonClassname} w-[80px] h-[40px]`}
+                            ref={btnRef}
+                          >
+                            Change
+                          </button>
+                        </div>
+                      ))}
                     <button
                       disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px]`}
+                      className={`${buttonClassname} w-[40px] h-[40px] self-end`}
                       onClick={createHashTableHandler}
                     >
                       Go

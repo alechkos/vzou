@@ -47,6 +47,13 @@ const hashTableSlice = createSlice({
       state.inputArray.push(action.payload);
       return state;
     },
+    changeInputArray(
+      state,
+      action: PayloadAction<{ id: number; listValues: number[]; index: number }>
+    ) {
+      const newHashNode = { id: action.payload.id, listValues: action.payload.listValues };
+      state.inputArray[action.payload.index] = { ...newHashNode };
+    },
     clearInputArray(state) {
       state.inputArray = [];
     },
@@ -89,4 +96,5 @@ export const {
   setPassedNodes,
   setCurrentAlgorithm,
   clearInputArray,
+  changeInputArray,
 } = hashTableSlice.actions;
