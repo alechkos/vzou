@@ -6,17 +6,16 @@ import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/
 import { HashTableAnimationController } from "../../../ClassObjects/HashTable/HashTableAnimationController";
 import {
   setError,
-  setInputArray,
   clearInputArray,
   setInput,
   setCurrentAlgorithm,
-  changeInputArray,
-  setIdForHash,
-  setValuesForId,
+  setSizeForHash,
+  setValuesForHash,
+  setInputArray,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
-import { TextField, ThemeProvider } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, TextField, ThemeProvider } from "@mui/material";
 import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import Box from "@mui/material/Box";
@@ -33,11 +32,7 @@ interface Props {
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
-  setChanging: () => void;
-  changing: boolean;
 }
-
-let count = 0;
 
 const HashTableControlPanel: FC<Props> = ({
   controller,
@@ -46,100 +41,57 @@ const HashTableControlPanel: FC<Props> = ({
   editingConstruction,
   handleShowActions,
   handleHideActions,
-  changing,
-  setChanging,
 }) => {
   const buttonClassname =
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
   const inputArray = useAppSelector((state) => state.hashTable.inputArray);
-  const idsForHash = useAppSelector((state) => state.hashTable.idForHash);
-  const valuesForId = useAppSelector((state) => state.hashTable.valuesForId);
   const inputValues = useAppSelector((state) => state.hashTable.inputValues);
+  const hashTableSize = useAppSelector((state) => state.hashTable.hashTableSize);
+  const hashTableValues = useAppSelector((state) => state.hashTable.hashTableValues);
   const error = useAppSelector((state) => state.hashTable.error);
 
   const [regsterActivity] = useRegisterActivityMutation();
 
   const dispatch = useAppDispatch();
 
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("Chaining");
+  const [selected, setSelected] = useState("divisionMethod" || "linearProbing");
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
-
-  const [inputCount, setInputCount] = useState<number[]>([count]);
-
-  const btnRef = useRef<HTMLButtonElement>(null);
 
   const algorithms = ["1", "2", "3", "4", "5"];
 
-  const changeIdForHash = (id: string, listValues: number[], index: number) => {
-    const val = Number(id);
-    if (isNaN(val)) {
-      setCurrentError("Please enter a numeric value for Id!");
-    }
-    const inpArr = {
-      id: +id,
-      listValues: listValues,
-      index,
-    };
-
-    // dispatch(changeInputArray(inpArr));
-  };
-
-  const changeValuesForId = (id: number, listValues: string, index: number) => {
-    const res = getArrFromInputForHeap(15, listValues, true);
-    if (typeof res !== "string") {
-      try {
-        const inpArr = {
-          id,
-          listValues,
-          index,
-        };
-        dispatch(changeInputArray(inpArr));
-      } catch (e: any) {
-        setCurrentError(e.message);
-      }
-    } else {
-      setCurrentError(res);
-    }
-  };
-
-  const addInfoForHashHandler = () => {
-    if (idsForHash === "") {
-      setCurrentError("Enter an id for Hash Node please!");
-      return;
-    }
-    count++;
-    setInputCount([...inputCount, count]);
-
-    dispatch(setInputArray());
-    dispatch(setIdForHash(""));
-    dispatch(setValuesForId(""));
-
-    if (btnRef && btnRef.current) {
-      btnRef.current.setAttribute("disabled", "disabled");
-    }
-  };
-
-  const addIdsHandler = (e: any) => {
-    const val = Number(e.target.value);
-    if (isNaN(val)) {
-      setCurrentError("Please enter a numeric value for Id!");
-      return;
-    }
-    dispatch(setIdForHash(e.target.value));
-  };
-
-  const addValuesHandler = (e: any) => {
+  const handleSetValuesForHash = (e: any) => {
     const res = getArrFromInputForHeap(15, e.target.value, true);
     if (typeof res !== "string") {
       try {
-        dispatch(setValuesForId(e.target.value));
+        dispatch(setValuesForHash(e.target.value));
       } catch (e: any) {
         setCurrentError(e.message);
       }
     } else {
       setCurrentError(res);
     }
+  };
+
+  const handleSetSize = (e: any) => {
+    const val = Number(e.target.value);
+    if (isNaN(val)) {
+      setCurrentError("Please enter a numeric value for Id!");
+      dispatch(setSizeForHash(""));
+      return;
+    }
+    if (val < 0) {
+      setCurrentError(`Size has to be greater than 0}`);
+      dispatch(setSizeForHash(""));
+      return;
+    }
+    if (val > 10) {
+      setCurrentError("Max size of hash table is 10");
+      dispatch(setSizeForHash(""));
+      return;
+    }
+    dispatch(setSizeForHash(e.target.value));
   };
 
   const handleRandomNodes = (e: any) => {
@@ -150,6 +102,10 @@ const HashTableControlPanel: FC<Props> = ({
       return;
     }
     setNumberOfRandomNodes(val);
+  };
+
+  const handleChangeSelect = (event: any) => {
+    setSelected(event.target.name);
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -174,17 +130,15 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const createHashTableHandler = () => {
-    const inpArray: Array<{ id: number; listValues: number[] }> = [];
-    inputArray.forEach((value) => {
-      let listValues: number[] = [];
-      if (value.listValues !== "")
-        listValues = value.listValues.split(",").map((val) => Number(val));
-      const tempObj = { id: value.id, listValues: listValues };
-      inpArray.push(tempObj);
-    });
+    const keys = hashTableValues.split(",").map((value) => Number(value));
+
+    const inpArray = { size: Number(hashTableSize), keys, method: selected };
+
+    dispatch(setInputArray(inpArray));
+
     controller.setHashFromInput(inpArray);
     handleShowActions();
-    setValue("Search");
+    // setValue("Search");
     // dispatch(setCurrentAlgorithm("Search"));
   };
 
@@ -239,9 +193,6 @@ const HashTableControlPanel: FC<Props> = ({
         case "Clear":
           // controller.setListFromInput([]);
           dispatch(clearInputArray());
-          count = 0;
-          setInputCount([count]);
-          setChanging();
           return;
         default:
           return;
@@ -286,19 +237,36 @@ const HashTableControlPanel: FC<Props> = ({
                     {!showActions && !editingConstruction && (
                       <Tab
                         label={`Create Hash Table construction`}
-                        value="1"
+                        value="Chaining"
                         disabled={isButtonDisabled}
                       />
                     )}
                     {(showActions || editingConstruction) && (
                       <Tab
                         label={`Change Hash Table construction`}
-                        value="1"
+                        value="Chaining"
                         onClick={handleHideActions}
                         disabled={isButtonDisabled}
                       />
                     )}
                   </TabList>
+                  {!showActions && !editingConstruction && (
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="algorithms and actions"
+                      centered
+                    >
+                      {["Chaining", "Open Addressing"].map((alg) => {
+                        return (
+                          <Tab
+                            label={alg}
+                            value={alg}
+                            disabled={isButtonDisabled}
+                          />
+                        );
+                      })}
+                    </TabList>
+                  )}
                   {showActions && (
                     <TabList
                       onChange={handleChange}
@@ -320,113 +288,112 @@ const HashTableControlPanel: FC<Props> = ({
                     </TabList>
                   )}
                 </Box>
-                <TabPanel
-                  value="1"
-                  className={value === "1" ? "justify-start flex " : "hidden"}
-                >
-                  <div className={"flex flex-col"}>
-                    {!changing &&
-                      inputCount.map((count) => (
-                        <div key={count}>
-                          <TextField
-                            placeholder="1 or 2 or .."
-                            size="small"
-                            sx={{ width: "100px", marginBottom: "10px" }}
-                            label="Enter Id"
-                            variant="outlined"
-                            onChange={addIdsHandler}
-                          />
-                          <TextField
-                            placeholder="e.g 1,2,3,4,..."
-                            size="small"
-                            sx={{ width: "150px" }}
-                            label="Enter Values"
-                            variant="outlined"
-                            onChange={addValuesHandler}
-                          />
-                          <button
-                            disabled={isButtonDisabled}
-                            className={`${buttonClassname} w-[60px] h-[40px]`}
-                            onClick={addInfoForHashHandler}
-                            ref={btnRef}
-                          >
-                            Add
-                          </button>
-                        </div>
-                      ))}
-                    {changing &&
-                      inputArray.map((hashNode, index) => (
-                        <div key={hashNode.id}>
-                          <TextField
-                            placeholder="1 or 2 or .."
-                            size="small"
-                            sx={{ width: "100px", marginBottom: "10px" }}
-                            label="Enter Id"
-                            variant="outlined"
-                            // onChange={(e) =>
-                            //   changeIdForHash(e.target.value, hashNode.listValues, index)
-                            // }
-                            value={hashNode.id}
-                          />
-                          <TextField
-                            placeholder="e.g 1,2,3,4,..."
-                            size="small"
-                            sx={{ width: "150px" }}
-                            label="Enter Values"
-                            variant="outlined"
-                            onChange={(e) => changeValuesForId(hashNode.id, e.target.value, index)}
-                            value={hashNode.listValues}
-                          />
-                          <button
-                            disabled={isButtonDisabled}
-                            className={`${buttonClassname} w-[80px] h-[40px]`}
-                            ref={btnRef}
-                          >
-                            Change
-                          </button>
-                        </div>
-                      ))}
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px] self-end`}
-                      onClick={createHashTableHandler}
+                {!showActions &&
+                  !editingConstruction &&
+                  ["Chaining", "Open Addressing"].map((text) => (
+                    <TabPanel
+                      key={text}
+                      value={text}
+                      className={value === text ? "justify-start flex w-max " : "hidden"}
                     >
-                      Go
-                    </button>
-                  </div>
-
-                  <div className={"ml-10"}>
-                    <TextField
-                      sx={{ width: "150px" }}
-                      name={"NumberOfRandom"}
-                      size="small"
-                      type="text"
-                      variant="outlined"
-                      label={"Number of nodes"}
-                      inputProps={{
-                        min: 0,
-                        max: 999,
-                        style: { textAlign: "center" },
-                      }}
-                      onChange={handleRandomNodes}
-                    />
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[140px] h-[40px]`}
-                      onClick={randomizeInput}
-                    >
-                      <CasinoIcon />
-                      Randomize
-                    </button>
-                  </div>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
-                    onClick={async () => Animate("Clear")}
-                  >
-                    Clear
-                  </button>
-                </TabPanel>
+                      <TextField
+                        sx={{ width: "138px", marginRight: "10px" }}
+                        name={text}
+                        size="small"
+                        type="text"
+                        variant="outlined"
+                        label={"Size of Table"}
+                        inputProps={{
+                          min: 0,
+                          max: 999,
+                          style: { textAlign: "center" },
+                        }}
+                        value={hashTableSize}
+                        onChange={handleSetSize}
+                      />
+                      <TextField
+                        sx={{ width: "138px", marginRight: "10px" }}
+                        name={text}
+                        size="small"
+                        type="text"
+                        variant="outlined"
+                        label={"Enter Values"}
+                        inputProps={{
+                          min: 0,
+                          max: 999,
+                          style: { textAlign: "center" },
+                        }}
+                        value={hashTableValues}
+                        onChange={handleSetValuesForHash}
+                      />
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={
+                                selected === "divisionMethod" || selected === "linearProbing"
+                              }
+                              name={text === "Chaining" ? "divisionMethod" : "linearProbing"}
+                              sx={{ marginRight: "10px" }}
+                              onChange={handleChangeSelect}
+                            />
+                          }
+                          label={text === "Chaining" ? "Division Method" : "Linear Probing"}
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={
+                                selected === "multiplicationMethod" || selected === "doubleHashing"
+                              }
+                              name={text === "Chaining" ? "multiplicationMethod" : "doubleHashing"}
+                              sx={{ marginRight: "10px" }}
+                              onChange={handleChangeSelect}
+                            />
+                          }
+                          label={text === "Chaining" ? "Multiplication Method" : "Double Hashing"}
+                        />
+                      </FormGroup>
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-[40px] h-[40px]`}
+                        onClick={createHashTableHandler}
+                      >
+                        Go
+                      </button>
+                      <div className={"ml-10"}>
+                        <TextField
+                          sx={{ width: "150px" }}
+                          name={"NumberOfRandom"}
+                          size="small"
+                          type="text"
+                          variant="outlined"
+                          label={"Number of nodes"}
+                          inputProps={{
+                            min: 0,
+                            max: 999,
+                            style: { textAlign: "center" },
+                          }}
+                          onChange={handleRandomNodes}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[140px] h-[40px]`}
+                          onClick={randomizeInput}
+                        >
+                          <CasinoIcon />
+                          Randomize
+                        </button>
+                      </div>
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
+                        onClick={async () => Animate("Clear")}
+                      >
+                        Clear
+                      </button>
+                    </TabPanel>
+                  ))}
                 {showActions &&
                   algorithms
                     .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))

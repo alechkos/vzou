@@ -5,8 +5,6 @@ import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/Bina
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
 
-const inputArray: Array<{ id: number; listValues: string }> = [];
-
 const initialState = {
   ...mainState,
   head: undefined as HashTableNode | undefined,
@@ -18,20 +16,24 @@ const initialState = {
     DeleteFromHead: +"",
     DeleteFromTail: +"",
   },
-  idForHash: "",
-  valuesForId: "",
-  inputArray,
+  hashTableSize: "",
+  hashTableValues: "",
+  inputArray: {
+    size: 0,
+    keys: [],
+    method: "",
+  },
 };
 
 const hashTableSlice = createSlice({
   name: "hashTable",
   initialState,
   reducers: {
-    setIdForHash(state, action: PayloadAction<string>) {
-      state.idForHash = action.payload;
+    setSizeForHash(state, action: PayloadAction<string>) {
+      state.hashTableSize = action.payload;
     },
-    setValuesForId(state, action: PayloadAction<string>) {
-      state.valuesForId = action.payload;
+    setValuesForHash(state, action: PayloadAction<string>) {
+      state.hashTableValues = action.payload;
     },
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
@@ -51,19 +53,14 @@ const hashTableSlice = createSlice({
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
     },
-    setInputArray(state) {
-      const inpArr = { id: +state.idForHash, listValues: state.valuesForId };
-      state.inputArray.push(inpArr);
-    },
-    changeInputArray(
+    setInputArray(
       state,
-      action: PayloadAction<{ id: number; listValues: string; index: number }>
-    ) {
-      const newHashNode = { id: action.payload.id, listValues: action.payload.listValues };
-      state.inputArray[action.payload.index] = { ...newHashNode };
-    },
+      action: PayloadAction<{ size: number; keys: number[]; method: string }>
+    ) {},
     clearInputArray(state) {
-      state.inputArray = [];
+      state.hashTableSize = "";
+      state.hashTableValues = "";
+      state.inputArray = { size: 0, keys: [], method: "" };
     },
     setPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;
@@ -95,7 +92,6 @@ export default hashTableSlice.reducer;
 export const {
   setError,
   setInput,
-  setInputArray,
   setHead,
   setActions,
   setRoles,
@@ -104,7 +100,7 @@ export const {
   setPassedNodes,
   setCurrentAlgorithm,
   clearInputArray,
-  changeInputArray,
-  setValuesForId,
-  setIdForHash,
+  setSizeForHash,
+  setValuesForHash,
+  setInputArray,
 } = hashTableSlice.actions;

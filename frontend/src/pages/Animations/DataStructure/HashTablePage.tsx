@@ -30,25 +30,17 @@ const HashTablePage: FC = () => {
   const showActions = useAppSelector((state) => state.basePage.showActions);
   const editingConstruction = useAppSelector((state) => state.basePage.editingConstruction);
 
-  const [changing, setChanging] = useState(false);
-
   const dispatch = useDispatch();
-
-  const setChangingHandler = () => {
-    setChanging(false);
-  };
 
   const handleShowActions = () => {
     dispatch(setShowActions(true));
     dispatch(setShowPseudoCode(true));
-    setChanging(false);
   };
 
   const handleHideActions = () => {
     dispatch(setShowActions(false));
     dispatch(setEditingConstruction(false));
     dispatch(setShowPseudoCode(false));
-    setChanging(true);
   };
 
   return (
@@ -61,8 +53,6 @@ const HashTablePage: FC = () => {
           editingConstruction={editingConstruction}
           handleHideActions={handleHideActions}
           isButtonDisabled={isPlaying}
-          changing={changing}
-          setChanging={setChangingHandler}
         />
       }
       visualization={
