@@ -5,7 +5,7 @@ import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/Bina
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
 
-const inputArray: Array<{ id: number; listValues: number[] }> = [];
+const inputArray: Array<{ id: number; listValues: string }> = [];
 
 const initialState = {
   ...mainState,
@@ -18,6 +18,8 @@ const initialState = {
     DeleteFromHead: +"",
     DeleteFromTail: +"",
   },
+  idForHash: "",
+  valuesForId: "",
   inputArray,
 };
 
@@ -25,6 +27,12 @@ const hashTableSlice = createSlice({
   name: "hashTable",
   initialState,
   reducers: {
+    setIdForHash(state, action: PayloadAction<string>) {
+      state.idForHash = action.payload;
+    },
+    setValuesForId(state, action: PayloadAction<string>) {
+      state.valuesForId = action.payload;
+    },
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
       return state;
@@ -43,13 +51,13 @@ const hashTableSlice = createSlice({
       state.inputValues[action.payload.key] = action.payload.val;
       return state;
     },
-    setInputArray(state, action: PayloadAction<{ id: number; listValues: number[] }>) {
-      state.inputArray.push(action.payload);
-      return state;
+    setInputArray(state) {
+      const inpArr = { id: +state.idForHash, listValues: state.valuesForId };
+      state.inputArray.push(inpArr);
     },
     changeInputArray(
       state,
-      action: PayloadAction<{ id: number; listValues: number[]; index: number }>
+      action: PayloadAction<{ id: number; listValues: string; index: number }>
     ) {
       const newHashNode = { id: action.payload.id, listValues: action.payload.listValues };
       state.inputArray[action.payload.index] = { ...newHashNode };
@@ -97,4 +105,6 @@ export const {
   setCurrentAlgorithm,
   clearInputArray,
   changeInputArray,
+  setValuesForId,
+  setIdForHash,
 } = hashTableSlice.actions;

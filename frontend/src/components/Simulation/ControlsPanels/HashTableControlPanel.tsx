@@ -11,6 +11,8 @@ import {
   setInput,
   setCurrentAlgorithm,
   changeInputArray,
+  setIdForHash,
+  setValuesForId,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
@@ -51,6 +53,8 @@ const HashTableControlPanel: FC<Props> = ({
     "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
   const inputArray = useAppSelector((state) => state.hashTable.inputArray);
+  const idsForHash = useAppSelector((state) => state.hashTable.idForHash);
+  const valuesForId = useAppSelector((state) => state.hashTable.valuesForId);
   const inputValues = useAppSelector((state) => state.hashTable.inputValues);
   const error = useAppSelector((state) => state.hashTable.error);
 
@@ -62,20 +66,32 @@ const HashTableControlPanel: FC<Props> = ({
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
 
   const [inputCount, setInputCount] = useState<number[]>([count]);
-  const [idForHashTable, setIdForHashTable] = useState<number>(0);
-  const [valuesForId, setValuesForId] = useState<string>("");
 
   const btnRef = useRef<HTMLButtonElement>(null);
 
   const algorithms = ["1", "2", "3", "4", "5"];
 
-  const changeInfoForHashHandler = (id: number, listValues: string, index: number) => {
+  const changeIdForHash = (id: string, listValues: number[], index: number) => {
+    const val = Number(id);
+    if (isNaN(val)) {
+      setCurrentError("Please enter a numeric value for Id!");
+    }
+    const inpArr = {
+      id: +id,
+      listValues: listValues,
+      index,
+    };
+
+    // dispatch(changeInputArray(inpArr));
+  };
+
+  const changeValuesForId = (id: number, listValues: string, index: number) => {
     const res = getArrFromInputForHeap(15, listValues, true);
     if (typeof res !== "string") {
       try {
         const inpArr = {
           id,
-          listValues: res,
+          listValues,
           index,
         };
         dispatch(changeInputArray(inpArr));
@@ -88,33 +104,16 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const addInfoForHashHandler = () => {
-    if (isNaN(idForHashTable)) {
-      setCurrentError("Please enter a numeric value!");
+    if (idsForHash === "") {
+      setCurrentError("Enter an id for Hash Node please!");
       return;
-    }
-    if (valuesForId !== "") {
-      const res = getArrFromInputForHeap(15, valuesForId, true);
-      if (typeof res !== "string") {
-        try {
-          const inpArr = {
-            id: idForHashTable,
-            listValues: res,
-          };
-          dispatch(setInputArray(inpArr));
-
-          setIdForHashTable(0);
-          setValuesForId("");
-        } catch (e: any) {
-          setCurrentError(e.message);
-        }
-      } else {
-        setCurrentError(res);
-      }
-    } else {
-      dispatch(setInputArray({ id: idForHashTable, listValues: [] }));
     }
     count++;
     setInputCount([...inputCount, count]);
+
+    dispatch(setInputArray());
+    dispatch(setIdForHash(""));
+    dispatch(setValuesForId(""));
 
     if (btnRef && btnRef.current) {
       btnRef.current.setAttribute("disabled", "disabled");
@@ -127,11 +126,20 @@ const HashTableControlPanel: FC<Props> = ({
       setCurrentError("Please enter a numeric value for Id!");
       return;
     }
-    setIdForHashTable(val);
+    dispatch(setIdForHash(e.target.value));
   };
 
   const addValuesHandler = (e: any) => {
-    setValuesForId(e.target.value);
+    const res = getArrFromInputForHeap(15, e.target.value, true);
+    if (typeof res !== "string") {
+      try {
+        dispatch(setValuesForId(e.target.value));
+      } catch (e: any) {
+        setCurrentError(e.message);
+      }
+    } else {
+      setCurrentError(res);
+    }
   };
 
   const handleRandomNodes = (e: any) => {
@@ -166,7 +174,15 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const createHashTableHandler = () => {
-    controller.setHashFromInput(inputArray);
+    const inpArray: Array<{ id: number; listValues: number[] }> = [];
+    inputArray.forEach((value) => {
+      let listValues: number[] = [];
+      if (value.listValues !== "")
+        listValues = value.listValues.split(",").map((val) => Number(val));
+      const tempObj = { id: value.id, listValues: listValues };
+      inpArray.push(tempObj);
+    });
+    controller.setHashFromInput(inpArray);
     handleShowActions();
     setValue("Search");
     // dispatch(setCurrentAlgorithm("Search"));
@@ -347,7 +363,9 @@ const HashTableControlPanel: FC<Props> = ({
                             sx={{ width: "100px", marginBottom: "10px" }}
                             label="Enter Id"
                             variant="outlined"
-                            onChange={addIdsHandler}
+                            // onChange={(e) =>
+                            //   changeIdForHash(e.target.value, hashNode.listValues, index)
+                            // }
                             value={hashNode.id}
                           />
                           <TextField
@@ -356,10 +374,8 @@ const HashTableControlPanel: FC<Props> = ({
                             sx={{ width: "150px" }}
                             label="Enter Values"
                             variant="outlined"
-                            onChange={(e) =>
-                              changeInfoForHashHandler(hashNode.id, e.target.value, index)
-                            }
-                            value={hashNode.listValues.toString()}
+                            onChange={(e) => changeValuesForId(hashNode.id, e.target.value, index)}
+                            value={hashNode.listValues}
                           />
                           <button
                             disabled={isButtonDisabled}
