@@ -12,6 +12,7 @@ import {
   setSizeForHash,
   setValuesForHash,
   setInputArray,
+  setA,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
@@ -47,6 +48,7 @@ const HashTableControlPanel: FC<Props> = ({
 
   const inputArray = useAppSelector((state) => state.hashTable.inputArray);
   const inputValues = useAppSelector((state) => state.hashTable.inputValues);
+  const A = useAppSelector((state) => state.hashTable.A);
   const hashTableSize = useAppSelector((state) => state.hashTable.hashTableSize);
   const hashTableValues = useAppSelector((state) => state.hashTable.hashTableValues);
   const error = useAppSelector((state) => state.hashTable.error);
@@ -56,10 +58,32 @@ const HashTableControlPanel: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("Chaining");
-  const [selected, setSelected] = useState("divisionMethod" || "linearProbing");
+  const [selected, setSelected] = useState(
+    value === "Chaining" ? "divisionMethod" : "linearProbing"
+  );
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
 
-  const algorithms = ["1", "2", "3", "4", "5"];
+  const algorithms = ["Search", "Insert", "Delete"];
+
+  const handleSetA = (e: any) => {
+    const val = Number(e.target.value);
+    if (isNaN(val)) {
+      setCurrentError("Please enter a numeric value for A!");
+      dispatch(setA(""));
+      return;
+    }
+    if (val < 0) {
+      setCurrentError(`A has to be greater than 0`);
+      dispatch(setA(""));
+      return;
+    }
+    if (val >= 1) {
+      setCurrentError("A has to be lower than 1");
+      dispatch(setA(""));
+      return;
+    }
+    dispatch(setA(e.target.value));
+  };
 
   const handleSetValuesForHash = (e: any) => {
     const res = getArrFromInputForHeap(15, e.target.value, true);
@@ -110,6 +134,8 @@ const HashTableControlPanel: FC<Props> = ({
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    if (newValue === "Open Addressing") setSelected("linearProbing");
+    if (newValue === "Chaining") setSelected("divisionMethod");
   };
 
   const setCurrentError = (error: string) => {
@@ -130,16 +156,17 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const createHashTableHandler = () => {
-    const keys = hashTableValues.split(",").map((value) => Number(value));
+    let keys: number[] = [];
+    if (hashTableValues !== "") keys = hashTableValues.split(",").map((value) => Number(value));
 
-    const inpArray = { size: Number(hashTableSize), keys, method: selected };
+    const inpArray = { size: Number(hashTableSize), keys, method: selected, A: Number(A) };
 
     dispatch(setInputArray(inpArray));
 
     controller.setHashFromInput(inpArray);
     handleShowActions();
-    // setValue("Search");
-    // dispatch(setCurrentAlgorithm("Search"));
+    setValue("Search");
+    dispatch(setCurrentAlgorithm("Search"));
   };
 
   const randomizeInput = () => {
@@ -222,7 +249,7 @@ const HashTableControlPanel: FC<Props> = ({
       )}
       <MediumCard
         isSmaller
-        maxWidth="max-w-5xl"
+        maxWidth="max-w-6xl"
       >
         <ThemeProvider theme={theme}>
           <ControlsToolTip isButtonDisabled={isButtonDisabled}>
@@ -354,6 +381,23 @@ const HashTableControlPanel: FC<Props> = ({
                           label={text === "Chaining" ? "Multiplication Method" : "Double Hashing"}
                         />
                       </FormGroup>
+                      {selected === "multiplicationMethod" && (
+                        <TextField
+                          sx={{ width: "100px", marginRight: "10px" }}
+                          name={text}
+                          size="small"
+                          type="text"
+                          variant="outlined"
+                          label={"Enter A"}
+                          inputProps={{
+                            min: 0,
+                            max: 999,
+                            style: { textAlign: "center" },
+                          }}
+                          value={A}
+                          onChange={handleSetA}
+                        />
+                      )}
                       <button
                         disabled={isButtonDisabled}
                         className={`${buttonClassname} w-[40px] h-[40px]`}

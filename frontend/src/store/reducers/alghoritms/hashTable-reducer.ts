@@ -1,34 +1,39 @@
 import mainState from "./main-state";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LinkedListAlgNames } from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { HashTableNode } from "../../../ClassObjects/HashTable/HashTableNode";
+import { HashTableAlgNames } from "../../../components/Simulation/PseudoCode/HashTablePseudoCodeData";
+
+const inputArray: { size: number; keys: number[]; method: string; A: number } = {
+  size: 0,
+  keys: [],
+  method: "",
+  A: 0,
+};
 
 const initialState = {
   ...mainState,
   head: undefined as HashTableNode | undefined,
-  currentAlg: "",
+  currentAlg: "Search" as HashTableAlgNames,
   inputValues: {
     Search: +"",
-    InsertToHead: +"",
-    InsertToTail: +"",
-    DeleteFromHead: +"",
-    DeleteFromTail: +"",
+    Insert: +"",
+    Delete: +"",
   },
+  A: "",
   hashTableSize: "",
   hashTableValues: "",
-  inputArray: {
-    size: 0,
-    keys: [],
-    method: "",
-  },
+  inputArray,
 };
 
 const hashTableSlice = createSlice({
   name: "hashTable",
   initialState,
   reducers: {
+    setA(state, action: PayloadAction<string>) {
+      state.A = action.payload;
+    },
     setSizeForHash(state, action: PayloadAction<string>) {
       state.hashTableSize = action.payload;
     },
@@ -39,7 +44,7 @@ const hashTableSlice = createSlice({
       state.error = action.payload;
       return state;
     },
-    setCurrentAlgorithm(state, action: PayloadAction<LinkedListAlgNames>) {
+    setCurrentAlgorithm(state, action: PayloadAction<HashTableAlgNames>) {
       state.currentAlg = action.payload;
       return state;
     },
@@ -47,7 +52,7 @@ const hashTableSlice = createSlice({
       state,
       action: PayloadAction<{
         val: number;
-        key: "Search" | "InsertToHead" | "InsertToTail" | "DeleteFromTail" | "DeleteFromHead";
+        key: "Search" | "Insert" | "Delete";
       }>
     ) {
       state.inputValues[action.payload.key] = action.payload.val;
@@ -55,12 +60,14 @@ const hashTableSlice = createSlice({
     },
     setInputArray(
       state,
-      action: PayloadAction<{ size: number; keys: number[]; method: string }>
-    ) {},
+      action: PayloadAction<{ size: number; keys: number[]; method: string; A: number }>
+    ) {
+      state.inputArray = { ...action.payload };
+    },
     clearInputArray(state) {
       state.hashTableSize = "";
       state.hashTableValues = "";
-      state.inputArray = { size: 0, keys: [], method: "" };
+      state.inputArray = { size: 0, keys: [], method: "", A: 0 };
     },
     setPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;
@@ -75,7 +82,7 @@ const hashTableSlice = createSlice({
     setRoles(state, action: PayloadAction<NodeRole[]>) {
       state.currentRoles = action.payload;
     },
-    setCodeRef(state, action: PayloadAction<CodeReference<LinkedListAlgNames>>) {
+    setCodeRef(state, action: PayloadAction<CodeReference<HashTableAlgNames>>) {
       state.currentAlg = action.payload.name;
       state.currentLine = action.payload.line;
       return state;
@@ -103,4 +110,5 @@ export const {
   setSizeForHash,
   setValuesForHash,
   setInputArray,
+  setA,
 } = hashTableSlice.actions;

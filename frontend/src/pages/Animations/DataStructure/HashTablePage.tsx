@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
-import { combineLinkedListPseudoCode } from "../../../components/Simulation/LinkedList/Helpers/LinkedListHelpers";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import HashTableControlPanel from "../../../components/Simulation/ControlsPanels/HashTableControlPanel";
 import BasePage from "./BasePage";
@@ -14,6 +13,7 @@ import {
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
 import HashTable from "../../../components/Simulation/HashTable/HashTable";
+import { combineHashTablePseudoCode } from "../../../components/Simulation/HashTable/Helpers/HashTableHelpers";
 
 const HashTablePage: FC = () => {
   const head = useAppSelector((state) => state.hashTable.head);
@@ -73,11 +73,10 @@ const HashTablePage: FC = () => {
         />
       }
       pseudoCode={
-        <div></div>
-        // <PseudoCodeContainer
-        //   line={currentLine}
-        //   code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}
-        // />
+        <PseudoCodeContainer
+          line={currentLine}
+          code={combineHashTablePseudoCode(currentAlg) as PseudoItem[]}
+        />
       }
     />
   );
