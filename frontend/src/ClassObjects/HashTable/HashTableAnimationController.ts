@@ -18,7 +18,8 @@ import {
 } from "../../store/reducers/alghoritms/hashTable-reducer";
 import { buildHashTable } from "../../components/Simulation/HashTable/Helpers/HashTableHelpers";
 import { chainingSearch } from "./HashTableAlgorithms";
-import { LinkedListMemento } from "../LinkedList/LinkedListMemento";
+import { LinkedListNode } from "../LinkedList/LinkedListNode";
+import { LinkedListAnimationController } from "../LinkedList/LinkedListAnimationController";
 
 export class HashTableAnimationController extends AnimationController<
   HashTableNode | undefined,
@@ -26,11 +27,8 @@ export class HashTableAnimationController extends AnimationController<
 > {
   private static hashTableController: HashTableAnimationController | null = null;
 
-  linkedListMemento: LinkedListMemento;
-
   private constructor(head: HashTableNode | undefined, dispatch: AppDispatch) {
     super(dispatch, new HashTableMemento(), head);
-    this.linkedListMemento = new LinkedListMemento();
   }
 
   static getController(head: HashTableNode | undefined, dispatch: AppDispatch) {
@@ -104,6 +102,11 @@ export class HashTableAnimationController extends AnimationController<
   //---------------Algorithms-----------
 
   async chainingSearch(value: number, size: number) {
-    await this.playAlgorithm(chainingSearch, this.memento, this.linkedListMemento, value, size);
+    await this.playAlgorithm(chainingSearch, this.memento, value, size);
+    const controller = LinkedListAnimationController.getController(
+      this.data!.listHead,
+      this.dispatch
+    );
+    await controller.search(value);
   }
 }

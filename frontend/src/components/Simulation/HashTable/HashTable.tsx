@@ -4,6 +4,7 @@ import { FC } from "react";
 import { HashTableItemObj } from "../../../ClassObjects/HashTable/HashTableItemObj";
 import { AnimatePresence } from "framer-motion";
 import HashNode from "./HashNode";
+import { LinkedListItemObj } from "../../../ClassObjects/LinkedList/LinkedListItemObj";
 
 interface Props {
   head: HashTableNodeType | undefined;
@@ -33,6 +34,15 @@ const HashTable: FC<Props> = ({
   if (passedNodes) {
     HashTableItemObj.setPassed(hashTableObjects, passedNodes);
   }
+  hashTableObjects.forEach((obj) => {
+    if (obj.valuesForList) {
+      LinkedListItemObj.setRoles(obj.valuesForList, roles);
+      LinkedListItemObj.setActions(obj.valuesForList, actions);
+      if (passedNodes) {
+        LinkedListItemObj.setPassed(obj.valuesForList, passedNodes);
+      }
+    }
+  });
   return (
     <div>
       <AnimatePresence>

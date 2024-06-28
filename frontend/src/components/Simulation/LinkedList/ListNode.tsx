@@ -28,6 +28,8 @@ const ListNode: FC<Props> = ({ nodeObj, length, forHash }) => {
   } else {
     animateObj = animate;
   }
+
+  let nameForClass = !forHash ? "node-of-list node-selected" : "node-of-list hashNode-selected";
   return (
     <div>
       {nodeObj.id === -1 && (
@@ -71,7 +73,7 @@ const ListNode: FC<Props> = ({ nodeObj, length, forHash }) => {
             top: nodeObj.position.y,
             left: nodeObj.position.x,
           }}
-          className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
+          className={nodeObj.nodeRole ? nameForClass : "node-of-list"}
         >
           {!forHash && length === 0 && <span className={"head-of-list"}>{"Head | Tail"}</span>}
           {!forHash && nodeObj.id === 0 && length !== 0 && (

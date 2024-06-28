@@ -44,7 +44,7 @@ const HashNode: FC<Props> = ({ nodeObj }) => {
           top: nodeObj.position.y,
           left: nodeObj.position.x,
         }}
-        className={nodeObj.nodeRole ? "node-of-list node-selected" : "node-of-list"}
+        className={nodeObj.nodeRole ? "node-of-list hashNode-selected" : "node-of-list"}
       >
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
 

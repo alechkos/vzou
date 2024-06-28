@@ -97,13 +97,15 @@ export function buildHashTable(
       break;
   }
   if (hashTable.length === 0) return undefined;
-  const listHead = buildLinkedList(hashTable[0]);
+  const listHead = buildLinkedList(hashTable[0], 1);
   const head = new HashTableNode(0, 0, undefined, undefined, listHead);
   let tempNode = head;
+  let id = 2;
   for (let i = 1; i < arr.size; i++) {
-    const listHead = buildLinkedList(hashTable[i]);
-    tempNode.next = new HashTableNode(i, i, undefined, tempNode, listHead);
+    const listHead = buildLinkedList(hashTable[i], id + 1);
+    tempNode.next = new HashTableNode(id, i, undefined, tempNode, listHead);
     tempNode = tempNode.next;
+    id += hashTable[i].length + 1;
   }
   return head;
 }

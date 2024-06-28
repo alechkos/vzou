@@ -1,12 +1,10 @@
 import { HashTableNode } from "./HashTableNode";
 import { HashTableMemento } from "./HashTableMemento";
 import { ActionType } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { LinkedListMemento } from "../LinkedList/LinkedListMemento";
 
 export function chainingSearch(
   head: HashTableNode,
   memento: HashTableMemento,
-  linkedListMemento: LinkedListMemento,
   value: number,
   size: number
 ) {
@@ -26,6 +24,7 @@ export function chainingSearch(
     undefined,
     passedIds
   );
+  passedIds.push(x.id);
 
   let list = x.listHead;
 
@@ -80,10 +79,19 @@ export function chainingSearch(
         { line: 0, name: "ChainingSearch" },
         head,
         `Node with value ${value} not found`,
-        [{ id: list.id, role: "X" }],
+        [],
         [],
         passedIds
       );
     }
+  } else {
+    memento.addError(
+      { line: 0, name: "ChainingSearch" },
+      head,
+      `Node with value ${value} not found`,
+      [],
+      [],
+      passedIds
+    );
   }
 }

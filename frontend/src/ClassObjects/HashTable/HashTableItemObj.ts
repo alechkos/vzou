@@ -10,7 +10,7 @@ import { LinkedListItemObj } from "../LinkedList/LinkedListItemObj";
 export class HashTableItemObj extends BaseObj {
   static width = 4;
 
-  static gapY = 45;
+  static gapY = 50;
 
   valuesForList?: LinkedListItemObj[];
 

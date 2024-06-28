@@ -1,8 +1,9 @@
 import { Memento } from "../Memento";
 import { HashTableNode } from "./HashTableNode";
 import { ActionType, NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { LinkedListNode } from "../LinkedList/LinkedListNode";
 
-export class HashTableMemento extends Memento<HashTableNode | undefined, string> {
+export class HashTableMemento extends Memento<HashTableNode | LinkedListNode | undefined, string> {
   visitedNodesSnapshots: number[][];
 
   passedNodesSnapshots: number[][];
@@ -21,7 +22,7 @@ export class HashTableMemento extends Memento<HashTableNode | undefined, string>
 
   addBlank(
     codeRef: any,
-    head: HashTableNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = []
@@ -38,7 +39,7 @@ export class HashTableMemento extends Memento<HashTableNode | undefined, string>
 
   addSnapshot(
     codeRef: any,
-    head: HashTableNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     index: number,
     action: ActionType,
     nodeRoles: NodeRole[] = [],
@@ -57,7 +58,7 @@ export class HashTableMemento extends Memento<HashTableNode | undefined, string>
 
   addError(
     codeRef: any,
-    head: HashTableNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     error: string,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
