@@ -62,8 +62,12 @@ const HashTableControlPanel: FC<Props> = ({
     value === "Chaining" ? "divisionMethod" : "linearProbing"
   );
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+  const [index, setIndex] = useState(0);
 
-  const algorithms = ["Search", "Insert", "Delete"];
+  const algorithms = [
+    ["ChainingSearch", "ChainingInsert", "ChainingDelete"],
+    ["Search", "Insert", "Delete"],
+  ];
 
   const handleSetA = (e: any) => {
     const val = Number(e.target.value);
@@ -160,21 +164,20 @@ const HashTableControlPanel: FC<Props> = ({
     if (hashTableValues !== "") keys = hashTableValues.split(",").map((value) => Number(value));
 
     const inpArray = { size: Number(hashTableSize), keys, method: selected, A: Number(A) };
-
     dispatch(setInputArray(inpArray));
 
     controller.setHashFromInput(inpArray);
     handleShowActions();
-    setValue("Search");
-    dispatch(setCurrentAlgorithm("Search"));
+    setValue(index === 0 ? "ChainingSearch" : "Search");
+    dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch" : "Search"));
   };
 
   const randomizeInput = () => {
     const randomArray = generateRandomArrForHeap(7, 1);
     // controller.setHashFromInput(randomArray);
     handleShowActions();
-    setValue("Search");
-    dispatch(setCurrentAlgorithm("Search"));
+    setValue(index === 0 ? "ChainingSearch" : "Search");
+    dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch" : "Search"));
     dispatch(clearInputArray());
     // dispatch(setInputArray([]));
   };
@@ -182,12 +185,12 @@ const HashTableControlPanel: FC<Props> = ({
   const Animate = async (animation: string) => {
     try {
       switch (animation) {
-        case "Search":
+        case "ChainingSearch":
           regsterActivity({
-            subject: "LinkedList",
-            algorithm: "Search",
+            subject: "HashTable",
+            algorithm: "ChainingSearch",
           });
-          // await controller.search(inputValues.Search);
+          await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size);
           return;
         case "InsertToHead":
           regsterActivity({
@@ -236,6 +239,11 @@ const HashTableControlPanel: FC<Props> = ({
   useEffect(() => {
     dispatch(clearInputArray());
   }, []);
+
+  useEffect(() => {
+    if (selected === "divisionMethod" || selected === "multiplicationMethod") setIndex(0);
+    else setIndex(1);
+  }, [selected]);
 
   return (
     <>
@@ -286,6 +294,7 @@ const HashTableControlPanel: FC<Props> = ({
                       {["Chaining", "Open Addressing"].map((alg) => {
                         return (
                           <Tab
+                            key={alg}
                             label={alg}
                             value={alg}
                             disabled={isButtonDisabled}
@@ -300,7 +309,7 @@ const HashTableControlPanel: FC<Props> = ({
                       aria-label="algorithms and actions"
                       centered
                     >
-                      {algorithms.map((alg) => {
+                      {algorithms[index].map((alg) => {
                         return (
                           <Tab
                             label={alg}
@@ -439,7 +448,7 @@ const HashTableControlPanel: FC<Props> = ({
                     </TabPanel>
                   ))}
                 {showActions &&
-                  algorithms
+                  algorithms[index]
                     .filter((alg) => !alg.includes("Min") && !alg.includes("Traversals"))
                     .map((text) => (
                       <TabPanel

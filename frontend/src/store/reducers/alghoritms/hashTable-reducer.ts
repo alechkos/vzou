@@ -17,8 +17,11 @@ const initialState = {
   head: undefined as HashTableNode | undefined,
   currentAlg: "Search" as HashTableAlgNames,
   inputValues: {
-    Search: +"",
+    ChainingSearch: +"",
+    ChainingInsert: +"",
+    ChainingDelete: +"",
     Insert: +"",
+    Search: +"",
     Delete: +"",
   },
   A: "",
@@ -52,7 +55,13 @@ const hashTableSlice = createSlice({
       state,
       action: PayloadAction<{
         val: number;
-        key: "Search" | "Insert" | "Delete";
+        key:
+          | "ChainingSearch"
+          | "ChainingInsert"
+          | "ChainingDelete"
+          | "Search"
+          | "Insert"
+          | "Delete";
       }>
     ) {
       state.inputValues[action.payload.key] = action.payload.val;

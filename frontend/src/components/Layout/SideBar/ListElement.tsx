@@ -8,13 +8,13 @@ export interface ExpendedItem {
 
 interface Props {
   title: string;
-  key: number;
+  keyz: number;
   url: string;
   expended?: boolean;
   expendedList?: ExpendedItem[];
 }
 
-const ListElement = ({ title, key, url, expendedList, expended }: Props) => {
+const ListElement = ({ title, keyz, url, expendedList, expended }: Props) => {
   const currentUrl = window.location.href;
 
   const [showSorts, setShowSorts] = useState(false);
@@ -28,7 +28,7 @@ const ListElement = ({ title, key, url, expendedList, expended }: Props) => {
       {url !== "" ? (
         <Link
           to={url}
-          key={key}
+          key={keyz}
           className={`flex flex-col p-2 hover:text-green-400 hover:cursor-pointer w-full ${
             currentUrl.includes(url) && url !== "" ? "text-green-400" : ""
           }`}
@@ -37,7 +37,7 @@ const ListElement = ({ title, key, url, expendedList, expended }: Props) => {
         </Link>
       ) : (
         <div
-          key={key}
+          key={keyz}
           className={`flex flex-col p-2 hover:text-green-400 hover:cursor-pointer w-full ${
             currentUrl.includes(url) && url !== "" ? "text-green-400" : ""
           }`}

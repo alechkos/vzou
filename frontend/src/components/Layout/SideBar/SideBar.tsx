@@ -7,7 +7,8 @@ const SideBar = () => {
       <ul className="flex flex-col p-4 w-52">
         {HomePageData.map((element, index) => (
           <ListElement
-            key={index}
+            key={element.title}
+            keyz={index}
             title={element.title}
             url={element.url}
             expended={element.expended}
