@@ -13,6 +13,7 @@ import {
   setValuesForHash,
   setInputArray,
   setA,
+  changeValuesForHash,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
@@ -192,12 +193,13 @@ const HashTableControlPanel: FC<Props> = ({
           });
           await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size);
           return;
-        case "InsertToHead":
+        case "ChainingInsert":
           regsterActivity({
-            subject: "LinkedList",
-            algorithm: "Insert to Head",
+            subject: "HashTable",
+            algorithm: "ChainingInsert",
           });
-          // await controller.insertToHead(inputValues.InsertToHead);
+          dispatch(changeValuesForHash(inputValues.ChainingInsert));
+          await controller.chainingInsert(inputValues.ChainingInsert, inputArray.size);
           return;
         case "InsertToTail":
           regsterActivity({

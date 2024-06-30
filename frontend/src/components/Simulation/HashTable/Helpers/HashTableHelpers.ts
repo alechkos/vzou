@@ -97,10 +97,11 @@ export function buildHashTable(
       break;
   }
   if (hashTable.length === 0) return undefined;
-  const listHead = buildLinkedList(hashTable[0], 1);
+  let id = 0;
+  const listHead = buildLinkedList(hashTable[0], id + 1);
   const head = new HashTableNode(0, 0, undefined, undefined, listHead);
   let tempNode = head;
-  let id = 2;
+  id += hashTable[0].length + 1;
   for (let i = 1; i < arr.size; i++) {
     const listHead = buildLinkedList(hashTable[i], id + 1);
     tempNode.next = new HashTableNode(id, i, undefined, tempNode, listHead);

@@ -17,9 +17,7 @@ import {
   setError,
 } from "../../store/reducers/alghoritms/hashTable-reducer";
 import { buildHashTable } from "../../components/Simulation/HashTable/Helpers/HashTableHelpers";
-import { chainingSearch } from "./HashTableAlgorithms";
-import { LinkedListNode } from "../LinkedList/LinkedListNode";
-import { LinkedListAnimationController } from "../LinkedList/LinkedListAnimationController";
+import { chainingInsert, chainingSearch } from "./HashTableAlgorithms";
 
 export class HashTableAnimationController extends AnimationController<
   HashTableNode | undefined,
@@ -103,10 +101,9 @@ export class HashTableAnimationController extends AnimationController<
 
   async chainingSearch(value: number, size: number) {
     await this.playAlgorithm(chainingSearch, this.memento, value, size);
-    const controller = LinkedListAnimationController.getController(
-      this.data!.listHead,
-      this.dispatch
-    );
-    await controller.search(value);
+  }
+
+  async chainingInsert(value: number, size: number) {
+    await this.playAlgorithm(chainingInsert, this.memento, value, size);
   }
 }

@@ -43,6 +43,11 @@ const hashTableSlice = createSlice({
     setValuesForHash(state, action: PayloadAction<string>) {
       state.hashTableValues = action.payload;
     },
+    changeValuesForHash(state, action: PayloadAction<number>) {
+      const inputArr = state.hashTableValues.split(",").map((val) => Number(val));
+      inputArr.push(action.payload);
+      state.hashTableValues = inputArr.toString();
+    },
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
       return state;
@@ -120,4 +125,5 @@ export const {
   setValuesForHash,
   setInputArray,
   setA,
+  changeValuesForHash,
 } = hashTableSlice.actions;

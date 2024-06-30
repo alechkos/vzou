@@ -18,28 +18,20 @@ export class LinkedListNode {
     this.next = next;
   }
 
-  static getLength(head: LinkedListNode | undefined): number {
-    let length = 0;
-    let tempNode = head;
-    while (tempNode?.next !== undefined) {
-      length++;
-      tempNode = tempNode.next;
-    }
-    return length;
-  }
-
-  static addNodeToHead(head: LinkedListNode | undefined, value: number) {
+  static addNodeToHead(head: LinkedListNode | undefined, value: number, id?: number) {
     if (head === undefined) {
-      head = new LinkedListNode(value, 0, undefined, undefined);
+      head = new LinkedListNode(value, id ? id : 0, undefined, undefined);
       return head;
     } else {
-      head.prev = new LinkedListNode(value, 0, undefined, head);
-      let tempNode = head;
-      while (tempNode.next !== undefined) {
+      head.prev = new LinkedListNode(value, id ? id : 0, undefined, head);
+      if (!id) {
+        let tempNode = head;
+        while (tempNode.next !== undefined) {
+          tempNode.id++;
+          tempNode = tempNode.next;
+        }
         tempNode.id++;
-        tempNode = tempNode.next;
       }
-      tempNode.id++;
       return head.prev;
     }
   }
