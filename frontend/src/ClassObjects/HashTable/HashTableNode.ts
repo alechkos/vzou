@@ -24,6 +24,4 @@ export class HashTableNode {
     this.prev = prev;
     this.listHead = listHead;
   }
-
-  //Functions for visualization!
 }

@@ -43,9 +43,16 @@ const hashTableSlice = createSlice({
     setValuesForHash(state, action: PayloadAction<string>) {
       state.hashTableValues = action.payload;
     },
-    changeValuesForHash(state, action: PayloadAction<number>) {
+    addValuesForHash(state, action: PayloadAction<number>) {
       const inputArr = state.hashTableValues.split(",").map((val) => Number(val));
       inputArr.push(action.payload);
+      state.hashTableValues = inputArr.toString();
+    },
+    deleteValuesFromHash(state, action: PayloadAction<number>) {
+      const inputArr = state.hashTableValues
+        .split(",")
+        .map((val) => Number(val))
+        .filter((val) => val !== action.payload);
       state.hashTableValues = inputArr.toString();
     },
     setError(state, action: PayloadAction<string>) {
@@ -125,5 +132,6 @@ export const {
   setValuesForHash,
   setInputArray,
   setA,
-  changeValuesForHash,
+  addValuesForHash,
+  deleteValuesFromHash,
 } = hashTableSlice.actions;

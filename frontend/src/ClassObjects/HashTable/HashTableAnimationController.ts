@@ -17,7 +17,14 @@ import {
   setError,
 } from "../../store/reducers/alghoritms/hashTable-reducer";
 import { buildHashTable } from "../../components/Simulation/HashTable/Helpers/HashTableHelpers";
-import { chainingInsert, chainingSearch } from "./HashTableAlgorithms";
+import {
+  chainingDelete,
+  chainingInsert,
+  chainingSearch,
+  search,
+  insert,
+} from "./HashTableAlgorithms";
+import { LinkedListNode } from "../LinkedList/LinkedListNode";
 
 export class HashTableAnimationController extends AnimationController<
   HashTableNode | undefined,
@@ -99,11 +106,32 @@ export class HashTableAnimationController extends AnimationController<
 
   //---------------Algorithms-----------
 
-  async chainingSearch(value: number, size: number) {
-    await this.playAlgorithm(chainingSearch, this.memento, value, size);
+  async chainingSearch(value: number, size: number, A?: number) {
+    await this.playAlgorithm(chainingSearch, this.memento, value, size, A);
   }
 
-  async chainingInsert(value: number, size: number) {
-    await this.playAlgorithm(chainingInsert, this.memento, value, size);
+  async chainingInsert(value: number, size: number, A?: number) {
+    await this.playAlgorithm(chainingInsert, this.memento, value, size, A);
+  }
+
+  async chainingDelete(value: number, size: number, A?: number) {
+    await this.playAlgorithm(chainingDelete, this.memento, value, size, A);
+    let x = this.data;
+    const index = !A ? value % size : Math.floor(size * ((value * A) % 1));
+    if (x) {
+      while (x.value !== index && x.next !== undefined) {
+        x = x.next;
+      }
+      x.listHead = LinkedListNode.deleteByValue(x.listHead, value);
+    }
+    this.initData(this.data);
+  }
+
+  async search(value: number, size: number) {
+    await this.playAlgorithm(search, this.memento, value, size);
+  }
+
+  async insert(value: number, size: number) {
+    await this.playAlgorithm(insert, this.memento, value, size);
   }
 }

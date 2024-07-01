@@ -13,7 +13,8 @@ import {
   setValuesForHash,
   setInputArray,
   setA,
-  changeValuesForHash,
+  addValuesForHash,
+  deleteValuesFromHash,
 } from "../../../store/reducers/alghoritms/hashTable-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import MediumCard from "../../UI/MediumCard";
@@ -191,36 +192,43 @@ const HashTableControlPanel: FC<Props> = ({
             subject: "HashTable",
             algorithm: "ChainingSearch",
           });
-          await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size);
+          if (selected === "multiplicationMethod")
+            await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size, Number(A));
+          else await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size);
           return;
         case "ChainingInsert":
           regsterActivity({
             subject: "HashTable",
             algorithm: "ChainingInsert",
           });
-          dispatch(changeValuesForHash(inputValues.ChainingInsert));
-          await controller.chainingInsert(inputValues.ChainingInsert, inputArray.size);
+          dispatch(addValuesForHash(inputValues.ChainingInsert));
+          if (selected === "multiplicationMethod")
+            await controller.chainingInsert(inputValues.ChainingInsert, inputArray.size, Number(A));
+          else await controller.chainingInsert(inputValues.ChainingInsert, inputArray.size);
           return;
-        case "InsertToTail":
+        case "ChainingDelete":
           regsterActivity({
-            subject: "LinkedList",
-            algorithm: "Insert to Tail",
+            subject: "HashTable",
+            algorithm: "ChainingDelete",
           });
-          // await controller.insertToTail(inputValues.InsertToTail);
+          dispatch(deleteValuesFromHash(inputValues.ChainingDelete));
+          if (selected === "multiplicationMethod")
+            await controller.chainingDelete(inputValues.ChainingDelete, inputArray.size, Number(A));
+          else await controller.chainingDelete(inputValues.ChainingDelete, inputArray.size);
           return;
-        case "DeleteFromHead":
+        case "Search":
           regsterActivity({
-            subject: "LinkedList",
-            algorithm: "DeleteFromHead",
+            subject: "HashTable",
+            algorithm: "AddressSearch",
           });
-          // await controller.deleteFromHead(inputValues.DeleteFromHead);
+          await controller.search(inputValues.Search, inputArray.size);
           return;
-        case "DeleteFromTail":
+        case "Insert":
           regsterActivity({
-            subject: "LinkedList",
-            algorithm: "DeleteFromTail",
+            subject: "HashTable",
+            algorithm: "AddressInsert",
           });
-          // await controller.deleteFromTail(inputValues.DeleteFromTail);
+          await controller.insert(inputValues.Insert, inputArray.size);
           return;
         case "Clear":
           // controller.setListFromInput([]);

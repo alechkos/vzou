@@ -90,4 +90,19 @@ export class LinkedListNode {
     }
     return tempNode;
   }
+
+  static deleteByValue(head: LinkedListNode | undefined, value: number) {
+    if (head === undefined) return undefined;
+    let tempNode: LinkedListNode | undefined = head;
+    while (tempNode && tempNode.value !== value) tempNode = tempNode.next;
+    if (tempNode === undefined) return undefined;
+    if (tempNode.next === undefined && tempNode.prev === undefined) return undefined;
+    if (tempNode.prev === undefined) return tempNode.next;
+    if (tempNode.next === undefined) tempNode.prev.next = undefined;
+    if (tempNode) {
+      tempNode.prev.next = tempNode.next;
+      tempNode.next?.prev ? (tempNode.next.prev = tempNode.prev) : undefined;
+    }
+    return head;
+  }
 }
