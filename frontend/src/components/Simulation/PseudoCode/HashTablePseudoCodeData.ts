@@ -60,7 +60,7 @@ export const HashTablePseudoCode = {
     { text: "𝘳𝘦𝘵𝘶𝘳𝘯 𝑇", tabAmount: 3 },
     { text: "𝑖 ← 𝑖 + 1", tabAmount: 2 },
     { text: "𝑗 ← 𝘩𝘢𝘴𝘩𝘍𝘶𝘯𝘤(𝑘, 𝑖)", tabAmount: 2 },
-    { text: "𝑟𝑒𝑡𝑢𝑟𝑛 𝑁𝑢𝑙𝑙", tabAmount: 1 },
+    { text: "𝘦𝘳𝘳𝘰𝘳: '𝘷𝘢𝘭𝘶𝘦 𝘯𝘰𝘵 𝘧𝘰𝘶𝘯𝘥'", tabAmount: 1 },
   ] as PseudoItem[],
 };
 

@@ -221,17 +221,29 @@ const HashTableControlPanel: FC<Props> = ({
             subject: "HashTable",
             algorithm: "AddressSearch",
           });
-          await controller.search(inputValues.Search, inputArray.size);
+          if (selected === "doubleHashing")
+            await controller.search(inputValues.Search, inputArray.size, "double");
+          else await controller.search(inputValues.Search, inputArray.size);
           return;
         case "Insert":
           regsterActivity({
             subject: "HashTable",
             algorithm: "AddressInsert",
           });
-          await controller.insert(inputValues.Insert, inputArray.size);
+          if (selected === "doubleHashing")
+            await controller.insert(inputValues.Insert, inputArray.size, "double");
+          else await controller.insert(inputValues.Insert, inputArray.size);
+          return;
+        case "Delete":
+          regsterActivity({
+            subject: "HashTable",
+            algorithm: "AddressDelete",
+          });
+          if (selected === "doubleHashing")
+            await controller.delete(inputValues.Delete, inputArray.size, "double");
+          else await controller.delete(inputValues.Delete, inputArray.size);
           return;
         case "Clear":
-          // controller.setListFromInput([]);
           dispatch(clearInputArray());
           return;
         default:

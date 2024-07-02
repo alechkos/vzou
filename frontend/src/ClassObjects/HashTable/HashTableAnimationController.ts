@@ -23,6 +23,7 @@ import {
   chainingSearch,
   search,
   insert,
+  deleteNode,
 } from "./HashTableAlgorithms";
 import { LinkedListNode } from "../LinkedList/LinkedListNode";
 
@@ -127,11 +128,91 @@ export class HashTableAnimationController extends AnimationController<
     this.initData(this.data);
   }
 
-  async search(value: number, size: number) {
-    await this.playAlgorithm(search, this.memento, value, size);
+  async search(value: number, size: number, double?: string) {
+    await this.playAlgorithm(search, this.memento, value, size, double);
   }
 
-  async insert(value: number, size: number) {
-    await this.playAlgorithm(insert, this.memento, value, size);
+  async insert(value: number, size: number, double?: string) {
+    await this.playAlgorithm(insert, this.memento, value, size, double);
+    let i = value % size;
+    let tempI = i;
+    let flag = false;
+    let hashNode = this.data;
+
+    let y: HashTableNode | undefined = this.data;
+    let id = 0;
+
+    //Get max Id
+    while (y) {
+      if (id < y.id) id = y.id;
+      let temp = y.listHead;
+      while (temp) {
+        if (id < temp.id) id = temp.id;
+        temp = temp.next;
+      }
+      y = y.next;
+    }
+
+    id += 1;
+
+    let j = 0;
+    while (i < size) {
+      hashNode = this.data;
+      if (hashNode) {
+        while (j < i && hashNode.next !== undefined) {
+          hashNode = hashNode.next;
+          j++;
+        }
+        if (hashNode?.listHead === undefined) {
+          hashNode!.listHead = LinkedListNode.addNodeToHead(hashNode?.listHead, value, id);
+          flag = true;
+        } else {
+          if (!double) {
+            i++;
+            i %= size;
+          } else {
+            let k = 1 + (value % (size - 2));
+            i = (k + i) % size;
+          }
+        }
+        if (tempI === i || flag) break;
+      }
+      j = 0;
+    }
+    this.initData(this.data);
+  }
+
+  async delete(value: number, size: number, double?: string) {
+    await this.playAlgorithm(deleteNode, this.memento, value, size, double);
+    let i = value % size;
+    let temp = i;
+    let flag = false;
+    let hashNode = this.data;
+
+    let j = 0;
+    while (i < size) {
+      hashNode = this.data;
+      if (hashNode) {
+        while (j < i && hashNode.next !== undefined) {
+          hashNode = hashNode.next;
+          j++;
+        }
+        if (hashNode.listHead?.value === value) {
+          hashNode!.listHead = LinkedListNode.deleteNodeFromHead(hashNode?.listHead);
+          flag = true;
+        } else {
+          if (!double) {
+            i++;
+            i %= size;
+          } else {
+            let k = 1 + (value % (size - 2));
+            i = (k + i) % size;
+          }
+        }
+        if (temp === i || flag) break;
+      }
+      j = 0;
+    }
+    this.initData(this.data);
   }
 }
