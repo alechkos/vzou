@@ -9,7 +9,7 @@ export class HashTableMemento extends Memento<HashTableNode | LinkedListNode | u
   passedNodesSnapshots: number[][];
 
   constructor() {
-    super("Search");
+    super("Search1");
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
   }

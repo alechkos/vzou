@@ -19,7 +19,7 @@ export function chainingSearch(
     x = x.next;
   }
   memento.addSnapshot(
-    { line: 1, name: "ChainingSearch" },
+    { line: 1, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
     head,
     x.id,
     ActionType.HIGHLIGHT_LIGHT,
@@ -34,7 +34,7 @@ export function chainingSearch(
   if (list !== undefined) {
     passedIds.push(list.id);
     memento.addSnapshot(
-      { line: 2, name: "ChainingSearch" },
+      { line: 2, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
       head,
       list.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -46,7 +46,7 @@ export function chainingSearch(
     while (list.next !== undefined && list.value !== value) {
       passedIds.push(list.next.id);
       memento.addSnapshot(
-        { line: 3, name: "ChainingSearch" },
+        { line: 3, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
         head,
         list.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -55,7 +55,7 @@ export function chainingSearch(
         passedIds
       );
       memento.addSnapshot(
-        { line: 4, name: "ChainingSearch" },
+        { line: 4, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
         head,
         list.next.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -68,7 +68,7 @@ export function chainingSearch(
 
     if (list.value === value) {
       memento.addSnapshot(
-        { line: 5, name: "ChainingSearch" },
+        { line: 5, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
         head,
         list.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -79,7 +79,7 @@ export function chainingSearch(
       return;
     } else {
       memento.addError(
-        { line: 0, name: "ChainingSearch" },
+        { line: 0, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
         head,
         `Node with value ${value} not found`,
         [],
@@ -89,7 +89,7 @@ export function chainingSearch(
     }
   } else {
     memento.addError(
-      { line: 0, name: "ChainingSearch" },
+      { line: 0, name: !A ? "ChainingSearch1" : "ChainingSearch2" },
       head,
       `Node with value ${value} not found`,
       [],
@@ -126,7 +126,7 @@ export function chainingInsert(
     x = x.next;
   }
   memento.addSnapshot(
-    { line: 1, name: "ChainingInsert" },
+    { line: 1, name: !A ? "ChainingInsert1" : "ChainingInsert2" },
     head,
     x.id,
     ActionType.HIGHLIGHT_LIGHT,
@@ -145,7 +145,7 @@ export function chainingInsert(
   }
 
   memento.addSnapshot(
-    { line: 2, name: "ChainingInsert" },
+    { line: 2, name: !A ? "ChainingInsert1" : "ChainingInsert2" },
     head,
     id,
     ActionType.HIGHLIGHT_LIGHT,
@@ -170,7 +170,7 @@ export function chainingDelete(
     x = x.next;
   }
   memento.addSnapshot(
-    { line: 1, name: "ChainingDelete" },
+    { line: 1, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
     head,
     x.id,
     ActionType.HIGHLIGHT_LIGHT,
@@ -185,7 +185,7 @@ export function chainingDelete(
   if (list !== undefined) {
     passedIds.push(list.id);
     memento.addSnapshot(
-      { line: 2, name: "ChainingDelete" },
+      { line: 2, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
       head,
       list.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -197,7 +197,7 @@ export function chainingDelete(
     while (list.next !== undefined && list.value !== value) {
       passedIds.push(list.next.id);
       memento.addSnapshot(
-        { line: 3, name: "ChainingDelete" },
+        { line: 3, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
         head,
         list.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -206,7 +206,7 @@ export function chainingDelete(
         passedIds
       );
       memento.addSnapshot(
-        { line: 4, name: "ChainingDelete" },
+        { line: 4, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
         head,
         list.next.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -219,7 +219,7 @@ export function chainingDelete(
 
     if (list.value === value) {
       memento.addSnapshot(
-        { line: 5, name: "ChainingDelete" },
+        { line: 5, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
         head,
         list.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -228,7 +228,7 @@ export function chainingDelete(
         passedIds
       );
       memento.addSnapshot(
-        { line: 6, name: "ChainingDelete" },
+        { line: 6, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
         head,
         list.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -238,7 +238,7 @@ export function chainingDelete(
       );
       if (list.next) {
         memento.addSnapshot(
-          { line: 7, name: "ChainingDelete" },
+          { line: 7, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
           head,
           list?.next.id,
           ActionType.HIGHLIGHT_LIGHT,
@@ -248,7 +248,7 @@ export function chainingDelete(
         );
       } else {
         memento.addSnapshot(
-          { line: 8, name: "ChainingDelete" },
+          { line: 8, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
           head,
           list.id,
           ActionType.HIGHLIGHT_LIGHT,
@@ -261,7 +261,7 @@ export function chainingDelete(
       return head;
     } else {
       memento.addError(
-        { line: 9, name: "ChainingDelete" },
+        { line: 9, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
         head,
         `Node with value ${value} not found`,
         [],
@@ -271,7 +271,7 @@ export function chainingDelete(
     }
   } else {
     memento.addSnapshot(
-      { line: 5, name: "ChainingDelete" },
+      { line: 5, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
       head,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -280,7 +280,7 @@ export function chainingDelete(
       passedIds
     );
     memento.addError(
-      { line: 9, name: "ChainingDelete" },
+      { line: 9, name: !A ? "ChainingDelete1" : "ChainingDelete2" },
       head,
       `Node with value ${value} not found`,
       [],
@@ -302,21 +302,39 @@ export function search(
   let x = head;
   const temp = index;
 
-  memento.addBlank({ line: 1, name: "Search" }, head, [], undefined, passedIds);
-  memento.addBlank({ line: 2, name: "Search" }, head, [], undefined, passedIds);
+  memento.addBlank(
+    { line: 1, name: !double ? "Search1" : "Search2" },
+    head,
+    [],
+    undefined,
+    passedIds
+  );
+  memento.addBlank(
+    { line: 2, name: !double ? "Search1" : "Search2" },
+    head,
+    [],
+    undefined,
+    passedIds
+  );
 
   while (x.value !== index && x.next !== undefined) {
     x = x.next;
   }
 
   while (index < size && x.listHead !== undefined) {
-    memento.addBlank({ line: 3, name: "Search" }, head, [], undefined, passedIds);
+    memento.addBlank(
+      { line: 3, name: !double ? "Search1" : "Search2" },
+      head,
+      [],
+      undefined,
+      passedIds
+    );
     x = head;
     while (x.value !== index && x.next !== undefined) {
       x = x.next;
     }
     memento.addSnapshot(
-      { line: 4, name: "Search" },
+      { line: 4, name: !double ? "Search1" : "Search2" },
       head,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -327,7 +345,7 @@ export function search(
     passedIds.push(x.id);
     if (x.listHead) {
       memento.addSnapshot(
-        { line: 4, name: "Search" },
+        { line: 4, name: !double ? "Search1" : "Search2" },
         head,
         x.listHead.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -337,7 +355,7 @@ export function search(
       );
       if (x.listHead.value === value) {
         memento.addSnapshot(
-          { line: 5, name: "Search" },
+          { line: 5, name: !double ? "Search1" : "Search2" },
           head,
           x.listHead.id,
           ActionType.HIGHLIGHT_LIGHT,
@@ -356,14 +374,26 @@ export function search(
       index = (j + index * j) % size;
     }
     if (x.listHead?.value !== value) {
-      memento.addBlank({ line: 6, name: "Search" }, head, [], undefined, passedIds);
-      memento.addBlank({ line: 7, name: "Search" }, head, [], undefined, passedIds);
+      memento.addBlank(
+        { line: 6, name: !double ? "Search1" : "Search2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
+      memento.addBlank(
+        { line: 7, name: !double ? "Search1" : "Search2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
     }
     if (index === temp) break;
   }
   if (x.listHead === undefined) {
     memento.addError(
-      { line: 8, name: "Search" },
+      { line: 8, name: !double ? "Search1" : "Search2" },
       head,
       `Node with value ${value} not found`,
       [],
@@ -374,7 +404,7 @@ export function search(
   }
   if (x.listHead.value === value) {
     memento.addSnapshot(
-      { line: 5, name: "Search" },
+      { line: 5, name: !double ? "Search1" : "Search2" },
       head,
       x.listHead.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -385,7 +415,7 @@ export function search(
     return head;
   }
   memento.addError(
-    { line: 8, name: "Search" },
+    { line: 8, name: !double ? "Search1" : "Search2" },
     head,
     `Node with value ${value} not found`,
     [],
@@ -409,18 +439,36 @@ export function insert(
     let temp = index;
     let x = head;
 
-    memento.addBlank({ line: 1, name: "Insert" }, head, [], undefined, passedIds);
+    memento.addBlank(
+      { line: 1, name: !double ? "Insert1" : "Insert2" },
+      head,
+      [],
+      undefined,
+      passedIds
+    );
 
     while (index < size) {
       x = head;
-      memento.addBlank({ line: 2, name: "Insert" }, head, [], undefined, passedIds);
-      memento.addBlank({ line: 3, name: "Insert" }, head, [], undefined, passedIds);
+      memento.addBlank(
+        { line: 2, name: !double ? "Insert1" : "Insert2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
+      memento.addBlank(
+        { line: 3, name: !double ? "Insert1" : "Insert2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
       while (x.value !== index && x.next !== undefined) {
         x = x.next;
       }
       passedIds.push(x.id);
       memento.addSnapshot(
-        { line: 4, name: "Insert" },
+        { line: 4, name: !double ? "Insert1" : "Insert2" },
         head,
         x.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -438,12 +486,25 @@ export function insert(
           let j = 1 + (value % (size - 2));
           index = (j + index * j) % size;
         }
-        memento.addBlank({ line: 7, name: "Insert" }, head, [], undefined, passedIds);
+        memento.addBlank(
+          { line: 7, name: !double ? "Insert1" : "Insert2" },
+          head,
+          [],
+          undefined,
+          passedIds
+        );
         if (index === temp) break;
       }
     }
 
-    memento.addError({ line: 8, name: "Insert" }, head, `Hash table overflow`, [], [], passedIds);
+    memento.addError(
+      { line: 8, name: !double ? "Insert1" : "Insert2" },
+      head,
+      `Hash table overflow`,
+      [],
+      [],
+      passedIds
+    );
     return;
   }
 
@@ -454,7 +515,7 @@ export function insert(
       x = x.next;
     }
     memento.addSnapshot(
-      { line: 5, name: "Insert" },
+      { line: 5, name: !double ? "Insert1" : "Insert2" },
       head,
       x.id,
       ActionType.ADD,
@@ -463,7 +524,7 @@ export function insert(
       passedIds
     );
     memento.addSnapshot(
-      { line: 6, name: "Insert" },
+      { line: 6, name: !double ? "Insert1" : "Insert2" },
       head,
       x.id,
       ActionType.ADD,
@@ -488,21 +549,39 @@ export function deleteNode(
   let x = head;
   const temp = index;
 
-  memento.addBlank({ line: 1, name: "Delete" }, head, [], undefined, passedIds);
-  memento.addBlank({ line: 2, name: "Delete" }, head, [], undefined, passedIds);
+  memento.addBlank(
+    { line: 1, name: !double ? "Delete1" : "Delete2" },
+    head,
+    [],
+    undefined,
+    passedIds
+  );
+  memento.addBlank(
+    { line: 2, name: !double ? "Delete1" : "Delete2" },
+    head,
+    [],
+    undefined,
+    passedIds
+  );
 
   while (x.value !== index && x.next !== undefined) {
     x = x.next;
   }
 
   while (index < size && x.listHead !== undefined) {
-    memento.addBlank({ line: 3, name: "Delete" }, head, [], undefined, passedIds);
+    memento.addBlank(
+      { line: 3, name: !double ? "Delete1" : "Delete2" },
+      head,
+      [],
+      undefined,
+      passedIds
+    );
     x = head;
     while (x.value !== index && x.next !== undefined) {
       x = x.next;
     }
     memento.addSnapshot(
-      { line: 4, name: "Delete" },
+      { line: 4, name: !double ? "Delete1" : "Delete2" },
       head,
       x.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -513,7 +592,7 @@ export function deleteNode(
     passedIds.push(x.id);
     if (x.listHead) {
       memento.addSnapshot(
-        { line: 4, name: "Delete" },
+        { line: 4, name: !double ? "Delete1" : "Delete2" },
         head,
         x.listHead.id,
         ActionType.HIGHLIGHT_LIGHT,
@@ -523,7 +602,7 @@ export function deleteNode(
       );
       if (x.listHead.value === value) {
         memento.addSnapshot(
-          { line: 5, name: "Delete" },
+          { line: 5, name: !double ? "Delete1" : "Delete2" },
           head,
           x.listHead.id,
           ActionType.HIGHLIGHT_LIGHT,
@@ -532,7 +611,7 @@ export function deleteNode(
           passedIds
         );
         memento.addSnapshot(
-          { line: 6, name: "Delete" },
+          { line: 6, name: !double ? "Delete1" : "Delete2" },
           head,
           x.listHead.id,
           ActionType.HIGHLIGHT_LIGHT,
@@ -551,14 +630,26 @@ export function deleteNode(
       index = (j + index * j) % size;
     }
     if (x.listHead?.value !== value) {
-      memento.addBlank({ line: 7, name: "Delete" }, head, [], undefined, passedIds);
-      memento.addBlank({ line: 8, name: "Delete" }, head, [], undefined, passedIds);
+      memento.addBlank(
+        { line: 7, name: !double ? "Delete1" : "Delete2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
+      memento.addBlank(
+        { line: 8, name: !double ? "Delete1" : "Delete2" },
+        head,
+        [],
+        undefined,
+        passedIds
+      );
     }
     if (index === temp) break;
   }
   if (x.listHead === undefined) {
     memento.addError(
-      { line: 9, name: "Delete" },
+      { line: 9, name: !double ? "Delete1" : "Delete2" },
       head,
       `Node with value ${value} not found`,
       [],
@@ -569,7 +660,7 @@ export function deleteNode(
   }
   if (x.listHead.value === value) {
     memento.addSnapshot(
-      { line: 5, name: "Delete" },
+      { line: 5, name: !double ? "Delete1" : "Delete2" },
       head,
       x.listHead.id,
       ActionType.HIGHLIGHT_LIGHT,
@@ -580,7 +671,7 @@ export function deleteNode(
     return head;
   }
   memento.addError(
-    { line: 9, name: "Delete" },
+    { line: 9, name: !double ? "Delete1" : "Delete2" },
     head,
     `Node with value ${value} not found`,
     [],

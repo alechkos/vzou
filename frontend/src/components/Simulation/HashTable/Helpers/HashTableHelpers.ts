@@ -111,6 +111,6 @@ export function buildHashTable(
   return head;
 }
 
-export const combineHashTablePseudoCode = (currentAlg: HashTablePseudoCodeKeys, method: string) => {
+export const combineHashTablePseudoCode = (currentAlg: HashTablePseudoCodeKeys) => {
   return HashTablePseudoCode[currentAlg];
 };

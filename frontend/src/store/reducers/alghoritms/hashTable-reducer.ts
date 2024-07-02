@@ -15,7 +15,7 @@ const inputArray: { size: number; keys: number[]; method: string; A: number } = 
 const initialState = {
   ...mainState,
   head: undefined as HashTableNode | undefined,
-  currentAlg: "Search" as HashTableAlgNames | string,
+  currentAlg: "Search1" as HashTableAlgNames | string,
   inputValues: {
     ChainingSearch: +"",
     ChainingInsert: +"",

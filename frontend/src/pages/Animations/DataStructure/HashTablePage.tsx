@@ -77,12 +77,7 @@ const HashTablePage: FC = () => {
       pseudoCode={
         <PseudoCodeContainer
           line={currentLine}
-          code={
-            combineHashTablePseudoCode(
-              currentAlg as HashTablePseudoCodeKeys,
-              inputArray.method
-            ) as PseudoItem[]
-          }
+          code={combineHashTablePseudoCode(currentAlg as HashTablePseudoCodeKeys) as PseudoItem[]}
         />
       }
     />
