@@ -15,6 +15,8 @@ import {
   setHead,
   setPassedNodes,
   setError,
+  addValuesForHash,
+  deleteValuesFromHash,
 } from "../../store/reducers/alghoritms/hashTable-reducer";
 import { buildHashTable } from "../../components/Simulation/HashTable/Helpers/HashTableHelpers";
 import {
@@ -165,6 +167,7 @@ export class HashTableAnimationController extends AnimationController<
         }
         if (hashNode?.listHead === undefined) {
           hashNode!.listHead = LinkedListNode.addNodeToHead(hashNode?.listHead, value, id);
+          this.dispatch(addValuesForHash(value));
           flag = true;
         } else {
           if (!double) {
@@ -172,7 +175,7 @@ export class HashTableAnimationController extends AnimationController<
             i %= size;
           } else {
             let k = 1 + (value % (size - 2));
-            i = (k + i) % size;
+            i = (k + i * k) % size;
           }
         }
         if (tempI === i || flag) break;
@@ -199,6 +202,7 @@ export class HashTableAnimationController extends AnimationController<
         }
         if (hashNode.listHead?.value === value) {
           hashNode!.listHead = LinkedListNode.deleteNodeFromHead(hashNode?.listHead);
+          this.dispatch(deleteValuesFromHash(value));
           flag = true;
         } else {
           if (!double) {
@@ -206,7 +210,7 @@ export class HashTableAnimationController extends AnimationController<
             i %= size;
           } else {
             let k = 1 + (value % (size - 2));
-            i = (k + i) % size;
+            i = (k + i * k) % size;
           }
         }
         if (temp === i || flag) break;

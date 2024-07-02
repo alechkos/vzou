@@ -353,7 +353,7 @@ export function search(
       index %= size;
     } else {
       let j = 1 + (value % (size - 2));
-      index = (j + index) % size;
+      index = (j + index * j) % size;
     }
     if (x.listHead?.value !== value) {
       memento.addBlank({ line: 6, name: "Search" }, head, [], undefined, passedIds);
@@ -436,7 +436,7 @@ export function insert(
           index %= size;
         } else {
           let j = 1 + (value % (size - 2));
-          index = (j + index) % size;
+          index = (j + index * j) % size;
         }
         memento.addBlank({ line: 7, name: "Insert" }, head, [], undefined, passedIds);
         if (index === temp) break;
@@ -548,7 +548,7 @@ export function deleteNode(
       index %= size;
     } else {
       let j = 1 + (value % (size - 2));
-      index = (j + index) % size;
+      index = (j + index * j) % size;
     }
     if (x.listHead?.value !== value) {
       memento.addBlank({ line: 7, name: "Delete" }, head, [], undefined, passedIds);

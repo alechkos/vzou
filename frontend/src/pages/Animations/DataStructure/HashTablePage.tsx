@@ -14,6 +14,7 @@ import {
 } from "../../../store/reducers/basePage-reducer";
 import HashTable from "../../../components/Simulation/HashTable/HashTable";
 import { combineHashTablePseudoCode } from "../../../components/Simulation/HashTable/Helpers/HashTableHelpers";
+import { HashTablePseudoCodeKeys } from "../../../components/Simulation/PseudoCode/HashTablePseudoCodeData";
 
 const HashTablePage: FC = () => {
   const head = useAppSelector((state) => state.hashTable.head);
@@ -24,6 +25,7 @@ const HashTablePage: FC = () => {
   const visitedNodes = useAppSelector((state) => state.hashTable.visitedNodes);
   const passedNodes = useAppSelector((state) => state.hashTable.passedNodes);
   const isPlaying = useAppSelector((state) => state.hashTable.isPlaying);
+  const inputArray = useAppSelector((state) => state.hashTable.inputArray);
   const controller = HashTableAnimationController.getController(head, useDispatch());
 
   const viewportWidth = useAppSelector((state) => state.basePage.viewportWidth);
@@ -75,7 +77,12 @@ const HashTablePage: FC = () => {
       pseudoCode={
         <PseudoCodeContainer
           line={currentLine}
-          code={combineHashTablePseudoCode(currentAlg) as PseudoItem[]}
+          code={
+            combineHashTablePseudoCode(
+              currentAlg as HashTablePseudoCodeKeys,
+              inputArray.method
+            ) as PseudoItem[]
+          }
         />
       }
     />

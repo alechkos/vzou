@@ -162,6 +162,10 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const createHashTableHandler = () => {
+    if (hashTableSize === "") {
+      setCurrentError("Enter the size of table please!");
+      return;
+    }
     let keys: number[] = [];
     if (hashTableValues !== "") keys = hashTableValues.split(",").map((value) => Number(value));
 
@@ -171,17 +175,41 @@ const HashTableControlPanel: FC<Props> = ({
     controller.setHashFromInput(inpArray);
     handleShowActions();
     setValue(index === 0 ? "ChainingSearch" : "Search");
-    dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch" : "Search"));
+    dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch1" : "Search1"));
   };
 
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap(7, 1);
-    // controller.setHashFromInput(randomArray);
+    if (hashTableSize === "") {
+      setCurrentError("Enter the size of table please!");
+      return;
+    }
+    const randomA = Math.random();
+    dispatch(setA(randomA.toString()));
+    const randomArray = generateRandomArrForHeap(5, 1);
+    dispatch(setValuesForHash(randomArray.toString()));
+
+    const inpArray = {
+      size: Number(hashTableSize),
+      keys: randomArray,
+      method: selected,
+      A: randomA,
+    };
+    dispatch(setInputArray(inpArray));
+
+    controller.setHashFromInput(inpArray);
     handleShowActions();
     setValue(index === 0 ? "ChainingSearch" : "Search");
-    dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch" : "Search"));
-    dispatch(clearInputArray());
-    // dispatch(setInputArray([]));
+    dispatch(
+      setCurrentAlgorithm(
+        index === 0 && selected === "divisionMethod"
+          ? "ChainingSearch1"
+          : index === 0 && selected === "multiplicationMethod"
+          ? "ChainingSearch2"
+          : selected === "linearProbing"
+          ? "Search1"
+          : "Search2"
+      )
+    );
   };
 
   const Animate = async (animation: string) => {
@@ -255,7 +283,22 @@ const HashTableControlPanel: FC<Props> = ({
   };
 
   const setAlgorithm = (name: any) => {
-    dispatch(setCurrentAlgorithm(name));
+    let algName: string = "";
+    switch (selected) {
+      case "divisionMethod":
+        algName = name + "1";
+        break;
+      case "linearProbing":
+        algName = name + "1";
+        break;
+      case "multiplicationMethod":
+        algName = name + "2";
+        break;
+      case "doubleHashing":
+        algName = name + "2";
+        break;
+    }
+    dispatch(setCurrentAlgorithm(algName));
   };
 
   useEffect(() => {
@@ -443,13 +486,14 @@ const HashTableControlPanel: FC<Props> = ({
                           size="small"
                           type="text"
                           variant="outlined"
-                          label={"Number of nodes"}
+                          label={"Size of Table"}
                           inputProps={{
                             min: 0,
                             max: 999,
                             style: { textAlign: "center" },
                           }}
-                          onChange={handleRandomNodes}
+                          value={hashTableSize}
+                          onChange={handleSetSize}
                         />
                         <button
                           disabled={isButtonDisabled}

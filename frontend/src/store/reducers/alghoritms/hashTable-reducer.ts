@@ -15,7 +15,7 @@ const inputArray: { size: number; keys: number[]; method: string; A: number } = 
 const initialState = {
   ...mainState,
   head: undefined as HashTableNode | undefined,
-  currentAlg: "Search" as HashTableAlgNames,
+  currentAlg: "Search" as HashTableAlgNames | string,
   inputValues: {
     ChainingSearch: +"",
     ChainingInsert: +"",
@@ -59,7 +59,7 @@ const hashTableSlice = createSlice({
       state.error = action.payload;
       return state;
     },
-    setCurrentAlgorithm(state, action: PayloadAction<HashTableAlgNames>) {
+    setCurrentAlgorithm(state, action: PayloadAction<HashTableAlgNames | string>) {
       state.currentAlg = action.payload;
       return state;
     },

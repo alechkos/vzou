@@ -63,7 +63,7 @@ export function doubleHashing(
     const temp = i;
     while (hashTable[i].length !== 0) {
       let j = 1 + (key % (size - 2));
-      i = (j + i) % size;
+      i = (j + i * j) % size;
       flag = true;
       if (i === temp) break;
     }
@@ -111,6 +111,6 @@ export function buildHashTable(
   return head;
 }
 
-export const combineHashTablePseudoCode = (currentAlg: HashTablePseudoCodeKeys) => {
+export const combineHashTablePseudoCode = (currentAlg: HashTablePseudoCodeKeys, method: string) => {
   return HashTablePseudoCode[currentAlg];
 };
