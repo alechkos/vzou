@@ -40,26 +40,28 @@ export const TWO_FA_verifier = async (code: string, type: CODE_TYPES, email: str
  *  and sends an email with either an email confirmation token, or a 2FA / password-reset code.
  */
 export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
-  if (type !== 'VERIFY_EMAIL') {
-    // For 2FAs or password resets, send a new code and update the database.
-    const code = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000) // Randomize a code
-    await TWOFA.upsert({ email, code: code.toString(), type }) // Update or create a new 2FA code for the user.
-    mailer(`${type} Code`, code.toString(), email) // Send the mail with the code
-    return
-  }
-  // For email confirmations, validate the data received and send a confirmation email to the user.
   const user = await User.findOne({ where: { email } })
+
   if (!user) {
     throw ApiError.badRequest('This email address does not exist. Please try again with a different email address.')
   }
-  const token = generateConfirmMailToken(email)
-  mailer(
-    // Send the email with the token
-    `Email verification`,
-    `To verify the email follow the link : 
+
+  if (type === 'VERIFY_EMAIL') {
+    const token = generateConfirmMailToken(email)
+    mailer(
+        // Send the email with the token
+        `Email verification`,
+        `To verify the email follow the link: 
     ${process.env.FRONT_IP || 'http://localhost:3000'}/verify-email/${token}`,
-    email
-  )
+        email
+    )
+  }
+  else {
+    // For 2FAs or password resets, send a new code and update the database droch.
+    const code = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000) // Randomize a code
+    await TWOFA.upsert({ email, code: code.toString(), type }) // Update or create a new 2FA code for the user.
+    mailer(`${type} Code: `, code.toString(), email) // Send the mail with the code
+  }
 }
 
 /** Controller for the entire 2FA process.
