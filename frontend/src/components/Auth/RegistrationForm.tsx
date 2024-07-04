@@ -39,22 +39,24 @@ function RegistrationForm() {
 
   const checkData = () => {
     const errorStack = [];
+
     // check passwords
     if (!CheckPassword(dataEntered.password)) {
-      errorStack.push("Invalid password, must contain:[a-z],[A-Z],[0-9] and special chracter");
+      errorStack.push("Invalid password, must contain at least 8 characters: [a-z], [A-Z], [0-9] and a special character");
     } else if (!CheckConfirmPassword(dataEntered.password, dataEntered.confirmPassword!)) {
       errorStack.push("The passwords must match");
     }
 
     // check names
     if (!CheckName(dataEntered.firstName) || !CheckName(dataEntered.lastName)) {
-      errorStack.push("Invalid name, must contain:[a-z],[A-Z]");
+      errorStack.push("Invalid name, must contain: [a-z], [A-Z]");
     }
 
     // check email
     if (!CheckEmail(dataEntered.email)) {
       errorStack.push("Invalid email");
     }
+
     return errorStack;
   };
 

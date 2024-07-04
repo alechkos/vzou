@@ -50,7 +50,7 @@ export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
   // For email confirmations, validate the data received and send a confirmation email to the user.
   const user = await User.findOne({ where: { email } })
   if (!user) {
-    throw ApiError.forbidden('Error sending email')
+    throw ApiError.badRequest('This email address does not exist. Please try again with a different email address.')
   }
   const token = generateConfirmMailToken(email)
   mailer(
@@ -136,7 +136,7 @@ class TwoFactorAuthController {
     try {
       const { password, email } = req.body
       if (!password || password.length < 8) {
-        return next(ApiError.badRequest('Password should be at least 8 char length'))
+        return next(ApiError.badRequest('Password should be at least 8 characters length'))
       }
       const hashPassword = await bcrypt.hash(password, 5)
       await User.update({ password: hashPassword }, { where: { email } })
