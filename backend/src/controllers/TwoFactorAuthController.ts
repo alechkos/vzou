@@ -77,13 +77,13 @@ export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
 class TwoFactorAuthController {
   async send2FA_Code(req: TypedRequestBody<{ type: CODE_TYPES; email: string }>, res: Response, next: NextFunction) {
     const { type, email } = req.body
+
     try {
       await ServiceSendCode(type, email)
       return res.json({ status: 'OK' })
     } catch (e: any) {
-      console.log(e)
-      const message = 'Error sending email'
-      return next(ApiError.badRequest(message))
+      console.info(e)
+      return next(ApiError.badRequest(e?.message || 'Error sending email'))
     }
   }
 
