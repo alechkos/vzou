@@ -6,25 +6,13 @@ const PASSWORD_CHARACTRES =
 const CONFIRM_PASSWORD = "The password and password verification must be equal";
 
 export function CheckEmail(email: string) {
-  // email length need to be at least 6 and "@" need to be in the email.
-  if (email.trim().length < 6 || email.search("@") < 0) {
-    return false;
-  }
-  return true;
+  const pattern = /^[a-zA-Z0-9_.±]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
+  return !!(email.match(pattern));
 }
 
 export function CheckPassword(password: string) {
-  const symbols = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_₹]).*$/; // regex for allowed symbols
-  if (
-    password.trim().length >= 8 &&
-    /[a-z]/.test(password) &&
-    /[A-Z]/.test(password) &&
-    /[0-9]/.test(password) &&
-    symbols.test(password)
-  ) {
-    return true;
-  }
-  return false;
+  const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_])[A-Za-z\d~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_]{8,}$/;
+  return !!(password.match(pattern));
 }
 
 export function CheckConfirmPassword(password: string, confirmPassword: string) {
@@ -36,7 +24,7 @@ export function CheckAge(age: number) {
 }
 
 export function CheckName(name: string) {
-  const letters = /^[A-Za-z]+$/;
-  if (name.match(letters)) return true;
-  return false;
+  const letters = /^[a-zA-Z]+(?:\s+[a-zA-Z]+)*$/;
+  return !!name.match(letters);
+
 }
