@@ -69,7 +69,7 @@ const EmailForVerification: FC<EmailForVerificationProps> = ({ setEmail, onConfi
           <input
             id="email-address"
             name="email"
-            type="email"
+            type="text"
             autoComplete="email"
             required
             className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-lime-500 focus:outline-none focus:ring-lime-500 sm:text-sm"
