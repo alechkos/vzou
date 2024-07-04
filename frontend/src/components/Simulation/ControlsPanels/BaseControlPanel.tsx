@@ -251,30 +251,32 @@ const BaseControlPanel: FC<Props> = ({
                         value={text}
                         className={value === text ? "justify-start " : "hidden"}
                       >
-                        <TextField
-                          sx={{ width: "138px" }}
-                          name={text}
-                          size="small"
-                          type="text"
-                          variant="outlined"
-                          label={"Your value here"}
-                          inputProps={{
-                            min: 0,
-                            max: 999,
-                            style: { textAlign: "center" },
-                          }}
-                          onChange={handleInput}
-                        />
+                        {text !== "DeleteFromHead" && text !== "DeleteFromTail" && (
+                          <TextField
+                            sx={{ width: "138px" }}
+                            name={text}
+                            size="small"
+                            type="text"
+                            variant="outlined"
+                            label={"Your value here"}
+                            inputProps={{
+                              min: 0,
+                              max: 999,
+                              style: { textAlign: "center" },
+                            }}
+                            onChange={handleInput}
+                          />
+                        )}
                         <button
                           disabled={isButtonDisabled}
-                          className={`${buttonClassname} w-[40px] h-[40px]`}
+                          className={`${buttonClassname} w-auto h-[40px]`}
                           onClick={async () =>
                             animate(text).catch((e) => {
                               setCurrentError(e.message);
                             })
                           }
                         >
-                          Go
+                          {text === "DeleteFromHead" || text === "DeleteFromTail" ? "Delete" : "Go"}
                         </button>
                       </TabPanel>
                     ))}
