@@ -34,3 +34,81 @@
   font-weight: bold;
   margin-left: 4rem;
 }
+
+.pseudoCodeWrapper {
+  position: relative;
+}
+
+.pseudoCodeContainer {
+  font-family: monospace;
+  font-size: 14px;
+  background-color: #ecfccb;
+  border: 2px solid #ecfccb;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left; /* text pseudo code will start from left */
+  white-space: pre-wrap; /* spaces */
+}
+
+.pseudoCodeContainer div {
+  margin: 5px 0;
+}
+
+.highlighted {
+  background-color: #a3e635; /* green background for row pseudocode */
+}
+
+.hamburgerWrapper {
+  position: absolute;
+  top: 40px;
+  right: 50px;
+  z-index: 1000;
+}
+.hamburgerWrapper2 {
+  position: absolute;
+  top: -560px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.tableWrapper {
+  position: absolute;
+  top: 500px; /* Setting the value for moving the table vertically */
+  right: 500px; /* Setting the value for moving the table horizontally */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.queueWrapper {
+  margin-top: 20px;
+}
+
+.queueWrapper ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.queueWrapper li {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}

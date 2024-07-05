@@ -1,0 +1,23 @@
+.buttonContainer {
+  display: flex;
+  justify-content: center; /* Centering the buttons horizontally */
+  margin-top: -700px; /* Add padding at the top */
+}
+
+.button {
+  background-color: #4caf50; /* Button color green */
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px; /* Space between buttons */
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #45a049; /* Dark green color on hover */
+}

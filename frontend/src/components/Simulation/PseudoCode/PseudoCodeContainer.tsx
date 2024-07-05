@@ -4,7 +4,6 @@ import React, { FC } from "react";
 import { PseudoItem } from "./pc-helpers";
 import { PseudoCode } from "./PseudoCode";
 
-
 interface Props {
   line: number;
   code: PseudoItem[];

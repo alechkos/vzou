@@ -10,6 +10,8 @@ import treeGif from "../../assets/Gallery/treeGif.gif";
 import treePhoto from "../../assets/Gallery/treePhoto.png";
 import linkedListPhoto from "../../assets/Gallery/LinkedListPhoto.png";
 import linkedListGif from "../../assets/Gallery/LinkedListGif.gif";
+import bfsPhoto from "../../assets/Gallery/bfsPhoto.png";
+import bfsGif from "../../assets/Gallery/bfsGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
 
 const sortTypes = [
@@ -84,6 +86,12 @@ const HomePageData = [
     gif: linkedListGif,
     image: linkedListPhoto,
     url: RoutePaths.LINKED_LIST,
+  },
+  {
+    title: "BFS",
+    gif: bfsGif,
+    image: bfsPhoto,
+    url: RoutePaths.BFS,
   },
   /*
   TODO:
