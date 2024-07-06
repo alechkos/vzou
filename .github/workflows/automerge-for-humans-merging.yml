@@ -1,0 +1,67 @@
+# See https://github.com/asyncapi/.github/blob/master/.github/workflows/automerge-for-humans-merging.yml
+
+name: Automerge PR
+
+on:
+  pull_request_target:
+    types:
+      - synchronize
+      - edited
+      - ready_for_review
+      - reopened
+    branches:
+      - 'develop'
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  automerge-for-humans:
+    if: github.event.pull_request.draft == false && (github.event.pull_request.user.login != 'dependabot[bot]' || github.event.pull_request.user.login != 'dependabot-preview[bot]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get list of authors
+        uses: sergeysova/jq-action@v2
+        id: authors
+        with:
+          # This cmd does following (line by line):
+          # 1. CURL querying the list of commits of the current PR via GH API. Why? Because the current event payload does not carry info about the commits.
+          # 2. Iterates over the previous returned payload, and creates an array with the filtered results (see below) so we can work with it later.
+          # 3. Grabs the data we need for adding the `Co-authored-by: ...` lines later and puts it into objects to be used later on.
+          # 4. Filters the results by excluding the current PR sender. We don't need to add it as co-author since is the PR creator and it will become by default the main author.
+          # 5. Removes repeated authors (authors can have more than one commit in the PR).
+          # 6. Builds the `Co-authored-by: ...` lines with actual info.
+          # 7. Transforms the array into plain text. Thanks to this, the actual stdout of this step can be used by the next Workflow step (which is basically the automerge).
+          cmd: |
+            curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.AUTH_TOKEN }}" "${{github.event.pull_request._links.commits.href}}?per_page=100" | 
+              jq -r '[.[] 
+                | {name: .commit.author.name, email: .commit.author.email, login: .author.login}] 
+                | map(select(.login != "${{github.event.pull_request.user.login}}")) 
+                | unique 
+                | map("Co-authored-by: " + .name + " <" + .email + ">") 
+                | join("\n")'
+          multiline: true
+      - name: Show authors
+        run: |
+          echo "${{ steps.authors.outputs.value }}"
+      - name: Automerge
+        uses: pascalgn/automerge-action@v0.16.3
+        id: automerge
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: ""
+          MERGE_METHOD: "squash"
+          MERGE_REQUIRED_APPROVALS: 2
+          UPDATE_LABELS: ""
+          # Using the output of the previous step (`Co-authored-by: ...` lines) as commit description.
+          # Important to keep 2 empty lines as https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors#creating-co-authored-commits-on-the-command-line mentions
+          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n\n${{ steps.authors.outputs.value }}"
+          MERGE_DELETE_BRANCH: true
+          MERGE_RETRIES: "20"
+          MERGE_RETRY_SLEEP: "30000"
+          UPDATE_RETRIES: "20"
+          UPDATE_RETRY_SLEEP: "30000"
+      - name: Feedback
+        if: ${{ steps.automerge.outputs.mergeResult == 'merged' }}
+        run: |
+          echo "Pull request ${{ steps.automerge.outputs.pullRequestNumber }} merged!"
