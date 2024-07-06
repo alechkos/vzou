@@ -73,7 +73,7 @@ jobs:
           UPDATE_LABELS: ""
           # Using the output of the previous step (`Co-authored-by: ...` lines) as commit description.
           # Important to keep 2 empty lines as https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors#creating-co-authored-commits-on-the-command-line mentions
-          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n{pullRequest.description}\n\n---------\n\n${{ steps.authors.outputs.value }}"
+          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n\n${{ steps.authors.outputs.value }}"
           MERGE_DELETE_BRANCH: true
           MERGE_RETRIES: "20"
           MERGE_RETRY_SLEEP: "30000"
