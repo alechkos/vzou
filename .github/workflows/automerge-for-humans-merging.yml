@@ -60,6 +60,10 @@ jobs:
                 | map("Co-authored-by: " + .name + " <" + .email + ">") 
                 | join("\n")'
           multiline: true
+      - name: Format output
+        run: |
+          authors=$(echo "${{ steps.authors.outputs.value }}" | sed 's/%0A/\n/g')
+          echo "::set-output name=authors::$authors"
       - name: Show authors
         run: echo "${{ steps.authors.outputs.value }}"
       - name: Automerge
