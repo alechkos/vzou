@@ -46,9 +46,9 @@ jobs:
                   },
                   coauthors: (
                     .commit.message
-                    | capture("(?<coauthors>(Co-authored-by: [^\n]+(\nCo-authored-by: [^\n]+)*))?"; "g")?
+                    | capture("(?<coauthors>(Co-authored-by: [^\\n]+(\\nCo-authored-by: [^\\n]+)*))?"; "g")?
                     | .coauthors // ""
-                    | split("\n")
+                    | split("\\n")
                     | map(select(length > 0)
                     | capture("Co-authored-by: (?<name>[^<]+) <(?<email>[^>]+)>")
                     | {name: .name, email: .email})
@@ -58,14 +58,11 @@ jobs:
                 | map(select(.login != "${{github.event.pull_request.user.login}}")) 
                 | unique 
                 | map("Co-authored-by: " + .name + " <" + .email + ">") 
-                | join("\n")'
+                | join("\\n")'
           multiline: true
-      - name: Format output
-        run: |
-          authors=$(echo "${{ steps.authors.outputs.value }}" | sed 's/%0A/\n/g')
-          echo "::set-output name=authors::$authors"
       - name: Show authors
-        run: echo "${{ steps.authors.outputs.value }}"
+        run: |
+          echo "${{ steps.authors.outputs.value }}"
       - name: Automerge
         uses: pascalgn/automerge-action@v0.16.3
         id: automerge
