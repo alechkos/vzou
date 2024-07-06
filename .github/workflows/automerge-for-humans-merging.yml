@@ -26,20 +26,39 @@ jobs:
         with:
           # This cmd does following (line by line):
           # 1. CURL querying the list of commits of the current PR via GH API. Why? Because the current event payload does not carry info about the commits.
-          # 2. Iterates over the previous returned payload, and creates an array with the filtered results (see below) so we can work with it later.
-          # 3. Grabs the data we need for adding the `Co-authored-by: ...` lines later and puts it into objects to be used later on.
-          # 4. Filters the results by excluding the current PR sender. We don't need to add it as co-author since is the PR creator and it will become by default the main author.
-          # 5. Removes repeated authors (authors can have more than one commit in the PR).
-          # 6. Builds the `Co-authored-by: ...` lines with actual info.
-          # 7. Transforms the array into plain text. Thanks to this, the actual stdout of this step can be used by the next Workflow step (which is basically the automerge).
+          # 2. Iterates over the previous returned payload, and creates an array with the filtered results (see below) so we can work with it later. An example of payload can be found in https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#webhook-payload-example-34.
+          # 3. Grabs the data of commit author we need for adding the `Co-authored-by: ...` lines later and puts it into objects to be used later on.
+          # 4. Grabs the data of co-authors in each commit using the regex and puts it into objects to be used later on.
+          # 5. Combine the committer and co-authors arrays. Then flatten the resulting array of arrays into a single array.
+          # 6. Filters the results by excluding the current PR author. We don't need to add it as co-author since is the PR creator and it will become by default the main author.
+          # 7. Removes repeated authors and co-authors (may have multiple commits in the PR, potentially with different co-authors).
+          # 8. Builds the `Co-authored-by: ...` lines with actual info.
+          # 9. Transforms the array into plain text. Thanks to this, the actual stdout of this step can be used by the next workflow step (which is basically the automerge).
           cmd: |
             curl -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.AUTH_TOKEN }}" "${{github.event.pull_request._links.commits.href}}?per_page=100" | 
               jq -r '[.[] 
-                | {name: .commit.author.name, email: .commit.author.email, login: .author.login}] 
+                |
+                {
+                  committer: {
+                    name: .commit.author.name,
+                    email: .commit.author.email,
+                    login: .author.login
+                  },
+                  coauthors: (
+                    .commit.message
+                    | capture("(?<coauthors>(Co-authored-by: [^\n]+(\nCo-authored-by: [^\n]+)*))?"; "g")?
+                    | .coauthors // ""
+                    | split("\n")
+                    | map(select(length > 0)
+                    | capture("Co-authored-by: (?<name>[^<]+) <(?<email>[^>]+)>")
+                    | {name: .name, email: .email})
+                  )
+                }
+                | [.committer] + .coauthors] | flatten
                 | map(select(.login != "${{github.event.pull_request.user.login}}")) 
                 | unique 
                 | map("Co-authored-by: " + .name + " <" + .email + ">") 
-                | join("\n")'
+                | join("\\n")'
           multiline: true
       - name: Show authors
         run: |
