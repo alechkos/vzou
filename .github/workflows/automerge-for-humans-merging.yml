@@ -33,11 +33,14 @@ jobs:
           script: |
             async function getCoAuthors() {
               try {
+                const { owner, repo } = context.repo;
+                const pull_number = context.issue.number;
+            
                 const commits = await github.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", {
-                  owner: repository.split('/')[0],
-                  repo: repository.split('/')[1],
-                  pull_number: ${{ github.event.number }},
-                  per_page: 100,
+                  owner,
+                  repo,
+                  pull_number,
+                  per_page: 100
                 });
             
                 let authors = [];
