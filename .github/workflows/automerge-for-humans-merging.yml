@@ -88,6 +88,7 @@ jobs:
             }
 
             await getCoAuthors();
+            core.setOutput("value", authors);
       - name: Show authors
         run: |
           echo "${{ steps.authors.outputs.value }}"
