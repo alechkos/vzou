@@ -40,7 +40,7 @@ jobs:
                   per_page: 100
                 });
             
-                let coAuthors = [];
+                let authors = [];
   
                 for (const item of commits) {
                   const committer = {
@@ -60,23 +60,23 @@ jobs:
                     });
                   }
   
-                  coAuthors.push(committer);
-                  coAuthors.push(...coAuthors);
+                  authors.push(committer);
+                  authors.push(...coAuthors);
                 }
   
-                coAuthors = coAuthors.filter((x) => x.email !== commits[0].commit.author.email);
+                authors = authors.filter((x) => x.email !== commits[0].commit.author.email);
   
                 const seen = new Set();
-                coAuthors = coAuthors.filter((item) => {
+                authors = authors.filter((item) => {
                   const duplicate = seen.has(item.email);
                   seen.add(item.email);
                   return !duplicate;
                 });
   
-                coAuthors = coAuthors.map((x) => `Co-authored by: ${x.name} <${x.email}>`).join('\n');
-                console.log(coAuthors);
+                authors = authors.map((x) => `Co-authored by: ${x.name} <${x.email}>`).join('\n');
+                console.log(authors);
   
-                return coAuthors;
+                return authors;
               }
               catch (e) {
                 console.error('GetCoAuthorsError: ', e);
