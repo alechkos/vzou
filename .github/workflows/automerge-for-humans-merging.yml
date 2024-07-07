@@ -102,7 +102,7 @@ jobs:
           MERGE_METHOD: "squash"
           MERGE_REQUIRED_APPROVALS: 2
           UPDATE_LABELS: ""
-          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n\n${{ steps.authors.outputs.value }}"
+          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n\n\n${{ steps.authors.outputs.value }}"
           MERGE_DELETE_BRANCH: true
           MERGE_RETRIES: "20"
           MERGE_RETRY_SLEEP: "30000"
