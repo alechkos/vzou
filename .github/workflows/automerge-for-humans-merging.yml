@@ -37,7 +37,7 @@ jobs:
                   owner: repository.split('/')[0],
                   repo: repository.split('/')[1],
                   pull_number: ${{ github.event.number }},
-                  per_page: 100
+                  per_page: 100,
                 });
             
                 let authors = [];
