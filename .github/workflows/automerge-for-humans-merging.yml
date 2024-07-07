@@ -87,7 +87,7 @@ jobs:
               }
             }
 
-            await getCoAuthors();
+            const authors = await getCoAuthors();
             core.setOutput("value", authors);
       - name: Show authors
         run: |
