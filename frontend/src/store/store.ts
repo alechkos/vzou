@@ -16,6 +16,7 @@ import quickSortReducer from "./reducers/sorts/quickSortReducer";
 import radixSortReducer from "./reducers/sorts/radixSortReducer";
 import stackReducer from "./reducers/stackReducer";
 import linkedListReducer from "./reducers/alghoritms/linkedList-reducer";
+import bfsReducer from "./reducers/alghoritms/bfs-reducer";
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     mergeSort: mergeSortReducer,
     bucketSort: bucketSortReducer,
     radixSort: radixSortReducer,
+    bfs: bfsReducer,
     animationController: animationControlReducer,
     [reportApi.reducerPath]: reportApi.reducer,
     [authApi.reducerPath]: authApi.reducer,

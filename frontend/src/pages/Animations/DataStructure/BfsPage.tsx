@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { BfsAnimationController } from "../../../ClassObjects/BST/BfsAnimationController";
+import { BfsAnimationController } from "../../../ClassObjects/BFS/BfsAnimationController";
 import BfsControlsPanel from "../../../components/Simulation/ControlsPanels/BfsControlsPanel";
 import BfsPseudoCodeContainer from "../../../components/Simulation/PseudoCode/BfsPseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
@@ -8,19 +8,23 @@ import SideBar from "../../../components/Layout/SideBar/SideBar";
 import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import styles from "../../../components/Simulation/PseudoCode/PseudoCodeWrapper.module.css";
 import controlStyles from "./BfsControlsPanel.module.css";
+import { combineBfsPseudoCode } from "../../../ClassObjects/BFS/BFSAlgorithms";
+import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
+import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 
 const BfsPage: FC = () => {
-  const root = useAppSelector((state) => state.bst.currentRoot);
-  const isPlaying = useAppSelector((state) => state.bst.isPlaying);
+  const initialNode = useAppSelector((state) => state.bfs.initialNode);
+  const isPlaying = useAppSelector((state) => state.bfs.isPlaying);
+  const currentAlg = useAppSelector((state) => state.bfs.currentAlg);
+  // const currentLine = useAppSelector((state) => state.bfs.currentLine);
   const dispatch = useDispatch();
 
-  const controller = BfsAnimationController.getController(root, dispatch);
+  const controller = BfsAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [showActions, setShowActions] = useState(false);
   const [editingConstruction, setEditingConstruction] = useState(false);
   const [showPseudoCode, setShowPseudoCode] = useState(false);
-  const [initialNode, setInitialNode] = useState<number | null>(null);
   const [speed, setSpeed] = useState(1);
   const [currentLine, setCurrentLine] = useState(0);
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
@@ -113,18 +117,18 @@ const BfsPage: FC = () => {
     await waitForNextStep();
     setQueue([]);
     setCurrentLine(6);
-    setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
+    setDistances((prev) => ({ ...prev, [initialNode!.value]: 0 }));
     await waitForNextStep();
     setCurrentLine(7);
-    setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
+    setColors((prev) => ({ ...prev, [initialNode!.value]: "GRAY" }));
     await waitForNextStep();
     setCurrentLine(8);
 
-    setQueue((prev) => {
-      const newQueue = [...prev, initialNode];
-      console.log("Updated queue in setQueue:", newQueue);
-      return newQueue;
-    });
+    // setQueue((prev) => {
+    //   const newQueue = [...prev, initialNode];
+    //   console.log("Updated queue in setQueue:", newQueue);
+    //   return newQueue;
+    // });
     await waitForNextStep();
   };
 
@@ -211,17 +215,16 @@ const BfsPage: FC = () => {
       {fitsAnimation && (
         <div>
           <BfsControlsPanel
-            isButtonDisabled={isPlaying}
             showActions={showActions}
             handleShowActions={handleShowActions}
             handleHideActions={handleHideActions}
             editingConstruction={editingConstruction}
             setShowPseudoCode={setShowPseudoCode}
-            setInitialNode={setInitialNode}
             startAnimation={bfsAnimation}
             setSpeed={setSpeed}
             graphData={graphData}
-            setGraphData={setGraphData}
+            setGraphData1={setGraphData}
+            controller={controller}
           />
           {hasStarted && ( // Show buttons only if the animation has started
             <div className={controlStyles.buttonContainer}>
@@ -240,9 +243,9 @@ const BfsPage: FC = () => {
             </div>
           )}
           {showPseudoCode && (
-            <BfsPseudoCodeContainer
-              visible={showPseudoCode}
-              currentLine={currentLine}
+            <PseudoCodeContainer
+              line={currentLine}
+              code={combineBfsPseudoCode(currentAlg) as PseudoItem[]}
             />
           )}
           {showPseudoCode && (

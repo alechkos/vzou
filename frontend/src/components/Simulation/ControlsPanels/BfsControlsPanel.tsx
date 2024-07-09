@@ -4,49 +4,55 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  setError,
-  setInputArray,
-  clearInputArray,
-} from "../../../store/reducers/alghoritms/bst-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import GraphVisualizer from "./GraphVisualizer";
+import { BfsAnimationController } from "../../../ClassObjects/BFS/BfsAnimationController";
+import {
+  setInitialValue,
+  setError,
+  setInputArray,
+  setGraphData,
+  setPlaying,
+} from "../../../store/reducers/alghoritms/bfs-reducer";
+import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 
 interface Props {
-  isButtonDisabled: boolean;
+  controller: BfsAnimationController;
   showActions: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
   editingConstruction: boolean;
   setShowPseudoCode: (show: boolean) => void;
-  setInitialNode: (node: number | null) => void;
   startAnimation: () => void;
   setSpeed: (speed: number) => void;
   graphData: { nodes: number[]; links: { source: number; target: number }[] };
-  setGraphData: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
+  setGraphData1: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
 }
 
 const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
 const BfsControlsPanel: FC<Props> = ({
-  isButtonDisabled,
   handleHideActions,
   handleShowActions,
   showActions,
   editingConstruction,
   setShowPseudoCode,
-  setInitialNode,
   startAnimation,
   setSpeed,
   graphData,
-  setGraphData,
+  setGraphData1,
+  controller,
 }) => {
-  const inputArray = useAppSelector((state) => state.bst.inputArray);
-  const error = useAppSelector((state) => state.bst.error);
+  const [regsterActivity] = useRegisterActivityMutation();
+  const inputArray = useAppSelector((state) => state.bfs.inputArray);
+  const error = useAppSelector((state) => state.bfs.error);
+  const graphData1 = useAppSelector((state) => state.bfs.graphData);
+  const initialNode = useAppSelector((state) => state.bfs.initialNode);
+  const isButtonDisabled = useAppSelector((state) => state.bfs.isPlaying);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -61,6 +67,28 @@ const BfsControlsPanel: FC<Props> = ({
     setTimeout(() => {
       dispatch(setError(""));
     }, 5000);
+  };
+
+  const Animate = async (animation: string) => {
+    try {
+      switch (animation) {
+        case "Search":
+          regsterActivity({
+            subject: "BFS",
+            algorithm: "Search",
+          });
+
+          await controller.bfsAnimation();
+          return;
+        case "Clear":
+          // controller.setTreeFromInput([]);
+          return;
+        default:
+          return;
+      }
+    } catch (e: any) {
+      setCurrentError(e.message);
+    }
   };
 
   const createGraphHandler = async () => {
@@ -78,7 +106,12 @@ const BfsControlsPanel: FC<Props> = ({
       nodes.add(target);
       links.push({ source, target });
     }
-    setGraphData({ nodes: Array.from(nodes), links });
+
+    const graphData = { nodes: Array.from(nodes), links };
+    await controller.setGraphFromInput(graphData, Number(initialNode));
+    dispatch(setGraphData(graphData));
+
+    setGraphData1({ nodes: Array.from(nodes), links });
     setShowPseudoCode(true);
   };
 
@@ -89,14 +122,24 @@ const BfsControlsPanel: FC<Props> = ({
   const handleInitialNodeChange = (e: any) => {
     setInitialNodeInput(e.target.value);
     const node = parseInt(e.target.value, 10);
-    if (!isNaN(node)) {
-      setInitialNode(node);
+
+    if (!graphData1.nodes.includes(node) && e.target.value !== "") {
+      setCurrentError("The value doesn't exist in the graph!");
+      dispatch(setPlaying(true));
+      return;
     }
+    if (isNaN(node) && e.target.value !== "") {
+      setCurrentError("Input a numeric value please!");
+      dispatch(setPlaying(true));
+      return;
+    }
+    dispatch(setInitialValue(e.target.value));
+    dispatch(setPlaying(false));
   };
 
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(clearInputArray());
+  // }, [dispatch]);
 
   return (
     <>
@@ -156,15 +199,13 @@ const BfsControlsPanel: FC<Props> = ({
                     variant="outlined"
                     onChange={handleInitialNodeChange}
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginLeft: 2 }}
-                    onClick={startAnimation}
+                  <button
                     disabled={isButtonDisabled}
+                    className={`${buttonClassname} w-auto h-[40px]`}
+                    onClick={() => Animate("Search")}
                   >
                     Start Algorithm Animation
-                  </Button>
+                  </button>
                   <Box sx={{ width: 200, marginTop: 2 }}>
                     <Slider
                       defaultValue={1}
