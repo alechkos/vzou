@@ -76,7 +76,7 @@ jobs:
                   return !duplicate;
                 });
   
-                authors = authors.map((x) => `Co-authored by: ${x.name} <${x.email}>`).join('\n');
+                authors = authors.map((x) => `Co-authored-by: ${x.name} <${x.email}>`).join('\n');
                 console.log(authors);
   
                 return authors;
@@ -87,7 +87,8 @@ jobs:
               }
             }
 
-            await getCoAuthors();
+            const authors = await getCoAuthors();
+            core.setOutput("value", authors);
       - name: Show authors
         run: |
           echo "${{ steps.authors.outputs.value }}"
