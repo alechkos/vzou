@@ -12,8 +12,10 @@ import {
   setActions,
   setPassedNodes,
   setError,
+  setCodeRef,
 } from "../../store/reducers/alghoritms/bfs-reducer";
-import { bfsAnimation, buildBFSNodes, graphType } from "./BFSAlgorithms";
+import { bfsAnimation, buildBFSNodes } from "./BFSAlgorithms";
+import { graphType, SVGType } from "../../types/GraphTypes";
 
 export class BfsAnimationController extends AnimationController<BFSNode | undefined, string> {
   private static bfsController: BfsAnimationController | null = null;
@@ -43,16 +45,16 @@ export class BfsAnimationController extends AnimationController<BFSNode | undefi
     this.dispatch(setActions(actions));
   }
 
-  // setReference(ref: any) {
-  //   this.dispatch(setCodeRef(ref));
-  // }
+  setReference(ref: any) {
+    this.dispatch(setCodeRef(ref));
+  }
 
   setPassedNodes(passedNodes: number[]) {
     this.dispatch(setPassedNodes(passedNodes));
   }
 
   setGraphFromInput(graphData: graphType, initialNode: number) {
-    const node = buildBFSNodes(graphData, initialNode);
+    const node = buildBFSNodes(graphData, initialNode, this);
     this.data = node;
     this.setHead(node);
     this.memento.clearSnapshots();
@@ -87,7 +89,7 @@ export class BfsAnimationController extends AnimationController<BFSNode | undefi
 
   //Animation
 
-  async bfsAnimation() {
-    await this.playAlgorithm(bfsAnimation, this.memento);
+  async bfsAnimation(svg: SVGType) {
+    await this.playAlgorithm(bfsAnimation, this.memento, svg);
   }
 }

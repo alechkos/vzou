@@ -1,7 +1,7 @@
 import { BaseObj } from "../BaseObj";
 
 export class BFSNode extends BaseObj {
-  adjacents: number[];
+  adjacents: BFSNode[];
 
   links: { source: number; target: number }[];
 
@@ -13,7 +13,7 @@ export class BFSNode extends BaseObj {
     viewportWidth: number,
     parent: BFSNode | undefined,
     type: "BFS",
-    adjacents: number[],
+    adjacents: BFSNode[],
     links: { source: number; target: number }[]
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);

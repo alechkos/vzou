@@ -26,10 +26,6 @@ interface Props {
   handleHideActions: () => void;
   editingConstruction: boolean;
   setShowPseudoCode: (show: boolean) => void;
-  startAnimation: () => void;
-  setSpeed: (speed: number) => void;
-  graphData: { nodes: number[]; links: { source: number; target: number }[] };
-  setGraphData1: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
 }
 
 const buttonClassname =
@@ -41,18 +37,15 @@ const BfsControlsPanel: FC<Props> = ({
   showActions,
   editingConstruction,
   setShowPseudoCode,
-  startAnimation,
-  setSpeed,
-  graphData,
-  setGraphData1,
   controller,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
   const inputArray = useAppSelector((state) => state.bfs.inputArray);
   const error = useAppSelector((state) => state.bfs.error);
   const graphData1 = useAppSelector((state) => state.bfs.graphData);
-  const initialNode = useAppSelector((state) => state.bfs.initialNode);
+  const initialValue = useAppSelector((state) => state.bfs.initialValue);
   const isButtonDisabled = useAppSelector((state) => state.bfs.isPlaying);
+  const svgData = useAppSelector((state) => state.bfs.svgData);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -77,8 +70,8 @@ const BfsControlsPanel: FC<Props> = ({
             subject: "BFS",
             algorithm: "Search",
           });
-
-          await controller.bfsAnimation();
+          await createGraphHandler();
+          await controller.bfsAnimation(svgData);
           return;
         case "Clear":
           // controller.setTreeFromInput([]);
@@ -108,10 +101,9 @@ const BfsControlsPanel: FC<Props> = ({
     }
 
     const graphData = { nodes: Array.from(nodes), links };
-    await controller.setGraphFromInput(graphData, Number(initialNode));
+    controller.setGraphFromInput(graphData, Number(initialValue));
     dispatch(setGraphData(graphData));
 
-    setGraphData1({ nodes: Array.from(nodes), links });
     setShowPseudoCode(true);
   };
 
@@ -184,12 +176,6 @@ const BfsControlsPanel: FC<Props> = ({
                     variant="outlined"
                     onChange={handleInput}
                   />
-                  <button
-                    className={`${buttonClassname} w-[40px] h-[40px]`}
-                    onClick={createGraphHandler}
-                  >
-                    Go
-                  </button>
                   <TextField
                     placeholder="Initial node"
                     size="small"
@@ -202,29 +188,28 @@ const BfsControlsPanel: FC<Props> = ({
                   <button
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-auto h-[40px]`}
-                    onClick={() => Animate("Search")}
+                    onClick={async () => Animate("Search")}
                   >
                     Start Algorithm Animation
                   </button>
-                  <Box sx={{ width: 200, marginTop: 2 }}>
-                    <Slider
-                      defaultValue={1}
-                      aria-labelledby="discrete-slider"
-                      valueLabelDisplay="auto"
-                      step={0.1}
-                      marks
-                      min={0.1}
-                      max={5}
-                      onChange={(e, value) => setSpeed(value as number)}
-                    />
-                  </Box>
+                  {/*<Box sx={{ width: 200, marginTop: 2 }}>*/}
+                  {/*  <Slider*/}
+                  {/*    defaultValue={1}*/}
+                  {/*    aria-labelledby="discrete-slider"*/}
+                  {/*    valueLabelDisplay="auto"*/}
+                  {/*    step={0.1}*/}
+                  {/*    marks*/}
+                  {/*    min={0.1}*/}
+                  {/*    max={5}*/}
+                  {/*    onChange={(e, value) => setSpeed(value as number)}*/}
+                  {/*  />*/}
+                  {/*</Box>*/}
                 </TabPanel>
               </TabContext>
             </Box>
           </ControlsToolTip>
         </ThemeProvider>
       </MediumCard>
-      {graphData.nodes.length > 0 && <GraphVisualizer data={graphData} />}
     </>
   );
 };

@@ -5,26 +5,43 @@ import {
 } from "../../components/Simulation/PseudoCode/BfsPseudoCodeData";
 import { BFSMemento } from "./BFSMemento";
 import { BFSNode } from "./BFSNode";
+import { BfsAnimationController } from "./BfsAnimationController";
+import { GraphNode, graphType, SVGType } from "../../types/GraphTypes";
+import { log10 } from "chart.js/helpers";
 
-export type graphType = { nodes: number[]; links: { source: number; target: number }[] };
-
-export function buildBFSNodes(graphData: graphType, initialNode: number) {
+export function buildBFSNodes(
+  graphData: graphType,
+  initialNode: number,
+  controller: BfsAnimationController
+) {
   let arrayOfBfs: any = [];
   let result: BFSNode | undefined;
 
   graphData.nodes.forEach((node) => {
-    let adjacents: number[] = [];
+    let adjacents: BFSNode[] = [];
     let links: any = [];
     graphData.links.forEach((link) => {
       if (link.source === node) {
-        adjacents.push(link.target);
+        adjacents.push(
+          new BFSNode(
+            { x: 0, y: 0 },
+            controller.speed,
+            node,
+            node,
+            1500,
+            undefined,
+            "BFS",
+            [],
+            links
+          )
+        );
         links.push(link);
       }
     });
 
     const newNode = new BFSNode(
       { x: 0, y: 0 },
-      1,
+      controller.speed,
       node,
       node,
       1500,
@@ -39,14 +56,37 @@ export function buildBFSNodes(graphData: graphType, initialNode: number) {
   return result;
 }
 
-export const bfsAnimation = (initiaNode: BFSNode | undefined, memento: BFSMemento) => {
-  // if (initialNode === null) {
-  //   setCurrentError("Please set the initial node.");
-  //   return;
-  // }
-  // setIsPlayingAnimation(true);
-  // setIsPaused(false);
-  // setHasStarted(true); // Set the hasStarted state to true when the animation starts
+export const bfsAnimation = (
+  initialNode: BFSNode | undefined,
+  memento: BFSMemento,
+  svg: SVGType
+) => {
+  if (initialNode === undefined) {
+    memento.addError(
+      { line: 0, name: "Search" },
+      initialNode,
+      `Please set the initial node`,
+      [],
+      [],
+      []
+    );
+    const temp: GraphNode[] = [{ id: 1, value: 1 }];
+
+    console.log(svg);
+
+    svg.container
+      ?.append("g")
+      .selectAll("text")
+      .data(temp)
+      .enter()
+      .append("text")
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
+      .text("CHECK");
+    return;
+  }
+
   // const initDistances: { [key: number]: number } = {};
   // const initPredecessors: { [key: number]: number | null } = {};
   // const initColors: { [key: number]: string } = {};
