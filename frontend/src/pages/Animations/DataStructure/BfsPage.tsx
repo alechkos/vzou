@@ -131,19 +131,23 @@ const BfsPage: FC = () => {
   const continueBfsAnimation = async () => {
     console.log("Queue before while:", queue);
 
-    // Create a copy of the queue to work inside the loop
-    let localQueue = [...queue];
+    while (queue.length > 0) {
+      setCurrentLine(9); // Move to line 9 before checking the queue
+      await waitForNextStep();
 
-    while (localQueue.length > 0) {
-      const u = localQueue[0];
-      localQueue = localQueue.slice(1); // Removing the first element from a copy of the queue
+      setCurrentLine(10); // Move to line 10 before updating u
+      const u = queue[0];
+      setQueue((prev) => {
+        const newQueue = prev.slice(1);
+        console.log("Updated queue after dequeue:", newQueue);
+        return newQueue;
+      });
       setCurrentU(u);
 
       await waitForNextStep();
       console.log("U is ", u);
 
       if (u !== undefined) {
-        setCurrentLine(10);
         await waitForNextStep();
 
         for (const v of graphData.links
@@ -165,8 +169,11 @@ const BfsPage: FC = () => {
             setCurrentLine(15);
             await waitForNextStep();
             setCurrentLine(16);
-            localQueue.push(v); // Adding a new element to a copy of the queue
-            console.log("Updated localQueue:", localQueue);
+            setQueue((prev) => {
+              const newQueue = [...prev, v];
+              console.log("Updated queue in setQueue:", newQueue);
+              return newQueue;
+            });
             await waitForNextStep();
           }
         }
@@ -176,9 +183,6 @@ const BfsPage: FC = () => {
         await waitForNextStep();
       }
     }
-
-    // After finishing work, update the queue status
-    setQueue(localQueue);
 
     setCurrentLine(18);
     await waitForNextStep();
