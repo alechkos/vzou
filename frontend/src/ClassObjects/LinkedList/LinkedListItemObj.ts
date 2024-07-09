@@ -3,7 +3,6 @@
  */
 import { BranchObj } from "../BranchObj";
 import { BaseObj } from "../BaseObj";
-import { LinkedListNodeType } from "../../components/Simulation/LinkedList/LinkedListTypes";
 import {
   ActionType,
   Events,
@@ -61,7 +60,9 @@ export class LinkedListItemObj extends BaseObj {
   static generateLinkedListObjects(
     viewportWidth: number,
     speed: number,
-    head: LinkedListNode | undefined
+    head: LinkedListNode | undefined,
+    x?: number,
+    y?: number
   ) {
     if (!head) return [];
     const linkedListObjects = [];
@@ -69,7 +70,7 @@ export class LinkedListItemObj extends BaseObj {
       {
         node: head,
         nodeObj: new LinkedListItemObj(
-          { x: viewportWidth / 2 - 600, y: 325 },
+          { x: x ? x : viewportWidth / 2 - 600, y: y ? y : 325 },
           speed,
           head.id,
           head.value,

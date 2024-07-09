@@ -1,5 +1,5 @@
-import {BranchObj} from "./BranchObj";
-import {ActionType} from "../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { BranchObj } from "./BranchObj";
+import { ActionType } from "../components/Simulation/BinaryTree/BinaryTreeTypes";
 
 /*
  * The base class for objects for data structures vizualization
@@ -20,7 +20,7 @@ export abstract class BaseObj {
 
   branch: BranchObj | null;
 
-  type: string;
+  type?: string;
 
   isVisited: boolean;
 
@@ -28,7 +28,7 @@ export abstract class BaseObj {
 
   viewportWidth: number;
 
-  parent: BaseObj | undefined;
+  parent?: BaseObj | undefined;
 
   action: ActionType;
 
@@ -67,6 +67,20 @@ export abstract class BaseObj {
   createBranch() {
     if (this.type === "root" || this.type === "head") {
       // waht have to be here?
+    } else if (this.type === "hashNodeHead") {
+      this.branch = new BranchObj({
+        x1: this.position.x - 280,
+        x2: this.position.x - 190,
+        y1: this.position.y - 280,
+        y2: this.position.y - 280,
+      });
+    } else if (this.type === "hashNode") {
+      this.branch = new BranchObj({
+        x1: this.position.x - 280,
+        x2: this.position.x - 190,
+        y1: (this.position.y - 5500) / 100,
+        y2: (this.position.y - 5500) / 100,
+      });
     } else if (this.parent === undefined || this.parent.position === undefined) {
       throw new Error("parent is null or parent position is null");
     } else {

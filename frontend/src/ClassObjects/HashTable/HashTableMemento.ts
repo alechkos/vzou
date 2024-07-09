@@ -1,14 +1,15 @@
 import { Memento } from "../Memento";
-import { LinkedListNode } from "./LinkedListNode";
+import { HashTableNode } from "./HashTableNode";
 import { ActionType, NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
+import { LinkedListNode } from "../LinkedList/LinkedListNode";
 
-export class LinkedListMemento extends Memento<LinkedListNode | undefined, string> {
+export class HashTableMemento extends Memento<HashTableNode | LinkedListNode | undefined, string> {
   visitedNodesSnapshots: number[][];
 
   passedNodesSnapshots: number[][];
 
   constructor() {
-    super("Search");
+    super("Search1");
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
   }
@@ -21,7 +22,7 @@ export class LinkedListMemento extends Memento<LinkedListNode | undefined, strin
 
   addBlank(
     codeRef: any,
-    head: LinkedListNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = []
@@ -38,7 +39,7 @@ export class LinkedListMemento extends Memento<LinkedListNode | undefined, strin
 
   addSnapshot(
     codeRef: any,
-    head: LinkedListNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     index: number,
     action: ActionType,
     nodeRoles: NodeRole[] = [],
@@ -57,7 +58,7 @@ export class LinkedListMemento extends Memento<LinkedListNode | undefined, strin
 
   addError(
     codeRef: any,
-    head: LinkedListNode | undefined,
+    head: HashTableNode | LinkedListNode | undefined,
     error: string,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],

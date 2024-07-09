@@ -137,7 +137,10 @@ export class LinkedListAnimationController extends AnimationController<
 
   async deleteFromTail(value: number) {
     await this.playAlgorithm(deleteFromTailWithAnimations, this.memento, this);
+    const tail = LinkedListNode.getTailOfList(this.data);
+    this.data = LinkedListNode.deleteNodeFromTail(this.data, tail);
     setLength(LinkedListNode.getLengthOfList(this.data));
     this.dispatch(deleteNodeFromTail());
+    this.initData(this.data);
   }
 }

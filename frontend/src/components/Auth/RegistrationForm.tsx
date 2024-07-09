@@ -39,22 +39,24 @@ function RegistrationForm() {
 
   const checkData = () => {
     const errorStack = [];
+
     // check passwords
     if (!CheckPassword(dataEntered.password)) {
-      errorStack.push("Invalid password, must contain:[a-z],[A-Z],[0-9] and special chracter");
+      errorStack.push("Invalid password, must contain at least 8 characters: [a-z], [A-Z], [0-9] and a special character");
     } else if (!CheckConfirmPassword(dataEntered.password, dataEntered.confirmPassword!)) {
       errorStack.push("The passwords must match");
     }
 
     // check names
     if (!CheckName(dataEntered.firstName) || !CheckName(dataEntered.lastName)) {
-      errorStack.push("Invalid name, must contain:[a-z],[A-Z]");
+      errorStack.push("Invalid name, must contain: [a-z], [A-Z]");
     }
 
     // check email
     if (!CheckEmail(dataEntered.email)) {
       errorStack.push("Invalid email");
     }
+
     return errorStack;
   };
 
@@ -144,7 +146,7 @@ function RegistrationForm() {
             name="birthYear"
             type="number"
             max={new Date().getFullYear() - 16}
-            min={new Date().getFullYear() - 120}
+            min={new Date().getFullYear() - 90}
             required
             className={`relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-${mainColor} focus:outline-none focus:ring-${mainColor} sm:text-sm`}
             placeholder="Birth year"
@@ -163,7 +165,7 @@ function RegistrationForm() {
             onChange={onChangeHandler}
             id="email-address"
             name="email"
-            type="email"
+            type="text"
             autoComplete="email"
             required
             className={`relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-${mainColor} focus:outline-none focus:ring-${mainColor} sm:text-sm`}

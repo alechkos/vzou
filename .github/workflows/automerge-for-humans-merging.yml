@@ -1,0 +1,114 @@
+name: Automerge PR
+
+on:
+  pull_request_target:
+    types:
+      - synchronize
+      - edited
+      - ready_for_review
+      - reopened
+    branches:
+      - 'develop'
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  automerge-for-humans:
+    if: github.event.pull_request.draft == false && (github.event.pull_request.user.login != 'dependabot[bot]' || github.event.pull_request.user.login != 'dependabot-preview[bot]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '20'
+
+      - name: Get list of authors
+        id: authors
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            async function getCoAuthors() {
+              try {
+                const { owner, repo } = context.repo;
+                const pull_number = context.issue.number;
+            
+                const commits = await github.paginate("GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", {
+                  owner,
+                  repo,
+                  pull_number,
+                  per_page: 100
+                });
+            
+                let authors = [];
+  
+                for (const item of commits) {
+                  const committer = {
+                    name: item.commit.author.name,
+                    email: item.commit.author.email
+                  };
+  
+                  const coAuthors = [];
+                  const coAuthorRegex = /Co-authored-by:\s*(.+?)\s*<(.+?)>/g;
+  
+                  let match;
+                  
+                  while ((match = coAuthorRegex.exec(item.commit.message)) !== null) {
+                    coAuthors.push({
+                      name: match[1],
+                      email: match[2]
+                    });
+                  }
+  
+                  authors.push(committer);
+                  authors.push(...coAuthors);
+                }
+  
+                authors = authors.filter((x) => x.email !== commits[0].commit.author.email);
+  
+                const seen = new Set();
+                authors = authors.filter((item) => {
+                  const duplicate = seen.has(item.email);
+                  seen.add(item.email);
+                  return !duplicate;
+                });
+  
+                authors = authors.map((x) => `Co-authored-by: ${x.name} <${x.email}>`).join('\n');
+                console.log(authors);
+  
+                return authors;
+              }
+              catch (e) {
+                console.error('GetCoAuthorsError: ', e);
+                return null;
+              }
+            }
+
+            const authors = await getCoAuthors();
+            core.setOutput("value", authors);
+      - name: Show authors
+        run: |
+          echo "${{ steps.authors.outputs.value }}"
+
+      - name: Automerge
+        id: automerge
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_LABELS: ""
+          MERGE_METHOD: "squash"
+          MERGE_REQUIRED_APPROVALS: 2
+          UPDATE_LABELS: ""
+          MERGE_COMMIT_MESSAGE: "{pullRequest.title} (#{pullRequest.number})\n\n\n${{ steps.authors.outputs.value }}"
+          MERGE_DELETE_BRANCH: true
+          MERGE_RETRIES: "20"
+          MERGE_RETRY_SLEEP: "30000"
+          UPDATE_RETRIES: "20"
+          UPDATE_RETRY_SLEEP: "30000"
+      - name: Feedback
+        if: ${{ steps.automerge.outputs.mergeResult == 'merged' }}
+        run: |
+          echo "Pull request ${{ steps.automerge.outputs.pullRequestNumber }} merged!"
