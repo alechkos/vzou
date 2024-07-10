@@ -42,10 +42,9 @@ const BfsControlsPanel: FC<Props> = ({
   const [regsterActivity] = useRegisterActivityMutation();
   const inputArray = useAppSelector((state) => state.bfs.inputArray);
   const error = useAppSelector((state) => state.bfs.error);
-  const graphData1 = useAppSelector((state) => state.bfs.graphData);
+  const graphData = useAppSelector((state) => state.bfs.graphData);
   const initialValue = useAppSelector((state) => state.bfs.initialValue);
   const isButtonDisabled = useAppSelector((state) => state.bfs.isPlaying);
-  const svgData = useAppSelector((state) => state.bfs.svgData);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -71,7 +70,7 @@ const BfsControlsPanel: FC<Props> = ({
             algorithm: "Search",
           });
           await createGraphHandler();
-          await controller.bfsAnimation(svgData);
+          await controller.bfsAnimation(graphData);
           return;
         case "Clear":
           // controller.setTreeFromInput([]);
@@ -104,6 +103,7 @@ const BfsControlsPanel: FC<Props> = ({
     controller.setGraphFromInput(graphData, Number(initialValue));
     dispatch(setGraphData(graphData));
 
+    handleShowActions();
     setShowPseudoCode(true);
   };
 
@@ -115,18 +115,18 @@ const BfsControlsPanel: FC<Props> = ({
     setInitialNodeInput(e.target.value);
     const node = parseInt(e.target.value, 10);
 
-    if (!graphData1.nodes.includes(node) && e.target.value !== "") {
-      setCurrentError("The value doesn't exist in the graph!");
-      dispatch(setPlaying(true));
-      return;
-    }
-    if (isNaN(node) && e.target.value !== "") {
-      setCurrentError("Input a numeric value please!");
-      dispatch(setPlaying(true));
-      return;
-    }
+    // if (!graphData1.nodes.includes(node) && e.target.value !== "") {
+    //   setCurrentError("The value doesn't exist in the graph!");
+    //   dispatch(setPlaying(true));
+    //   return;
+    // }
+    // if (isNaN(node) && e.target.value !== "") {
+    //   setCurrentError("Input a numeric value please!");
+    //   dispatch(setPlaying(true));
+    //   return;
+    // }
     dispatch(setInitialValue(e.target.value));
-    dispatch(setPlaying(false));
+    // dispatch(setPlaying(false));
   };
 
   // useEffect(() => {

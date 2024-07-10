@@ -1,20 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BFSNode } from "../../../ClassObjects/BFS/BFSNode";
 import { NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { Events } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { BfsAlgNames } from "../../../components/Simulation/PseudoCode/BfsPseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import d3 from "d3";
 import { graphType, SVGType } from "../../../types/GraphTypes";
+import { BfsNode } from "../../../ClassObjects/BFS/BfsNode";
 
 const graphData: graphType = { nodes: [], links: [] };
-const svgData: SVGType = { svg: null, container: null };
 
 const initialState = {
-  svgData,
   graphData,
   initialValue: "",
-  initialNode: undefined as BFSNode | undefined,
+  initialNode: undefined as BfsNode | undefined,
   isPlaying: false,
   inputArray: "",
   error: "",
@@ -34,7 +32,7 @@ const bfsSlice = createSlice({
     setPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;
     },
-    setInitialNode(state, action: PayloadAction<BFSNode | undefined>) {
+    setInitialNode(state, action: PayloadAction<BfsNode | undefined>) {
       state.initialNode = action.payload;
     },
     setRoles(state, action: PayloadAction<NodeRole[]>) {
@@ -63,15 +61,6 @@ const bfsSlice = createSlice({
       state.currentLine = action.payload.line;
       return state;
     },
-    setSvgData(
-      state,
-      action: PayloadAction<{
-        svg: d3.Selection<SVGSVGElement, unknown, null, undefined> | null;
-        container: d3.Selection<SVGGElement, unknown, null, undefined> | null;
-      }>
-    ) {
-      state.svgData = { ...action.payload };
-    },
   },
 });
 
@@ -88,5 +77,4 @@ export const {
   setInputArray,
   setGraphData,
   setCodeRef,
-  setSvgData,
 } = bfsSlice.actions;

@@ -1,5 +1,4 @@
 import AnimationController from "../AnimationController";
-import { BFSNode } from "./BFSNode";
 import { AppDispatch } from "../../store/store";
 import { BFSMemento } from "./BFSMemento";
 import { NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
@@ -15,16 +14,17 @@ import {
   setCodeRef,
 } from "../../store/reducers/alghoritms/bfs-reducer";
 import { bfsAnimation, buildBFSNodes } from "./BFSAlgorithms";
-import { graphType, SVGType } from "../../types/GraphTypes";
+import { graphType } from "../../types/GraphTypes";
+import { BfsNode } from "./BfsNode";
 
-export class BfsAnimationController extends AnimationController<BFSNode | undefined, string> {
+export class BfsAnimationController extends AnimationController<BfsNode | undefined, string> {
   private static bfsController: BfsAnimationController | null = null;
 
-  private constructor(node: BFSNode | undefined, dispatch: AppDispatch) {
+  private constructor(node: BfsNode | undefined, dispatch: AppDispatch) {
     super(dispatch, new BFSMemento(), node);
   }
 
-  static getController(root: BFSNode | undefined, dispatch: AppDispatch): BfsAnimationController {
+  static getController(root: BfsNode | undefined, dispatch: AppDispatch): BfsAnimationController {
     if (!this.bfsController) this.bfsController = new BfsAnimationController(root, dispatch);
     return this.bfsController;
   }
@@ -33,7 +33,7 @@ export class BfsAnimationController extends AnimationController<BFSNode | undefi
     this.dispatch(setPlaying(value));
   }
 
-  setHead(node: BFSNode | undefined) {
+  setHead(node: BfsNode | undefined) {
     this.dispatch(setInitialNode(node));
   }
 
@@ -63,7 +63,7 @@ export class BfsAnimationController extends AnimationController<BFSNode | undefi
     this.setPassedNodes([]);
   }
 
-  initData(data: BFSNode | undefined) {
+  initData(data: BfsNode | undefined) {
     this.setReference({ name: this.memento.getCurrentAlg(), line: 0 });
     this.setHead(data);
     this.setCurrentActions([]);
@@ -89,7 +89,7 @@ export class BfsAnimationController extends AnimationController<BFSNode | undefi
 
   //Animation
 
-  async bfsAnimation(svg: SVGType) {
-    await this.playAlgorithm(bfsAnimation, this.memento, svg);
+  async bfsAnimation(graphData: graphType) {
+    await this.playAlgorithm(bfsAnimation, this.memento, this.dispatch, graphData);
   }
 }
