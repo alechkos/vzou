@@ -8,15 +8,11 @@ import {
 import { BfsNode } from "./BfsNode";
 
 export class BfsItemObj extends BaseObj {
-  static width = 4; //Used to calculate X gap
+  static width = 3; //Used to calculate X gap
 
-  static gapY = 10;
+  static gapY = 20;
 
   parents: BfsItemObj[];
-
-  topLineForArrow: BranchObj | null;
-
-  botLineForArrow: BranchObj | null;
 
   constructor(
     position: { x: number; y: number },
@@ -30,37 +26,32 @@ export class BfsItemObj extends BaseObj {
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parents = parents;
-    this.topLineForArrow = null;
-    this.botLineForArrow = null;
     this.calculatePosition();
-    this.createLineForArrow(10, "top");
     this.createBranch();
-    this.createLineForArrow(10, "bot");
   }
 
   getXGap() {
-    if (this.parent) {
-      return Math.min(this.viewportWidth, BfsItemObj.availableSpace) / BfsItemObj.width;
-    }
-    return 0;
+    return Math.min(this.viewportWidth, BfsItemObj.availableSpace) / BfsItemObj.width;
   }
 
   calculatePosition() {
     if (this.type === "root") {
       return;
     }
-    // if (this.parent === undefined || this.parent.position === undefined) {
-    //   throw new Error("parent is null or parent position is null");
-    // }
     if (this.type === "left") {
       this.position = {
-        x: this.parents[0].position.x - this.getXGap(),
-        y: this.parents[0].position.y + BfsItemObj.gapY,
+        x:
+          this.parents[0].position.x -
+          this.getXGap() +
+          Math.random() * 150 +
+          Math.random() * 100 -
+          50,
+        y: this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 200 - 50,
       };
     } else {
       this.position = {
-        x: this.parents[0].position.x + this.getXGap(),
-        y: this.parents[0].position.y + BfsItemObj.gapY,
+        x: this.parents[0].position.x + this.getXGap() - 100 + Math.random() * 100 - 50,
+        y: this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 200 - 50,
       };
     }
   }
@@ -68,17 +59,17 @@ export class BfsItemObj extends BaseObj {
   createBranch() {
     if (this.type === "root" || this.type === "head") {
       // waht have to be here?
-    }
-    // else if (this.parent === undefined || this.parent.position === undefined) {
-    //   throw new Error("parent is null or parent position is null");
-    // }
-    else {
-      this.branch = new BranchObj({
-        x1: this.parents[0].position.x,
-        x2: this.position.x,
-        y1: this.parents[0].position.y,
-        y2: this.position.y,
-      });
+    } else {
+      this.branch = new BranchObj(
+        {
+          x1: this.parents[0].position.x,
+          x2: this.position.x,
+          y1: this.parents[0].position.y,
+          y2: this.position.y,
+        },
+        false,
+        true
+      );
     }
   }
 
@@ -89,7 +80,10 @@ export class BfsItemObj extends BaseObj {
       {
         node: head,
         nodeObj: new BfsItemObj(
-          { x: viewportWidth / 2 - 600, y: 325 },
+          {
+            x: viewportWidth / 2 - 200 + Math.random() * 100 - 50,
+            y: 325 + Math.random() * 100 - 50,
+          },
           speed,
           head.id,
           head.value,
@@ -107,6 +101,8 @@ export class BfsItemObj extends BaseObj {
       const { node, nodeObj } = item;
       node.adjacents.forEach((bfsNode) => {
         const checkNode = bfsObjects.find((check) => check.value === bfsNode.value);
+        const directions = ["right", "left"];
+        const randomIndex = Math.floor(Math.random() * directions.length);
         if (checkNode === undefined) {
           stack.push({
             node: bfsNode,
@@ -117,15 +113,15 @@ export class BfsItemObj extends BaseObj {
               bfsNode.value,
               viewportWidth,
               undefined,
-              "left",
+              directions[randomIndex] as "root" | "right" | "left",
               [nodeObj]
             ),
           });
-          bfsObjects.push(nodeObj);
         } else {
           checkNode.addParent(nodeObj);
         }
       });
+      bfsObjects.push(nodeObj);
     }
 
     bfsObjects.sort((a, b) => a.id - b.id);
@@ -134,38 +130,6 @@ export class BfsItemObj extends BaseObj {
 
   addParent(parent: BfsItemObj) {
     this.parents.push(parent);
-  }
-
-  createLineForArrow(gapY: number, place: string) {
-    if (this.type === "root" || this.type === "head") {
-      // waht have to be here?
-    }
-    // else if (this.parent === undefined || this.parent.position === undefined) {
-    //   throw new Error("parent is null or parent position is null");
-    // }
-    else {
-      if (place === "top") {
-        this.botLineForArrow = new BranchObj(
-          {
-            x1: this.parents[0].position.x + 100,
-            x2: this.position.x,
-            y1: this.parents[0].position.y - gapY,
-            y2: this.position.y,
-          },
-          true
-        );
-      } else if (place === "bot") {
-        this.topLineForArrow = new BranchObj(
-          {
-            x1: this.parents[0].position.x + 100,
-            x2: this.position.x,
-            y1: this.parents[0].position.y + gapY,
-            y2: this.position.y,
-          },
-          true
-        );
-      }
-    }
   }
 
   setAction(action: ActionType) {

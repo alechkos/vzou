@@ -1,3 +1,13 @@
+.branch-for-graph {
+  margin-top: 170px;
+  margin-left: 20px;
+  position: absolute;
+  height: 2px;
+  background-color: black;
+  transform-origin: left center;
+  z-index: 0;
+}
+
 .branch {
   margin-top: 50px;
   position: absolute;

@@ -29,7 +29,7 @@ export function buildBFSNodes(
     });
   });
 
-  result = arrayOfBfs.find((node: BfsNode) => node.value === initialNode);
+  result = arrayOfBfs[0];
   return result;
 }
 

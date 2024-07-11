@@ -34,6 +34,8 @@ const BFS: FC<Props> = ({
     BfsItemObj.setPassed(bfsObjects, passedNodes);
   }
 
+  console.log(bfsObjects);
+
   return (
     <div>
       <AnimatePresence>
