@@ -7,11 +7,7 @@ import { BfsAnimationController } from "./BfsAnimationController";
 import { Colors, graphType } from "../../types/GraphTypes";
 import { BfsNode } from "./BfsNode";
 
-export function buildBFSNodes(
-  graphData: graphType,
-  initialNode: number,
-  controller: BfsAnimationController
-) {
+export function buildBFSNodes(graphData: graphType) {
   let arrayOfBfs: BfsNode[] = [];
   let result: BfsNode | undefined;
 
@@ -34,16 +30,16 @@ export function buildBFSNodes(
 }
 
 export const bfsAnimation = (initialNode: BfsNode | undefined, memento: BFSMemento) => {
-  if (initialNode === undefined) {
-    memento.addError(
-      { line: 0, name: "Search" },
-      initialNode,
-      `Please set the initial node`,
-      [],
-      [],
-      []
-    );
-  }
+  // if (initialNode === undefined) {
+  //   memento.addError(
+  //     { line: 0, name: "Search" },
+  //     initialNode,
+  //     `Please set the initial node`,
+  //     [],
+  //     [],
+  //     []
+  //   );
+  // }
 };
 
 export const combineBfsPseudoCode = (currentAlg: BFSPseudoCodeKeys) => {

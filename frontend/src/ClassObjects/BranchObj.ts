@@ -68,7 +68,7 @@ export class BranchObj {
     if (!isPassed) {
       return {
         top: `${isArrow ? this.y2 + 10 : this.y1}px`,
-        left: `${isArrow ? this.x2 + 8 : this.x1}px`,
+        left: `${isArrow ? this.x2 : this.x1}px`,
         width: `${!isArrow ? this.getBranchLength() : 0}px`,
         transform: `rotate(${this.getRotateAngle()}deg)`,
       };

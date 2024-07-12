@@ -10,9 +10,13 @@ import { BfsNode } from "./BfsNode";
 export class BfsItemObj extends BaseObj {
   static width = 3; //Used to calculate X gap
 
+  static positions: { x: number; y: number }[] = [];
+
   static gapY = 20;
 
   parents: BfsItemObj[];
+
+  branches: BranchObj[];
 
   constructor(
     position: { x: number; y: number },
@@ -26,6 +30,7 @@ export class BfsItemObj extends BaseObj {
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parents = parents;
+    this.branches = [];
     this.calculatePosition();
     this.createBranch();
   }
@@ -35,42 +40,80 @@ export class BfsItemObj extends BaseObj {
   }
 
   calculatePosition() {
+    const dist = 40;
+    const add = 30;
+
     if (this.type === "root") {
       return;
     }
     if (this.type === "left") {
+      let x =
+        this.parents[0].position.x -
+        this.getXGap() +
+        Math.random() * 150 +
+        Math.random() * 100 -
+        50;
+
+      let y = this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 150 - 50;
+
+      BfsItemObj.positions.forEach((pos) => {
+        if (Math.abs(pos.x - x) <= dist) {
+          x += add;
+        }
+        if (Math.abs(pos.y - y) <= dist) {
+          y += add;
+        }
+      });
+
       this.position = {
-        x:
-          this.parents[0].position.x -
-          this.getXGap() +
-          Math.random() * 150 +
-          Math.random() * 100 -
-          50,
-        y: this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 200 - 50,
+        x: x,
+        y: y,
       };
+
+      BfsItemObj.positions.push(this.position);
     } else {
+      let x =
+        this.parents[0].position.x +
+        this.getXGap() +
+        Math.random() * 150 +
+        Math.random() * 100 -
+        50;
+
+      let y = this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 150 - 50;
+
+      BfsItemObj.positions.forEach((pos) => {
+        if (Math.abs(pos.x - x) <= dist) {
+          x += add;
+        }
+        if (Math.abs(pos.y - y) <= dist) {
+          y += add;
+        }
+      });
+
       this.position = {
-        x: this.parents[0].position.x + this.getXGap() - 100 + Math.random() * 100 - 50,
-        y: this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 200 - 50,
+        x: x,
+        y: y,
       };
+
+      BfsItemObj.positions.push(this.position);
     }
   }
 
   createBranch() {
-    if (this.type === "root" || this.type === "head") {
-      // waht have to be here?
-    } else {
-      this.branch = new BranchObj(
+    this.parents.forEach((parent) => {
+      const branch = new BranchObj(
         {
-          x1: this.parents[0].position.x,
+          x1: parent.position.x,
           x2: this.position.x,
-          y1: this.parents[0].position.y,
+          y1: parent.position.y,
           y2: this.position.y,
         },
         false,
         true
       );
-    }
+
+      this.branches.push(branch);
+    });
   }
 
   static generateBFSObjects(viewportWidth: number, speed: number, head: BfsNode | undefined) {
@@ -119,6 +162,7 @@ export class BfsItemObj extends BaseObj {
           });
         } else {
           checkNode.addParent(nodeObj);
+          checkNode.createBranch();
         }
       });
       bfsObjects.push(nodeObj);

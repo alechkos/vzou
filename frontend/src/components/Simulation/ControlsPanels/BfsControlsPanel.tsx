@@ -16,8 +16,10 @@ import {
   setInputArray,
   setGraphData,
   setPlaying,
+  setBfsObjects,
 } from "../../../store/reducers/alghoritms/bfs-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
+import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
 
 interface Props {
   controller: BfsAnimationController;
@@ -69,7 +71,6 @@ const BfsControlsPanel: FC<Props> = ({
             subject: "BFS",
             algorithm: "Search",
           });
-          await createGraphHandler();
           await controller.bfsAnimation(graphData);
           return;
         case "Clear":
@@ -100,11 +101,13 @@ const BfsControlsPanel: FC<Props> = ({
     }
 
     const graphData = { nodes: Array.from(nodes), links };
-    controller.setGraphFromInput(graphData, Number(initialValue));
+    controller.setGraphFromInput(graphData);
     dispatch(setGraphData(graphData));
 
     handleShowActions();
     setShowPseudoCode(true);
+    dispatch(setBfsObjects([]));
+    BfsItemObj.positions = [];
   };
 
   const handleInput = (e: any) => {
@@ -157,53 +160,67 @@ const BfsControlsPanel: FC<Props> = ({
                     aria-label="algorithms and actions"
                     centered
                   >
-                    <Tab
-                      label="Create Graph"
-                      value="1"
-                    />
+                    {!showActions && !editingConstruction && (
+                      <Tab
+                        label={"Create Graph"}
+                        value="1"
+                        disabled={isButtonDisabled}
+                      />
+                    )}
+                    {(showActions || editingConstruction) && (
+                      <Tab
+                        label={`Change Graph construction`}
+                        value="1"
+                        onClick={handleHideActions}
+                        disabled={isButtonDisabled}
+                      />
+                    )}
                   </TabList>
                 </Box>
                 <TabPanel
                   value="1"
                   className={value === "1" ? "justify-start " : "hidden"}
                 >
-                  <TextField
-                    placeholder="e.g 1-2,3-4,..."
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={inputArray}
-                    label="Graph Data"
-                    variant="outlined"
-                    onChange={handleInput}
-                  />
-                  <TextField
-                    placeholder="Initial node"
-                    size="small"
-                    sx={{ width: "150px", marginLeft: 2 }}
-                    value={initialNodeInput}
-                    label="Initial Node"
-                    variant="outlined"
-                    onChange={handleInitialNodeChange}
-                  />
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-auto h-[40px]`}
-                    onClick={async () => Animate("Search")}
-                  >
-                    Start Algorithm Animation
-                  </button>
-                  {/*<Box sx={{ width: 200, marginTop: 2 }}>*/}
-                  {/*  <Slider*/}
-                  {/*    defaultValue={1}*/}
-                  {/*    aria-labelledby="discrete-slider"*/}
-                  {/*    valueLabelDisplay="auto"*/}
-                  {/*    step={0.1}*/}
-                  {/*    marks*/}
-                  {/*    min={0.1}*/}
-                  {/*    max={5}*/}
-                  {/*    onChange={(e, value) => setSpeed(value as number)}*/}
-                  {/*  />*/}
-                  {/*</Box>*/}
+                  {!showActions && (
+                    <>
+                      <TextField
+                        placeholder="e.g 1-2,3-4,..."
+                        size="small"
+                        sx={{ width: "150px" }}
+                        value={inputArray}
+                        label="Graph Data"
+                        variant="outlined"
+                        onChange={handleInput}
+                      />
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-auto h-[40px]`}
+                        onClick={createGraphHandler}
+                      >
+                        Create Graph
+                      </button>
+                    </>
+                  )}
+                  {showActions && (
+                    <>
+                      <TextField
+                        placeholder="Initial node"
+                        size="small"
+                        sx={{ width: "150px", marginLeft: 2 }}
+                        value={initialNodeInput}
+                        label="Initial Node"
+                        variant="outlined"
+                        onChange={handleInitialNodeChange}
+                      />
+                      <button
+                        disabled={isButtonDisabled}
+                        className={`${buttonClassname} w-auto h-[40px]`}
+                        onClick={async () => Animate("Search")}
+                      >
+                        Start Algorithm Animation
+                      </button>
+                    </>
+                  )}
                 </TabPanel>
               </TabContext>
             </Box>

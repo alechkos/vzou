@@ -6,8 +6,10 @@ import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPse
 import d3 from "d3";
 import { graphType, SVGType } from "../../../types/GraphTypes";
 import { BfsNode } from "../../../ClassObjects/BFS/BfsNode";
+import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
+const bfsObjects: BfsItemObj[] = [];
 
 const initialState = {
   graphData,
@@ -23,6 +25,7 @@ const initialState = {
   passedNodes: [] as number[],
   traversalResults: [] as number[],
   currentActions: [] as Events,
+  bfsObjects,
 };
 
 const bfsSlice = createSlice({
@@ -61,6 +64,9 @@ const bfsSlice = createSlice({
       state.currentLine = action.payload.line;
       return state;
     },
+    setBfsObjects(state, action: PayloadAction<BfsItemObj[]>) {
+      state.bfsObjects = action.payload;
+    },
   },
 });
 
@@ -77,4 +83,5 @@ export const {
   setInputArray,
   setGraphData,
   setCodeRef,
+  setBfsObjects,
 } = bfsSlice.actions;

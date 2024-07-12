@@ -6,6 +6,7 @@ import Arrow from "../LinkedList/Arrow";
 import styles from "./BFSNode.module.css";
 import Branch from "../BinaryTree/Branch";
 import ArrowForGraph from "./ArrowForGraph";
+import branch from "../BinaryTree/Branch";
 
 interface Props {
   nodeObj: BfsItemObj;
@@ -53,23 +54,16 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
       >
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
       </motion.span>
-      {nodeObj.branch && (
-        // <Arrow
-        //   className={"branch-for-graph"}
-        //   topLineArrow={nodeObj.topLineForArrow}
-        //   botLineArrow={nodeObj.botLineForArrow}
-        //   branch={nodeObj.branch}
-        //   key={`${nodeObj.id},${nodeObj.value}-Branch`}
-        //   isPassed={nodeObj.isPassed}
-        //   speed={nodeObj.speed}
-        // />
-        <ArrowForGraph
-          branch={nodeObj.branch}
-          isPassed={nodeObj.isPassed}
-          speed={nodeObj.speed}
-          className={"branch-for-graph"}
-        />
-      )}
+      {nodeObj.branches.length > 0 &&
+        nodeObj.branches.map((branch) => (
+          <ArrowForGraph
+            branch={branch}
+            isPassed={nodeObj.isPassed}
+            speed={nodeObj.speed}
+            className={"branch-for-graph"}
+          />
+        ))}
+
       {/*{nodeObj.branch && (*/}
       {/*  <Branch*/}
       {/*    branch={nodeObj.branch}*/}

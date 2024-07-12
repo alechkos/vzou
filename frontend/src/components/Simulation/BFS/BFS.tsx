@@ -4,6 +4,9 @@ import { Events, NodeRole } from "../BinaryTree/BinaryTreeTypes";
 import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
 import { AnimatePresence } from "framer-motion";
 import BFSNode from "./BFSNode";
+import { useAppSelector } from "../../../store/hooks";
+import { useDispatch } from "react-redux";
+import { setBfsObjects } from "../../../store/reducers/alghoritms/bfs-reducer";
 
 interface Props {
   initialNode: BfsNode | undefined;
@@ -24,7 +27,13 @@ const BFS: FC<Props> = ({
   actions,
   roles,
 }) => {
-  const bfsObjects = BfsItemObj.generateBFSObjects(viewportWidth, speed, initialNode);
+  const dispatch = useDispatch();
+
+  let bfsObjects = useAppSelector((state) => state.bfs.bfsObjects);
+  if (bfsObjects.length === 0) {
+    bfsObjects = BfsItemObj.generateBFSObjects(viewportWidth, speed, initialNode);
+    dispatch(setBfsObjects(bfsObjects));
+  }
   BfsItemObj.setActions(bfsObjects, actions);
   BfsItemObj.setRoles(bfsObjects, roles);
   if (visitedNodes) {
@@ -33,8 +42,6 @@ const BFS: FC<Props> = ({
   if (passedNodes) {
     BfsItemObj.setPassed(bfsObjects, passedNodes);
   }
-
-  console.log(bfsObjects);
 
   return (
     <div>

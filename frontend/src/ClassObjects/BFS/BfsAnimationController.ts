@@ -53,8 +53,8 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
     this.dispatch(setPassedNodes(passedNodes));
   }
 
-  setGraphFromInput(graphData: graphType, initialNode: number) {
-    const node = buildBFSNodes(graphData, initialNode, this);
+  setGraphFromInput(graphData: graphType) {
+    const node = buildBFSNodes(graphData);
     this.data = node;
     this.setHead(node);
     this.memento.clearSnapshots();
@@ -88,8 +88,7 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
   }
 
   //Animation
-
   async bfsAnimation(graphData: graphType) {
-    await this.playAlgorithm(bfsAnimation, this.memento, this.dispatch, graphData);
+    await this.playAlgorithm(bfsAnimation, this.memento, graphData);
   }
 }
