@@ -112,3 +112,9 @@
   border-radius: 4px;
   background-color: #f9f9f9;
 }
+
+/* В файле styles.module.css */
+.highlightedNode {
+  stroke: yellow;
+  stroke-width: 3px;
+}

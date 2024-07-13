@@ -3,6 +3,7 @@ import * as d3 from "d3";
 
 interface GraphVisualizerProps {
   data: { nodes: number[]; links: { source: number; target: number }[] };
+  highlightedNode: number | null;
 }
 
 interface GraphNode extends d3.SimulationNodeDatum {
@@ -10,77 +11,72 @@ interface GraphNode extends d3.SimulationNodeDatum {
   value: number;
 }
 
-const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data }) => {
+const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data, highlightedNode }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const nodesDataRef = useRef<GraphNode[]>([]);
+  const linksDataRef = useRef<{ source: GraphNode; target: GraphNode }[]>([]);
 
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
       const svg = d3.select(svgRef.current);
       svg.selectAll("*").remove(); // clean previous graph
 
-      //size of our nodes
       const width = 1200;
       const height = 600;
       const radius = 20;
 
-      //this is will allow to scale graph
       const container = svg.append("g");
 
-      // change type to GraphNode
-      const nodesData: GraphNode[] = data.nodes.map((d, i) => ({
+      nodesDataRef.current = data.nodes.map((d) => ({
         id: d,
         value: d,
         x: width / 2 + 200 + Math.random() * 100 - 50,
         y: height / 2 + Math.random() * 100 - 50,
       }));
 
-      // creating simulation of graph
       const simulation = d3
-        .forceSimulation<GraphNode>(nodesData)
+        .forceSimulation<GraphNode>(nodesDataRef.current)
         .force(
           "link",
           d3
             .forceLink<GraphNode, d3.SimulationLinkDatum<GraphNode>>()
             .id((d) => d.id.toString())
-            .distance(50) //distance between nodes
+            .distance(50)
         )
         .force("charge", d3.forceManyBody<GraphNode>().strength(-200))
-        .force("center", d3.forceCenter(width / 2 + 200, height / 2)); //forces attraction of nodes to the center
+        .force("center", d3.forceCenter(width / 2 + 200, height / 2));
 
-      // creating links
-      const links = data.links.map((d) => ({
-        source: nodesData.find((node) => node.id === d.source)!,
-        target: nodesData.find((node) => node.id === d.target)!,
+      linksDataRef.current = data.links.map((d) => ({
+        source: nodesDataRef.current.find((node) => node.id === d.source)!,
+        target: nodesDataRef.current.find((node) => node.id === d.target)!,
       }));
 
-      //creating svg elements for links
       const link = container
         .append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
-        .data(links)
+        .data(linksDataRef.current)
         .enter()
         .append("line")
         .attr("stroke-width", 2)
         .attr("marker-end", "url(#arrow)");
 
-      //creating svg elements for nodes
       const node = container
         .append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
         .selectAll("circle")
-        .data(nodesData)
+        .data(nodesDataRef.current)
         .enter()
         .append("circle")
         .attr("r", radius)
-        .attr("fill", "lime");
+        .attr("fill", (d) => (d.id === highlightedNode ? "yellow" : "lime"));
 
       const text = container
         .append("g")
         .selectAll("text")
-        .data(nodesData)
+        .data(nodesDataRef.current)
         .enter()
         .append("text")
         .attr("dy", "0.35em")
@@ -88,20 +84,19 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data }) => {
         .attr("font-size", "10px")
         .text((d) => d.value.toString());
 
-      //addition arrows
       svg
         .append("defs")
         .append("marker")
         .attr("id", "arrow")
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 30) //settings for visible arrow
+        .attr("refX", 30)
         .attr("refY", 0)
         .attr("markerWidth", 6)
         .attr("markerHeight", 6)
         .attr("orient", "auto")
         .append("path")
-        .attr("d", "M0,-5L10,0L0,5") //shape of arrow
-        .attr("fill", "#999"); //color of fill
+        .attr("d", "M0,-5L10,0L0,5")
+        .attr("fill", "#999");
 
       svg.call(
         d3.zoom<SVGSVGElement, unknown>().on("zoom", (event) => {
@@ -122,6 +117,18 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data }) => {
       });
     }
   }, [data]);
+
+  useEffect(() => {
+    if (svgRef.current && nodesDataRef.current.length > 0) {
+      const svg = d3.select(svgRef.current);
+      const nodes = svg.selectAll("circle").data(nodesDataRef.current);
+
+      nodes
+        .transition()
+        .duration(500)
+        .attr("fill", (d) => (d.id === highlightedNode ? "yellow" : "lime"));
+    }
+  }, [highlightedNode]);
 
   return (
     <svg

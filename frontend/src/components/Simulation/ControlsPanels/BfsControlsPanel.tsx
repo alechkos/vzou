@@ -27,6 +27,7 @@ interface Props {
   setSpeed: (speed: number) => void;
   graphData: { nodes: number[]; links: { source: number; target: number }[] };
   setGraphData: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
+  highlightedNode: number | null; // Добавляем highlightedNode в Props
 }
 
 const buttonClassname =
@@ -44,6 +45,7 @@ const BfsControlsPanel: FC<Props> = ({
   setSpeed,
   graphData,
   setGraphData,
+  highlightedNode, // Добавляем highlightedNode в Props
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const error = useAppSelector((state) => state.bst.error);
@@ -183,7 +185,13 @@ const BfsControlsPanel: FC<Props> = ({
           </ControlsToolTip>
         </ThemeProvider>
       </MediumCard>
-      {graphData.nodes.length > 0 && <GraphVisualizer data={graphData} />}
+      {graphData.nodes.length > 0 && (
+        <GraphVisualizer
+          data={graphData}
+          highlightedNode={highlightedNode}
+        />
+      )}{" "}
+      {/* Передаем highlightedNode */}
     </>
   );
 };

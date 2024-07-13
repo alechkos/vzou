@@ -35,6 +35,7 @@ const BfsPage: FC = () => {
     nodes: [],
     links: [],
   });
+  const [highlightedNode, setHighlightedNode] = useState<number | null>(null); // Добавляем highlightedNode
 
   const [isPaused, setIsPaused] = useState(false);
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
@@ -96,6 +97,7 @@ const BfsPage: FC = () => {
     await waitForNextStep();
 
     for (const v of graphData.nodes) {
+      setHighlightedNode(v); // Подсвечиваем текущий узел
       setCurrentLine(1);
       await waitForNextStep();
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
@@ -109,6 +111,7 @@ const BfsPage: FC = () => {
       await waitForNextStep();
     }
 
+    setHighlightedNode(null); // Убираем подсветку после завершения цикла
     setCurrentLine(5);
     await waitForNextStep();
     setQueue([]);
@@ -222,6 +225,7 @@ const BfsPage: FC = () => {
             setSpeed={setSpeed}
             graphData={graphData}
             setGraphData={setGraphData}
+            highlightedNode={highlightedNode} // Передаем highlightedNode в BfsControlsPanel
           />
           {hasStarted && ( // Show buttons only if the animation has started
             <div className={controlStyles.buttonContainer}>
