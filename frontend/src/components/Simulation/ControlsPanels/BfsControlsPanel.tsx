@@ -27,7 +27,7 @@ interface Props {
   setSpeed: (speed: number) => void;
   graphData: { nodes: number[]; links: { source: number; target: number }[] };
   setGraphData: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
-  highlightedNode: number | null; // Добавляем highlightedNode в Props
+  highlightedNode: number | null; // Add this prop
 }
 
 const buttonClassname =
@@ -45,7 +45,7 @@ const BfsControlsPanel: FC<Props> = ({
   setSpeed,
   graphData,
   setGraphData,
-  highlightedNode, // Добавляем highlightedNode в Props
+  highlightedNode, // Destructure this prop
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const error = useAppSelector((state) => state.bst.error);
@@ -190,8 +190,7 @@ const BfsControlsPanel: FC<Props> = ({
           data={graphData}
           highlightedNode={highlightedNode}
         />
-      )}{" "}
-      {/* Передаем highlightedNode */}
+      )}
     </>
   );
 };

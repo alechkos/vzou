@@ -35,14 +35,26 @@ const BfsPage: FC = () => {
     nodes: [],
     links: [],
   });
-  const [highlightedNode, setHighlightedNode] = useState<number | null>(null); // Добавляем highlightedNode
+  const [highlightedNode, setHighlightedNode] = useState<number | null>(null);
 
   const [isPaused, setIsPaused] = useState(false);
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false); // New state to track animation start
+  const [hasStarted, setHasStarted] = useState(false);
 
   const isPausedRef = useRef(isPaused);
   isPausedRef.current = isPaused;
+
+  const distancesRef = useRef(distances);
+  distancesRef.current = distances;
+
+  const predecessorsRef = useRef(predecessors);
+  predecessorsRef.current = predecessors;
+
+  const colorsRef = useRef(colors);
+  colorsRef.current = colors;
+
+  const queueRef = useRef(queue);
+  queueRef.current = queue;
 
   const handleShowActions = () => setShowActions(true);
   const handleHideActions = () => {
@@ -70,8 +82,8 @@ const BfsPage: FC = () => {
     if (queue.length > 0 && currentLine === 8) {
       setTimeout(() => {
         setCurrentLine(9);
-        continueBfsAnimation();
-      }, 1000 / speed); // Delay before moving to next line
+        continueBfsAnimation(queueRef.current);
+      }, 1000 / speed);
     }
   }, [queue, currentLine, speed]);
 
@@ -83,7 +95,7 @@ const BfsPage: FC = () => {
 
     setIsPlayingAnimation(true);
     setIsPaused(false);
-    setHasStarted(true); // Set the hasStarted state to true when the animation starts
+    setHasStarted(true);
 
     const initDistances: { [key: number]: number } = {};
     const initPredecessors: { [key: number]: number | null } = {};
@@ -97,7 +109,7 @@ const BfsPage: FC = () => {
     await waitForNextStep();
 
     for (const v of graphData.nodes) {
-      setHighlightedNode(v); // Подсвечиваем текущий узел
+      setHighlightedNode(v);
       setCurrentLine(1);
       await waitForNextStep();
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
@@ -111,10 +123,10 @@ const BfsPage: FC = () => {
       await waitForNextStep();
     }
 
-    setHighlightedNode(null); // Убираем подсветку после завершения цикла
+    setHighlightedNode(null);
     setCurrentLine(5);
     await waitForNextStep();
-    setQueue([]);
+    let localQueue: number[] = [];
     setCurrentLine(6);
     setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
     await waitForNextStep();
@@ -123,29 +135,23 @@ const BfsPage: FC = () => {
     await waitForNextStep();
     setCurrentLine(8);
 
-    setQueue((prev) => {
-      const newQueue = [...prev, initialNode];
-      console.log("Updated queue in setQueue:", newQueue);
-      return newQueue;
-    });
+    localQueue.push(initialNode);
+    setQueue([...localQueue]);
     await waitForNextStep();
+    continueBfsAnimation(localQueue);
   };
 
-  const continueBfsAnimation = async () => {
-    console.log("Queue before while:", queue);
+  const continueBfsAnimation = async (localQueue: number[]) => {
+    console.log("Queue before while:", localQueue);
 
-    while (queue.length > 0) {
-      setCurrentLine(9); // Move to line 9 before checking the queue
+    while (localQueue.length > 0) {
+      setCurrentLine(9);
       await waitForNextStep();
 
-      setCurrentLine(10); // Move to line 10 before updating u
-      const u = queue[0];
-      setQueue((prev) => {
-        const newQueue = prev.slice(1);
-        console.log("Updated queue after dequeue:", newQueue);
-        return newQueue;
-      });
-      setCurrentU(u);
+      setCurrentLine(10);
+      const u = localQueue.shift()!;
+      setQueue([...localQueue]);
+      setCurrentU(u ?? null);
 
       await waitForNextStep();
       console.log("U is ", u);
@@ -159,25 +165,24 @@ const BfsPage: FC = () => {
           setCurrentLine(11);
           await waitForNextStep();
 
-          if (colors[v] === "WHITE") {
-            setCurrentLine(12);
-            await waitForNextStep();
-            setDistances((prev) => ({ ...prev, [v]: distances[u] + 1 }));
-            setCurrentLine(13);
-            await waitForNextStep();
-            setPredecessors((prev) => ({ ...prev, [v]: u }));
-            setCurrentLine(14);
-            await waitForNextStep();
-            setColors((prev) => ({ ...prev, [v]: "GRAY" }));
-            setCurrentLine(15);
-            await waitForNextStep();
-            setCurrentLine(16);
-            setQueue((prev) => {
-              const newQueue = [...prev, v];
-              console.log("Updated queue in setQueue:", newQueue);
-              return newQueue;
-            });
-            await waitForNextStep();
+          if (colorsRef.current[u] !== "BLACK") {
+            if (colorsRef.current[v] === "WHITE") {
+              setCurrentLine(12);
+              await waitForNextStep();
+              setDistances((prev) => ({ ...prev, [v]: distancesRef.current[u] + 1 }));
+              setCurrentLine(13);
+              await waitForNextStep();
+              setPredecessors((prev) => ({ ...prev, [v]: u }));
+              setCurrentLine(14);
+              await waitForNextStep();
+              setColors((prev) => ({ ...prev, [v]: "GRAY" }));
+              setCurrentLine(15);
+              await waitForNextStep();
+              setCurrentLine(16);
+              localQueue.push(v);
+              setQueue([...localQueue]);
+              await waitForNextStep();
+            }
           }
         }
 
@@ -189,7 +194,7 @@ const BfsPage: FC = () => {
 
     setCurrentLine(18);
     await waitForNextStep();
-    console.log(queue);
+    console.log(localQueue);
     setIsPlayingAnimation(false);
   };
 
@@ -225,9 +230,9 @@ const BfsPage: FC = () => {
             setSpeed={setSpeed}
             graphData={graphData}
             setGraphData={setGraphData}
-            highlightedNode={highlightedNode} // Передаем highlightedNode в BfsControlsPanel
+            highlightedNode={highlightedNode}
           />
-          {hasStarted && ( // Show buttons only if the animation has started
+          {hasStarted && (
             <div className={controlStyles.buttonContainer}>
               <button
                 className={controlStyles.button}
