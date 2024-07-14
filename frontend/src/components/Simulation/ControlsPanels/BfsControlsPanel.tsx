@@ -27,7 +27,9 @@ interface Props {
   setSpeed: (speed: number) => void;
   graphData: { nodes: number[]; links: { source: number; target: number }[] };
   setGraphData: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
-  highlightedNode: number | null; // Add this prop
+  highlightedNode: number | null;
+  highlightedLink: { source: number; target: number } | null; // новое состояние
+  highlightedTargetNode: number | null; // новое состояние
 }
 
 const buttonClassname =
@@ -45,7 +47,9 @@ const BfsControlsPanel: FC<Props> = ({
   setSpeed,
   graphData,
   setGraphData,
-  highlightedNode, // Destructure this prop
+  highlightedNode,
+  highlightedLink,
+  highlightedTargetNode,
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const error = useAppSelector((state) => state.bst.error);
@@ -189,6 +193,8 @@ const BfsControlsPanel: FC<Props> = ({
         <GraphVisualizer
           data={graphData}
           highlightedNode={highlightedNode}
+          highlightedLink={highlightedLink} // передача состояния
+          highlightedTargetNode={highlightedTargetNode} // передача состояния
         />
       )}
     </>

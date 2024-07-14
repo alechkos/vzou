@@ -4,6 +4,8 @@ import * as d3 from "d3";
 interface GraphVisualizerProps {
   data: { nodes: number[]; links: { source: number; target: number }[] };
   highlightedNode: number | null;
+  highlightedLink: { source: number; target: number } | null;
+  highlightedTargetNode: number | null;
 }
 
 interface GraphNode extends d3.SimulationNodeDatum {
@@ -11,7 +13,12 @@ interface GraphNode extends d3.SimulationNodeDatum {
   value: number;
 }
 
-const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data, highlightedNode }) => {
+const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
+  data,
+  highlightedNode,
+  highlightedLink,
+  highlightedTargetNode,
+}) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const nodesDataRef = useRef<GraphNode[]>([]);
   const linksDataRef = useRef<{ source: GraphNode; target: GraphNode }[]>([]);
@@ -71,7 +78,9 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data, highlightedNode
         .enter()
         .append("circle")
         .attr("r", radius)
-        .attr("fill", (d) => (d.id === highlightedNode ? "yellow" : "lime"));
+        .attr("fill", (d) =>
+          d.id === highlightedNode ? "yellow" : d.id === highlightedTargetNode ? "red" : "lime"
+        );
 
       const text = container
         .append("g")
@@ -122,13 +131,27 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ data, highlightedNode
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select(svgRef.current);
       const nodes = svg.selectAll("circle").data(nodesDataRef.current);
+      const links = svg.selectAll("line").data(linksDataRef.current);
 
       nodes
         .transition()
         .duration(500)
-        .attr("fill", (d) => (d.id === highlightedNode ? "yellow" : "lime"));
+        .attr("fill", (d) =>
+          d.id === highlightedNode ? "yellow" : d.id === highlightedTargetNode ? "red" : "lime"
+        );
+
+      links
+        .transition()
+        .duration(500)
+        .attr("stroke", (d) =>
+          highlightedLink &&
+          d.source.id === highlightedLink.source &&
+          d.target.id === highlightedLink.target
+            ? "red"
+            : "#999"
+        );
     }
-  }, [highlightedNode]);
+  }, [highlightedNode, highlightedLink, highlightedTargetNode]);
 
   return (
     <svg

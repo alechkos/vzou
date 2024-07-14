@@ -36,6 +36,10 @@ const BfsPage: FC = () => {
     links: [],
   });
   const [highlightedNode, setHighlightedNode] = useState<number | null>(null);
+  const [highlightedLink, setHighlightedLink] = useState<{ source: number; target: number } | null>(
+    null
+  ); // новое состояние
+  const [highlightedTargetNode, setHighlightedTargetNode] = useState<number | null>(null); // новое состояние
 
   const [isPaused, setIsPaused] = useState(false);
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
@@ -165,6 +169,10 @@ const BfsPage: FC = () => {
           setCurrentLine(11);
           await waitForNextStep();
 
+          setHighlightedLink({ source: u, target: v });
+          setHighlightedTargetNode(v);
+          await waitForNextStep();
+
           if (colorsRef.current[u] !== "BLACK") {
             if (colorsRef.current[v] === "WHITE") {
               setCurrentLine(12);
@@ -231,6 +239,8 @@ const BfsPage: FC = () => {
             graphData={graphData}
             setGraphData={setGraphData}
             highlightedNode={highlightedNode}
+            highlightedLink={highlightedLink} // передача состояния
+            highlightedTargetNode={highlightedTargetNode} // передача состояния
           />
           {hasStarted && (
             <div className={controlStyles.buttonContainer}>
