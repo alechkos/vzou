@@ -3,14 +3,12 @@ import { LinkedListNode } from "../../../ClassObjects/LinkedList/LinkedListNode"
 import { LinkedListAlgNames } from "../../../components/Simulation/PseudoCode/LinkedListPseudoCodeData";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import mainState from "./main-state";
 
 const initialState = {
+  ...mainState,
   head: undefined as LinkedListNode | undefined,
-  isPlaying: false,
-  inputArray: "",
-  error: "",
   currentAlg: "Search" as LinkedListAlgNames,
-  currentLine: 0,
   inputValues: {
     Search: +"",
     InsertToHead: +"",
@@ -18,9 +16,6 @@ const initialState = {
     DeleteFromHead: +"",
     DeleteFromTail: +"",
   },
-  currentActions: [] as Events,
-  currentRoles: [] as NodeRole[],
-  passedNodes: [] as number[],
   currentLength: 0,
 };
 

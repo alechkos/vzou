@@ -172,9 +172,15 @@ export function getHeapArrayAnimationsAndStyles(
   return { initial, animate, style };
 }
 
-export function getArrFromInputForHeap(maxSize: number, data: string, maxNum = 999, minNum = 0) {
+export function getArrFromInputForHeap(
+  maxSize: number,
+  data: string,
+  isHash?: boolean,
+  maxNum = 999,
+  minNum = 0
+) {
   const list = data.split(",");
-  if (list.includes("")) return "Input must be numbers that seperated by comma";
+  if (list.includes("") && !isHash) return "Input must be numbers that seperated by comma";
   if (list.length > maxSize) return `Max array size is ${maxSize}`;
   const newData: number[] = [];
   for (const item of list) {
@@ -203,9 +209,14 @@ export const getNodeRolesForIter = (
   roles.push({ role: "𝑖", id: i });
   return roles;
 };
-export const generateRandomArrForHeap = (num1: number, num2: number) => {
+export const generateRandomArrForHeap = (num1: number, num2: number, len = 0) => {
   const randomArray = [];
-  const length = Math.floor(Math.random() * num1) + num2; // Generate a random length between 10 and 15
+  let length;
+  if (len > 0) {
+    length = len;
+  } else {
+    length = Math.floor(Math.random() * num1) + num2;
+  }
   for (let i = 0; i < length; i++) {
     randomArray.push(Math.floor(Math.random() * 100)); // Generate a random number between 0 and 99 and add it to the array
   }

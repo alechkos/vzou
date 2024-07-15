@@ -24,6 +24,26 @@
     font-size: 14px;
     z-index: 999;
 }
+
+.hashNode-selected::before {
+    content: attr(data-id);
+    display: block;
+    position: absolute;
+    top: 30%;
+    left: -30px;
+    transform: translate(-50%, 9px) rotate(90deg);
+    background-color: #83cb16;
+    color: #000;
+    padding-top: 2px;
+    clip-path: polygon(0% 40%, 20% 40%, 20% 100%, 80% 100%, 80% 40%, 100% 40%, 50% 0%);
+    height: 24px;
+    width: 24px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 999;
+
+}
+
 .node-of-list {
     display: flex;
     position: absolute;

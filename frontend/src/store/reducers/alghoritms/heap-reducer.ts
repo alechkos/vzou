@@ -12,21 +12,17 @@ import {
   HeapAlgNames,
   HeapPseudoCode,
 } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import mainState from "./main-state";
 
-
-const heapArray = [ 2, 1, 0 ];
+const heapArray = [2, 1, 0];
 
 const initialState = {
+  ...mainState,
   root: arrayToBinaryTree(heapArray),
-  currentActions: [] as Events,
   currentArr: heapArray,
-  isPlaying: false,
-  inputArray: "",
   currentAlg: "BuildMaxHeap" as keyof typeof HeapPseudoCode,
-  currentLine: 0,
   inputKey: 0,
   currentHeapSize: heapArray.length,
-  currentRoles: [] as NodeRole[],
 };
 
 const heapSlice = createSlice({

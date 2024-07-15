@@ -5,25 +5,18 @@ import { BSTreeNode } from "../../../ClassObjects/BST/BSTreeNode";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { BSTAlgNames } from "../../../components/Simulation/PseudoCode/BSTreePseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import mainState from "./main-state";
 
 const initialState = {
-  currentActions: [] as Events,
+  ...mainState,
   currentRoot: undefined as BSTreeNode | undefined,
-  isPlaying: false,
-  inputArray: "",
-  error: "", // TODO:error in search in bst
   currentAlg: "Search" as BSTAlgNames,
-  currentLine: 0,
-  currentRoles: [] as NodeRole[],
-  visitedNodes: [] as number[],
-  passedNodes: [] as number[],
-  traversalResults: [] as number[],
   inputValues: {
     Successor: +"",
     Predecessor: +"",
     Search: +"",
     Insert: +"",
-    DeleteNode: +"",
+    Delete: +"",
   },
 };
 
@@ -95,7 +88,7 @@ const bstSlice = createSlice({
       state,
       action: PayloadAction<{
         val: number;
-        key: "Successor" | "Predecessor" | "Search" | "Insert" | "DeleteNode";
+        key: "Successor" | "Predecessor" | "Search" | "Insert" | "Delete";
       }>
     ) {
       state.inputValues[action.payload.key] = action.payload.val;

@@ -1,10 +1,3 @@
-import CasinoIcon from "@mui/icons-material/Casino";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import { TextField, ThemeProvider } from "@mui/material";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
 import React, { FC, useEffect, useState } from "react";
 
 import { AvlAnimationController } from "../../../ClassObjects/BST/AvlAnimationController";
@@ -17,12 +10,9 @@ import {
   clearInputArray,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
-import { AlertError } from "../../UI/Controls/AlertError";
-import { theme } from "../../UI/Controls/ControlsTheme";
-import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
-import MediumCard from "../../UI/MediumCard";
 import { buildTree } from "../AVL/AVL_Algorithms";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+import BaseControlPanel from "./BaseControlPanel";
 
 interface Props {
   controller: AvlAnimationController;
@@ -31,11 +21,7 @@ interface Props {
   editingConstruction: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
-  setShowPseudoCode: (show: boolean) => void; //pseudo code only after building
 }
-
-const buttonClassname =
-  "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
 /**
  * Renders the controls panel for the binary search tree.
@@ -52,7 +38,6 @@ const AvlControlsPanel: FC<Props> = ({
   handleShowActions,
   showActions,
   editingConstruction,
-  setShowPseudoCode, //add to here in order to our component will know this function
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
@@ -60,7 +45,28 @@ const AvlControlsPanel: FC<Props> = ({
   const dispatch = useAppDispatch();
   const [regsterActivity] = useRegisterActivityMutation();
 
+  const algorithms = [
+    "Min / Max",
+    "Traversals",
+    "Successor",
+    "Predecessor",
+    "Search",
+    "Insert",
+    "Delete",
+  ];
+
   const [value, setValue] = useState("1");
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+
+  const handleRandomNodes = (e: any) => {
+    const val = Number(e.target.value);
+    if (val < 1 || val > 20) {
+      setCurrentError("Please enter a value between 1-20");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    setNumberOfRandomNodes(val);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -84,7 +90,6 @@ const AvlControlsPanel: FC<Props> = ({
         handleShowActions();
         setValue("2");
         dispatch(setCurrentAlg("Min"));
-        setShowPseudoCode(true); //after build
       } catch (e: any) {
         setCurrentError(e.message);
       }
@@ -126,12 +131,12 @@ const AvlControlsPanel: FC<Props> = ({
           });
           await controller.insert(inputValues.Insert);
           return;
-        case "DeleteNode":
+        case "Delete":
           regsterActivity({
             subject: "AVL",
-            algorithm: "DeleteNode",
+            algorithm: "Delete",
           });
-          await controller.deleteNode(inputValues.DeleteNode);
+          await controller.deleteNode(inputValues.Delete);
           return;
         case "Min":
           regsterActivity({
@@ -194,14 +199,21 @@ const AvlControlsPanel: FC<Props> = ({
     }
   };
   const randomizeInput = () => {
-    const randomArray = generateRandomArrForHeap(9, 7);
+    if (numberOfRandomNodes < 1 || numberOfRandomNodes > 20) {
+      setCurrentError("Please enter the number of nodes to randomize.");
+      return;
+    }
+    const randomArray = generateRandomArrForHeap(numberOfRandomNodes, 1, numberOfRandomNodes);
     controller.setTreeFromInput([], buildTree(randomArray));
     handleShowActions();
     setValue("2");
     dispatch(setCurrentAlg("Min"));
     dispatch(clearInputArray());
     dispatch(setInputArray(randomArray));
-    setShowPseudoCode(true); //after build
+  };
+
+  const setAlgorithm = (name: any) => {
+    dispatch(setCurrentAlg(name));
   };
 
   useEffect(() => {
@@ -209,223 +221,32 @@ const AvlControlsPanel: FC<Props> = ({
   }, []);
 
   return (
-    <>
-      {error && (
-        <AlertError
-          error={error}
-          onClose={() => {
-            setCurrentError("");
-          }}
-        />
-      )}
-      <MediumCard
-        isSmaller
-        maxWidth="max-w-5xl"
-      >
-        <ThemeProvider theme={theme}>
-          <ControlsToolTip isButtonDisabled={isButtonDisabled}>
-            <Box sx={{ width: "100%", typography: "body1" }}>
-              <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="algorithms and actions"
-                    centered
-                  >
-                    {!showActions && !editingConstruction && (
-                      <Tab
-                        label="Create AVL construction"
-                        value="1"
-                        disabled={isButtonDisabled}
-                      />
-                    )}
-                    {(showActions || editingConstruction) && (
-                      <Tab
-                        label="Change Avl construction"
-                        value="1"
-                        onClick={handleHideActions}
-                        disabled={isButtonDisabled}
-                      />
-                    )}
-                  </TabList>
-                  {showActions && (
-                    <TabList
-                      onChange={handleChange}
-                      aria-label="algorithms and actions"
-                      centered
-                    >
-                      <Tab
-                        label="Min / Max"
-                        value="2"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Min"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Traversals"
-                        value="3"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Inorder"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Successor"
-                        value="Successor"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Successor"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Predecessor"
-                        value="Predecessor"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Predecessor"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Search"
-                        value="Search"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Search"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Insert"
-                        value="Insert"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Insert"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                      <Tab
-                        label="Delete"
-                        value="DeleteNode"
-                        onClick={() => {
-                          dispatch(setCurrentAlg("Delete"));
-                        }}
-                        disabled={isButtonDisabled}
-                      />
-                    </TabList>
-                  )}
-                </Box>
-                <TabPanel
-                  value="1"
-                  className={value === "1" ? "justify-start " : "hidden"}
-                >
-                  <TextField
-                    placeholder="e.g 1,2,3,4,..."
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={inputArray}
-                    label="Build-AVL-Tree"
-                    variant="outlined"
-                    onChange={(e) => dispatch(setInputArray(e.target.value))}
-                  />
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[40px] h-[40px]`}
-                    onClick={createBSTreeHandler}
-                  >
-                    Go
-                  </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
-                    onClick={randomizeInput}
-                  >
-                    <CasinoIcon />
-                    Randomize
-                  </button>
-                  <button
-                    disabled={isButtonDisabled}
-                    className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
-                    onClick={async () => Animate("Clear")}
-                  >
-                    Clear
-                  </button>
-                </TabPanel>
-                <TabPanel
-                  value="2"
-                  className={value === "2" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Min", "Max"].map((text) => (
-                    <div
-                      className="py-2 px-6"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-[60px] h-[40px]`}
-                        onClick={async () => Animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                <TabPanel
-                  value="3"
-                  className={value === "3" ? "flex flex-row justify-center " : "hidden"}
-                >
-                  {["Inorder", "Preorder", "Postorder"].map((text) => (
-                    <div
-                      className="py-2 px-2"
-                      key={text}
-                    >
-                      <button
-                        disabled={isButtonDisabled}
-                        className={buttonClassname}
-                        onClick={async () => Animate(text)}
-                      >
-                        {text}
-                      </button>
-                    </div>
-                  ))}
-                </TabPanel>
-                {["Successor", "Predecessor", "Search", "Insert", "DeleteNode"].map((text) => (
-                  <TabPanel
-                    key={text}
-                    value={text}
-                    className={value === text ? "justify-start " : "hidden"}
-                  >
-                    <TextField
-                      sx={{ width: "138px" }}
-                      name={text as "Search" | "Insert" | "DeleteNode"}
-                      size="small"
-                      type="text"
-                      variant="outlined"
-                      label={"Your value here"}
-                      inputProps={{
-                        min: 0,
-                        max: 999,
-                        style: { textAlign: "center" },
-                      }}
-                      onChange={handleInput}
-                    />
-                    <button
-                      disabled={isButtonDisabled}
-                      className={`${buttonClassname} w-[40px] h-[40px]`}
-                      onClick={async () =>
-                        Animate(text).catch((e) => {
-                          setCurrentError(e.message);
-                        })
-                      }
-                    >
-                      Go
-                    </button>
-                  </TabPanel>
-                ))}
-              </TabContext>
-            </Box>
-          </ControlsToolTip>
-        </ThemeProvider>
-      </MediumCard>
-    </>
+    <BaseControlPanel
+      error={error}
+      setCurrentError={setCurrentError}
+      isButtonDisabled={isButtonDisabled}
+      showActions={showActions}
+      editingConstruction={editingConstruction}
+      handleHideActions={handleHideActions}
+      handleShowActions={handleShowActions}
+      setAlgorithm={setAlgorithm}
+      algorithms={algorithms}
+      inputArray={inputArray}
+      setInputArray={(e) => {
+        dispatch(setInputArray(e.target.value));
+      }}
+      createStructure={createBSTreeHandler}
+      randomizeStructure={randomizeInput}
+      animate={Animate}
+      handleInput={handleInput}
+      value={value}
+      handleChange={handleChange}
+      minMax={["Min", "Max"]}
+      traversals={["Inorder", "Preorder", "Postorder"]}
+      dataLabel={"Avl"}
+      dataForInput={"Build-Avl-Tree"}
+      handleRandomNodes={handleRandomNodes}
+    />
   );
 };
 

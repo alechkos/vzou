@@ -30,6 +30,7 @@ import RegistrationPage from "../pages/RegistrationPage";
 import TwoFactorAuthPage from "../pages/TwoFactorAuthPage";
 import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
 import BfsPage from "../pages/Animations/DataStructure/BfsPage";
+import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 
 export interface RouteItem {
   path: string;
@@ -61,6 +62,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.BST, element: BSTreePage },
   { path: RoutePaths.AVL, element: AvlPage },
   { path: RoutePaths.LINKED_LIST, element: LinkedListPage },
+  { path: RoutePaths.HASH_TABLE, element: HashTablePage },
   { path: RoutePaths.QUICK_SORT, element: QuickSortPage },
   { path: RoutePaths.INSERTION_SORT, element: InsertionSortPage },
   { path: RoutePaths.COUNTING_SORT, element: CountingSortPage },

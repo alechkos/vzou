@@ -179,51 +179,51 @@ export function deleteFromTailWithAnimations(
   memento: LinkedListMemento,
   controller: LinkedListAnimationController
 ) {
-  let tail = LinkedListNode.getTailOfList(head);
-  if (tail !== undefined) {
-    memento.addSnapshot(
+  let x = head;
+  const passedIds: number[] = [];
+
+  if (x !== undefined) {
+    passedIds.push(x.id);
+    memento.addBlank(
       { line: 1, name: "DeleteFromTail" },
       head,
-      tail.id,
-      ActionType.HIGHLIGHT_LIGHT,
-      [{ id: tail.id, role: "X" }],
+      [{ id: x.id, role: "X" }],
       undefined,
-      undefined
+      passedIds
     );
-  }
-  head = LinkedListNode.deleteNodeFromTail(head, tail);
-  if (head === undefined) {
-    controller.setListFromInput([]);
-    memento.addBlank({ line: 3, name: "DeleteFromTail" }, head, [], undefined, undefined);
-    return head;
-  }
-  tail = LinkedListNode.getTailOfList(head);
-  if (tail !== undefined) {
+
+    while (x.next !== undefined) {
+      passedIds.push(x.next.id);
+      memento.addSnapshot(
+        { line: 2, name: "DeleteFromTail" },
+        head,
+        x.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: x.id, role: "X" }],
+        undefined,
+        passedIds
+      );
+      memento.addSnapshot(
+        { line: 3, name: "DeleteFromTail" },
+        head,
+        x.next.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: x.next.id, role: "X" }],
+        undefined,
+        passedIds
+      );
+      x = x.next;
+    }
     memento.addSnapshot(
-      { line: 2, name: "DeleteFromTail" },
+      { line: 4, name: "DeleteFromTail" },
       head,
-      tail.id,
+      x.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: tail.id, role: "X" }],
+      [{ id: x.id, role: "X" }],
       undefined,
-      undefined
+      passedIds
     );
-    memento.addSnapshot(
-      { line: 3, name: "DeleteFromTail" },
-      head,
-      tail.id,
-      ActionType.HIGHLIGHT_LIGHT,
-      [{ id: tail.id, role: "X" }],
-      undefined,
-      undefined
-    );
-  } else controller.setListFromInput([]);
-  memento.addBlank(
-    { line: 3, name: "DeleteFromTail" },
-    head,
-    [{ id: tail ? tail.id : 0, role: "X" }],
-    undefined,
-    undefined
-  );
-  return head;
+  } else {
+    memento.addError({ line: 0, name: "Search" }, head, `The List is empty!`, [], [], passedIds);
+  }
 }

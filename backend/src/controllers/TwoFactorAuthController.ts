@@ -40,26 +40,28 @@ export const TWO_FA_verifier = async (code: string, type: CODE_TYPES, email: str
  *  and sends an email with either an email confirmation token, or a 2FA / password-reset code.
  */
 export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
-  if (type !== 'VERIFY_EMAIL') {
-    // For 2FAs or password resets, send a new code and update the database.
+  const user = await User.findOne({ where: { email } })
+
+  if (!user) {
+    throw ApiError.badRequest('This email address does not exist. Please try again with a different email address.')
+  }
+
+  if (type === 'VERIFY_EMAIL') {
+    const token = generateConfirmMailToken(email)
+    mailer(
+        // Send the email with the token
+        `Email verification`,
+        `To verify the email follow the link: 
+    ${process.env.FRONT_IP || 'http://localhost:3000'}/verify-email/${token}`,
+        email
+    )
+  }
+  else {
+    // For 2FAs or password resets, send a new code and update the database droch.
     const code = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000) // Randomize a code
     await TWOFA.upsert({ email, code: code.toString(), type }) // Update or create a new 2FA code for the user.
-    mailer(`${type} Code`, code.toString(), email) // Send the mail with the code
-    return
+    mailer(`${type} Code: `, code.toString(), email) // Send the mail with the code
   }
-  // For email confirmations, validate the data received and send a confirmation email to the user.
-  const user = await User.findOne({ where: { email } })
-  if (!user) {
-    throw ApiError.forbidden('Error sending email')
-  }
-  const token = generateConfirmMailToken(email)
-  mailer(
-    // Send the email with the token
-    `Email verification`,
-    `To verify the email follow the link : 
-    ${process.env.FRONT_IP || 'http://localhost:3000'}/verify-email/${token}`,
-    email
-  )
 }
 
 /** Controller for the entire 2FA process.
@@ -75,13 +77,13 @@ export const ServiceSendCode = async (type: CODE_TYPES, email: string) => {
 class TwoFactorAuthController {
   async send2FA_Code(req: TypedRequestBody<{ type: CODE_TYPES; email: string }>, res: Response, next: NextFunction) {
     const { type, email } = req.body
+
     try {
       await ServiceSendCode(type, email)
       return res.json({ status: 'OK' })
     } catch (e: any) {
-      console.log(e)
-      const message = 'Error sending email'
-      return next(ApiError.badRequest(message))
+      console.info(e)
+      return next(ApiError.badRequest(e?.message || 'Error sending email'))
     }
   }
 
@@ -136,7 +138,7 @@ class TwoFactorAuthController {
     try {
       const { password, email } = req.body
       if (!password || password.length < 8) {
-        return next(ApiError.badRequest('Password should be at least 8 char length'))
+        return next(ApiError.badRequest('Password should be at least 8 characters length'))
       }
       const hashPassword = await bcrypt.hash(password, 5)
       await User.update({ password: hashPassword }, { where: { email } })

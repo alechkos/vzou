@@ -20,11 +20,20 @@ import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/
 interface Props {
   controller: HeapAnimationController;
   isButtonDisabled: boolean;
+  handleShowActions: () => void;
+  handleHideActions: () => void;
+  showActions: boolean;
 }
 
 const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
-const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
+const HeapControlsPanel: FC<Props> = ({
+  controller,
+  isButtonDisabled,
+  handleHideActions,
+  handleShowActions,
+  showActions,
+}) => {
   const inputArray = useAppSelector((state) => state.heap.inputArray);
   const inputKey = useAppSelector((state) => state.heap.inputKey);
   const [error, setError] = useState("");
@@ -44,6 +53,7 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
     const res = getArrFromInputForHeap(15, inputArray);
     if (typeof res !== "string") {
       controller.setArrFromInput(res);
+      handleShowActions();
       await Animate("Build-Max-Heap");
     } else {
       setCurrentError(res);
@@ -98,6 +108,7 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
         return;
       case "Clear":
         controller.setArrFromInput([]);
+        handleHideActions();
         return;
 
       default:
@@ -132,10 +143,12 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                       value="1"
                     />
                     <Tab
+                      disabled={!showActions}
                       label="Algorithms"
                       value="2"
                     />
                     <Tab
+                      disabled={!showActions}
                       label="Insert"
                       value="3"
                     />
@@ -166,6 +179,7 @@ const HeapControlsPanel: FC<Props> = ({ controller, isButtonDisabled }) => {
                     disabled={isButtonDisabled}
                     className={`${buttonClassname} w-[140px] h-[40px] ml-8`}
                     onClick={async () => {
+                      handleShowActions();
                       controller.setArrFromInput(generateRandomArrForHeap(9, 7));
                       await Animate("Build-Max-Heap");
                     }}
