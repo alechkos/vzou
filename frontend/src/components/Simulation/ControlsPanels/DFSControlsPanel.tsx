@@ -8,21 +8,19 @@ import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
-import GraphVisualizer from "./GraphVisualizer";
-import { BfsAnimationController } from "../../../ClassObjects/BFS/BfsAnimationController";
+import { DFSAnimationController } from "../../../ClassObjects/DFS/DFSAnimationController";
 import {
   setInitialValue,
   setError,
   setInputArray,
   setGraphData,
   setPlaying,
-  setBfsObjects,
-} from "../../../store/reducers/alghoritms/bfs-reducer";
+} from "../../../store/reducers/alghoritms/dfs-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
-import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
+import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 interface Props {
-  controller: BfsAnimationController;
+  controller: DFSAnimationController;
   showActions: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
@@ -33,7 +31,7 @@ interface Props {
 const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
-const BfsControlsPanel: FC<Props> = ({
+const DFSControlsPanel: FC<Props> = ({
   handleHideActions,
   handleShowActions,
   showActions,
@@ -42,11 +40,11 @@ const BfsControlsPanel: FC<Props> = ({
   controller,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
-  const inputArray = useAppSelector((state) => state.bfs.inputArray);
-  const error = useAppSelector((state) => state.bfs.error);
-  const graphData = useAppSelector((state) => state.bfs.graphData);
-  const initialValue = useAppSelector((state) => state.bfs.initialValue);
-  const isButtonDisabled = useAppSelector((state) => state.bfs.isPlaying);
+  const inputArray = useAppSelector((state) => state.dfs.inputArray);
+  const error = useAppSelector((state) => state.dfs.error);
+  const graphData = useAppSelector((state) => state.dfs.graphData);
+  const initialValue = useAppSelector((state) => state.dfs.initialValue);
+  const isButtonDisabled = useAppSelector((state) => state.dfs.isPlaying);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -71,7 +69,7 @@ const BfsControlsPanel: FC<Props> = ({
             subject: "BFS",
             algorithm: "Search",
           });
-          await controller.bfsAnimation(graphData);
+          await controller.dfsAnimation(Number(initialValue));
           return;
         case "Clear":
           // controller.setTreeFromInput([]);
@@ -106,8 +104,7 @@ const BfsControlsPanel: FC<Props> = ({
 
     handleShowActions();
     setShowPseudoCode(true);
-    dispatch(setBfsObjects([]));
-    BfsItemObj.positions = [];
+    DFSItemObj.positions = [];
   };
 
   const handleInput = (e: any) => {
@@ -231,4 +228,4 @@ const BfsControlsPanel: FC<Props> = ({
   );
 };
 
-export default BfsControlsPanel;
+export default DFSControlsPanel;

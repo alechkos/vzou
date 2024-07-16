@@ -1,9 +1,9 @@
 import { Memento } from "../Memento";
 import { NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { ActionType } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { BfsNode } from "./BfsNode";
+import { DFSNode } from "./DFSNode";
 
-export class BFSMemento extends Memento<BfsNode | undefined, string> {
+export class DFSMemento extends Memento<DFSNode | undefined, string> {
   visitedNodesSnapshots: number[][];
 
   passedNodesSnapshots: number[][];
@@ -26,7 +26,7 @@ export class BFSMemento extends Memento<BfsNode | undefined, string> {
 
   addBlank(
     codeRef: any,
-    node: BfsNode | undefined,
+    node: DFSNode | undefined,
     heapSize?: number,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
@@ -46,7 +46,7 @@ export class BFSMemento extends Memento<BfsNode | undefined, string> {
 
   addError(
     codeRef: any,
-    node: BfsNode | undefined,
+    node: DFSNode | undefined,
     error: string,
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
@@ -70,7 +70,7 @@ export class BFSMemento extends Memento<BfsNode | undefined, string> {
 
   addSnapshot(
     codeRef: any,
-    node: BfsNode | undefined,
+    node: DFSNode | undefined,
     index: number,
     action: ActionType,
     nodeRoles: NodeRole[] = [],

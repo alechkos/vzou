@@ -1,32 +1,32 @@
 import React, { FC, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { BfsAnimationController } from "../../../ClassObjects/BFS/BfsAnimationController";
-import BfsControlsPanel from "../../../components/Simulation/ControlsPanels/BfsControlsPanel";
+import { DFSAnimationController } from "../../../ClassObjects/DFS/DFSAnimationController";
+import DFSControlsPanel from "../../../components/Simulation/ControlsPanels/DFSControlsPanel";
 import BfsPseudoCodeContainer from "../../../components/Simulation/PseudoCode/BfsPseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
 import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import styles from "../../../components/Simulation/PseudoCode/PseudoCodeWrapper.module.css";
 import controlStyles from "./BfsControlsPanel.module.css";
-import { combineBfsPseudoCode } from "../../../ClassObjects/BFS/BFSAlgorithms";
+import { combineDFSPseudoCode } from "../../../ClassObjects/DFS/DFSAlgorithms";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import GraphVisualizer from "../../../components/Simulation/ControlsPanels/GraphVisualizer";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
-import BFS from "../../../components/Simulation/BFS/BFS";
+import DFS from "../../../components/Simulation/DFS/DFS";
 
-const BfsPage: FC = () => {
+const DFSPage: FC = () => {
   const dispatch = useDispatch();
-  const initialNode = useAppSelector((state) => state.bfs.initialNode);
-  const isPlaying = useAppSelector((state) => state.bfs.isPlaying);
-  const currentAlg = useAppSelector((state) => state.bfs.currentAlg);
-  const currentLine = useAppSelector((state) => state.bfs.currentLine);
-  const graphData = useAppSelector((state) => state.bfs.graphData);
-  const actions = useAppSelector((state) => state.bfs.currentActions);
-  const roles = useAppSelector((state) => state.bfs.currentRoles);
-  const passedNode = useAppSelector((state) => state.bfs.passedNodes);
-  const visitedNodes = useAppSelector((state) => state.bfs.visitedNodes);
-  const controller = BfsAnimationController.getController(initialNode, dispatch);
+  const initialNode = useAppSelector((state) => state.dfs.initialNode);
+  const isPlaying = useAppSelector((state) => state.dfs.isPlaying);
+  const currentAlg = useAppSelector((state) => state.dfs.currentAlg);
+  const currentLine = useAppSelector((state) => state.dfs.currentLine);
+  const graphData = useAppSelector((state) => state.dfs.graphData);
+  const actions = useAppSelector((state) => state.dfs.currentActions);
+  const roles = useAppSelector((state) => state.dfs.currentRoles);
+  const passedNode = useAppSelector((state) => state.dfs.passedNodes);
+  const visitedNodes = useAppSelector((state) => state.dfs.visitedNodes);
+  const controller = DFSAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [showActions, setShowActions] = useState(false);
@@ -53,7 +53,7 @@ const BfsPage: FC = () => {
       <SideBar />
       {fitsAnimation && (
         <div>
-          <BfsControlsPanel
+          <DFSControlsPanel
             showActions={showActions}
             handleShowActions={handleShowActions}
             handleHideActions={handleHideActions}
@@ -62,7 +62,7 @@ const BfsPage: FC = () => {
             controller={controller}
           />
           {(showActions || editingConstruction) && (
-            <BFS
+            <DFS
               initialNode={initialNode}
               speed={controller.speed}
               viewportWidth={viewportWidth}
@@ -81,7 +81,7 @@ const BfsPage: FC = () => {
           {showPseudoCode && (
             <PseudoCodeContainer
               line={currentLine}
-              code={combineBfsPseudoCode(currentAlg) as PseudoItem[]}
+              code={combineDFSPseudoCode(currentAlg) as PseudoItem[]}
             />
           )}
           {/*{showPseudoCode && (*/}
@@ -136,4 +136,4 @@ const BfsPage: FC = () => {
   );
 };
 
-export default BfsPage;
+export default DFSPage;

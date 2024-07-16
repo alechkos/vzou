@@ -14,7 +14,7 @@ const BfsPseudoCodeContainer: FC<Props> = ({ visible, currentLine }) => {
   const [open, setOpen] = useState(true);
 
   const pseudoCode = [
-    "0. BFS(G,s)",
+    "0. DFS(G,s)",
     "1. For each v in V",
     "2.     d[v]=infinity",
     "3.     п[v]=NIL",

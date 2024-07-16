@@ -101,7 +101,12 @@ const HomePageData = [
     image: bfsPhoto,
     url: RoutePaths.BFS,
   },
-
+  {
+    title: "DFS",
+    gif: bfsGif,
+    image: bfsPhoto,
+    url: RoutePaths.DFS,
+  },
 ];
 
 export default HomePageData;

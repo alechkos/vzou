@@ -7,7 +7,7 @@ import { useAppSelector } from "../../../store/hooks";
 const GraphVisualizer: React.FC = () => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dispatch = useDispatch();
-  const data = useAppSelector((state) => state.bfs.graphData);
+  const data = useAppSelector((state) => state.dfs.graphData);
 
   //size of our nodes
   const width = 1200;

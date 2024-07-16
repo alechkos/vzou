@@ -5,16 +5,16 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { BfsNode } from "./BfsNode";
+import { DFSNode } from "./DFSNode";
 
-export class BfsItemObj extends BaseObj {
+export class DFSItemObj extends BaseObj {
   static width = 3; //Used to calculate X gap
 
   static positions: { x: number; y: number }[] = [];
 
   static gapY = 20;
 
-  parents: BfsItemObj[];
+  parents: DFSItemObj[];
 
   branches: BranchObj[];
 
@@ -24,9 +24,9 @@ export class BfsItemObj extends BaseObj {
     id: number,
     value: number,
     viewportWidth: number,
-    parent: BfsItemObj | undefined,
+    parent: DFSItemObj | undefined,
     type: "root" | "left" | "right",
-    parents: BfsItemObj[]
+    parents: DFSItemObj[]
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parents = parents;
@@ -36,27 +36,22 @@ export class BfsItemObj extends BaseObj {
   }
 
   getXGap() {
-    return Math.min(this.viewportWidth, BfsItemObj.availableSpace) / BfsItemObj.width;
+    return Math.min(this.viewportWidth, DFSItemObj.availableSpace) / DFSItemObj.width;
   }
 
   calculatePosition() {
     const dist = 40;
-    const add = 30;
+    const add = 40;
 
     if (this.type === "root") {
       return;
     }
     if (this.type === "left") {
-      let x =
-        this.parents[0].position.x -
-        this.getXGap() +
-        Math.random() * 150 +
-        Math.random() * 100 -
-        50;
+      let x = this.parents[0].position.x - this.getXGap() + 40;
 
-      let y = this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 150 - 50;
+      let y = this.parents[0].position.y + DFSItemObj.gapY + 40;
 
-      BfsItemObj.positions.forEach((pos) => {
+      DFSItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
           x += add;
         }
@@ -70,20 +65,15 @@ export class BfsItemObj extends BaseObj {
         y: y,
       };
 
-      BfsItemObj.positions.push(this.position);
+      DFSItemObj.positions.push(this.position);
     } else {
-      let x =
-        this.parents[0].position.x +
-        this.getXGap() +
-        Math.random() * 150 +
-        Math.random() * 100 -
-        50;
+      let x = this.parents[0].position.x + this.getXGap() - 40;
 
-      let y = this.parents[0].position.y + BfsItemObj.gapY + Math.random() * 150 - 50;
+      let y = this.parents[0].position.y + DFSItemObj.gapY + 40;
 
-      BfsItemObj.positions.forEach((pos) => {
+      DFSItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
-          x += add;
+          x -= add;
         }
         if (Math.abs(pos.y - y) <= dist) {
           y += add;
@@ -95,7 +85,7 @@ export class BfsItemObj extends BaseObj {
         y: y,
       };
 
-      BfsItemObj.positions.push(this.position);
+      DFSItemObj.positions.push(this.position);
     }
   }
 
@@ -116,16 +106,17 @@ export class BfsItemObj extends BaseObj {
     });
   }
 
-  static generateBFSObjects(viewportWidth: number, speed: number, head: BfsNode | undefined) {
+  static generateBFSObjects(viewportWidth: number, speed: number, head: DFSNode | undefined) {
     if (!head) return [];
-    const bfsObjects: BfsItemObj[] = [];
+    const directions = ["right", "left"];
+    const bfsObjects: DFSItemObj[] = [];
     const stack = [
       {
         node: head,
-        nodeObj: new BfsItemObj(
+        nodeObj: new DFSItemObj(
           {
-            x: viewportWidth / 2 - 200 + Math.random() * 100 - 50,
-            y: 325 + Math.random() * 100 - 50,
+            x: viewportWidth / 2 - 200,
+            y: 325,
           },
           speed,
           head.id,
@@ -144,19 +135,22 @@ export class BfsItemObj extends BaseObj {
       const { node, nodeObj } = item;
       node.adjacents.forEach((bfsNode) => {
         const checkNode = bfsObjects.find((check) => check.value === bfsNode.value);
-        const directions = ["right", "left"];
-        const randomIndex = Math.floor(Math.random() * directions.length);
+        const dir = directions.pop();
+        if (dir === undefined) {
+          directions.push("right");
+          directions.push("left");
+        }
         if (checkNode === undefined) {
           stack.push({
             node: bfsNode,
-            nodeObj: new BfsItemObj(
+            nodeObj: new DFSItemObj(
               { x: 0, y: 0 },
               speed,
               bfsNode.id,
               bfsNode.value,
               viewportWidth,
               undefined,
-              directions[randomIndex] as "root" | "right" | "left",
+              dir as "root" | "right" | "left",
               [nodeObj]
             ),
           });
@@ -165,14 +159,15 @@ export class BfsItemObj extends BaseObj {
           checkNode.createBranch();
         }
       });
-      bfsObjects.push(nodeObj);
+      const checkNode = bfsObjects.find((node) => node.id === nodeObj.id);
+      if (checkNode === undefined) bfsObjects.push(nodeObj);
     }
 
     bfsObjects.sort((a, b) => a.id - b.id);
     return bfsObjects;
   }
 
-  addParent(parent: BfsItemObj) {
+  addParent(parent: DFSItemObj) {
     this.parents.push(parent);
   }
 
@@ -184,7 +179,7 @@ export class BfsItemObj extends BaseObj {
     this.nodeRole = role;
   }
 
-  static setActions(listObjects: BfsItemObj[], actions: Events | null) {
+  static setActions(listObjects: DFSItemObj[], actions: Events | null) {
     if (actions) {
       for (const action of actions) {
         if (action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
@@ -199,7 +194,7 @@ export class BfsItemObj extends BaseObj {
     }
   }
 
-  static setRoles(listObjects: BfsItemObj[], roles: NodeRole[]) {
+  static setRoles(listObjects: DFSItemObj[], roles: NodeRole[]) {
     if (!listObjects.length) return;
     else {
       for (const role of roles) {
@@ -212,13 +207,13 @@ export class BfsItemObj extends BaseObj {
     }
   }
 
-  static setPassed(listObjects: BfsItemObj[], passedNodes: number[]) {
+  static setPassed(listObjects: DFSItemObj[], passedNodes: number[]) {
     for (const node of listObjects) {
       node.isPassed = passedNodes.includes(node.id);
     }
   }
 
-  static setVisited(hashObjects: BfsItemObj[], visitedNodes: number[]) {
+  static setVisited(hashObjects: DFSItemObj[], visitedNodes: number[]) {
     for (const node of hashObjects) {
       node.isVisited = visitedNodes.includes(node.id);
     }

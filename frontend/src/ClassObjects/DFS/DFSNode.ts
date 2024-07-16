@@ -1,5 +1,5 @@
-export class BfsNode {
-  adjacents: BfsNode[];
+export class DFSNode {
+  adjacents: DFSNode[];
 
   links: { source: number; target: number }[];
 
@@ -17,7 +17,7 @@ export class BfsNode {
     this.links = [];
   }
 
-  addAdjacent(node: BfsNode) {
+  addAdjacent(node: DFSNode) {
     this.adjacents.push(node);
   }
 

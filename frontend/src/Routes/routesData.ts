@@ -29,7 +29,7 @@ import RegisterLecturerPage from "../pages/RegisterLecturerPage";
 import RegistrationPage from "../pages/RegistrationPage";
 import TwoFactorAuthPage from "../pages/TwoFactorAuthPage";
 import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
-import BfsPage from "../pages/Animations/DataStructure/BfsPage";
+import DFSPage from "../pages/Animations/DataStructure/DFSPage";
 import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 
 export interface RouteItem {
@@ -69,7 +69,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.MERGE_SORT, element: MergeSortPage },
   { path: RoutePaths.BUCKET_SORT, element: BucketSortPage },
   { path: RoutePaths.RADIX_SORT, element: RadixSortPage },
-  { path: RoutePaths.BFS, element: BfsPage },
+  { path: RoutePaths.DFS, element: DFSPage },
 ];
 
 export const lecturerRoutes: RouteItem[] = [

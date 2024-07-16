@@ -1,31 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { Events } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { BfsAlgNames } from "../../../components/Simulation/PseudoCode/BfsPseudoCodeData";
+import { DFSAlgNames } from "../../../components/Simulation/PseudoCode/DFSPseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
-import d3 from "d3";
-import { graphType, SVGType } from "../../../types/GraphTypes";
-import { BfsNode } from "../../../ClassObjects/BFS/BfsNode";
-import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
+import { graphType } from "../../../types/GraphTypes";
+import { DFSNode } from "../../../ClassObjects/DFS/DFSNode";
+import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
-const bfsObjects: BfsItemObj[] = [];
 
 const initialState = {
   graphData,
   initialValue: "",
-  initialNode: undefined as BfsNode | undefined,
+  initialNode: undefined as DFSNode | undefined,
   isPlaying: false,
   inputArray: "",
   error: "",
-  currentAlg: "Search" as BfsAlgNames,
+  currentAlg: "Search" as DFSAlgNames,
   currentLine: 0,
   currentRoles: [] as NodeRole[],
   visitedNodes: [] as number[],
   passedNodes: [] as number[],
   traversalResults: [] as number[],
   currentActions: [] as Events,
-  bfsObjects,
 };
 
 const bfsSlice = createSlice({
@@ -35,7 +32,7 @@ const bfsSlice = createSlice({
     setPlaying(state, action: PayloadAction<boolean>) {
       state.isPlaying = action.payload;
     },
-    setInitialNode(state, action: PayloadAction<BfsNode | undefined>) {
+    setInitialNode(state, action: PayloadAction<DFSNode | undefined>) {
       state.initialNode = action.payload;
     },
     setRoles(state, action: PayloadAction<NodeRole[]>) {
@@ -59,13 +56,10 @@ const bfsSlice = createSlice({
     setGraphData(state, action: PayloadAction<graphType>) {
       state.graphData = action.payload;
     },
-    setCodeRef(state, action: PayloadAction<CodeReference<BfsAlgNames>>) {
+    setCodeRef(state, action: PayloadAction<CodeReference<DFSAlgNames>>) {
       state.currentAlg = action.payload.name;
       state.currentLine = action.payload.line;
       return state;
-    },
-    setBfsObjects(state, action: PayloadAction<BfsItemObj[]>) {
-      state.bfsObjects = action.payload;
     },
   },
 });
@@ -83,5 +77,4 @@ export const {
   setInputArray,
   setGraphData,
   setCodeRef,
-  setBfsObjects,
 } = bfsSlice.actions;

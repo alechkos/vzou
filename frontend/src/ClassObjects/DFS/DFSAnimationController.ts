@@ -1,6 +1,6 @@
 import AnimationController from "../AnimationController";
 import { AppDispatch } from "../../store/store";
-import { BFSMemento } from "./BFSMemento";
+import { DFSMemento } from "./DFSMemento";
 import { NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { Events } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { ActionType } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
@@ -12,28 +12,35 @@ import {
   setPassedNodes,
   setError,
   setCodeRef,
-} from "../../store/reducers/alghoritms/bfs-reducer";
-import { bfsAnimation, buildBFSNodes } from "./BFSAlgorithms";
+} from "../../store/reducers/alghoritms/dfs-reducer";
+import { dfsAnimation, buildDFSNodes } from "./DFSAlgorithms";
 import { graphType } from "../../types/GraphTypes";
-import { BfsNode } from "./BfsNode";
+import { DFSNode } from "./DFSNode";
 
-export class BfsAnimationController extends AnimationController<BfsNode | undefined, string> {
-  private static bfsController: BfsAnimationController | null = null;
+export class DFSAnimationController extends AnimationController<DFSNode | undefined, string> {
+  private static dfsController: DFSAnimationController | null = null;
 
-  private constructor(node: BfsNode | undefined, dispatch: AppDispatch) {
-    super(dispatch, new BFSMemento(), node);
+  graphNodes: DFSNode[];
+
+  private constructor(node: DFSNode | undefined, dispatch: AppDispatch) {
+    super(dispatch, new DFSMemento(), node);
+    this.graphNodes = [];
   }
 
-  static getController(root: BfsNode | undefined, dispatch: AppDispatch): BfsAnimationController {
-    if (!this.bfsController) this.bfsController = new BfsAnimationController(root, dispatch);
-    return this.bfsController;
+  static getController(root: DFSNode | undefined, dispatch: AppDispatch): DFSAnimationController {
+    if (!this.dfsController) this.dfsController = new DFSAnimationController(root, dispatch);
+    return this.dfsController;
+  }
+
+  setGraphNodes(graphData: DFSNode[]) {
+    this.graphNodes = graphData;
   }
 
   setPlaying(value: boolean) {
     this.dispatch(setPlaying(value));
   }
 
-  setHead(node: BfsNode | undefined) {
+  setHead(node: DFSNode | undefined) {
     this.dispatch(setInitialNode(node));
   }
 
@@ -54,7 +61,7 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
   }
 
   setGraphFromInput(graphData: graphType) {
-    const node = buildBFSNodes(graphData);
+    const node = buildDFSNodes(graphData, this);
     this.data = node;
     this.setHead(node);
     this.memento.clearSnapshots();
@@ -63,7 +70,7 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
     this.setPassedNodes([]);
   }
 
-  initData(data: BfsNode | undefined) {
+  initData(data: DFSNode | undefined) {
     this.setReference({ name: this.memento.getCurrentAlg(), line: 0 });
     this.setHead(data);
     this.setCurrentActions([]);
@@ -77,7 +84,7 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
     this.setCurrentActions(actions);
     this.setCurrentRoles(this.memento.getRoles(index));
     this.setReference(this.memento.getCodeRef(index));
-    this.setPassedNodes((this.memento as BFSMemento).getPassedNodes(index));
+    this.setPassedNodes((this.memento as DFSMemento).getPassedNodes(index));
     if (actions.length > 0 && actions[0].action === ActionType.ERROR) {
       this.setError(actions[0]?.error || "ERROR");
     }
@@ -88,7 +95,7 @@ export class BfsAnimationController extends AnimationController<BfsNode | undefi
   }
 
   //Animation
-  async bfsAnimation(graphData: graphType) {
-    await this.playAlgorithm(bfsAnimation, this.memento, graphData);
+  async dfsAnimation(initialValue: number) {
+    await this.playAlgorithm(dfsAnimation, this.memento, initialValue, this.graphNodes);
   }
 }

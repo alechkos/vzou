@@ -1,15 +1,15 @@
 import { FC } from "react";
 import { getAnimationsAndStyles } from "../BinaryTree/Helpers/Functions";
 import { motion } from "framer-motion";
-import { BfsItemObj } from "../../../ClassObjects/BFS/BfsItemObj";
+import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import Arrow from "../LinkedList/Arrow";
-import styles from "./BFSNode.module.css";
+import styles from "./DFSNode.module.css";
 import Branch from "../BinaryTree/Branch";
 import ArrowForGraph from "./ArrowForGraph";
 import branch from "../BinaryTree/Branch";
 
 interface Props {
-  nodeObj: BfsItemObj;
+  nodeObj: DFSItemObj;
 }
 
 const ListNode: FC<Props> = ({ nodeObj }) => {
@@ -29,7 +29,7 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
     animateObj = animate;
   }
 
-  let nameForClass = "node-of-list node-selected";
+  let nameForClass = `${styles.node} node-selected`;
   return (
     <div>
       <motion.span
@@ -49,8 +49,7 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
           top: nodeObj.position.y,
           left: nodeObj.position.x,
         }}
-        // className={nodeObj.nodeRole ? nameForClass : "node-of-list"}
-        className={styles.node}
+        className={nodeObj.nodeRole ? nameForClass : styles.node}
       >
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
       </motion.span>
