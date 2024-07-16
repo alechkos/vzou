@@ -63,7 +63,7 @@ const DFSPage: FC = () => {
           />
           {(showActions || editingConstruction) && (
             <DFS
-              initialNode={initialNode}
+              graphData={controller.graphNodes}
               speed={controller.speed}
               viewportWidth={viewportWidth}
               actions={actions}

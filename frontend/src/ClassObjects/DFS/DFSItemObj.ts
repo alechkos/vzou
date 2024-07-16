@@ -32,7 +32,7 @@ export class DFSItemObj extends BaseObj {
     this.parents = parents;
     this.branches = [];
     this.calculatePosition();
-    this.createBranch();
+    // this.createBranch();
   }
 
   getXGap() {
@@ -47,9 +47,9 @@ export class DFSItemObj extends BaseObj {
       return;
     }
     if (this.type === "left") {
-      let x = this.parents[0].position.x - this.getXGap() + 40;
+      let x = this.position.x - this.getXGap() + 40;
 
-      let y = this.parents[0].position.y + DFSItemObj.gapY + 40;
+      let y = this.position.y + DFSItemObj.gapY + 40;
 
       DFSItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
@@ -67,9 +67,9 @@ export class DFSItemObj extends BaseObj {
 
       DFSItemObj.positions.push(this.position);
     } else {
-      let x = this.parents[0].position.x + this.getXGap() - 40;
+      let x = this.position.x + this.getXGap() - 40;
 
-      let y = this.parents[0].position.y + DFSItemObj.gapY + 40;
+      let y = this.position.y + DFSItemObj.gapY + 40;
 
       DFSItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
@@ -106,62 +106,119 @@ export class DFSItemObj extends BaseObj {
     });
   }
 
-  static generateBFSObjects(viewportWidth: number, speed: number, head: DFSNode | undefined) {
-    if (!head) return [];
+  static generateBFSObjects(viewportWidth: number, speed: number, graphData: DFSNode[]) {
+    if (graphData.length === 0) return [];
     const directions = ["right", "left"];
     const bfsObjects: DFSItemObj[] = [];
-    const stack = [
-      {
-        node: head,
-        nodeObj: new DFSItemObj(
+
+    let newItem: DFSItemObj;
+    graphData.forEach((node, index) => {
+      if (directions.length === 0) {
+        directions.push("right");
+        directions.push("left");
+      }
+
+      let dir = directions.pop();
+
+      if (index === 0) {
+        newItem = new DFSItemObj(
           {
             x: viewportWidth / 2 - 200,
             y: 325,
           },
           speed,
-          head.id,
-          head.value,
+          node.id,
+          node.value,
           viewportWidth,
           undefined,
           "root",
           []
-        ),
-      },
-    ];
+        );
+      } else {
+        newItem = new DFSItemObj(
+          {
+            x: viewportWidth / 2 - 200,
+            y: 325,
+          },
+          speed,
+          node.id,
+          node.value,
+          viewportWidth,
+          undefined,
+          dir as "root" | "right" | "left",
+          []
+        );
+      }
 
-    while (stack.length) {
-      const item = stack.pop();
-      if (!item) break;
-      const { node, nodeObj } = item;
-      node.adjacents.forEach((bfsNode) => {
-        const checkNode = bfsObjects.find((check) => check.value === bfsNode.value);
-        const dir = directions.pop();
-        if (dir === undefined) {
-          directions.push("right");
-          directions.push("left");
-        }
-        if (checkNode === undefined) {
-          stack.push({
-            node: bfsNode,
-            nodeObj: new DFSItemObj(
-              { x: 0, y: 0 },
-              speed,
-              bfsNode.id,
-              bfsNode.value,
-              viewportWidth,
-              undefined,
-              dir as "root" | "right" | "left",
-              [nodeObj]
-            ),
+      bfsObjects.push(newItem);
+    });
+
+    graphData.forEach((node) => {
+      node.links.map((link) => {
+        bfsObjects
+          .filter((obj) => obj.id === link.target)
+          .map((obj) => {
+            let parent = bfsObjects.find((par) => par.id === link.source);
+            if (parent) {
+              obj.addParent(parent);
+              obj.createBranch();
+            }
           });
-        } else {
-          checkNode.addParent(nodeObj);
-          checkNode.createBranch();
-        }
       });
-      const checkNode = bfsObjects.find((node) => node.id === nodeObj.id);
-      if (checkNode === undefined) bfsObjects.push(nodeObj);
-    }
+    });
+
+    // const stack = [
+    //   {
+    //     node: head,
+    //     nodeObj: new DFSItemObj(
+    //       {
+    //         x: viewportWidth / 2 - 200,
+    //         y: 325,
+    //       },
+    //       speed,
+    //       head.id,
+    //       head.value,
+    //       viewportWidth,
+    //       undefined,
+    //       "root",
+    //       []
+    //     ),
+    //   },
+    // ];
+    //
+    // while (stack.length) {
+    //   const item = stack.pop();
+    //   if (!item) break;
+    //   const { node, nodeObj } = item;
+    //   node.adjacents.forEach((bfsNode) => {
+    //     if (directions.length === 0) {
+    //       directions.push("right");
+    //       directions.push("left");
+    //     }
+    //     const checkNode = stack.find((check) => check.node.id === bfsNode.id);
+    //     const dir = directions.pop();
+    //     if (checkNode === undefined) {
+    //       stack.push({
+    //         node: bfsNode,
+    //         nodeObj: new DFSItemObj(
+    //           { x: 0, y: 0 },
+    //           speed,
+    //           bfsNode.id,
+    //           bfsNode.value,
+    //           viewportWidth,
+    //           undefined,
+    //           dir as "root" | "right" | "left",
+    //           [nodeObj]
+    //         ),
+    //       });
+    //     } else {
+    //       checkNode.nodeObj.addParent(nodeObj);
+    //       checkNode.nodeObj.createBranch();
+    //     }
+    //   });
+    //   const checkNode = bfsObjects.find((node) => node.id === nodeObj.id);
+    //   if (checkNode === undefined) bfsObjects.push(nodeObj);
+    // }
 
     bfsObjects.sort((a, b) => a.id - b.id);
     return bfsObjects;

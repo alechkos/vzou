@@ -12,7 +12,7 @@ interface Props {
   nodeObj: DFSItemObj;
 }
 
-const ListNode: FC<Props> = ({ nodeObj }) => {
+const DFSNode: FC<Props> = ({ nodeObj }) => {
   const { initial, animate, style } = getAnimationsAndStyles(
     nodeObj.action,
     null,
@@ -56,6 +56,7 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
       {nodeObj.branches.length > 0 &&
         nodeObj.branches.map((branch) => (
           <ArrowForGraph
+            key={nodeObj.position.x}
             branch={branch}
             isPassed={nodeObj.isPassed}
             speed={nodeObj.speed}
@@ -75,4 +76,4 @@ const ListNode: FC<Props> = ({ nodeObj }) => {
   );
 };
 
-export default ListNode;
+export default DFSNode;

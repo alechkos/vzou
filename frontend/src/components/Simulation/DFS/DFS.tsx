@@ -6,7 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import DFSNodes from "./DFSNode";
 
 interface Props {
-  initialNode: DFSNode | undefined;
+  graphData: DFSNode[];
   speed: number;
   viewportWidth: number;
   passedNodes?: number[];
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const DFS: FC<Props> = ({
-  initialNode,
+  graphData,
   speed,
   viewportWidth,
   passedNodes,
@@ -25,9 +25,7 @@ const DFS: FC<Props> = ({
   roles,
 }) => {
   DFSItemObj.positions = [];
-  const bfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, initialNode);
-
-  console.log(bfsObjects);
+  const bfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
 
   DFSItemObj.setActions(bfsObjects, actions);
   DFSItemObj.setRoles(bfsObjects, roles);
