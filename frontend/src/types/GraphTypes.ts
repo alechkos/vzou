@@ -22,7 +22,7 @@ export type graphType = {
 };
 
 export enum Colors {
-  White = "white",
-  Gray = "gray",
-  Black = "black",
+  White = "White",
+  Gray = "Gray",
+  Black = "Black",
 }

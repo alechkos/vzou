@@ -5,9 +5,9 @@ import { DFSAlgNames } from "../../../components/Simulation/PseudoCode/DFSPseudo
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { graphType } from "../../../types/GraphTypes";
 import { DFSNode } from "../../../ClassObjects/DFS/DFSNode";
-import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
+const graphNodes: DFSNode[] = [];
 
 const initialState = {
   graphData,
@@ -23,6 +23,7 @@ const initialState = {
   passedNodes: [] as number[],
   traversalResults: [] as number[],
   currentActions: [] as Events,
+  graphNodes,
 };
 
 const bfsSlice = createSlice({
@@ -61,6 +62,9 @@ const bfsSlice = createSlice({
       state.currentLine = action.payload.line;
       return state;
     },
+    setGraphNodes(state, action: PayloadAction<DFSNode[]>) {
+      state.graphNodes = action.payload;
+    },
   },
 });
 
@@ -77,4 +81,5 @@ export const {
   setInputArray,
   setGraphData,
   setCodeRef,
+  setGraphNodes,
 } = bfsSlice.actions;

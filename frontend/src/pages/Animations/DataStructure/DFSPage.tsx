@@ -14,6 +14,7 @@ import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/Pseud
 import GraphVisualizer from "../../../components/Simulation/ControlsPanels/GraphVisualizer";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import DFS from "../../../components/Simulation/DFS/DFS";
+import DFSTable from "../../../components/Simulation/DFS/DFSTable";
 
 const DFSPage: FC = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const DFSPage: FC = () => {
   const roles = useAppSelector((state) => state.dfs.currentRoles);
   const passedNode = useAppSelector((state) => state.dfs.passedNodes);
   const visitedNodes = useAppSelector((state) => state.dfs.visitedNodes);
+  const graphNodes = useAppSelector((state) => state.dfs.graphNodes);
   const controller = DFSAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -72,6 +74,7 @@ const DFSPage: FC = () => {
               visitedNodes={visitedNodes}
             />
           )}
+          {(showActions || editingConstruction) && <DFSTable graphData={graphNodes} />}
           {showPseudoCode && (
             <PlayerControlsPanel
               controller={controller}
@@ -84,52 +87,6 @@ const DFSPage: FC = () => {
               code={combineDFSPseudoCode(currentAlg) as PseudoItem[]}
             />
           )}
-          {/*{showPseudoCode && (*/}
-          {/*  <div className={styles.tableWrapper}>*/}
-          {/*    <table className={styles.table}>*/}
-          {/*      <thead>*/}
-          {/*        <tr>*/}
-          {/*          <th>Node</th>*/}
-          {/*          {graphData.nodes.map((node) => (*/}
-          {/*            <th key={node}>{node}</th>*/}
-          {/*          ))}*/}
-          {/*        </tr>*/}
-          {/*      </thead>*/}
-          {/*      <tbody>*/}
-          {/*        <tr>*/}
-          {/*          <td>d</td>*/}
-          {/*          {graphData.nodes.map((node) => (*/}
-          {/*            <td key={node}>{distances[node]}</td>*/}
-          {/*          ))}*/}
-          {/*        </tr>*/}
-          {/*        <tr>*/}
-          {/*          <td>π</td>*/}
-          {/*          {graphData.nodes.map((node) => (*/}
-          {/*            <td key={node}>{predecessors[node] === null ? "NIL" : predecessors[node]}</td>*/}
-          {/*          ))}*/}
-          {/*        </tr>*/}
-          {/*        <tr>*/}
-          {/*          <td>color</td>*/}
-          {/*          {graphData.nodes.map((node) => (*/}
-          {/*            <td key={node}>{colors[node]}</td>*/}
-          {/*          ))}*/}
-          {/*        </tr>*/}
-          {/*        <tr>*/}
-          {/*          <td>u</td>*/}
-          {/*          <td>{currentU !== null ? currentU : ""}</td>*/}
-          {/*        </tr>*/}
-          {/*      </tbody>*/}
-          {/*    </table>*/}
-          {/*    <div className={styles.queueWrapper}>*/}
-          {/*      <h3>Queue</h3>*/}
-          {/*      <ul>*/}
-          {/*        {queue.map((node, index) => (*/}
-          {/*          <li key={index}>{node}</li>*/}
-          {/*        ))}*/}
-          {/*      </ul>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*)}*/}
         </div>
       )}
     </>

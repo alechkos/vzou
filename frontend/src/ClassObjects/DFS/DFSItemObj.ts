@@ -32,7 +32,6 @@ export class DFSItemObj extends BaseObj {
     this.parents = parents;
     this.branches = [];
     this.calculatePosition();
-    // this.createBranch();
   }
 
   getXGap() {
@@ -166,59 +165,6 @@ export class DFSItemObj extends BaseObj {
           });
       });
     });
-
-    // const stack = [
-    //   {
-    //     node: head,
-    //     nodeObj: new DFSItemObj(
-    //       {
-    //         x: viewportWidth / 2 - 200,
-    //         y: 325,
-    //       },
-    //       speed,
-    //       head.id,
-    //       head.value,
-    //       viewportWidth,
-    //       undefined,
-    //       "root",
-    //       []
-    //     ),
-    //   },
-    // ];
-    //
-    // while (stack.length) {
-    //   const item = stack.pop();
-    //   if (!item) break;
-    //   const { node, nodeObj } = item;
-    //   node.adjacents.forEach((bfsNode) => {
-    //     if (directions.length === 0) {
-    //       directions.push("right");
-    //       directions.push("left");
-    //     }
-    //     const checkNode = stack.find((check) => check.node.id === bfsNode.id);
-    //     const dir = directions.pop();
-    //     if (checkNode === undefined) {
-    //       stack.push({
-    //         node: bfsNode,
-    //         nodeObj: new DFSItemObj(
-    //           { x: 0, y: 0 },
-    //           speed,
-    //           bfsNode.id,
-    //           bfsNode.value,
-    //           viewportWidth,
-    //           undefined,
-    //           dir as "root" | "right" | "left",
-    //           [nodeObj]
-    //         ),
-    //       });
-    //     } else {
-    //       checkNode.nodeObj.addParent(nodeObj);
-    //       checkNode.nodeObj.createBranch();
-    //     }
-    //   });
-    //   const checkNode = bfsObjects.find((node) => node.id === nodeObj.id);
-    //   if (checkNode === undefined) bfsObjects.push(nodeObj);
-    // }
 
     bfsObjects.sort((a, b) => a.id - b.id);
     return bfsObjects;
