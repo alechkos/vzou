@@ -4,6 +4,8 @@ import { Events, NodeRole } from "../BinaryTree/BinaryTreeTypes";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import { AnimatePresence } from "framer-motion";
 import DFSNodes from "./DFSNode";
+import { useAppDispatch } from "../../../store/hooks";
+import { setGraphNodes } from "../../../store/reducers/alghoritms/dfs-reducer";
 
 interface Props {
   graphData: DFSNode[];
@@ -24,6 +26,8 @@ const DFS: FC<Props> = ({
   actions,
   roles,
 }) => {
+  const dispatch = useAppDispatch();
+
   DFSItemObj.positions = [];
   const bfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
 
@@ -35,6 +39,8 @@ const DFS: FC<Props> = ({
   if (passedNodes) {
     DFSItemObj.setPassed(bfsObjects, passedNodes);
   }
+
+  dispatch(setGraphNodes(bfsObjects));
 
   return (
     <div>

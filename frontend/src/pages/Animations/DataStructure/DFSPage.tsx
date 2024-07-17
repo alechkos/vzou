@@ -27,7 +27,6 @@ const DFSPage: FC = () => {
   const roles = useAppSelector((state) => state.dfs.currentRoles);
   const passedNode = useAppSelector((state) => state.dfs.passedNodes);
   const visitedNodes = useAppSelector((state) => state.dfs.visitedNodes);
-  const graphNodes = useAppSelector((state) => state.dfs.graphNodes);
   const controller = DFSAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -74,7 +73,7 @@ const DFSPage: FC = () => {
               visitedNodes={visitedNodes}
             />
           )}
-          {(showActions || editingConstruction) && <DFSTable graphData={graphNodes} />}
+          {(showActions || editingConstruction) && <DFSTable />}
           {showPseudoCode && (
             <PlayerControlsPanel
               controller={controller}

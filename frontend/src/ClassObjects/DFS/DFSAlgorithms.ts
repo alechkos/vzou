@@ -30,7 +30,6 @@ export function buildDFSNodes(graphData: graphType, controller: DFSAnimationCont
   result = arrayOfDFS[0];
   arrayOfDFS.sort((a, b) => a.id - b.id);
   controller.setGraphNodes(arrayOfDFS);
-  controller.dispatch(setGraphNodes(arrayOfDFS));
   return result;
 }
 
@@ -54,14 +53,28 @@ export const dfsAnimation = (
       []
     );
   }
+  const passedNodes: number[] = [];
   memento.addBlank({ line: 1, name: "Search" }, initialNode);
   graphData.forEach((node) => {
+    passedNodes.push(node.id);
     memento.addSnapshot(
       { line: 2, name: "Search" },
       initialNode,
       node.id,
       ActionType.HIGHLIGHT_LIGHT,
-      [{ id: node.id, role: "V" }]
+      [{ id: node.id, role: "V" }],
+      undefined,
+      passedNodes
+    );
+    node.setColor(Colors.White);
+    memento.addSnapshot(
+      { line: 3, name: "Search" },
+      initialNode,
+      node.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: node.id, role: "V" }],
+      undefined,
+      passedNodes
     );
     node.setColor(Colors.White);
   });

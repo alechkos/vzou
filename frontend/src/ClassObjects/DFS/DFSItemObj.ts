@@ -18,6 +18,14 @@ export class DFSItemObj extends BaseObj {
 
   branches: BranchObj[];
 
+  color: string;
+
+  d: number;
+
+  f: number;
+
+  pi: DFSItemObj | undefined;
+
   constructor(
     position: { x: number; y: number },
     speed: number,
@@ -26,12 +34,19 @@ export class DFSItemObj extends BaseObj {
     viewportWidth: number,
     parent: DFSItemObj | undefined,
     type: "root" | "left" | "right",
-    parents: DFSItemObj[]
+    parents: DFSItemObj[],
+    color: string,
+    d: number,
+    f: number
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parents = parents;
     this.branches = [];
     this.calculatePosition();
+    this.color = color;
+    this.d = d;
+    this.f = f;
+    this.pi = undefined;
   }
 
   getXGap() {
@@ -131,7 +146,10 @@ export class DFSItemObj extends BaseObj {
           viewportWidth,
           undefined,
           "root",
-          []
+          [],
+          node.color,
+          node.d,
+          node.f
         );
       } else {
         newItem = new DFSItemObj(
@@ -145,7 +163,10 @@ export class DFSItemObj extends BaseObj {
           viewportWidth,
           undefined,
           dir as "root" | "right" | "left",
-          []
+          [],
+          node.color,
+          node.d,
+          node.f
         );
       }
 
