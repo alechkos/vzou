@@ -38,8 +38,8 @@ const BfsPage: FC = () => {
   const [highlightedNode, setHighlightedNode] = useState<number | null>(null);
   const [highlightedLink, setHighlightedLink] = useState<{ source: number; target: number } | null>(
     null
-  ); // новое состояние
-  const [highlightedTargetNode, setHighlightedTargetNode] = useState<number | null>(null); // новое состояние
+  );
+  const [highlightedTargetNode, setHighlightedTargetNode] = useState<number | null>(null);
 
   const [isPaused, setIsPaused] = useState(false);
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
@@ -48,17 +48,8 @@ const BfsPage: FC = () => {
   const isPausedRef = useRef(isPaused);
   isPausedRef.current = isPaused;
 
-  const distancesRef = useRef(distances);
-  distancesRef.current = distances;
-
-  const predecessorsRef = useRef(predecessors);
-  predecessorsRef.current = predecessors;
-
-  const colorsRef = useRef(colors);
-  colorsRef.current = colors;
-
-  const queueRef = useRef(queue);
-  queueRef.current = queue;
+  const historyRef = useRef<any[]>([]); // Состояние истории
+  const abortControllerRef = useRef<AbortController | null>(null); // Контроллер для остановки
 
   const handleShowActions = () => setShowActions(true);
   const handleHideActions = () => {
@@ -82,16 +73,72 @@ const BfsPage: FC = () => {
     }, 5000);
   };
 
-  useEffect(() => {
-    if (queue.length > 0 && currentLine === 8) {
-      setTimeout(() => {
-        setCurrentLine(9);
-        continueBfsAnimation(queueRef.current);
-      }, 1000 / speed);
-    }
-  }, [queue, currentLine, speed]);
+  const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any) => {
+    console.log("I save my last to ", cl);
+    const currentState = {
+      cl,
+      distances: { ...d },
+      predecessors: { ...p },
+      colors: { ...c },
+      queue: [...q],
+      u,
+      highlightedNode,
+      highlightedLink,
+      highlightedTargetNode,
+    };
+    console.log("My last current state is ", currentState);
+    historyRef.current.push(currentState);
+    console.log("My last history is ", historyRef);
+  };
 
-  const bfsAnimation = async () => {
+  const restoreState = (index: number) => {
+    const state = historyRef.current[index];
+    if (state) {
+      setCurrentLine(state.cl);
+      setDistances(state.distances);
+      setPredecessors(state.predecessors);
+      setColors(state.colors);
+      setQueue(state.queue);
+      setCurrentU(state.u);
+      setHighlightedNode(state.highlightedNode);
+      setHighlightedLink(state.highlightedLink);
+      setHighlightedTargetNode(state.highlightedTargetNode);
+    }
+  };
+
+  const handleBack = () => {
+    if (historyRef.current.length > 1) {
+      historyRef.current.pop();
+      restoreState(historyRef.current.length - 1);
+      setIsPaused(true);
+    }
+  };
+
+  const resetAnimation = () => {
+    setIsPlayingAnimation(false);
+    setHasStarted(false);
+    setIsPaused(false);
+    setCurrentLine(0);
+    setDistances({});
+    setPredecessors({});
+    setColors({});
+    setQueue([]);
+    setCurrentU(null);
+    setHighlightedNode(null);
+    setHighlightedLink(null);
+    setHighlightedTargetNode(null);
+    historyRef.current = [];
+  };
+
+  const bfsAnimation = async (signal: AbortSignal) => {
+    let cl = 0;
+    let d = {};
+    let p = {};
+    let c = {};
+    let q: number[] = [];
+    let u = null;
+    let localQueue: number[] = [];
+
     if (initialNode === null) {
       setCurrentError("Please set the initial node.");
       return;
@@ -110,107 +157,175 @@ const BfsPage: FC = () => {
     setColors(initColors);
 
     setCurrentLine(0);
-    await waitForNextStep();
+    saveState(cl, d, p, c, q, u);
+
+    await waitForNextStep(signal);
 
     for (const v of graphData.nodes) {
+      if (signal.aborted) return resetAnimation();
       setHighlightedNode(v);
       setCurrentLine(1);
-      await waitForNextStep();
+
+      saveState(cl + 1, d, p, c, q, u);
+
+      await waitForNextStep(signal);
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
+      d = { ...d, [v]: Infinity };
+
       setCurrentLine(2);
-      await waitForNextStep();
+
+      saveState(cl + 2, d, p, c, q, u);
+
+      await waitForNextStep(signal);
       setPredecessors((prev) => ({ ...prev, [v]: null }));
+      p = { ...p, [v]: null };
+
       setCurrentLine(3);
-      await waitForNextStep();
+      saveState(cl + 3, d, p, c, q, u);
+      await waitForNextStep(signal);
       setColors((prev) => ({ ...prev, [v]: "WHITE" }));
+      c = { ...c, [v]: "WHITE" };
       setCurrentLine(4);
-      await waitForNextStep();
+      saveState(cl + 4, d, p, c, q, u);
+      await waitForNextStep(signal);
     }
 
     setHighlightedNode(null);
     setCurrentLine(5);
-    await waitForNextStep();
-    let localQueue: number[] = [];
+    saveState(cl + 5, d, p, c, q, u);
+    await waitForNextStep(signal);
+
     setCurrentLine(6);
     setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
-    await waitForNextStep();
+    d = { ...d, [initialNode]: 0 };
+    saveState(cl + 6, d, p, c, q, u);
+    await waitForNextStep(signal);
     setCurrentLine(7);
     setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
-    await waitForNextStep();
+    c = { ...c, [initialNode]: "GRAY" };
+    saveState(cl + 7, d, p, c, q, u);
+    await waitForNextStep(signal);
+
     setCurrentLine(8);
 
     localQueue.push(initialNode);
     setQueue([...localQueue]);
-    await waitForNextStep();
-    continueBfsAnimation(localQueue);
+    q = [...localQueue];
+
+    saveState(cl + 8, d, p, c, q, u);
+    await waitForNextStep(signal);
+    continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
 
-  const continueBfsAnimation = async (localQueue: number[]) => {
-    console.log("Queue before while:", localQueue);
+  const continueBfsAnimation = async (
+    localQueue: number[],
+    signal: AbortSignal,
+    di: any,
+    pr: any,
+    co: any,
+    qu: any
+  ) => {
+    let cl = 9;
+    let d = { ...di };
+    let p = { ...pr };
+    let c = { ...co };
+    let q = [...qu];
+    let localU = null;
 
     while (localQueue.length > 0) {
+      if (signal.aborted) return resetAnimation();
       setCurrentLine(9);
-      await waitForNextStep();
+      saveState(cl, d, p, c, q, localU);
+
+      await waitForNextStep(signal);
 
       setCurrentLine(10);
+
       const u = localQueue.shift()!;
+      localU = u;
+      q = [...localQueue];
       setQueue([...localQueue]);
       setCurrentU(u ?? null);
-
-      await waitForNextStep();
-      console.log("U is ", u);
+      saveState(cl + 1, d, p, c, q, localU);
+      await waitForNextStep(signal);
 
       if (u !== undefined) {
-        await waitForNextStep();
+        await waitForNextStep(signal);
 
         for (const v of graphData.links
           .filter((link) => link.source === u)
           .map((link) => link.target)) {
+          if (signal.aborted) return resetAnimation();
           setCurrentLine(11);
-          await waitForNextStep();
+
+          saveState(cl + 2, d, p, c, q, localU);
+          await waitForNextStep(signal);
 
           setHighlightedLink({ source: u, target: v });
           setHighlightedTargetNode(v);
-          await waitForNextStep();
 
-          if (colorsRef.current[u] !== "BLACK") {
-            if (colorsRef.current[v] === "WHITE") {
+          await waitForNextStep(signal);
+
+          if (c[u] !== "BLACK") {
+            if (c[v] === "WHITE") {
               setCurrentLine(12);
-              await waitForNextStep();
-              setDistances((prev) => ({ ...prev, [v]: distancesRef.current[u] + 1 }));
+
+              saveState(cl + 3, d, p, c, q, localU);
+              await waitForNextStep(signal);
+              d = { ...d, [v]: d[u] + 1 };
+              setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
               setCurrentLine(13);
-              await waitForNextStep();
+              saveState(cl + 4, d, p, c, q, localU);
+              await waitForNextStep(signal);
+              p = { ...p, [v]: u };
               setPredecessors((prev) => ({ ...prev, [v]: u }));
               setCurrentLine(14);
-              await waitForNextStep();
+              saveState(cl + 5, d, p, c, q, localU);
+              await waitForNextStep(signal);
+              c = { ...c, [v]: "GRAY" };
               setColors((prev) => ({ ...prev, [v]: "GRAY" }));
               setCurrentLine(15);
-              await waitForNextStep();
+
+              saveState(cl + 6, d, p, c, q, localU);
+              await waitForNextStep(signal);
               setCurrentLine(16);
+
               localQueue.push(v);
+              q = [...localQueue];
               setQueue([...localQueue]);
-              await waitForNextStep();
+              saveState(cl + 7, d, p, c, q, localU);
+              await waitForNextStep(signal);
             }
           }
         }
-
+        c = { ...c, [u]: "BLACK" };
         setColors((prev) => ({ ...prev, [u]: "BLACK" }));
         setCurrentLine(17);
-        await waitForNextStep();
+        saveState(cl + 8, d, p, c, q, localU);
+        await waitForNextStep(signal);
       }
     }
 
     setCurrentLine(18);
-    await waitForNextStep();
-    console.log(localQueue);
+    saveState(cl + 7, d, p, c, q, localU);
+    await waitForNextStep(signal);
     setIsPlayingAnimation(false);
   };
 
-  const waitForNextStep = async () => {
-    while (isPausedRef.current) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
+  const waitForNextStep = async (signal: AbortSignal) => {
+    const delay = 1000 / speed;
+    const checkInterval = Math.min(100, delay); // Проверка каждые 100ms или меньше
+    const steps = Math.ceil(delay / checkInterval);
+
+    for (let i = 0; i < steps; i++) {
+      if (signal.aborted) return;
+      if (isPausedRef.current) {
+        while (isPausedRef.current && !signal.aborted) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      }
+      await new Promise((resolve) => setTimeout(resolve, checkInterval));
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000 / speed));
   };
 
   const handlePause = () => {
@@ -219,6 +334,18 @@ const BfsPage: FC = () => {
 
   const handlePlay = () => {
     setIsPaused(false);
+  };
+
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  };
+
+  const startBfsAnimation = () => {
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    bfsAnimation(controller.signal);
   };
 
   return (
@@ -234,13 +361,13 @@ const BfsPage: FC = () => {
             editingConstruction={editingConstruction}
             setShowPseudoCode={setShowPseudoCode}
             setInitialNode={setInitialNode}
-            startAnimation={bfsAnimation}
+            startAnimation={startBfsAnimation}
             setSpeed={setSpeed}
             graphData={graphData}
             setGraphData={setGraphData}
             highlightedNode={highlightedNode}
-            highlightedLink={highlightedLink} // передача состояния
-            highlightedTargetNode={highlightedTargetNode} // передача состояния
+            highlightedLink={highlightedLink}
+            highlightedTargetNode={highlightedTargetNode}
           />
           {hasStarted && (
             <div className={controlStyles.buttonContainer}>
@@ -255,6 +382,18 @@ const BfsPage: FC = () => {
                 onClick={handlePlay}
               >
                 Play
+              </button>
+              <button
+                className={controlStyles.button}
+                onClick={handleBack}
+              >
+                Back
+              </button>
+              <button
+                className={controlStyles.button}
+                onClick={handleStop}
+              >
+                Stop
               </button>
             </div>
           )}
