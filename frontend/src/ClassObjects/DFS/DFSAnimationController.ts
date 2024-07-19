@@ -12,6 +12,8 @@ import {
   setPassedNodes,
   setError,
   setCodeRef,
+  setVisitedNodes,
+  setTableData,
 } from "../../store/reducers/alghoritms/dfs-reducer";
 import { dfsAnimation, buildDFSNodes } from "./DFSAlgorithms";
 import { graphType } from "../../types/GraphTypes";
@@ -60,6 +62,16 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.dispatch(setPassedNodes(passedNodes));
   }
 
+  setVisitedNodes(visitedNodes: number[]) {
+    this.dispatch(setVisitedNodes(visitedNodes));
+  }
+
+  setTableData(
+    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[]
+  ) {
+    this.dispatch(setTableData(tableData));
+  }
+
   setGraphFromInput(graphData: graphType) {
     const node = buildDFSNodes(graphData, this);
     this.data = node;
@@ -68,6 +80,8 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.setCurrentActions([]);
     this.setCurrentRoles([]);
     this.setPassedNodes([]);
+    this.setVisitedNodes([]);
+    this.setTableData([]);
   }
 
   initData(data: DFSNode | undefined) {
@@ -76,6 +90,8 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.setCurrentActions([]);
     this.setCurrentRoles([]);
     this.setPassedNodes([]);
+    this.setVisitedNodes([]);
+    this.setTableData([]);
   }
 
   setAllData(index: number) {
@@ -84,7 +100,9 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.setCurrentActions(actions);
     this.setCurrentRoles(this.memento.getRoles(index));
     this.setReference(this.memento.getCodeRef(index));
+    this.setVisitedNodes((this.memento as DFSMemento).getVisitedNodes(index));
     this.setPassedNodes((this.memento as DFSMemento).getPassedNodes(index));
+    this.setTableData((this.memento as DFSMemento).getTableData(index));
     if (actions.length > 0 && actions[0].action === ActionType.ERROR) {
       this.setError(actions[0]?.error || "ERROR");
     }
@@ -96,6 +114,12 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
 
   //Animation
   async dfsAnimation(initialValue: number) {
+    this.graphNodes.forEach((node) => {
+      node.setF(0);
+      node.setColor("");
+      node.setD(0);
+      node.setPi(undefined);
+    });
     await this.playAlgorithm(dfsAnimation, this.memento, initialValue, this.graphNodes);
   }
 }

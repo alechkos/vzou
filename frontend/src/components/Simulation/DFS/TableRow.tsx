@@ -38,7 +38,7 @@ const TableRow: FC<Props> = ({ nodeObj, rowData }) => {
       }}
       // className={nodeObj.nodeRole ? nameForClass : styles.node}
     >
-      {nodeObj.isPassed && rowData}
+      {rowData}
     </motion.td>
   );
 };

@@ -9,6 +9,7 @@ import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
 const graphNodes: DFSItemObj[] = [];
+const tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = [];
 
 const initialState = {
   graphData,
@@ -22,9 +23,9 @@ const initialState = {
   currentRoles: [] as NodeRole[],
   visitedNodes: [] as number[],
   passedNodes: [] as number[],
-  traversalResults: [] as number[],
   currentActions: [] as Events,
   graphNodes,
+  tableData,
 };
 
 const bfsSlice = createSlice({
@@ -46,6 +47,9 @@ const bfsSlice = createSlice({
     setPassedNodes(state, action: PayloadAction<number[]>) {
       state.passedNodes = action.payload;
     },
+    setVisitedNodes(state, action: PayloadAction<number[]>) {
+      state.visitedNodes = action.payload;
+    },
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
     },
@@ -66,6 +70,14 @@ const bfsSlice = createSlice({
     setGraphNodes(state, action: PayloadAction<DFSItemObj[]>) {
       state.graphNodes = action.payload;
     },
+    setTableData(
+      state,
+      action: PayloadAction<
+        { id: number; data: { color: string; pi: number; d: number; f: number } }[]
+      >
+    ) {
+      state.tableData = action.payload;
+    },
   },
 });
 
@@ -77,10 +89,12 @@ export const {
   setRoles,
   setActions,
   setPassedNodes,
+  setVisitedNodes,
   setError,
   setInitialValue,
   setInputArray,
   setGraphData,
   setCodeRef,
   setGraphNodes,
+  setTableData,
 } = bfsSlice.actions;

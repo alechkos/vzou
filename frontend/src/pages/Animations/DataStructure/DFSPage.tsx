@@ -27,6 +27,7 @@ const DFSPage: FC = () => {
   const roles = useAppSelector((state) => state.dfs.currentRoles);
   const passedNode = useAppSelector((state) => state.dfs.passedNodes);
   const visitedNodes = useAppSelector((state) => state.dfs.visitedNodes);
+  const tableData = useAppSelector((state) => state.dfs.tableData);
   const controller = DFSAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -48,6 +49,8 @@ const DFSPage: FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  console.log(passedNode);
 
   return (
     <>
@@ -71,6 +74,7 @@ const DFSPage: FC = () => {
               roles={roles}
               passedNodes={passedNode}
               visitedNodes={visitedNodes}
+              tableData={tableData}
             />
           )}
           {(showActions || editingConstruction) && <DFSTable />}

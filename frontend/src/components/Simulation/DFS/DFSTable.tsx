@@ -30,7 +30,7 @@ const DFSTable: FC = () => {
               {graphData.map((node) => (
                 <TableRow
                   key={node.id}
-                  rowData={node.pi ? node.pi.id : "-∞"}
+                  rowData={node.pi !== -1 ? node.pi : "-∞"}
                   nodeObj={node}
                 />
               ))}
@@ -64,10 +64,6 @@ const DFSTable: FC = () => {
                   nodeObj={node}
                 />
               ))}
-            </tr>
-            <tr>
-              <td>u</td>
-              {/*<td>{currentU !== null ? currentU : ""}</td>*/}
             </tr>
           </tbody>
         </table>

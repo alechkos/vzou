@@ -24,7 +24,7 @@ export class DFSItemObj extends BaseObj {
 
   f: number;
 
-  pi: DFSItemObj | undefined;
+  pi: number;
 
   constructor(
     position: { x: number; y: number },
@@ -34,19 +34,16 @@ export class DFSItemObj extends BaseObj {
     viewportWidth: number,
     parent: DFSItemObj | undefined,
     type: "root" | "left" | "right",
-    parents: DFSItemObj[],
-    color: string,
-    d: number,
-    f: number
+    parents: DFSItemObj[]
   ) {
     super(position, speed, id, value, type, viewportWidth, parent);
     this.parents = parents;
     this.branches = [];
     this.calculatePosition();
-    this.color = color;
-    this.d = d;
-    this.f = f;
-    this.pi = undefined;
+    this.color = "";
+    this.d = 0;
+    this.f = 0;
+    this.pi = -1;
   }
 
   getXGap() {
@@ -146,10 +143,7 @@ export class DFSItemObj extends BaseObj {
           viewportWidth,
           undefined,
           "root",
-          [],
-          node.color,
-          node.d,
-          node.f
+          []
         );
       } else {
         newItem = new DFSItemObj(
@@ -163,10 +157,7 @@ export class DFSItemObj extends BaseObj {
           viewportWidth,
           undefined,
           dir as "root" | "right" | "left",
-          [],
-          node.color,
-          node.d,
-          node.f
+          []
         );
       }
 
@@ -203,12 +194,28 @@ export class DFSItemObj extends BaseObj {
     this.nodeRole = role;
   }
 
-  static setActions(listObjects: DFSItemObj[], actions: Events | null) {
+  setColor(color: string) {
+    this.color = color;
+  }
+
+  setD(d: number) {
+    this.d = d;
+  }
+
+  setF(f: number) {
+    this.f = f;
+  }
+
+  setPi(pi: number) {
+    this.pi = pi;
+  }
+
+  static setActions(graphObjects: DFSItemObj[], actions: Events | null) {
     if (actions) {
       for (const action of actions) {
         if (action.action === ActionType.ERROR || action.action === ActionType.SWAP) return;
         else {
-          for (const list of listObjects) {
+          for (const list of graphObjects) {
             if (list.id === action.item) {
               list.setAction(action.action);
             }
@@ -218,11 +225,11 @@ export class DFSItemObj extends BaseObj {
     }
   }
 
-  static setRoles(listObjects: DFSItemObj[], roles: NodeRole[]) {
-    if (!listObjects.length) return;
+  static setRoles(graphObjects: DFSItemObj[], roles: NodeRole[]) {
+    if (!graphObjects.length) return;
     else {
       for (const role of roles) {
-        for (const list of listObjects) {
+        for (const list of graphObjects) {
           if (list.id === role.id) {
             list.setRole(role.role);
           }
@@ -231,15 +238,31 @@ export class DFSItemObj extends BaseObj {
     }
   }
 
-  static setPassed(listObjects: DFSItemObj[], passedNodes: number[]) {
-    for (const node of listObjects) {
+  static setPassed(graphObjects: DFSItemObj[], passedNodes: number[]) {
+    for (const node of graphObjects) {
       node.isPassed = passedNodes.includes(node.id);
     }
   }
 
-  static setVisited(hashObjects: DFSItemObj[], visitedNodes: number[]) {
-    for (const node of hashObjects) {
+  static setVisited(graphObjects: DFSItemObj[], visitedNodes: number[]) {
+    for (const node of graphObjects) {
       node.isVisited = visitedNodes.includes(node.id);
     }
+  }
+
+  static setTableData(
+    graphObjects: DFSItemObj[],
+    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[]
+  ) {
+    graphObjects.forEach((node) => {
+      tableData.forEach((data) => {
+        if (node.id === data.id) {
+          node.setColor(data.data.color);
+          node.setD(data.data.d);
+          node.setF(data.data.f);
+          node.setPi(data.data.pi);
+        }
+      });
+    });
   }
 }

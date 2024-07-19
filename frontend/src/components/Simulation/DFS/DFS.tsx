@@ -15,6 +15,7 @@ interface Props {
   visitedNodes?: number[];
   actions: Events | null;
   roles: NodeRole[];
+  tableData?: { id: number; data: { color: string; pi: number; d: number; f: number } }[];
 }
 
 const DFS: FC<Props> = ({
@@ -25,27 +26,31 @@ const DFS: FC<Props> = ({
   visitedNodes,
   actions,
   roles,
+  tableData,
 }) => {
   const dispatch = useAppDispatch();
 
   DFSItemObj.positions = [];
-  const bfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
+  const dfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
 
-  DFSItemObj.setActions(bfsObjects, actions);
-  DFSItemObj.setRoles(bfsObjects, roles);
+  DFSItemObj.setActions(dfsObjects, actions);
+  DFSItemObj.setRoles(dfsObjects, roles);
   if (visitedNodes) {
-    DFSItemObj.setVisited(bfsObjects, visitedNodes);
+    DFSItemObj.setVisited(dfsObjects, visitedNodes);
   }
   if (passedNodes) {
-    DFSItemObj.setPassed(bfsObjects, passedNodes);
+    DFSItemObj.setPassed(dfsObjects, passedNodes);
+  }
+  if (tableData) {
+    DFSItemObj.setTableData(dfsObjects, tableData);
   }
 
-  dispatch(setGraphNodes(bfsObjects));
+  dispatch(setGraphNodes(dfsObjects));
 
   return (
     <div>
       <AnimatePresence>
-        {bfsObjects.map((nodeObj) => (
+        {dfsObjects.map((nodeObj) => (
           <DFSNodes
             nodeObj={nodeObj}
             key={nodeObj.id}

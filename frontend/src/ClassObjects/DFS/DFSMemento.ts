@@ -8,20 +8,20 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
 
   passedNodesSnapshots: number[][];
 
-  traversalResultsSnapshots: number[][];
+  tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[][];
 
   constructor() {
     super("Search");
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
-    this.traversalResultsSnapshots = [];
+    this.tableData = [];
   }
 
   clearSnapshots() {
     super.clearSnapshots();
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
-    this.traversalResultsSnapshots = [];
+    this.tableData = [];
   }
 
   addBlank(
@@ -31,7 +31,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = []
+    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -41,7 +41,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     });
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
-    this.traversalResultsSnapshots.push([...traversalResults]);
+    this.tableData.push([...tableData]);
   }
 
   addError(
@@ -51,7 +51,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = []
+    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.ERROR, item: -1, error }],
@@ -61,7 +61,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     });
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
-    this.traversalResultsSnapshots.push([...traversalResults]);
+    this.tableData.push([...tableData]);
   }
 
   getLength() {
@@ -76,7 +76,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    traversalResults: number[] = []
+    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],
@@ -86,7 +86,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     });
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
-    this.traversalResultsSnapshots.push([...traversalResults]);
+    this.tableData.push([...tableData]);
   }
 
   getVisitedNodes(index: number) {
@@ -103,10 +103,10 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     return this.passedNodesSnapshots[index];
   }
 
-  getTraversalResults(index: number) {
-    if (index < 0 || index >= this.traversalResultsSnapshots.length) {
+  getTableData(index: number) {
+    if (index < 0 || index >= this.tableData.length) {
       throw new Error("Index out of range");
     }
-    return this.traversalResultsSnapshots[index];
+    return this.tableData[index];
   }
 }
