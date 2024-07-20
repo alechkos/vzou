@@ -6,6 +6,7 @@ interface GraphVisualizerProps {
   highlightedNode: number | null;
   highlightedLink: { source: number; target: number } | null;
   highlightedTargetNode: number | null;
+  colors: { [key: number]: string };
 }
 
 interface GraphNode extends d3.SimulationNodeDatum {
@@ -18,6 +19,7 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
   highlightedNode,
   highlightedLink,
   highlightedTargetNode,
+  colors,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const nodesDataRef = useRef<GraphNode[]>([]);
@@ -58,42 +60,7 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
         target: nodesDataRef.current.find((node) => node.id === d.target)!,
       }));
 
-      const link = container
-        .append("g")
-        .attr("stroke", "#999")
-        .attr("stroke-opacity", 0.6)
-        .selectAll("line")
-        .data(linksDataRef.current)
-        .enter()
-        .append("line")
-        .attr("stroke-width", 2)
-        .attr("marker-end", "url(#arrow)");
-
-      const node = container
-        .append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .selectAll("circle")
-        .data(nodesDataRef.current)
-        .enter()
-        .append("circle")
-        .attr("r", radius)
-        .attr("fill", (d) =>
-          d.id === highlightedNode ? "yellow" : d.id === highlightedTargetNode ? "red" : "lime"
-        );
-
-      const text = container
-        .append("g")
-        .selectAll("text")
-        .data(nodesDataRef.current)
-        .enter()
-        .append("text")
-        .attr("dy", "0.35em")
-        .attr("text-anchor", "middle")
-        .attr("font-size", "10px")
-        .text((d) => d.value.toString());
-
-      svg
+      container
         .append("defs")
         .append("marker")
         .attr("id", "arrow")
@@ -114,15 +81,41 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
       );
 
       simulation.on("tick", () => {
-        link
+        container
+          .selectAll("line")
+          .data(linksDataRef.current)
+          .join("line")
+          .attr("stroke", "#999")
+          .attr("stroke-opacity", 0.6)
+          .attr("stroke-width", 2)
+          .attr("marker-end", "url(#arrow)")
           .attr("x1", (d: any) => d.source.x)
           .attr("y1", (d: any) => d.source.y)
           .attr("x2", (d: any) => d.target.x)
           .attr("y2", (d: any) => d.target.y);
 
-        node.attr("cx", (d: any) => d.x).attr("cy", (d: any) => d.y);
+        container
+          .selectAll("circle")
+          .data(nodesDataRef.current)
+          .join("circle")
+          .attr("r", radius)
+          .attr("fill", (d) => colors[d.id] || "lime")
+          .attr("stroke", "#000") // Set stroke to black
+          .attr("stroke-width", 1.5)
+          .attr("cx", (d: any) => d.x)
+          .attr("cy", (d: any) => d.y);
 
-        text.attr("x", (d: any) => d.x).attr("y", (d: any) => d.y);
+        container
+          .selectAll("text")
+          .data(nodesDataRef.current)
+          .join("text")
+          .attr("dy", "0.35em")
+          .attr("text-anchor", "middle")
+          .attr("font-size", "10px")
+          .text((d) => d.value.toString())
+          .attr("x", (d: any) => d.x)
+          .attr("y", (d: any) => d.y)
+          .attr("fill", (d) => (colors[d.id] === "BLACK" ? "white" : "black"));
       });
     }
   }, [data]);
@@ -131,14 +124,18 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select(svgRef.current);
       const nodes = svg.selectAll("circle").data(nodesDataRef.current);
+      const texts = svg.selectAll("text").data(nodesDataRef.current);
       const links = svg.selectAll("line").data(linksDataRef.current);
 
       nodes
         .transition()
         .duration(500)
-        .attr("fill", (d) =>
-          d.id === highlightedNode ? "yellow" : d.id === highlightedTargetNode ? "red" : "lime"
-        );
+        .attr("fill", (d) => colors[d.id] || "lime");
+
+      texts
+        .transition()
+        .duration(500)
+        .attr("fill", (d) => (colors[d.id] === "BLACK" ? "white" : "black"));
 
       links
         .transition()
@@ -151,12 +148,12 @@ const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
             : "#999"
         );
     }
-  }, [highlightedNode, highlightedLink, highlightedTargetNode]);
+  }, [colors, highlightedLink]);
 
   return (
     <svg
       ref={svgRef}
-      width={800}
+      width={1200}
       height={600}
       style={{ overflow: "visible" }}
     ></svg>

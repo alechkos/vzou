@@ -163,7 +163,6 @@ const BfsPage: FC = () => {
 
     for (const v of graphData.nodes) {
       if (signal.aborted) return resetAnimation();
-      setHighlightedNode(v);
       setCurrentLine(1);
 
       saveState(cl + 1, d, p, c, q, u);
@@ -185,9 +184,11 @@ const BfsPage: FC = () => {
       await waitForNextStep(signal);
       setColors((prev) => ({ ...prev, [v]: "WHITE" }));
       c = { ...c, [v]: "WHITE" };
+      setHighlightedNode(v); // подсветка узла
       setCurrentLine(4);
       saveState(cl + 4, d, p, c, q, u);
       await waitForNextStep(signal);
+      setHighlightedNode(null); // убрать подсветку узла
     }
 
     setHighlightedNode(null);
@@ -203,8 +204,10 @@ const BfsPage: FC = () => {
     setCurrentLine(7);
     setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
     c = { ...c, [initialNode]: "GRAY" };
+    setHighlightedNode(initialNode); // подсветка узла
     saveState(cl + 7, d, p, c, q, u);
     await waitForNextStep(signal);
+    setHighlightedNode(null); // убрать подсветку узла
 
     setCurrentLine(8);
 
@@ -284,10 +287,12 @@ const BfsPage: FC = () => {
               await waitForNextStep(signal);
               c = { ...c, [v]: "GRAY" };
               setColors((prev) => ({ ...prev, [v]: "GRAY" }));
+              setHighlightedNode(v); // подсветка узла
               setCurrentLine(15);
 
               saveState(cl + 6, d, p, c, q, localU);
               await waitForNextStep(signal);
+              setHighlightedNode(null); // убрать подсветку узла
               setCurrentLine(16);
 
               localQueue.push(v);
@@ -300,9 +305,11 @@ const BfsPage: FC = () => {
         }
         c = { ...c, [u]: "BLACK" };
         setColors((prev) => ({ ...prev, [u]: "BLACK" }));
+        setHighlightedNode(u); // подсветка узла
         setCurrentLine(17);
         saveState(cl + 8, d, p, c, q, localU);
         await waitForNextStep(signal);
+        setHighlightedNode(null); // убрать подсветку узла
       }
     }
 
@@ -368,6 +375,7 @@ const BfsPage: FC = () => {
             highlightedNode={highlightedNode}
             highlightedLink={highlightedLink}
             highlightedTargetNode={highlightedTargetNode}
+            colors={colors} // передача colors
           />
           {hasStarted && (
             <div className={controlStyles.buttonContainer}>

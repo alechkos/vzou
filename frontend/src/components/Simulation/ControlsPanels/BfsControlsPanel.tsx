@@ -28,8 +28,9 @@ interface Props {
   graphData: { nodes: number[]; links: { source: number; target: number }[] };
   setGraphData: (data: { nodes: number[]; links: { source: number; target: number }[] }) => void;
   highlightedNode: number | null;
-  highlightedLink: { source: number; target: number } | null; // новое состояние
-  highlightedTargetNode: number | null; // новое состояние
+  highlightedLink: { source: number; target: number } | null;
+  highlightedTargetNode: number | null;
+  colors: { [key: number]: string }; // добавляем colors
 }
 
 const buttonClassname =
@@ -50,6 +51,7 @@ const BfsControlsPanel: FC<Props> = ({
   highlightedNode,
   highlightedLink,
   highlightedTargetNode,
+  colors, // принимаем colors
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const error = useAppSelector((state) => state.bst.error);
@@ -195,6 +197,7 @@ const BfsControlsPanel: FC<Props> = ({
           highlightedNode={highlightedNode}
           highlightedLink={highlightedLink} // передача состояния
           highlightedTargetNode={highlightedTargetNode} // передача состояния
+          colors={colors} // передача colors
         />
       )}
     </>
