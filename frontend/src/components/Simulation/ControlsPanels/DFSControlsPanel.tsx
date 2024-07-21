@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { TextField, ThemeProvider, Tab, Box, Slider, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -13,6 +13,7 @@ import {
   setError,
   setInputArray,
   setGraphData,
+  clearInputArray,
 } from "../../../store/reducers/alghoritms/dfs-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
@@ -47,6 +48,7 @@ const DFSControlsPanel: FC<Props> = ({
 
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
+  const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -70,7 +72,8 @@ const DFSControlsPanel: FC<Props> = ({
           await controller.dfsAnimation();
           return;
         case "Clear":
-          // controller.setTreeFromInput([]);
+          dispatch(clearInputArray());
+          controller.setGraphFromInput({ nodes: [], links: [] });
           return;
         default:
           return;
@@ -80,11 +83,50 @@ const DFSControlsPanel: FC<Props> = ({
     }
   };
 
-  const handleRandomNodes = () => {};
+  const handleRandomNodes = (e: any) => {
+    const val = Number(e.target.value);
+    if (val < 1 || val > 10) {
+      setCurrentError("Please enter a value between 1-10");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    setNumberOfRandomNodes(val);
+  };
 
-  const createGraphHandler = async () => {
-    const userInput = inputArray.split(",");
+  const randomizeStructure = () => {
+    if (numberOfRandomNodes < 1 || numberOfRandomNodes > 10) {
+      setCurrentError("Please enter a value between 1-10");
+      setNumberOfRandomNodes(0);
+      return;
+    }
+    let randomString = "";
+    let i = 1;
+    for (i; i <= numberOfRandomNodes; i++) {
+      let randomChar = Math.random() < 0.7 ? "-" : ",";
+      if (randomChar === "-") {
+        let randomNumber = Math.floor(Math.random() * numberOfRandomNodes) + 1;
+        randomString = randomString + i.toString() + randomChar + randomNumber.toString();
+        if (i !== numberOfRandomNodes) {
+          randomString += ",";
+        }
+      } else {
+        randomString = randomString + i.toString();
+        if (i !== numberOfRandomNodes) {
+          randomString += ",";
+        }
+      }
+    }
+    dispatch(setInputArray(randomString));
+    createGraphHandler(randomString);
+  };
 
+  const createGraphHandler = (randomInp?: string) => {
+    let userInput;
+    if (randomInp) {
+      userInput = randomInp.split(",");
+    } else {
+      userInput = inputArray.split(",");
+    }
     const oneCharInput = userInput.filter((inp) => !inp.includes("-"));
     const input = userInput.filter((inp) => inp.includes("-"));
     const nodes = new Set<number>();
@@ -122,9 +164,9 @@ const DFSControlsPanel: FC<Props> = ({
     dispatch(setInputArray(e.target.value));
   };
 
-  // useEffect(() => {
-  //   dispatch(clearInputArray());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(clearInputArray());
+  }, [dispatch]);
 
   return (
     <>
@@ -186,7 +228,7 @@ const DFSControlsPanel: FC<Props> = ({
                         <button
                           disabled={isButtonDisabled}
                           className={`${buttonClassname} w-auto h-[40px]`}
-                          onClick={createGraphHandler}
+                          onClick={() => createGraphHandler()}
                         >
                           Create Graph
                         </button>
@@ -204,12 +246,12 @@ const DFSControlsPanel: FC<Props> = ({
                             max: 999,
                             style: { textAlign: "center" },
                           }}
-                          // onChange={handleRandomNodes}
+                          onChange={handleRandomNodes}
                         />
                         <button
                           disabled={isButtonDisabled}
                           className={`${buttonClassname} w-[140px] h-[40px]`}
-                          // onClick={randomizeStructure}
+                          onClick={randomizeStructure}
                         >
                           <CasinoIcon />
                           Randomize
@@ -218,7 +260,7 @@ const DFSControlsPanel: FC<Props> = ({
                       <button
                         disabled={isButtonDisabled}
                         className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
-                        // onClick={async () => animate("Clear")}
+                        onClick={async () => Animate("Clear")}
                       >
                         Clear
                       </button>

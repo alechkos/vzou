@@ -75,7 +75,7 @@ const DFSPage: FC = () => {
               tableData={tableData}
             />
           )}
-          {(showActions || editingConstruction) && <DFSTable />}
+          {showActions && <DFSTable />}
           {showPseudoCode && (
             <PlayerControlsPanel
               controller={controller}

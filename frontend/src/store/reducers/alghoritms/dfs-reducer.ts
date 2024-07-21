@@ -55,6 +55,9 @@ const bfsSlice = createSlice({
     setInputArray(state, action: PayloadAction<string>) {
       state.inputArray = action.payload;
     },
+    clearInputArray(state) {
+      state.inputArray = "";
+    },
     setGraphData(state, action: PayloadAction<graphType>) {
       state.graphData = action.payload;
     },
@@ -92,4 +95,5 @@ export const {
   setCodeRef,
   setGraphNodes,
   setTableData,
+  clearInputArray,
 } = bfsSlice.actions;
