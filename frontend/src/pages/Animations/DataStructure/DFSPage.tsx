@@ -1,17 +1,12 @@
-import React, { FC, useEffect, useState, useRef } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DFSAnimationController } from "../../../ClassObjects/DFS/DFSAnimationController";
 import DFSControlsPanel from "../../../components/Simulation/ControlsPanels/DFSControlsPanel";
-import BfsPseudoCodeContainer from "../../../components/Simulation/PseudoCode/BfsPseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
-import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
-import styles from "../../../components/Simulation/PseudoCode/PseudoCodeWrapper.module.css";
-import controlStyles from "./BfsControlsPanel.module.css";
 import { combineDFSPseudoCode } from "../../../ClassObjects/DFS/DFSAlgorithms";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
-import GraphVisualizer from "../../../components/Simulation/ControlsPanels/GraphVisualizer";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import DFS from "../../../components/Simulation/DFS/DFS";
 import DFSTable from "../../../components/Simulation/DFS/DFSTable";
@@ -22,7 +17,6 @@ const DFSPage: FC = () => {
   const isPlaying = useAppSelector((state) => state.dfs.isPlaying);
   const currentAlg = useAppSelector((state) => state.dfs.currentAlg);
   const currentLine = useAppSelector((state) => state.dfs.currentLine);
-  const graphData = useAppSelector((state) => state.dfs.graphData);
   const actions = useAppSelector((state) => state.dfs.currentActions);
   const roles = useAppSelector((state) => state.dfs.currentRoles);
   const passedNode = useAppSelector((state) => state.dfs.passedNodes);
