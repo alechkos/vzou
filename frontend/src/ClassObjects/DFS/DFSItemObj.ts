@@ -14,6 +14,8 @@ export class DFSItemObj extends BaseObj {
 
   static gapY = 20;
 
+  static space = 10;
+
   parents: DFSItemObj[];
 
   branches: BranchObj[];
@@ -52,35 +54,15 @@ export class DFSItemObj extends BaseObj {
 
   calculatePosition() {
     const dist = 40;
-    const add = 40;
+    const add = 60;
 
     if (this.type === "root") {
       return;
     }
     if (this.type === "left") {
-      let x = this.position.x - this.getXGap() + 40;
+      let x = this.position.x - this.getXGap() + DFSItemObj.space * 6;
 
-      let y = this.position.y + DFSItemObj.gapY + 40;
-
-      DFSItemObj.positions.forEach((pos) => {
-        if (Math.abs(pos.x - x) <= dist) {
-          x += add;
-        }
-        if (Math.abs(pos.y - y) <= dist) {
-          y += add;
-        }
-      });
-
-      this.position = {
-        x: x,
-        y: y,
-      };
-
-      DFSItemObj.positions.push(this.position);
-    } else {
-      let x = this.position.x + this.getXGap() - 40;
-
-      let y = this.position.y + DFSItemObj.gapY + 40;
+      let y = this.position.y + DFSItemObj.gapY + DFSItemObj.space * 6;
 
       DFSItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
@@ -97,7 +79,29 @@ export class DFSItemObj extends BaseObj {
       };
 
       DFSItemObj.positions.push(this.position);
+    } else {
+      let x = this.position.x + this.getXGap() - DFSItemObj.space * 6;
+
+      let y = this.position.y + DFSItemObj.gapY + DFSItemObj.space * 6;
+
+      DFSItemObj.positions.forEach((pos) => {
+        if (Math.abs(pos.x - x) <= dist) {
+          x += add;
+        }
+        if (Math.abs(pos.y - y) <= dist) {
+          y += add;
+        }
+      });
+
+      this.position = {
+        x: x,
+        y: y,
+      };
+
+      DFSItemObj.positions.push(this.position);
     }
+
+    DFSItemObj.space += 8;
   }
 
   createBranch() {
@@ -135,7 +139,7 @@ export class DFSItemObj extends BaseObj {
         newItem = new DFSItemObj(
           {
             x: viewportWidth / 2 - 200,
-            y: 325,
+            y: 200,
           },
           speed,
           node.id,
@@ -149,7 +153,7 @@ export class DFSItemObj extends BaseObj {
         newItem = new DFSItemObj(
           {
             x: viewportWidth / 2 - 200,
-            y: 325,
+            y: 200,
           },
           speed,
           node.id,

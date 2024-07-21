@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { TextField, ThemeProvider, Tab, Box, Slider, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -10,14 +10,13 @@ import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { DFSAnimationController } from "../../../ClassObjects/DFS/DFSAnimationController";
 import {
-  setInitialValue,
   setError,
   setInputArray,
   setGraphData,
-  setPlaying,
 } from "../../../store/reducers/alghoritms/dfs-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
+import CasinoIcon from "@mui/icons-material/Casino";
 
 interface Props {
   controller: DFSAnimationController;
@@ -43,7 +42,6 @@ const DFSControlsPanel: FC<Props> = ({
   const inputArray = useAppSelector((state) => state.dfs.inputArray);
   const error = useAppSelector((state) => state.dfs.error);
   const graphData = useAppSelector((state) => state.dfs.graphData);
-  const initialValue = useAppSelector((state) => state.dfs.initialValue);
   const isButtonDisabled = useAppSelector((state) => state.dfs.isPlaying);
   const dispatch = useAppDispatch();
 
@@ -69,7 +67,7 @@ const DFSControlsPanel: FC<Props> = ({
             subject: "BFS",
             algorithm: "Search",
           });
-          await controller.dfsAnimation(Number(initialValue));
+          await controller.dfsAnimation();
           return;
         case "Clear":
           // controller.setTreeFromInput([]);
@@ -82,8 +80,13 @@ const DFSControlsPanel: FC<Props> = ({
     }
   };
 
+  const handleRandomNodes = () => {};
+
   const createGraphHandler = async () => {
-    const input = inputArray.split(",");
+    const userInput = inputArray.split(",");
+
+    const oneCharInput = userInput.filter((inp) => !inp.includes("-"));
+    const input = userInput.filter((inp) => inp.includes("-"));
     const nodes = new Set<number>();
     const links: { source: number; target: number }[] = [];
 
@@ -98,6 +101,14 @@ const DFSControlsPanel: FC<Props> = ({
       links.push({ source, target });
     }
 
+    oneCharInput.forEach((inp) => {
+      if (isNaN(Number(inp))) {
+        setCurrentError("Please enter a numeric data format for node!");
+        return;
+      }
+      nodes.add(Number(inp));
+    });
+
     const graphData = { nodes: Array.from(nodes), links };
     controller.setGraphFromInput(graphData);
     dispatch(setGraphData(graphData));
@@ -109,24 +120,6 @@ const DFSControlsPanel: FC<Props> = ({
 
   const handleInput = (e: any) => {
     dispatch(setInputArray(e.target.value));
-  };
-
-  const handleInitialNodeChange = (e: any) => {
-    setInitialNodeInput(e.target.value);
-    const node = parseInt(e.target.value, 10);
-
-    // if (!graphData1.nodes.includes(node) && e.target.value !== "") {
-    //   setCurrentError("The value doesn't exist in the graph!");
-    //   dispatch(setPlaying(true));
-    //   return;
-    // }
-    // if (isNaN(node) && e.target.value !== "") {
-    //   setCurrentError("Input a numeric value please!");
-    //   dispatch(setPlaying(true));
-    //   return;
-    // }
-    dispatch(setInitialValue(e.target.value));
-    // dispatch(setPlaying(false));
   };
 
   // useEffect(() => {
@@ -176,39 +169,63 @@ const DFSControlsPanel: FC<Props> = ({
                 </Box>
                 <TabPanel
                   value="1"
-                  className={value === "1" ? "justify-start " : "hidden"}
+                  className={value === "1" ? "justify-around flex" : "hidden"}
                 >
                   {!showActions && (
                     <>
-                      <TextField
-                        placeholder="e.g 1-2,3-4,..."
-                        size="small"
-                        sx={{ width: "150px" }}
-                        value={inputArray}
-                        label="Graph Data"
-                        variant="outlined"
-                        onChange={handleInput}
-                      />
+                      <div>
+                        <TextField
+                          placeholder="e.g 1-2,3-4,..."
+                          size="small"
+                          sx={{ width: "150px" }}
+                          value={inputArray}
+                          label="Graph Data"
+                          variant="outlined"
+                          onChange={handleInput}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-auto h-[40px]`}
+                          onClick={createGraphHandler}
+                        >
+                          Create Graph
+                        </button>
+                      </div>
+                      <div className={"ml-10"}>
+                        <TextField
+                          sx={{ width: "150px" }}
+                          name={"NumberOfRandom"}
+                          size="small"
+                          type="text"
+                          variant="outlined"
+                          label={"Number of nodes"}
+                          inputProps={{
+                            min: 0,
+                            max: 999,
+                            style: { textAlign: "center" },
+                          }}
+                          // onChange={handleRandomNodes}
+                        />
+                        <button
+                          disabled={isButtonDisabled}
+                          className={`${buttonClassname} w-[140px] h-[40px]`}
+                          // onClick={randomizeStructure}
+                        >
+                          <CasinoIcon />
+                          Randomize
+                        </button>
+                      </div>
                       <button
                         disabled={isButtonDisabled}
-                        className={`${buttonClassname} w-auto h-[40px]`}
-                        onClick={createGraphHandler}
+                        className={`${buttonClassname} w-[60px] h-[40px] ml-8`}
+                        // onClick={async () => animate("Clear")}
                       >
-                        Create Graph
+                        Clear
                       </button>
                     </>
                   )}
                   {showActions && (
                     <>
-                      <TextField
-                        placeholder="Initial node"
-                        size="small"
-                        sx={{ width: "150px", marginLeft: 2 }}
-                        value={initialNodeInput}
-                        label="Initial Node"
-                        variant="outlined"
-                        onChange={handleInitialNodeChange}
-                      />
                       <button
                         disabled={isButtonDisabled}
                         className={`${buttonClassname} w-auto h-[40px]`}

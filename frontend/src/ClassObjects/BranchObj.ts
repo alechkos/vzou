@@ -64,13 +64,34 @@ export class BranchObj {
    * A passing algorithm is one such algorithm where a traversal is displayed, much like an inorder scan.
    * In that case, we use a special style for the branch to represent the path.
    */
-  getStyle(isPassed = false, isArrow: boolean = false) {
-    if (!isPassed) {
+  getStyle(isPassed = false, isArrow: boolean = false, isVisited = false) {
+    let borderLeft = "";
+    if (isArrow && isVisited) {
+      borderLeft = "20px solid rgba(0,100,0,0.3)";
+    }
+
+    if (isArrow && isPassed) {
+      borderLeft = "20px solid rgba(241,0,0, 0.3)";
+    }
+
+    if (!isPassed && !isVisited) {
       return {
         top: `${isArrow ? this.y2 + 10 : this.y1}px`,
         left: `${isArrow ? this.x2 : this.x1}px`,
         width: `${!isArrow ? this.getBranchLength() : 0}px`,
         transform: `rotate(${this.getRotateAngle()}deg)`,
+      };
+    }
+    if (isVisited) {
+      return {
+        top: `${isArrow ? this.y2 + 10 : this.y1}px`,
+        left: `${isArrow ? this.x2 : this.x1}px`,
+        width: `${!isArrow ? this.getBranchLength() : 0}px`,
+        transform: `rotate(${this.getRotateAngle()}deg)`,
+        background: "linear-gradient(to right, black, green)",
+        backgroundSize: "200% 100%",
+        backgroundPosition: "100% 0%",
+        borderLeft,
       };
     }
     return {
@@ -81,6 +102,7 @@ export class BranchObj {
       background: "linear-gradient(to right, black, red)",
       backgroundSize: "200% 100%",
       backgroundPosition: "100% 0%",
+      borderLeft,
     };
   }
 

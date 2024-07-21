@@ -50,8 +50,6 @@ const DFSPage: FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log(passedNode);
-
   return (
     <>
       <SideBar />

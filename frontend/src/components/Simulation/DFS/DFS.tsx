@@ -31,6 +31,7 @@ const DFS: FC<Props> = ({
   const dispatch = useAppDispatch();
 
   DFSItemObj.positions = [];
+  DFSItemObj.space = 10;
   const dfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
 
   DFSItemObj.setActions(dfsObjects, actions);
@@ -52,6 +53,7 @@ const DFS: FC<Props> = ({
       <AnimatePresence>
         {dfsObjects.map((nodeObj) => (
           <DFSNodes
+            dfsObjects={dfsObjects}
             nodeObj={nodeObj}
             key={nodeObj.id}
           />

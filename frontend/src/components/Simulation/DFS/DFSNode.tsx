@@ -10,9 +10,10 @@ import branch from "../BinaryTree/Branch";
 
 interface Props {
   nodeObj: DFSItemObj;
+  dfsObjects: DFSItemObj[];
 }
 
-const DFSNode: FC<Props> = ({ nodeObj }) => {
+const DFSNode: FC<Props> = ({ nodeObj, dfsObjects }) => {
   const { initial, animate, style } = getAnimationsAndStyles(
     nodeObj.action,
     null,
@@ -28,6 +29,8 @@ const DFSNode: FC<Props> = ({ nodeObj }) => {
   } else {
     animateObj = animate;
   }
+
+  const parent = dfsObjects.find((node) => node.id === nodeObj.pi);
 
   let nameForClass = `${styles.node} node-selected`;
   return (
@@ -58,20 +61,12 @@ const DFSNode: FC<Props> = ({ nodeObj }) => {
           <ArrowForGraph
             key={nodeObj.position.x}
             branch={branch}
-            isPassed={nodeObj.isPassed}
+            isPassed={parent?.position.x === branch.x1 ? nodeObj.isPassed : false}
+            isVisited={parent?.position.x !== branch.x1 ? nodeObj.isVisited : false}
             speed={nodeObj.speed}
             className={"branch-for-graph"}
           />
         ))}
-
-      {/*{nodeObj.branch && (*/}
-      {/*  <Branch*/}
-      {/*    branch={nodeObj.branch}*/}
-      {/*    isPassed={nodeObj.isPassed}*/}
-      {/*    speed={nodeObj.speed}*/}
-      {/*    className={"branch-for-graph"}*/}
-      {/*  />*/}
-      {/*)}*/}
     </div>
   );
 };

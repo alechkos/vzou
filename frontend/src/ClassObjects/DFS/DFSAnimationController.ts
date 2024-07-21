@@ -113,13 +113,13 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
   }
 
   //Animation
-  async dfsAnimation(initialValue: number) {
+  async dfsAnimation() {
     this.graphNodes.forEach((node) => {
       node.setF(0);
       node.setColor("");
       node.setD(0);
       node.setPi(undefined);
     });
-    await this.playAlgorithm(dfsAnimation, this.memento, initialValue, this.graphNodes);
+    await this.playAlgorithm(dfsAnimation, this.memento, this.graphNodes);
   }
 }

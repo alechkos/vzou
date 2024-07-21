@@ -13,7 +13,6 @@ const tableData: { id: number; data: { color: string; pi: number; d: number; f: 
 
 const initialState = {
   graphData,
-  initialValue: "",
   initialNode: undefined as DFSNode | undefined,
   isPlaying: false,
   inputArray: "",
@@ -53,9 +52,6 @@ const bfsSlice = createSlice({
     setError(state, action: PayloadAction<string>) {
       state.error = action.payload;
     },
-    setInitialValue(state, action: PayloadAction<string>) {
-      state.initialValue = action.payload;
-    },
     setInputArray(state, action: PayloadAction<string>) {
       state.inputArray = action.payload;
     },
@@ -91,7 +87,6 @@ export const {
   setPassedNodes,
   setVisitedNodes,
   setError,
-  setInitialValue,
   setInputArray,
   setGraphData,
   setCodeRef,

@@ -36,7 +36,6 @@ export function buildDFSNodes(graphData: graphType, controller: DFSAnimationCont
 export const dfsAnimation = (
   initialNode: DFSNode | undefined,
   memento: DFSMemento,
-  startValue: number,
   graphData: DFSNode[]
 ) => {
   const passedNodes: number[] = [];
