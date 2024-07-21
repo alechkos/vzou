@@ -59,6 +59,7 @@ const BfsControlsPanel: FC<Props> = ({
 
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
+  const [showInitialNodeInput, setShowInitialNodeInput] = useState<boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -88,6 +89,7 @@ const BfsControlsPanel: FC<Props> = ({
     }
     setGraphData({ nodes: Array.from(nodes), links });
     setShowPseudoCode(true);
+    setShowInitialNodeInput(true); // показать поле начального узла и кнопку запуска анимации
   };
 
   const handleInput = (e: any) => {
@@ -155,36 +157,40 @@ const BfsControlsPanel: FC<Props> = ({
                   >
                     Go
                   </button>
-                  <TextField
-                    placeholder="Initial node"
-                    size="small"
-                    sx={{ width: "150px", marginLeft: 2 }}
-                    value={initialNodeInput}
-                    label="Initial Node"
-                    variant="outlined"
-                    onChange={handleInitialNodeChange}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginLeft: 2 }}
-                    onClick={startAnimation}
-                    disabled={isButtonDisabled}
-                  >
-                    Start Algorithm Animation
-                  </Button>
-                  <Box sx={{ width: 200, marginTop: 2 }}>
-                    <Slider
-                      defaultValue={1}
-                      aria-labelledby="discrete-slider"
-                      valueLabelDisplay="auto"
-                      step={0.1}
-                      marks
-                      min={0.1}
-                      max={5}
-                      onChange={(e, value) => setSpeed(value as number)}
-                    />
-                  </Box>
+                  {showInitialNodeInput && (
+                    <>
+                      <TextField
+                        placeholder="Initial node"
+                        size="small"
+                        sx={{ width: "150px", marginLeft: 2 }}
+                        value={initialNodeInput}
+                        label="Initial Node"
+                        variant="outlined"
+                        onChange={handleInitialNodeChange}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ marginLeft: 2 }}
+                        onClick={startAnimation}
+                        disabled={isButtonDisabled}
+                      >
+                        Start Algorithm Animation
+                      </Button>
+                      <Box sx={{ width: 200, marginTop: 2 }}>
+                        <Slider
+                          defaultValue={1}
+                          aria-labelledby="discrete-slider"
+                          valueLabelDisplay="auto"
+                          step={0.1}
+                          marks
+                          min={0.1}
+                          max={5}
+                          onChange={(e, value) => setSpeed(value as number)}
+                        />
+                      </Box>
+                    </>
+                  )}
                 </TabPanel>
               </TabContext>
             </Box>
