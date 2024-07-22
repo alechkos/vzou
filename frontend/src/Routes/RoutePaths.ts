@@ -33,6 +33,7 @@ export enum RoutePaths {
   BUCKET_SORT = "/bucketsort",
   RADIX_SORT = "/radixsort",
   BFS = "/bfs",
+  DJIKSTRA = "/djikstra",
 
   // feedbacks
   POST_FEEDBACK = "/post-feedback",

@@ -11,7 +11,9 @@ import treePhoto from "../../assets/Gallery/treePhoto.png";
 import linkedListPhoto from "../../assets/Gallery/LinkedListPhoto.png";
 import linkedListGif from "../../assets/Gallery/LinkedListGif.gif";
 import bfsPhoto from "../../assets/Gallery/bfsPhoto.png";
+import djikstraPhoto from "../../assets/Gallery/DjikstraPhoto.png";
 import bfsGif from "../../assets/Gallery/bfsGif.gif";
+import djikstraGif from "../../assets/Gallery/djikstraGif.gif";
 import hashTablePhoto from "../../assets/Gallery/HashTablePhoto.png";
 import hashTableGif from "../../assets/Gallery/HashTableGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
@@ -100,6 +102,12 @@ const HomePageData = [
     gif: bfsGif,
     image: bfsPhoto,
     url: RoutePaths.BFS,
+  },
+  {
+    title: "Djikstra",
+    gif: djikstraGif,
+    image: djikstraPhoto,
+    url: RoutePaths.DJIKSTRA,
   },
 ];
 
