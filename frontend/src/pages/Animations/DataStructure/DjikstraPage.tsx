@@ -30,7 +30,7 @@ const DjikstraPage: FC = () => {
   const [currentU, setCurrentU] = useState<number | null>(null);
   const [graphData, setGraphData] = useState<{
     nodes: number[];
-    links: { source: number; target: number }[];
+    links: { source: number; target: number; weight: number }[];
   }>({
     nodes: [],
     links: [],
