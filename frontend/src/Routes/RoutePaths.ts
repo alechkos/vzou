@@ -32,7 +32,6 @@ export enum RoutePaths {
   MERGE_SORT = "/mergesort",
   BUCKET_SORT = "/bucketsort",
   RADIX_SORT = "/radixsort",
-  BFS = "/bfs",
   DFS = "/dfs",
 
   // feedbacks

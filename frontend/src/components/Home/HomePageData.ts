@@ -96,12 +96,6 @@ const HomePageData = [
     url: RoutePaths.HASH_TABLE,
   },
   {
-    title: "BFS",
-    gif: bfsGif,
-    image: bfsPhoto,
-    url: RoutePaths.BFS,
-  },
-  {
     title: "DFS",
     gif: bfsGif,
     image: bfsPhoto,
