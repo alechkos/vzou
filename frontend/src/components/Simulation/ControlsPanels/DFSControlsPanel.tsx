@@ -60,7 +60,7 @@ const DFSControlsPanel: FC<Props> = ({
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(directed);
 
   const handleChangeSelect = (event: any) => {
     setSelected((prev) => !prev);
@@ -185,9 +185,9 @@ const DFSControlsPanel: FC<Props> = ({
     dispatch(setInputArray(e.target.value));
   };
 
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(clearInputArray());
+  // }, [dispatch]);
 
   return (
     <>

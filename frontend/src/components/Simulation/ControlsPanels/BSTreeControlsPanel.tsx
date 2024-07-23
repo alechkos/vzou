@@ -216,10 +216,10 @@ const BSTreeControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlg(name));
   };
 
-  useEffect(() => {
-    // create a random array whenever the page is loaded.
-    controller.setTreeFromInput([2, 1, 3]);
-  }, []);
+  // useEffect(() => {
+  //   // create a random array whenever the page is loaded.
+  //   controller.setTreeFromInput([2, 1, 3]);
+  // }, []);
 
   return (
     <BaseControlPanel

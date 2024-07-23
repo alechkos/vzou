@@ -204,10 +204,10 @@ const HashTableControlPanel: FC<Props> = ({
         index === 0 && selected === "divisionMethod"
           ? "ChainingSearch1"
           : index === 0 && selected === "multiplicationMethod"
-          ? "ChainingSearch2"
-          : selected === "linearProbing"
-          ? "Search1"
-          : "Search2"
+            ? "ChainingSearch2"
+            : selected === "linearProbing"
+              ? "Search1"
+              : "Search2"
       )
     );
   };
@@ -300,10 +300,6 @@ const HashTableControlPanel: FC<Props> = ({
     }
     dispatch(setCurrentAlgorithm(algName));
   };
-
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, []);
 
   useEffect(() => {
     if (selected === "divisionMethod" || selected === "multiplicationMethod") setIndex(0);

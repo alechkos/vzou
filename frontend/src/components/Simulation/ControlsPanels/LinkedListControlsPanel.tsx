@@ -160,10 +160,6 @@ const LinkedListControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlgorithm(name));
   };
 
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, []);
-
   return (
     <BaseControlPanel
       error={error}

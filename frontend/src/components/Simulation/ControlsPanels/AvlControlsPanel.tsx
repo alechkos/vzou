@@ -216,10 +216,6 @@ const AvlControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlg(name));
   };
 
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, []);
-
   return (
     <BaseControlPanel
       error={error}
