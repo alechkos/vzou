@@ -11,9 +11,10 @@ import branch from "../BinaryTree/Branch";
 interface Props {
   nodeObj: DFSItemObj;
   dfsObjects: DFSItemObj[];
+  directed: boolean;
 }
 
-const DFSNode: FC<Props> = ({ nodeObj, dfsObjects }) => {
+const DFSNode: FC<Props> = ({ nodeObj, dfsObjects, directed }) => {
   const { initial, animate, style } = getAnimationsAndStyles(
     nodeObj.action,
     null,
@@ -57,8 +58,21 @@ const DFSNode: FC<Props> = ({ nodeObj, dfsObjects }) => {
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
       </motion.span>
       {nodeObj.branches.length > 0 &&
+        !directed &&
         nodeObj.branches.map((branch) => (
           <ArrowForGraph
+            key={nodeObj.position.x}
+            branch={branch}
+            isPassed={parent?.position.x === branch.x1 ? nodeObj.isPassed : false}
+            isVisited={parent?.position.x !== branch.x1 ? nodeObj.isVisited : false}
+            speed={nodeObj.speed}
+            className={"branch-for-graph"}
+          />
+        ))}
+      {nodeObj.branches.length > 0 &&
+        directed &&
+        nodeObj.branches.map((branch) => (
+          <Branch
             key={nodeObj.position.x}
             branch={branch}
             isPassed={parent?.position.x === branch.x1 ? nodeObj.isPassed : false}

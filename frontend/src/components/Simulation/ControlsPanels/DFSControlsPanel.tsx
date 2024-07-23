@@ -1,5 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { TextField, ThemeProvider, Tab, Box, Slider, Button } from "@mui/material";
+import {
+  TextField,
+  ThemeProvider,
+  Tab,
+  Box,
+  Slider,
+  Button,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
@@ -14,6 +23,7 @@ import {
   setInputArray,
   setGraphData,
   clearInputArray,
+  setDirected,
 } from "../../../store/reducers/alghoritms/dfs-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
@@ -44,11 +54,18 @@ const DFSControlsPanel: FC<Props> = ({
   const error = useAppSelector((state) => state.dfs.error);
   const graphData = useAppSelector((state) => state.dfs.graphData);
   const isButtonDisabled = useAppSelector((state) => state.dfs.isPlaying);
+  const directed = useAppSelector((state) => state.dfs.directed);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
+  const [selected, setSelected] = useState(false);
+
+  const handleChangeSelect = (event: any) => {
+    setSelected((prev) => !prev);
+    dispatch(setDirected(selected));
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -105,8 +122,9 @@ const DFSControlsPanel: FC<Props> = ({
       let randomChar = Math.random() < 0.7 ? "-" : ",";
       if (randomChar === "-") {
         let randomNumber = Math.floor(Math.random() * numberOfRandomNodes) + 1;
-        randomString = randomString + i.toString() + randomChar + randomNumber.toString();
-        if (i !== numberOfRandomNodes) {
+        if (randomNumber !== i)
+          randomString = randomString + i.toString() + randomChar + randomNumber.toString();
+        if (i !== numberOfRandomNodes && randomNumber !== i) {
           randomString += ",";
         }
       } else {
@@ -141,6 +159,9 @@ const DFSControlsPanel: FC<Props> = ({
       nodes.add(source);
       nodes.add(target);
       links.push({ source, target });
+      if (selected) {
+        links.push({ target, source });
+      }
     }
 
     oneCharInput.forEach((inp) => {
@@ -232,6 +253,18 @@ const DFSControlsPanel: FC<Props> = ({
                         >
                           Create Graph
                         </button>
+                      </div>
+                      <div>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={selected}
+                              name={"directed"}
+                              onChange={handleChangeSelect}
+                            />
+                          }
+                          label={"Directed Graph"}
+                        />
                       </div>
                       <div className={"ml-10"}>
                         <TextField

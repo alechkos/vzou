@@ -16,6 +16,7 @@ interface Props {
   actions: Events | null;
   roles: NodeRole[];
   tableData?: { id: number; data: { color: string; pi: number; d: number; f: number } }[];
+  directed: boolean;
 }
 
 const DFS: FC<Props> = ({
@@ -27,6 +28,7 @@ const DFS: FC<Props> = ({
   actions,
   roles,
   tableData,
+  directed,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -56,6 +58,7 @@ const DFS: FC<Props> = ({
             dfsObjects={dfsObjects}
             nodeObj={nodeObj}
             key={nodeObj.id}
+            directed={directed}
           />
         ))}
       </AnimatePresence>

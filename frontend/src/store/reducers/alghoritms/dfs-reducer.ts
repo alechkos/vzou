@@ -25,6 +25,7 @@ const initialState = {
   currentActions: [] as Events,
   graphNodes,
   tableData,
+  directed: false,
 };
 
 const bfsSlice = createSlice({
@@ -77,6 +78,9 @@ const bfsSlice = createSlice({
     ) {
       state.tableData = action.payload;
     },
+    setDirected(state, action: PayloadAction<boolean>) {
+      state.directed = action.payload;
+    },
   },
 });
 
@@ -96,4 +100,5 @@ export const {
   setGraphNodes,
   setTableData,
   clearInputArray,
+  setDirected,
 } = bfsSlice.actions;

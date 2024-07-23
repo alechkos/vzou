@@ -22,6 +22,7 @@ const DFSPage: FC = () => {
   const passedNode = useAppSelector((state) => state.dfs.passedNodes);
   const visitedNodes = useAppSelector((state) => state.dfs.visitedNodes);
   const tableData = useAppSelector((state) => state.dfs.tableData);
+  const directed = useAppSelector((state) => state.dfs.directed);
   const controller = DFSAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -67,6 +68,7 @@ const DFSPage: FC = () => {
               passedNodes={passedNode}
               visitedNodes={visitedNodes}
               tableData={tableData}
+              directed={directed}
             />
           )}
           {showActions && <DFSTable />}
