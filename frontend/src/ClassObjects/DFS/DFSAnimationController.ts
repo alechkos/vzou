@@ -24,7 +24,7 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
 
   graphNodes: DFSNode[];
 
-  private constructor(node: DFSNode | undefined, dispatch: AppDispatch) {
+  protected constructor(node: DFSNode | undefined, dispatch: AppDispatch) {
     super(dispatch, new DFSMemento(), node);
     this.graphNodes = [];
   }

@@ -101,6 +101,12 @@ const HomePageData = [
     image: bfsPhoto,
     url: RoutePaths.DFS,
   },
+  {
+    title: "Bellman-Ford",
+    gif: bfsGif,
+    image: bfsPhoto,
+    url: RoutePaths.BELLMAN_FORD,
+  },
 ];
 
 export default HomePageData;

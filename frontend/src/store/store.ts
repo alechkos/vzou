@@ -19,6 +19,7 @@ import linkedListReducer from "./reducers/alghoritms/linkedList-reducer";
 import dfsReducer from "./reducers/alghoritms/dfs-reducer";
 import hashTableReducer from "./reducers/alghoritms/hashTable-reducer";
 import basePageReducer from "./reducers/basePage-reducer";
+import bellmanFordReducer from "./reducers/alghoritms/bellmanFord-reducer";
 
 const store = configureStore({
   reducer: {
@@ -37,6 +38,7 @@ const store = configureStore({
     bucketSort: bucketSortReducer,
     radixSort: radixSortReducer,
     dfs: dfsReducer,
+    bellmanFord: bellmanFordReducer,
     animationController: animationControlReducer,
     basePage: basePageReducer,
     [reportApi.reducerPath]: reportApi.reducer,
