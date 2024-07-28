@@ -57,6 +57,7 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
   const [source, setSource] = useState<string>("");
   const [target, setTarget] = useState<string>("");
   const [weight, setWeight] = useState<string>("");
+  const [graphCreated, setGraphCreated] = useState<boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -95,6 +96,7 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
     setGraphData({ nodes: Array.from(nodes), links: edges });
     setShowPseudoCode(true);
     setShowInitialNodeInput(true);
+    setGraphCreated(true);
   };
 
   const handleInitialNodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,49 +124,53 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
         <ThemeProvider theme={theme}>
           <ControlsToolTip isButtonDisabled={isButtonDisabled}>
             <Box sx={{ width: "100%", typography: "body1" }}>
-              <TextField
-                placeholder="From"
-                size="small"
-                sx={{ width: "150px" }}
-                value={source}
-                label="From"
-                variant="outlined"
-                onChange={(e) => setSource(e.target.value)}
-              />
-              <TextField
-                placeholder="To"
-                size="small"
-                sx={{ width: "150px", marginLeft: 2 }}
-                value={target}
-                label="To"
-                variant="outlined"
-                onChange={(e) => setTarget(e.target.value)}
-              />
-              <TextField
-                placeholder="Weight"
-                size="small"
-                sx={{ width: "150px", marginLeft: 2 }}
-                value={weight}
-                label="Weight"
-                variant="outlined"
-                onChange={(e) => setWeight(e.target.value)}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginLeft: 2 }}
-                onClick={addEdgeHandler}
-              >
-                Add
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginLeft: 2 }}
-                onClick={createGraphHandler}
-              >
-                Create Graph
-              </Button>
+              {!graphCreated && (
+                <>
+                  <TextField
+                    placeholder="From"
+                    size="small"
+                    sx={{ width: "150px" }}
+                    value={source}
+                    label="From"
+                    variant="outlined"
+                    onChange={(e) => setSource(e.target.value)}
+                  />
+                  <TextField
+                    placeholder="To"
+                    size="small"
+                    sx={{ width: "150px", marginLeft: 2 }}
+                    value={target}
+                    label="To"
+                    variant="outlined"
+                    onChange={(e) => setTarget(e.target.value)}
+                  />
+                  <TextField
+                    placeholder="Weight"
+                    size="small"
+                    sx={{ width: "150px", marginLeft: 2 }}
+                    value={weight}
+                    label="Weight"
+                    variant="outlined"
+                    onChange={(e) => setWeight(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginLeft: 2 }}
+                    onClick={addEdgeHandler}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginLeft: 2 }}
+                    onClick={createGraphHandler}
+                  >
+                    Create Graph
+                  </Button>
+                </>
+              )}
               {showInitialNodeInput && (
                 <>
                   <TextField

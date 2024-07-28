@@ -8,6 +8,7 @@ import SideBar from "../../../components/Layout/SideBar/SideBar";
 import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import styles from "../../../components/Simulation/PseudoCode/PseudoCodeWrapper.module.css";
 import controlStyles from "./DjikstraControlsPanel.module.css";
+import DjikstraTable from "../../../components/Simulation/ControlsPanels/DjikstraTable";
 
 const DjikstraPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
@@ -25,8 +26,8 @@ const DjikstraPage: FC = () => {
   const [currentLine, setCurrentLine] = useState(0);
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
   const [predecessors, setPredecessors] = useState<{ [key: number]: number | null }>({});
-  const [colors, setColors] = useState<{ [key: number]: string }>({});
   const [queue, setQueue] = useState<number[]>([]);
+  const [s, setS] = useState<number[]>([]);
   const [currentU, setCurrentU] = useState<number | null>(null);
   const [graphData, setGraphData] = useState<{
     nodes: number[];
@@ -73,22 +74,19 @@ const DjikstraPage: FC = () => {
     }, 5000);
   };
 
-  const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any) => {
-    console.log("I save my last to ", cl);
+  const saveState = (cl: any, d: any, p: any, q: number[], u: any) => {
     const currentState = {
       cl,
       distances: { ...d },
       predecessors: { ...p },
-      colors: { ...c },
       queue: [...q],
       u,
+      s: [...s],
       highlightedNode,
       highlightedLink,
       highlightedTargetNode,
     };
-    console.log("My last current state is ", currentState);
     historyRef.current.push(currentState);
-    console.log("My last history is ", historyRef);
   };
 
   const restoreState = (index: number) => {
@@ -97,8 +95,8 @@ const DjikstraPage: FC = () => {
       setCurrentLine(state.cl);
       setDistances(state.distances);
       setPredecessors(state.predecessors);
-      setColors(state.colors);
       setQueue(state.queue);
+      setS(state.s);
       setCurrentU(state.u);
       setHighlightedNode(state.highlightedNode);
       setHighlightedLink(state.highlightedLink);
@@ -121,8 +119,8 @@ const DjikstraPage: FC = () => {
     setCurrentLine(0);
     setDistances({});
     setPredecessors({});
-    setColors({});
     setQueue([]);
+    setS([]);
     setCurrentU(null);
     setHighlightedNode(null);
     setHighlightedLink(null);
@@ -134,7 +132,6 @@ const DjikstraPage: FC = () => {
     let cl = 0;
     let d = {};
     let p = {};
-    let c = {};
     let q: number[] = [];
     let u = null;
     let localQueue: number[] = [];
@@ -150,14 +147,12 @@ const DjikstraPage: FC = () => {
 
     const initDistances: { [key: number]: number } = {};
     const initPredecessors: { [key: number]: number | null } = {};
-    const initColors: { [key: number]: string } = {};
 
     setDistances(initDistances);
     setPredecessors(initPredecessors);
-    setColors(initColors);
 
     setCurrentLine(0);
-    saveState(cl, d, p, c, q, u);
+    saveState(cl, d, p, q, u);
 
     await waitForNextStep(signal);
 
@@ -165,7 +160,7 @@ const DjikstraPage: FC = () => {
       if (signal.aborted) return resetAnimation();
       setCurrentLine(1);
 
-      saveState(cl + 1, d, p, c, q, u);
+      saveState(cl + 1, d, p, q, u);
 
       await waitForNextStep(signal);
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
@@ -173,51 +168,35 @@ const DjikstraPage: FC = () => {
 
       setCurrentLine(2);
 
-      saveState(cl + 2, d, p, c, q, u);
+      saveState(cl + 2, d, p, q, u);
 
       await waitForNextStep(signal);
       setPredecessors((prev) => ({ ...prev, [v]: null }));
       p = { ...p, [v]: null };
 
       setCurrentLine(3);
-      saveState(cl + 3, d, p, c, q, u);
+      saveState(cl + 3, d, p, q, u);
       await waitForNextStep(signal);
-      setColors((prev) => ({ ...prev, [v]: "WHITE" }));
-      c = { ...c, [v]: "WHITE" };
-      setHighlightedNode(v);
-      setCurrentLine(4);
-      saveState(cl + 4, d, p, c, q, u);
-      await waitForNextStep(signal);
-      setHighlightedNode(null);
     }
 
-    setHighlightedNode(null);
     setCurrentLine(5);
-    saveState(cl + 5, d, p, c, q, u);
+    saveState(cl + 5, d, p, q, u);
     await waitForNextStep(signal);
 
     setCurrentLine(6);
     setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
     d = { ...d, [initialNode]: 0 };
-    saveState(cl + 6, d, p, c, q, u);
+    saveState(cl + 6, d, p, q, u);
     await waitForNextStep(signal);
+
     setCurrentLine(7);
-    setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
-    c = { ...c, [initialNode]: "GRAY" };
-    setHighlightedNode(initialNode);
-    saveState(cl + 7, d, p, c, q, u);
-    await waitForNextStep(signal);
-    setHighlightedNode(null);
-
-    setCurrentLine(8);
-
     localQueue.push(initialNode);
     setQueue([...localQueue]);
     q = [...localQueue];
 
-    saveState(cl + 8, d, p, c, q, u);
+    saveState(cl + 7, d, p, q, u);
     await waitForNextStep(signal);
-    continueBfsAnimation(localQueue, signal, d, p, c, q);
+    continueBfsAnimation(localQueue, signal, d, p, q);
   };
 
   const continueBfsAnimation = async (
@@ -225,31 +204,29 @@ const DjikstraPage: FC = () => {
     signal: AbortSignal,
     di: any,
     pr: any,
-    co: any,
     qu: any
   ) => {
-    let cl = 9;
+    let cl = 8;
     let d = { ...di };
     let p = { ...pr };
-    let c = { ...co };
     let q = [...qu];
     let localU = null;
 
     while (localQueue.length > 0) {
       if (signal.aborted) return resetAnimation();
-      setCurrentLine(9);
-      saveState(cl, d, p, c, q, localU);
+      setCurrentLine(8);
+      saveState(cl, d, p, q, localU);
 
       await waitForNextStep(signal);
 
-      setCurrentLine(10);
+      setCurrentLine(9);
 
       const u = localQueue.shift()!;
       localU = u;
       q = [...localQueue];
       setQueue([...localQueue]);
       setCurrentU(u ?? null);
-      saveState(cl + 1, d, p, c, q, localU);
+      saveState(cl + 1, d, p, q, localU);
       await waitForNextStep(signal);
 
       if (u !== undefined) {
@@ -259,9 +236,9 @@ const DjikstraPage: FC = () => {
           .filter((link) => link.source === u)
           .map((link) => link.target)) {
           if (signal.aborted) return resetAnimation();
-          setCurrentLine(11);
+          setCurrentLine(10);
 
-          saveState(cl + 2, d, p, c, q, localU);
+          saveState(cl + 2, d, p, q, localU);
           await waitForNextStep(signal);
 
           setHighlightedLink({ source: u, target: v });
@@ -269,52 +246,43 @@ const DjikstraPage: FC = () => {
 
           await waitForNextStep(signal);
 
-          if (c[u] !== "BLACK") {
-            if (c[v] === "WHITE") {
-              setCurrentLine(12);
+          if (p[v] === null) {
+            if (d[v] > d[u] + 1) {
+              setCurrentLine(11);
 
-              saveState(cl + 3, d, p, c, q, localU);
+              saveState(cl + 3, d, p, q, localU);
               await waitForNextStep(signal);
               d = { ...d, [v]: d[u] + 1 };
               setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
-              setCurrentLine(13);
-              saveState(cl + 4, d, p, c, q, localU);
+              setCurrentLine(12);
+              saveState(cl + 4, d, p, q, localU);
               await waitForNextStep(signal);
               p = { ...p, [v]: u };
               setPredecessors((prev) => ({ ...prev, [v]: u }));
-              setCurrentLine(14);
-              saveState(cl + 5, d, p, c, q, localU);
+              setCurrentLine(13);
+              saveState(cl + 5, d, p, q, localU);
               await waitForNextStep(signal);
-              c = { ...c, [v]: "GRAY" };
-              setColors((prev) => ({ ...prev, [v]: "GRAY" }));
               setHighlightedNode(v);
-              setCurrentLine(15);
+              setCurrentLine(14);
 
-              saveState(cl + 6, d, p, c, q, localU);
+              saveState(cl + 6, d, p, q, localU);
               await waitForNextStep(signal);
               setHighlightedNode(null);
-              setCurrentLine(16);
+              setCurrentLine(15);
 
               localQueue.push(v);
               q = [...localQueue];
               setQueue([...localQueue]);
-              saveState(cl + 7, d, p, c, q, localU);
+              saveState(cl + 7, d, p, q, localU);
               await waitForNextStep(signal);
             }
           }
         }
-        c = { ...c, [u]: "BLACK" };
-        setColors((prev) => ({ ...prev, [u]: "BLACK" }));
-        setHighlightedNode(u);
-        setCurrentLine(17);
-        saveState(cl + 8, d, p, c, q, localU);
-        await waitForNextStep(signal);
-        setHighlightedNode(null);
       }
     }
 
-    setCurrentLine(18);
-    saveState(cl + 7, d, p, c, q, localU);
+    setCurrentLine(16);
+    saveState(cl + 7, d, p, q, localU);
     await waitForNextStep(signal);
     setIsPlayingAnimation(false);
   };
@@ -375,7 +343,7 @@ const DjikstraPage: FC = () => {
             highlightedNode={highlightedNode}
             highlightedLink={highlightedLink}
             highlightedTargetNode={highlightedTargetNode}
-            colors={colors}
+            colors={{}}
           />
           {hasStarted && (
             <div className={controlStyles.buttonContainer}>
@@ -413,44 +381,21 @@ const DjikstraPage: FC = () => {
           )}
           {showPseudoCode && (
             <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead>
-                  <tr>
-                    <th>Node</th>
-                    {graphData.nodes.map((node) => (
-                      <th key={node}>{node}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>d</td>
-                    {graphData.nodes.map((node) => (
-                      <td key={node}>{distances[node]}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td>π</td>
-                    {graphData.nodes.map((node) => (
-                      <td key={node}>{predecessors[node] === null ? "NIL" : predecessors[node]}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td>color</td>
-                    {graphData.nodes.map((node) => (
-                      <td key={node}>{colors[node]}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td>u</td>
-                    <td>{currentU !== null ? currentU : ""}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <DjikstraTable
+                nodes={graphData.nodes}
+                distances={distances}
+                predecessors={predecessors}
+              />
               <div className={styles.queueWrapper}>
-                <h3>Queue</h3>
+                <h3>Q</h3>
                 <ul>
                   {queue.map((node, index) => (
+                    <li key={index}>{node}</li>
+                  ))}
+                </ul>
+                <h3>S</h3>
+                <ul>
+                  {s.map((node, index) => (
                     <li key={index}>{node}</li>
                   ))}
                 </ul>
