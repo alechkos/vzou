@@ -25,9 +25,9 @@ const DjikstraTable: FC<DjikstraTableProps> = ({ nodes, distances, predecessors 
           ))}
         </tr>
         <tr>
-          <td>П</td>
+          <td>π</td>
           {nodes.map((node) => (
-            <td key={node}>{predecessors[node]}</td>
+            <td key={node}>{predecessors[node] === null ? "NIL" : predecessors[node]}</td>
           ))}
         </tr>
       </tbody>

@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { BfsAnimationController } from "../../../ClassObjects/BST/BfsAnimationController";
 import DjikstraControlsPanel from "../../../components/Simulation/ControlsPanels/DjikstraControlsPanel";
 import DjikstraPseudoCodeContainer from "../../../components/Simulation/PseudoCode/DjikstraPseudoCodeContainer";
 import { useAppSelector } from "../../../store/hooks";
@@ -14,8 +13,6 @@ const DjikstraPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
   const isPlaying = useAppSelector((state) => state.bst.isPlaying);
   const dispatch = useDispatch();
-
-  const controller = BfsAnimationController.getController(root, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
   const [showActions, setShowActions] = useState(false);
@@ -74,14 +71,21 @@ const DjikstraPage: FC = () => {
     }, 5000);
   };
 
-  const saveState = (cl: any, d: any, p: any, q: number[], u: any) => {
+  const saveState = (
+    cl: any,
+    d: { [key: number]: number },
+    p: { [key: number]: number | null },
+    q: number[],
+    s: number[],
+    u: any
+  ) => {
     const currentState = {
       cl,
       distances: { ...d },
       predecessors: { ...p },
       queue: [...q],
-      u,
       s: [...s],
+      u,
       highlightedNode,
       highlightedLink,
       highlightedTargetNode,
@@ -128,165 +132,6 @@ const DjikstraPage: FC = () => {
     historyRef.current = [];
   };
 
-  const bfsAnimation = async (signal: AbortSignal) => {
-    let cl = 0;
-    let d = {};
-    let p = {};
-    let q: number[] = [];
-    let u = null;
-    let localQueue: number[] = [];
-
-    if (initialNode === null) {
-      setCurrentError("Please set the initial node.");
-      return;
-    }
-
-    setIsPlayingAnimation(true);
-    setIsPaused(false);
-    setHasStarted(true);
-
-    const initDistances: { [key: number]: number } = {};
-    const initPredecessors: { [key: number]: number | null } = {};
-
-    setDistances(initDistances);
-    setPredecessors(initPredecessors);
-
-    setCurrentLine(0);
-    saveState(cl, d, p, q, u);
-
-    await waitForNextStep(signal);
-
-    for (const v of graphData.nodes) {
-      if (signal.aborted) return resetAnimation();
-      setCurrentLine(1);
-
-      saveState(cl + 1, d, p, q, u);
-
-      await waitForNextStep(signal);
-      setDistances((prev) => ({ ...prev, [v]: Infinity }));
-      d = { ...d, [v]: Infinity };
-
-      setCurrentLine(2);
-
-      saveState(cl + 2, d, p, q, u);
-
-      await waitForNextStep(signal);
-      setPredecessors((prev) => ({ ...prev, [v]: null }));
-      p = { ...p, [v]: null };
-
-      setCurrentLine(3);
-      saveState(cl + 3, d, p, q, u);
-      await waitForNextStep(signal);
-    }
-
-    setCurrentLine(5);
-    saveState(cl + 5, d, p, q, u);
-    await waitForNextStep(signal);
-
-    setCurrentLine(6);
-    setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
-    d = { ...d, [initialNode]: 0 };
-    saveState(cl + 6, d, p, q, u);
-    await waitForNextStep(signal);
-
-    setCurrentLine(7);
-    localQueue.push(initialNode);
-    setQueue([...localQueue]);
-    q = [...localQueue];
-
-    saveState(cl + 7, d, p, q, u);
-    await waitForNextStep(signal);
-    continueBfsAnimation(localQueue, signal, d, p, q);
-  };
-
-  const continueBfsAnimation = async (
-    localQueue: number[],
-    signal: AbortSignal,
-    di: any,
-    pr: any,
-    qu: any
-  ) => {
-    let cl = 8;
-    let d = { ...di };
-    let p = { ...pr };
-    let q = [...qu];
-    let localU = null;
-
-    while (localQueue.length > 0) {
-      if (signal.aborted) return resetAnimation();
-      setCurrentLine(8);
-      saveState(cl, d, p, q, localU);
-
-      await waitForNextStep(signal);
-
-      setCurrentLine(9);
-
-      const u = localQueue.shift()!;
-      localU = u;
-      q = [...localQueue];
-      setQueue([...localQueue]);
-      setCurrentU(u ?? null);
-      saveState(cl + 1, d, p, q, localU);
-      await waitForNextStep(signal);
-
-      if (u !== undefined) {
-        await waitForNextStep(signal);
-
-        for (const v of graphData.links
-          .filter((link) => link.source === u)
-          .map((link) => link.target)) {
-          if (signal.aborted) return resetAnimation();
-          setCurrentLine(10);
-
-          saveState(cl + 2, d, p, q, localU);
-          await waitForNextStep(signal);
-
-          setHighlightedLink({ source: u, target: v });
-          setHighlightedTargetNode(v);
-
-          await waitForNextStep(signal);
-
-          if (p[v] === null) {
-            if (d[v] > d[u] + 1) {
-              setCurrentLine(11);
-
-              saveState(cl + 3, d, p, q, localU);
-              await waitForNextStep(signal);
-              d = { ...d, [v]: d[u] + 1 };
-              setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
-              setCurrentLine(12);
-              saveState(cl + 4, d, p, q, localU);
-              await waitForNextStep(signal);
-              p = { ...p, [v]: u };
-              setPredecessors((prev) => ({ ...prev, [v]: u }));
-              setCurrentLine(13);
-              saveState(cl + 5, d, p, q, localU);
-              await waitForNextStep(signal);
-              setHighlightedNode(v);
-              setCurrentLine(14);
-
-              saveState(cl + 6, d, p, q, localU);
-              await waitForNextStep(signal);
-              setHighlightedNode(null);
-              setCurrentLine(15);
-
-              localQueue.push(v);
-              q = [...localQueue];
-              setQueue([...localQueue]);
-              saveState(cl + 7, d, p, q, localU);
-              await waitForNextStep(signal);
-            }
-          }
-        }
-      }
-    }
-
-    setCurrentLine(16);
-    saveState(cl + 7, d, p, q, localU);
-    await waitForNextStep(signal);
-    setIsPlayingAnimation(false);
-  };
-
   const waitForNextStep = async (signal: AbortSignal) => {
     const delay = 1000 / speed;
     const checkInterval = Math.min(100, delay);
@@ -303,6 +148,106 @@ const DjikstraPage: FC = () => {
     }
   };
 
+  const djikstraAnimation = async (signal: AbortSignal) => {
+    if (initialNode === null) {
+      setCurrentError("Please set the initial node.");
+      return;
+    }
+
+    let cl = 0;
+    let d: { [key: number]: number } = {};
+    let p: { [key: number]: number | null } = {};
+    let q: number[] = [];
+    let s: number[] = [];
+    let u = null;
+
+    setIsPlayingAnimation(true);
+    setIsPaused(false);
+    setHasStarted(true);
+
+    const initDistances: { [key: number]: number } = {};
+    const initPredecessors: { [key: number]: number | null } = {};
+
+    setDistances(initDistances);
+    setPredecessors(initPredecessors);
+
+    setCurrentLine(cl);
+    saveState(cl, d, p, q, s, u);
+
+    await waitForNextStep(signal);
+    //----------------------end 0 line--------------------------------------
+
+    cl++;
+    setCurrentLine(cl);
+    saveState(cl, d, p, q, s, u);
+    await waitForNextStep(signal);
+    //---------------------end 1-st line-------------------------------------
+
+    for (const v of graphData.nodes) {
+      if (signal.aborted) return resetAnimation();
+
+      cl++;
+      setCurrentLine(cl);
+      setDistances((prev) => ({ ...prev, [v]: Infinity }));
+      d[v] = Infinity;
+      await waitForNextStep(signal);
+      saveState(cl, d, p, q, s, u);
+
+      cl++;
+      setCurrentLine(cl);
+      setPredecessors((prev) => ({ ...prev, [v]: null }));
+      p[v] = null;
+      await waitForNextStep(signal);
+      saveState(cl, d, p, q, s, u);
+    }
+
+    setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
+    d[initialNode] = 0;
+
+    q.push(initialNode);
+    setQueue([...q]);
+
+    cl++;
+    setCurrentLine(cl);
+    saveState(cl, d, p, q, s, u);
+    await waitForNextStep(signal);
+
+    while (q.length > 0 && !signal.aborted) {
+      u = q.shift()!;
+      setQueue([...q]);
+      s.push(u);
+      setS([...s]);
+
+      cl++;
+      setCurrentLine(cl);
+      saveState(cl, d, p, q, s, u);
+      await waitForNextStep(signal);
+
+      for (const edge of graphData.links) {
+        if (edge.source === u) {
+          const v = edge.target;
+          const weight = edge.weight;
+          if (d[v] > d[u] + weight) {
+            d[v] = d[u] + weight;
+            setDistances({ ...d });
+            p[v] = u;
+            setPredecessors({ ...p });
+
+            q.push(v);
+            setQueue([...q]);
+
+            cl++;
+            setCurrentLine(cl);
+            saveState(cl, d, p, q, s, u);
+            await waitForNextStep(signal);
+          }
+        }
+      }
+    }
+
+    setIsPlayingAnimation(false);
+  };
+
   const handlePause = () => {
     setIsPaused(true);
   };
@@ -315,12 +260,13 @@ const DjikstraPage: FC = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
+    resetAnimation();
   };
 
-  const startBfsAnimation = () => {
+  const startDjikstraAnimation = () => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
-    bfsAnimation(controller.signal);
+    djikstraAnimation(controller.signal);
   };
 
   return (
@@ -336,7 +282,7 @@ const DjikstraPage: FC = () => {
             editingConstruction={editingConstruction}
             setShowPseudoCode={setShowPseudoCode}
             setInitialNode={setInitialNode}
-            startAnimation={startBfsAnimation}
+            startAnimation={startDjikstraAnimation}
             setSpeed={setSpeed}
             graphData={graphData}
             setGraphData={setGraphData}
