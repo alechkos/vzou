@@ -159,7 +159,7 @@ const DjikstraPage: FC = () => {
     let p: { [key: number]: number | null } = {};
     let q: number[] = [];
     let s: number[] = [];
-    let u = null;
+    let u: any = null;
 
     setIsPlayingAnimation(true);
     setIsPaused(false);
@@ -170,76 +170,139 @@ const DjikstraPage: FC = () => {
 
     setDistances(initDistances);
     setPredecessors(initPredecessors);
-
-    setCurrentLine(cl);
-    saveState(cl, d, p, q, s, u);
-
-    await waitForNextStep(signal);
-    //----------------------end 0 line--------------------------------------
-
-    cl++;
+    //-------------------------0-st line------------------------------
     setCurrentLine(cl);
     saveState(cl, d, p, q, s, u);
     await waitForNextStep(signal);
-    //---------------------end 1-st line-------------------------------------
+    //-------------------------end of 0-st line-----------------------
 
     for (const v of graphData.nodes) {
       if (signal.aborted) return resetAnimation();
+      //----------------------1-t line--------------------------------
+      setCurrentLine(cl + 1);
+      saveState(cl + 1, d, p, q, s, u);
+      await waitForNextStep(signal);
+      //----------------------end of 1-t line-------------------------
 
-      cl++;
-      setCurrentLine(cl);
+      //----------------------2-nd line--------------------------------
+      setCurrentLine(cl + 2);
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
       d[v] = Infinity;
+      saveState(cl + 2, d, p, q, s, u);
       await waitForNextStep(signal);
-      saveState(cl, d, p, q, s, u);
+      //----------------------end of 2-nd line-------------------------
 
-      cl++;
-      setCurrentLine(cl);
+      //-----------------------3-rd line-------------------------------
+      setCurrentLine(cl + 3);
       setPredecessors((prev) => ({ ...prev, [v]: null }));
       p[v] = null;
       await waitForNextStep(signal);
-      saveState(cl, d, p, q, s, u);
+      saveState(cl + 3, d, p, q, s, u);
+      //-----------------------end of 3-rd line-------------------------------
     }
 
+    //-------------------------4-nd line--------------------------------------
+    setCurrentLine(cl + 4);
     setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
     d[initialNode] = 0;
-
-    q.push(initialNode);
-    setQueue([...q]);
-
-    cl++;
-    setCurrentLine(cl);
-    saveState(cl, d, p, q, s, u);
+    saveState(cl + 4, d, p, q, s, u);
     await waitForNextStep(signal);
+    //-------------------------end of 4-nd line--------------------------------------
+
+    //--------------------------5-th line--------------------------------------------
+    setCurrentLine(cl + 5);
+    saveState(cl + 5, d, p, q, s, u);
+    await waitForNextStep(signal);
+    //----------------------------end of 5-th line------------------------------------
+
+    //----------------------------6-th line-------------------------------------------
+    setCurrentLine(cl + 6);
+    q = [...graphData.nodes];
+    setQueue([...q]);
+    saveState(cl + 6, d, p, q, s, u);
+    await waitForNextStep(signal);
+    //----------------------------end of 6-th line---------------------------------------------------
 
     while (q.length > 0 && !signal.aborted) {
-      u = q.shift()!;
+      //----------------------------7-th line------------------------------------------------------------
+      setCurrentLine(cl + 7);
+      saveState(cl + 7, d, p, q, s, u);
+      await waitForNextStep(signal);
+      //----------------------------end of 7-th line-----------------------------------------------------
+
+      //----------------------------8-th line------------------------------------------------------------
+      setCurrentLine(cl + 8);
+      u = q.reduce((minNode, node) => (d[node] < d[minNode] ? node : minNode), q[0]);
+      q = q.filter((node) => node !== u);
       setQueue([...q]);
+      setCurrentU(u);
+      saveState(cl + 8, d, p, q, s, u);
+      await waitForNextStep(signal);
+      //----------------------------end of 8-th line-------------------------------------------------------
+
+      //---------------------------9-th line---------------------------------------------------------------
+      setCurrentLine(cl + 9);
       s.push(u);
       setS([...s]);
-
-      cl++;
-      setCurrentLine(cl);
-      saveState(cl, d, p, q, s, u);
+      saveState(cl + 9, d, p, q, s, u);
       await waitForNextStep(signal);
+      //---------------------------end of 9-th line---------------------------------------------------------------
 
       for (const edge of graphData.links) {
-        if (edge.source === u) {
+        //----------------------------10-th line--------------------------------------------------------------------
+        setCurrentLine(cl + 10);
+        saveState(cl + 10, d, p, q, s, u);
+        await waitForNextStep(signal);
+        //----------------------------end of 10-th line--------------------------------------------------------------------
+
+        //----------------------------11-th line---------------------------------------------------------------------------
+        setCurrentLine(cl + 11);
+        saveState(cl + 11, d, p, q, s, u);
+        await waitForNextStep(signal);
+        //----------------------------end of11-th line----------------------------------------------------------------------
+        if (edge.source === u && !s.includes(edge.target)) {
+          //----------------------------12-th line--------------------------------------------------------------------------
+          setCurrentLine(cl + 12);
+          saveState(cl + 12, d, p, q, s, u);
+          await waitForNextStep(signal);
+          //----------------------------end of 12-th line--------------------------------------------------------------------------
+
+          //----------------------------16-th line(relax)--------------------------------------------------------------------------
+          setCurrentLine(cl + 16);
+          saveState(cl + 16, d, p, q, s, u);
+          await waitForNextStep(signal);
+          //----------------------------end of 16-th line(relax)--------------------------------------------------------------------------
+
+          //----------------------------17-th line---------------------------------------------------------------------------------------
+          setCurrentLine(cl + 17);
+          saveState(cl + 17, d, p, q, s, u);
+          await waitForNextStep(signal);
+          //----------------------------end of 17-th line---------------------------------------------------------------------------------------
+
           const v = edge.target;
           const weight = edge.weight;
           if (d[v] > d[u] + weight) {
+            //----------------------------18-th line----------------------------------------------------------------------------------------------
+            setCurrentLine(cl + 18);
+            saveState(cl + 18, d, p, q, s, u);
             d[v] = d[u] + weight;
             setDistances({ ...d });
+            await waitForNextStep(signal);
+            //----------------------------end of 18-th line----------------------------------------------------------------------------------------------
+
+            //----------------------------19-th line-----------------------------------------------------------------------------------------------------
+            setCurrentLine(cl + 19);
+            saveState(cl + 19, d, p, q, s, u);
             p[v] = u;
             setPredecessors({ ...p });
-
-            q.push(v);
-            setQueue([...q]);
-
-            cl++;
-            setCurrentLine(cl);
-            saveState(cl, d, p, q, s, u);
             await waitForNextStep(signal);
+            //----------------------------end of 19-th line-----------------------------------------------------------------------------------------------------
+
+            //----------------------------20-th line------------------------------------------------------------------------------------------------------------
+            setCurrentLine(cl + 20);
+            saveState(cl + 20, d, p, q, s, u);
+            await waitForNextStep(signal);
+            //----------------------------end of 20-th line------------------------------------------------------------------------------------------------------
           }
         }
       }
@@ -344,6 +407,10 @@ const DjikstraPage: FC = () => {
                   {s.map((node, index) => (
                     <li key={index}>{node}</li>
                   ))}
+                </ul>
+                <h3>u</h3>
+                <ul>
+                  <li>{currentU !== null ? currentU : ""}</li>
                 </ul>
               </div>
             </div>
