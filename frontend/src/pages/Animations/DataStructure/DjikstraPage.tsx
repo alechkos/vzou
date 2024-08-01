@@ -147,6 +147,10 @@ const DjikstraPage: FC = () => {
       await new Promise((resolve) => setTimeout(resolve, checkInterval));
     }
   };
+  const getEdgeWeight = (u: number, v: number) => {
+    const edge = graphData.links.find((edge) => edge.source === u && edge.target === v);
+    return edge ? edge.weight : null;
+  };
 
   const djikstraAnimation = async (signal: AbortSignal) => {
     if (initialNode === null) {
@@ -245,66 +249,80 @@ const DjikstraPage: FC = () => {
       s.push(u);
       setS([...s]);
       saveState(cl + 9, d, p, q, s, u);
+      const neighbors = graphData.links
+        .filter((edge) => edge.source === u)
+        .map((edge) => edge.target);
+
       await waitForNextStep(signal);
       //---------------------------end of 9-th line---------------------------------------------------------------
+      if (neighbors.length > 0) {
+        for (const v of neighbors) {
+          //----------------------------10-th line--------------------------------------------------------------------
+          setCurrentLine(cl + 10);
+          saveState(cl + 10, d, p, q, s, u);
+          await waitForNextStep(signal);
+          //----------------------------end of 10-th line--------------------------------------------------------------------
 
-      for (const edge of graphData.links) {
-        //----------------------------10-th line--------------------------------------------------------------------
+          //----------------------------11-th line---------------------------------------------------------------------------
+          setCurrentLine(cl + 11);
+          saveState(cl + 11, d, p, q, s, u);
+          await waitForNextStep(signal);
+          //----------------------------end of11-th line----------------------------------------------------------------------
+          if (!s.includes(v)) {
+            //----------------------------12-th line--------------------------------------------------------------------------
+            setCurrentLine(cl + 12);
+            saveState(cl + 12, d, p, q, s, u);
+            await waitForNextStep(signal);
+            //----------------------------end of 12-th line--------------------------------------------------------------------------
+
+            //----------------------------16-th line(relax)--------------------------------------------------------------------------
+            setCurrentLine(cl + 16);
+            saveState(cl + 16, d, p, q, s, u);
+            await waitForNextStep(signal);
+            //----------------------------end of 16-th line(relax)--------------------------------------------------------------------------
+
+            //----------------------------17-th line---------------------------------------------------------------------------------------
+            setCurrentLine(cl + 17);
+            saveState(cl + 17, d, p, q, s, u);
+            await waitForNextStep(signal);
+            //----------------------------end of 17-th line---------------------------------------------------------------------------------------
+
+            const weight = getEdgeWeight(u, v);
+            if (d[v] > d[u] + weight!) {
+              //----------------------------18-th line----------------------------------------------------------------------------------------------
+              setCurrentLine(cl + 18);
+              saveState(cl + 18, d, p, q, s, u);
+              d[v] = d[u] + weight!;
+              setDistances({ ...d });
+              await waitForNextStep(signal);
+              //----------------------------end of 18-th line----------------------------------------------------------------------------------------------
+
+              //----------------------------19-th line-----------------------------------------------------------------------------------------------------
+              setCurrentLine(cl + 19);
+              saveState(cl + 19, d, p, q, s, u);
+              p[v] = u;
+              setPredecessors({ ...p });
+              await waitForNextStep(signal);
+              //----------------------------end of 19-th line-----------------------------------------------------------------------------------------------------
+
+              //----------------------------20-th line------------------------------------------------------------------------------------------------------------
+              setCurrentLine(cl + 20);
+              saveState(cl + 20, d, p, q, s, u);
+              await waitForNextStep(signal);
+              //----------------------------end of 20-th line------------------------------------------------------------------------------------------------------
+            }
+          }
+        }
+        setCurrentLine(cl + 14);
+        saveState(cl + 14, d, p, q, s, u);
+        await waitForNextStep(signal);
+      } else {
         setCurrentLine(cl + 10);
         saveState(cl + 10, d, p, q, s, u);
         await waitForNextStep(signal);
-        //----------------------------end of 10-th line--------------------------------------------------------------------
-
-        //----------------------------11-th line---------------------------------------------------------------------------
-        setCurrentLine(cl + 11);
-        saveState(cl + 11, d, p, q, s, u);
+        setCurrentLine(cl + 14);
+        saveState(cl + 14, d, p, q, s, u);
         await waitForNextStep(signal);
-        //----------------------------end of11-th line----------------------------------------------------------------------
-        if (edge.source === u && !s.includes(edge.target)) {
-          //----------------------------12-th line--------------------------------------------------------------------------
-          setCurrentLine(cl + 12);
-          saveState(cl + 12, d, p, q, s, u);
-          await waitForNextStep(signal);
-          //----------------------------end of 12-th line--------------------------------------------------------------------------
-
-          //----------------------------16-th line(relax)--------------------------------------------------------------------------
-          setCurrentLine(cl + 16);
-          saveState(cl + 16, d, p, q, s, u);
-          await waitForNextStep(signal);
-          //----------------------------end of 16-th line(relax)--------------------------------------------------------------------------
-
-          //----------------------------17-th line---------------------------------------------------------------------------------------
-          setCurrentLine(cl + 17);
-          saveState(cl + 17, d, p, q, s, u);
-          await waitForNextStep(signal);
-          //----------------------------end of 17-th line---------------------------------------------------------------------------------------
-
-          const v = edge.target;
-          const weight = edge.weight;
-          if (d[v] > d[u] + weight) {
-            //----------------------------18-th line----------------------------------------------------------------------------------------------
-            setCurrentLine(cl + 18);
-            saveState(cl + 18, d, p, q, s, u);
-            d[v] = d[u] + weight;
-            setDistances({ ...d });
-            await waitForNextStep(signal);
-            //----------------------------end of 18-th line----------------------------------------------------------------------------------------------
-
-            //----------------------------19-th line-----------------------------------------------------------------------------------------------------
-            setCurrentLine(cl + 19);
-            saveState(cl + 19, d, p, q, s, u);
-            p[v] = u;
-            setPredecessors({ ...p });
-            await waitForNextStep(signal);
-            //----------------------------end of 19-th line-----------------------------------------------------------------------------------------------------
-
-            //----------------------------20-th line------------------------------------------------------------------------------------------------------------
-            setCurrentLine(cl + 20);
-            saveState(cl + 20, d, p, q, s, u);
-            await waitForNextStep(signal);
-            //----------------------------end of 20-th line------------------------------------------------------------------------------------------------------
-          }
-        }
       }
     }
 
