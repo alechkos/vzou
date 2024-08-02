@@ -9,6 +9,7 @@ const initialState = {
   ...graphState,
   initialNode: undefined as BellmanFordNode | undefined,
   currentAlg: "Search" as BellmanFordAlgNames,
+  countRows: [1],
 };
 
 const bellmanFordSlice = createSlice({
@@ -23,6 +24,13 @@ const bellmanFordSlice = createSlice({
       state.currentAlg = action.payload.name;
       state.currentLine = action.payload.line;
       return state;
+    },
+    setCountRows(state, action: PayloadAction<number>) {
+      state.countRows.push(action.payload);
+    },
+    clearInputArray(state) {
+      state.inputArray = "";
+      state.countRows = [1];
     },
   },
 });
@@ -43,4 +51,5 @@ export const {
   setInitialNode,
   setCodeRef,
   setGraphNodes,
+  setCountRows,
 } = bellmanFordSlice.actions;

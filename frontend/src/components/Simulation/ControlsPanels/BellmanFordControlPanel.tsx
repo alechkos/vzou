@@ -24,6 +24,7 @@ import {
   clearInputArray,
   setDirected,
   setInitialNode,
+  setCountRows,
 } from "../../../store/reducers/alghoritms/bellmanFord-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
@@ -57,12 +58,35 @@ const BellmanFordControlPanel: FC<Props> = ({
   const isButtonDisabled = useAppSelector((state) => state.bellmanFord.isPlaying);
   const directed = useAppSelector((state) => state.bellmanFord.directed);
   const graphData = useAppSelector((state) => state.bellmanFord.graphData);
+  const rowCount = useAppSelector((state) => state.bellmanFord.countRows);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
   const [selected, setSelected] = useState(directed);
+
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [weight, setWeight] = useState("");
+
+  const handleChangeFrom = (event: any) => {
+    setFrom(event.target.value);
+  };
+
+  const handleChangeTo = (event: any) => {
+    setTo(event.target.value);
+  };
+
+  const handleChangeWeight = (event: any) => {
+    setWeight(event.target.value);
+  };
+
+  const handleAddValues = (event: any) => {
+    dispatch(setCountRows(1));
+    const button = event.currentTarget;
+    button.disabled = true;
+  };
 
   const handleChangeSelect = (event: any) => {
     const newSelected = !selected;
@@ -251,20 +275,54 @@ const BellmanFordControlPanel: FC<Props> = ({
                 </Box>
                 <TabPanel
                   value="1"
-                  className={value === "1" ? "justify-around flex" : "hidden"}
+                  className={value === "1" ? "justify-around flex w-max" : "hidden"}
                 >
                   {!showActions && (
                     <>
-                      <div>
-                        <TextField
-                          placeholder="e.g 1-2,3-4,..."
-                          size="small"
-                          sx={{ width: "150px" }}
-                          value={inputArray}
-                          label="Graph Data"
-                          variant="outlined"
-                          onChange={handleInput}
-                        />
+                      <div className={"flex flex-col gap-2 mx-2"}>
+                        {rowCount.map((row) => {
+                          return (
+                            <>
+                              <div className={"flex gap-2"}>
+                                <TextField
+                                  placeholder="e.g 1,2,3,..."
+                                  size="small"
+                                  sx={{ width: "80px" }}
+                                  value={from}
+                                  label="From"
+                                  variant="outlined"
+                                  onChange={handleChangeFrom}
+                                />
+                                <TextField
+                                  placeholder="e.g 1,2,3,..."
+                                  size="small"
+                                  sx={{ width: "80px" }}
+                                  value={to}
+                                  label="To"
+                                  variant="outlined"
+                                  onChange={handleChangeTo}
+                                />
+                                <TextField
+                                  placeholder="e.g 1,2,3,..."
+                                  size="small"
+                                  sx={{ width: "80px" }}
+                                  value={weight}
+                                  label="Wieght"
+                                  variant="outlined"
+                                  onChange={handleChangeWeight}
+                                />
+                                <button
+                                  disabled={isButtonDisabled}
+                                  className={`${buttonClassname} w-auto h-[40px]`}
+                                  onClick={(event) => handleAddValues(event)}
+                                >
+                                  Add
+                                </button>
+                              </div>
+                            </>
+                          );
+                        })}
+
                         <button
                           disabled={isButtonDisabled}
                           className={`${buttonClassname} w-auto h-[40px]`}
