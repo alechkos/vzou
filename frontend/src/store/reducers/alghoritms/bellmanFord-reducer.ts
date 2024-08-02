@@ -42,4 +42,5 @@ export const {
   setDirected,
   setInitialNode,
   setCodeRef,
+  setGraphNodes,
 } = bellmanFordSlice.actions;

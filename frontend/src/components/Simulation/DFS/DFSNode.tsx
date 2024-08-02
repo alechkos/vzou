@@ -58,7 +58,7 @@ const DFSNode: FC<Props> = ({ nodeObj, dfsObjects, directed }) => {
         <p>{nodeObj.value === -Infinity ? "−∞" : nodeObj.value}</p>
       </motion.span>
       {nodeObj.branches.length > 0 &&
-        !directed &&
+        directed &&
         nodeObj.branches.map((branch) => (
           <ArrowForGraph
             key={nodeObj.position.x}
@@ -70,7 +70,7 @@ const DFSNode: FC<Props> = ({ nodeObj, dfsObjects, directed }) => {
           />
         ))}
       {nodeObj.branches.length > 0 &&
-        directed &&
+        !directed &&
         nodeObj.branches.map((branch) => (
           <Branch
             key={nodeObj.position.x}

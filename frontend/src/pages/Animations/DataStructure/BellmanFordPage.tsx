@@ -1,9 +1,14 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useDispatch } from "react-redux";
 import { BellmanFordAnimationController } from "../../../ClassObjects/BellmanFord/BellmanFordAnimationController";
 import BellmanFordControlPanel from "../../../components/Simulation/ControlsPanels/BellmanFordControlPanel";
+import BellmanFord from "../../../components/Simulation/BellmanFord/BellmanFord";
+import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
+import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
+import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
+import { combineBellmanFordPseudoCode } from "../../../ClassObjects/BellmanFord/BellmanFordAlgorithms";
 
 const BellmanFordPage: FC = () => {
   const dispatch = useDispatch();
@@ -53,6 +58,30 @@ const BellmanFordPage: FC = () => {
             setShowPseudoCode={setShowPseudoCode}
           />
         </div>
+      )}
+      {(showActions || editingConstruction) && (
+        <BellmanFord
+          graphData={controller.graphNodes}
+          speed={controller.speed}
+          viewportWidth={viewportWidth}
+          actions={actions}
+          roles={roles}
+          directed={directed}
+          passedNodes={passedNode}
+          visitedNodes={visitedNodes}
+        />
+      )}
+      {showPseudoCode && (
+        <PlayerControlsPanel
+          controller={controller}
+          isPlaying={isPlaying}
+        />
+      )}
+      {showPseudoCode && (
+        <PseudoCodeContainer
+          line={currentLine}
+          code={combineBellmanFordPseudoCode(currentAlg) as PseudoItem[]}
+        />
       )}
     </>
   );

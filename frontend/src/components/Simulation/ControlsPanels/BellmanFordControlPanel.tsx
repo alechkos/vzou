@@ -65,8 +65,9 @@ const BellmanFordControlPanel: FC<Props> = ({
   const [selected, setSelected] = useState(directed);
 
   const handleChangeSelect = (event: any) => {
-    setSelected((prev) => !prev);
-    dispatch(setDirected(selected));
+    const newSelected = !selected;
+    setSelected(newSelected);
+    dispatch(setDirected(newSelected));
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -181,8 +182,8 @@ const BellmanFordControlPanel: FC<Props> = ({
       nodes.add(source);
       nodes.add(target);
       links.push({ source, target });
-      if (selected) {
-        links.push({ target, source });
+      if (!selected) {
+        links.push({ source: target, target: source });
       }
     }
 

@@ -1,8 +1,10 @@
 import { graphType } from "../../../types/GraphTypes";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
+const graphNodes: DFSItemObj[] = [];
 
 export const graphState = {
   graphData,
@@ -15,6 +17,7 @@ export const graphState = {
   passedNodes: [] as number[],
   currentActions: [] as Events,
   directed: false,
+  graphNodes,
 };
 
 export const graphReducers = {
@@ -47,5 +50,8 @@ export const graphReducers = {
   },
   setDirected(state: any, action: PayloadAction<boolean>) {
     state.directed = action.payload;
+  },
+  setGraphNodes(state: any, action: PayloadAction<DFSItemObj[]>) {
+    state.graphNodes = action.payload;
   },
 };

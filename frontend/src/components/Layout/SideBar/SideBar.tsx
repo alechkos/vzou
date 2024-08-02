@@ -14,7 +14,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="absolute border border-gray-200 shadow-2xl rounded-xl text-xl top-80 ml-4">
+    <div className="absolute border border-gray-200 shadow-2xl rounded-xl text-xl top-48 ml-4">
       <ul className="flex flex-col p-4 w-52">
         {show && (
           <>

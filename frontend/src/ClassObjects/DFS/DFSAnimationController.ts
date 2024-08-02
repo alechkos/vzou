@@ -30,7 +30,7 @@ export class DFSAnimationController extends AnimationController<GraphNode | unde
     this.graphNodes = [];
   }
 
-  static getController(root: DFSNode | undefined, dispatch: AppDispatch): DFSAnimationController {
+  static getController(root: GraphNode | undefined, dispatch: AppDispatch): DFSAnimationController {
     if (!this.dfsController) this.dfsController = new DFSAnimationController(root, dispatch);
     return this.dfsController;
   }
@@ -83,7 +83,7 @@ export class DFSAnimationController extends AnimationController<GraphNode | unde
     this.setTableData([]);
   }
 
-  initData(data: DFSNode | undefined) {
+  initData(data: GraphNode | undefined) {
     this.setReference({ name: this.memento.getCurrentAlg(), line: 0 });
     this.setHead(data);
     this.setCurrentActions([]);
