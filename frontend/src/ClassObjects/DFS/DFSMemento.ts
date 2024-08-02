@@ -2,13 +2,14 @@ import { Memento } from "../Memento";
 import { NodeRole } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { ActionType } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { DFSNode } from "./DFSNode";
+import { TableDataType } from "../../types/GraphTypes";
 
 export class DFSMemento extends Memento<DFSNode | undefined, string> {
   visitedNodesSnapshots: number[][];
 
   passedNodesSnapshots: number[][];
 
-  tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[][];
+  tableData: TableDataType[];
 
   constructor() {
     super("Search");
@@ -31,7 +32,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
+    tableData: TableDataType = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -51,7 +52,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
+    tableData: TableDataType = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.ERROR, item: -1, error }],
@@ -76,7 +77,7 @@ export class DFSMemento extends Memento<DFSNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = []
+    tableData: TableDataType = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],

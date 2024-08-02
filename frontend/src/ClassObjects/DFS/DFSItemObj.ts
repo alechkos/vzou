@@ -5,7 +5,8 @@ import {
   Events,
   NodeRole,
 } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
-import { DFSNode } from "./DFSNode";
+import { TableDataType } from "../../types/GraphTypes";
+import { GraphNode } from "../GraphNode";
 
 export class DFSItemObj extends BaseObj {
   static width = 3; //Used to calculate X gap
@@ -121,7 +122,7 @@ export class DFSItemObj extends BaseObj {
     });
   }
 
-  static generateBFSObjects(viewportWidth: number, speed: number, graphData: DFSNode[]) {
+  static generateBFSObjects(viewportWidth: number, speed: number, graphData: GraphNode[]) {
     if (graphData.length === 0) return [];
     const directions = ["right", "left"];
     const bfsObjects: DFSItemObj[] = [];
@@ -254,16 +255,13 @@ export class DFSItemObj extends BaseObj {
     }
   }
 
-  static setTableData(
-    graphObjects: DFSItemObj[],
-    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[]
-  ) {
+  static setTableData(graphObjects: DFSItemObj[], tableData: TableDataType) {
     graphObjects.forEach((node) => {
       tableData.forEach((data) => {
         if (node.id === data.id) {
-          node.setColor(data.data.color);
+          node.setColor(data.data.color!);
           node.setD(data.data.d);
-          node.setF(data.data.f);
+          node.setF(data.data.f!);
           node.setPi(data.data.pi);
         }
       });

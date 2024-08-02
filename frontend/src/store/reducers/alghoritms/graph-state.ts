@@ -1,9 +1,6 @@
 import { graphType } from "../../../types/GraphTypes";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
-import { DFSAlgNames } from "../../../components/Simulation/PseudoCode/DFSPseudoCodeData";
-import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
 

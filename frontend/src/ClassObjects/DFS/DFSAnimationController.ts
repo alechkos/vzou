@@ -16,15 +16,16 @@ import {
   setTableData,
 } from "../../store/reducers/alghoritms/dfs-reducer";
 import { dfsAnimation, buildDFSNodes } from "./DFSAlgorithms";
-import { graphType } from "../../types/GraphTypes";
+import { graphType, TableDataType } from "../../types/GraphTypes";
 import { DFSNode } from "./DFSNode";
+import { GraphNode } from "../GraphNode";
 
-export class DFSAnimationController extends AnimationController<DFSNode | undefined, string> {
+export class DFSAnimationController extends AnimationController<GraphNode | undefined, string> {
   private static dfsController: DFSAnimationController | null = null;
 
   graphNodes: DFSNode[];
 
-  protected constructor(node: DFSNode | undefined, dispatch: AppDispatch) {
+  protected constructor(node: GraphNode | undefined, dispatch: AppDispatch) {
     super(dispatch, new DFSMemento(), node);
     this.graphNodes = [];
   }
@@ -42,8 +43,8 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.dispatch(setPlaying(value));
   }
 
-  setHead(node: DFSNode | undefined) {
-    this.dispatch(setInitialNode(node));
+  setHead(node: GraphNode | undefined) {
+    this.dispatch(setInitialNode(node as DFSNode));
   }
 
   setCurrentRoles(roles: NodeRole[]) {
@@ -66,9 +67,7 @@ export class DFSAnimationController extends AnimationController<DFSNode | undefi
     this.dispatch(setVisitedNodes(visitedNodes));
   }
 
-  setTableData(
-    tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[]
-  ) {
+  setTableData(tableData: TableDataType) {
     this.dispatch(setTableData(tableData));
   }
 

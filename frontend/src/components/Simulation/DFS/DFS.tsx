@@ -6,6 +6,7 @@ import { AnimatePresence } from "framer-motion";
 import DFSNodes from "./DFSNode";
 import { useAppDispatch } from "../../../store/hooks";
 import { setGraphNodes } from "../../../store/reducers/alghoritms/dfs-reducer";
+import { TableDataType } from "../../../types/GraphTypes";
 
 interface Props {
   graphData: DFSNode[];
@@ -15,7 +16,7 @@ interface Props {
   visitedNodes?: number[];
   actions: Events | null;
   roles: NodeRole[];
-  tableData?: { id: number; data: { color: string; pi: number; d: number; f: number } }[];
+  tableData?: TableDataType;
   directed: boolean;
 }
 

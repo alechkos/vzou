@@ -4,9 +4,10 @@ import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPse
 import { DFSNode } from "../../../ClassObjects/DFS/DFSNode";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import { graphReducers, graphState } from "./graph-state";
+import { TableDataType } from "../../../types/GraphTypes";
 
 const graphNodes: DFSItemObj[] = [];
-const tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = [];
+const tableData: TableDataType = [];
 
 const initialState = {
   ...graphState,
@@ -31,12 +32,7 @@ const bfsSlice = createSlice({
     setGraphNodes(state, action: PayloadAction<DFSItemObj[]>) {
       state.graphNodes = action.payload;
     },
-    setTableData(
-      state,
-      action: PayloadAction<
-        { id: number; data: { color: string; pi: number; d: number; f: number } }[]
-      >
-    ) {
+    setTableData(state, action: PayloadAction<TableDataType>) {
       state.tableData = action.payload;
     },
     ...graphReducers,

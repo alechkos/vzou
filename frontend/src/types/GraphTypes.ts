@@ -4,6 +4,11 @@ export type graphType = {
   pointer?: number;
 };
 
+export type TableDataType = {
+  id: number;
+  data: { color?: string; pi: number; d: number; f?: number; w?: number };
+}[];
+
 export enum Colors {
   White = "White",
   Gray = "Gray",
