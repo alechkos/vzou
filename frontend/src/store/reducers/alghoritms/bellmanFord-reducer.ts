@@ -10,6 +10,7 @@ const initialState = {
   initialNode: undefined as BellmanFordNode | undefined,
   currentAlg: "Search" as BellmanFordAlgNames,
   countRows: [1],
+  inputData: [] as { source: number; target: number; weight: number }[],
 };
 
 const bellmanFordSlice = createSlice({
@@ -32,6 +33,19 @@ const bellmanFordSlice = createSlice({
       state.inputArray = "";
       state.countRows = [1];
     },
+    setInputData(state, action: PayloadAction<{ source: number; target: number; weight: number }>) {
+      state.inputData.push(action.payload);
+    },
+    changeInputData(
+      state,
+      action: PayloadAction<{ source: number; target: number; weight: number; index: number }>
+    ) {
+      state.inputData[action.payload.index] = {
+        source: action.payload.source,
+        target: action.payload.target,
+        weight: action.payload.weight,
+      };
+    },
   },
 });
 
@@ -52,4 +66,6 @@ export const {
   setCodeRef,
   setGraphNodes,
   setCountRows,
+  setInputData,
+  changeInputData,
 } = bellmanFordSlice.actions;
