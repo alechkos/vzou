@@ -1,6 +1,6 @@
 export type graphType = {
   nodes: number[];
-  links: { source: number; target: number }[];
+  links: { source: number; target: number; weight?: number }[];
   pointer?: number;
 };
 

@@ -7,9 +7,12 @@ import styles from "./DFSNode.module.css";
 import Branch from "../BinaryTree/Branch";
 import ArrowForGraph from "./ArrowForGraph";
 import branch from "../BinaryTree/Branch";
+import { BellmanFordItemObj } from "../../../ClassObjects/BellmanFord/BellmanFordItemObj";
+import { BFBranch } from "../../../ClassObjects/BellmanFord/BFBranch";
+import { BranchObj } from "../../../ClassObjects/BranchObj";
 
 interface Props {
-  nodeObj: DFSItemObj;
+  nodeObj: DFSItemObj | BellmanFordItemObj;
   dfsObjects: DFSItemObj[];
   directed: boolean;
 }
@@ -59,7 +62,7 @@ const DFSNode: FC<Props> = ({ nodeObj, dfsObjects, directed }) => {
       </motion.span>
       {nodeObj.branches.length > 0 &&
         directed &&
-        nodeObj.branches.map((branch) => (
+        nodeObj.branches.map((branch: BFBranch | BranchObj) => (
           <ArrowForGraph
             key={nodeObj.position.x}
             branch={branch}
@@ -71,7 +74,7 @@ const DFSNode: FC<Props> = ({ nodeObj, dfsObjects, directed }) => {
         ))}
       {nodeObj.branches.length > 0 &&
         !directed &&
-        nodeObj.branches.map((branch) => (
+        nodeObj.branches.map((branch: BFBranch | BranchObj) => (
           <Branch
             key={nodeObj.position.x}
             branch={branch}

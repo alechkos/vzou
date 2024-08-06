@@ -27,6 +27,10 @@ import {
   setCountRows,
   setInputData,
   changeInputData,
+  setFrom,
+  setTo,
+  setWeight,
+  deleteInputData,
 } from "../../../store/reducers/alghoritms/bellmanFord-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
@@ -62,6 +66,9 @@ const BellmanFordControlPanel: FC<Props> = ({
   const graphData = useAppSelector((state) => state.bellmanFord.graphData);
   const rowCount = useAppSelector((state) => state.bellmanFord.countRows);
   const inputData = useAppSelector((state) => state.bellmanFord.inputData);
+  const from = useAppSelector((state) => state.bellmanFord.from);
+  const to = useAppSelector((state) => state.bellmanFord.to);
+  const weight = useAppSelector((state) => state.bellmanFord.weight);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -69,45 +76,74 @@ const BellmanFordControlPanel: FC<Props> = ({
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
   const [selected, setSelected] = useState(directed);
 
-  const fromRef = useRef<HTMLInputElement>(null);
-  const toRef = useRef<HTMLInputElement>(null);
-  const weightRef = useRef<HTMLInputElement>(null);
+  const fromChangeHandler = (e: any, index: number) => {
+    dispatch(setFrom({ input: e.target.value, index }));
+  };
 
-  const handleAddValues = (event: any) => {
+  const toChangeHandler = (e: any, index: number) => {
+    dispatch(setTo({ input: e.target.value, index }));
+  };
+
+  const weightChangeHandler = (e: any, index: number) => {
+    dispatch(setWeight({ input: e.target.value, index }));
+  };
+
+  const handleAddValues = (event: any, index: number) => {
+    if (!from[index]) {
+      setCurrentError("Enter a value for a 'from' node please!");
+      return;
+    }
+    if (!to[index]) {
+      setCurrentError("Enter a value for a 'to' node please!");
+      return;
+    }
+    if (!weight[index]) {
+      setCurrentError("Enter a value for a weight of branch please!");
+      return;
+    }
+
+    if (isNaN(Number(from[index]))) {
+      setCurrentError("Enter a numeric value for a 'from' node please!");
+      return;
+    }
+    if (isNaN(Number(to[index]))) {
+      setCurrentError("Enter a numeric value for a 'to' node please!");
+      return;
+    }
+    if (isNaN(Number(weight[index]))) {
+      setCurrentError("Enter a numeric value for a weight of branch please!");
+      return;
+    }
+
     dispatch(setCountRows(1));
     const button = event.currentTarget;
     button.disabled = true;
-    fromRef.current!.disabled = true;
-    toRef.current!.disabled = true;
-    weightRef.current!.disabled = true;
 
     dispatch(
       setInputData({
-        source: Number(fromRef.current!.value),
-        target: Number(toRef.current!.value),
-        weight: Number(weightRef.current!.value),
+        source: Number(from[index]),
+        target: Number(to[index]),
+        weight: Number(weight[index]),
       })
     );
   };
 
   const handleChangeValues = (event: any, index: number) => {
-    console.log(index);
-
     const button = event.currentTarget;
     button.disabled = true;
 
-    fromRef.current!.disabled = true;
-    toRef.current!.disabled = true;
-    weightRef.current!.disabled = true;
-
     dispatch(
       changeInputData({
-        source: Number(fromRef.current!.value),
-        target: Number(toRef.current!.value),
-        weight: Number(weightRef.current!.value),
+        source: Number(from[index]),
+        target: Number(to[index]),
+        weight: Number(weight[index]),
         index,
       })
     );
+  };
+
+  const handleDeleteValues = (event: any, index: number) => {
+    dispatch(deleteInputData(index));
   };
 
   const handleChangeSelect = (event: any) => {
@@ -208,15 +244,20 @@ const BellmanFordControlPanel: FC<Props> = ({
   };
 
   const createGraphHandler = () => {
+    if (inputData.length < 1) {
+      setCurrentError("Please enter at least one node!");
+      return;
+    }
+
     const nodes = new Set<number>();
-    const links: { source: number; target: number }[] = [];
+    const links: { source: number; target: number; weight: number }[] = [];
 
     inputData.forEach((data) => {
       nodes.add(data.source);
       nodes.add(data.target);
-      links.push({ source: data.source, target: data.target });
+      links.push({ source: data.source, target: data.target, weight: data.weight });
       if (!selected) {
-        links.push({ source: data.target, target: data.source });
+        links.push({ source: data.target, target: data.source, weight: data.weight });
       }
     });
 
@@ -245,7 +286,7 @@ const BellmanFordControlPanel: FC<Props> = ({
       )}
       <MediumCard
         isSmaller
-        maxWidth="max-w-5xl"
+        maxWidth="max-w-6xl"
       >
         <ThemeProvider theme={theme}>
           <ControlsToolTip isButtonDisabled={isButtonDisabled}>
@@ -295,7 +336,8 @@ const BellmanFordControlPanel: FC<Props> = ({
                                       : inputData[index] && inputData[index]!.source
                                   }
                                   variant="outlined"
-                                  inputRef={fromRef}
+                                  value={from[index] ? from[index] : ""}
+                                  onChange={(event) => fromChangeHandler(event, index)}
                                 />
                                 <TextField
                                   placeholder="e.g 1,2,3,..."
@@ -307,7 +349,8 @@ const BellmanFordControlPanel: FC<Props> = ({
                                       : inputData[index] && inputData[index]!.target
                                   }
                                   variant="outlined"
-                                  inputRef={toRef}
+                                  value={to[index] ? to[index] : ""}
+                                  onChange={(event) => toChangeHandler(event, index)}
                                 />
                                 <TextField
                                   placeholder="e.g 1,2,3,..."
@@ -319,24 +362,43 @@ const BellmanFordControlPanel: FC<Props> = ({
                                       : inputData[index] && inputData[index]!.weight
                                   }
                                   variant="outlined"
-                                  inputRef={weightRef}
+                                  value={weight[index] ? weight[index] : ""}
+                                  onChange={(event) => weightChangeHandler(event, index)}
                                 />
                                 {!editingConstruction && (
                                   <button
                                     disabled={isButtonDisabled}
                                     className={`${buttonClassname} w-auto h-[40px]`}
-                                    onClick={(event) => handleAddValues(event)}
+                                    onClick={(event) => handleAddValues(event, index)}
                                   >
                                     Add
                                   </button>
                                 )}
-                                {editingConstruction && (
+                                {editingConstruction && inputData[index] && (
+                                  <>
+                                    <button
+                                      disabled={isButtonDisabled}
+                                      className={`${buttonClassname} w-auto h-[40px]`}
+                                      onClick={(event) => handleChangeValues(event, index)}
+                                    >
+                                      Change
+                                    </button>
+                                    <button
+                                      disabled={isButtonDisabled}
+                                      className={`${buttonClassname} w-auto h-[40px]`}
+                                      onClick={(event) => handleDeleteValues(event, index)}
+                                    >
+                                      Delete
+                                    </button>
+                                  </>
+                                )}
+                                {editingConstruction && !inputData[index] && (
                                   <button
                                     disabled={isButtonDisabled}
                                     className={`${buttonClassname} w-auto h-[40px]`}
-                                    onClick={(event) => handleChangeValues(event, index)}
+                                    onClick={(event) => handleAddValues(event, index)}
                                   >
-                                    Change
+                                    Add
                                   </button>
                                 )}
                               </div>

@@ -1,5 +1,5 @@
 export class GraphNode {
-  links: { source: number; target: number }[];
+  links: { source: number; target: number; weight?: number }[];
 
   value: number;
 
@@ -17,7 +17,7 @@ export class GraphNode {
     this.d = 0;
   }
 
-  addLink(link: { source: number; target: number }) {
+  addLink(link: { source: number; target: number; weight?: number }) {
     this.links.push(link);
   }
 

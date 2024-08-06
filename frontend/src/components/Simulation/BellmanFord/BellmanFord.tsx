@@ -1,15 +1,15 @@
 import { FC } from "react";
-import { DFSNode } from "../../../ClassObjects/DFS/DFSNode";
 import { Events, NodeRole } from "../BinaryTree/BinaryTreeTypes";
-import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import { AnimatePresence } from "framer-motion";
 import DFSNodes from "../DFS/DFSNode";
 import { useAppDispatch } from "../../../store/hooks";
 import { setGraphNodes } from "../../../store/reducers/alghoritms/bellmanFord-reducer";
 import { TableDataType } from "../../../types/GraphTypes";
+import { BellmanFordItemObj } from "../../../ClassObjects/BellmanFord/BellmanFordItemObj";
+import { BellmanFordNode } from "../../../ClassObjects/BellmanFord/BellmanFordNode";
 
 interface Props {
-  graphData: DFSNode[];
+  graphData: BellmanFordNode[];
   speed: number;
   viewportWidth: number;
   passedNodes?: number[];
@@ -33,30 +33,30 @@ const BellmanFord: FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  DFSItemObj.positions = [];
-  DFSItemObj.space = 10;
-  const dfsObjects = DFSItemObj.generateBFSObjects(viewportWidth, speed, graphData);
+  BellmanFordItemObj.positions = [];
+  BellmanFordItemObj.space = 10;
+  const bfObjects = BellmanFordItemObj.generateBFObjects(viewportWidth, speed, graphData);
 
-  DFSItemObj.setActions(dfsObjects, actions);
-  DFSItemObj.setRoles(dfsObjects, roles);
+  BellmanFordItemObj.setActions(bfObjects, actions);
+  BellmanFordItemObj.setRoles(bfObjects, roles);
   if (visitedNodes) {
-    DFSItemObj.setVisited(dfsObjects, visitedNodes);
+    BellmanFordItemObj.setVisited(bfObjects, visitedNodes);
   }
   if (passedNodes) {
-    DFSItemObj.setPassed(dfsObjects, passedNodes);
+    BellmanFordItemObj.setPassed(bfObjects, passedNodes);
   }
   if (tableData) {
-    DFSItemObj.setTableData(dfsObjects, tableData);
+    BellmanFordItemObj.setTableData(bfObjects, tableData);
   }
 
-  dispatch(setGraphNodes(dfsObjects));
+  dispatch(setGraphNodes(bfObjects));
 
   return (
     <div>
       <AnimatePresence>
-        {dfsObjects.map((nodeObj) => (
+        {bfObjects.map((nodeObj) => (
           <DFSNodes
-            dfsObjects={dfsObjects}
+            dfsObjects={bfObjects}
             nodeObj={nodeObj}
             key={nodeObj.id}
             directed={directed}

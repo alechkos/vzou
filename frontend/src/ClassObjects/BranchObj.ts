@@ -17,6 +17,8 @@ export class BranchObj {
 
   isGraph?: boolean;
 
+  rotate: number;
+
   constructor(
     position: { x1: number; y1: number; x2: number; y2: number },
     isArrow?: boolean,
@@ -36,6 +38,7 @@ export class BranchObj {
     }
     this.isArrow = isArrow;
     this.isGraph = isGraph;
+    this.rotate = 0;
   }
 
   getBranchLength() {
@@ -47,6 +50,7 @@ export class BranchObj {
   }
 
   getRotateAngle() {
+    this.rotate = (Math.atan2(this.y2 - this.y1, this.x2 - this.x1) * 180) / Math.PI;
     return (Math.atan2(this.y2 - this.y1, this.x2 - this.x1) * 180) / Math.PI;
   }
 

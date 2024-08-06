@@ -61,7 +61,7 @@ const BellmanFordPage: FC = () => {
       )}
       {(showActions || editingConstruction) && (
         <BellmanFord
-          graphData={controller.graphNodes}
+          graphData={controller.grNodes}
           speed={controller.speed}
           viewportWidth={viewportWidth}
           actions={actions}
