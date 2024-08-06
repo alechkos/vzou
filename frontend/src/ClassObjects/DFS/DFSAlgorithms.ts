@@ -4,7 +4,7 @@ import {
 } from "../../components/Simulation/PseudoCode/DFSPseudoCodeData";
 import { DFSMemento } from "./DFSMemento";
 import { DFSAnimationController } from "./DFSAnimationController";
-import { Colors, graphType } from "../../types/GraphTypes";
+import { Colors, graphType, TableDataType } from "../../types/GraphTypes";
 import { DFSNode } from "./DFSNode";
 import { ActionType } from "../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { setGraphNodes } from "../../store/reducers/alghoritms/dfs-reducer";
@@ -40,7 +40,7 @@ export const dfsAnimation = (
 ) => {
   const passedNodes: number[] = [];
   const visitedNodes: number[] = [];
-  const tableData: { id: number; data: { color: string; pi: number; d: number; f: number } }[] = [];
+  const tableData: TableDataType = [];
   let time = 0;
 
   const DFSVisit = (node: DFSNode) => {

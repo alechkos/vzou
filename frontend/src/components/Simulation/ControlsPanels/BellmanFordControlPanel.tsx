@@ -69,6 +69,7 @@ const BellmanFordControlPanel: FC<Props> = ({
   const from = useAppSelector((state) => state.bellmanFord.from);
   const to = useAppSelector((state) => state.bellmanFord.to);
   const weight = useAppSelector((state) => state.bellmanFord.weight);
+  const startNode = useAppSelector((state) => state.bellmanFord.initialNode);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("1");
@@ -180,8 +181,7 @@ const BellmanFordControlPanel: FC<Props> = ({
           dispatch(
             setInitialNode(new BellmanFordNode(Number(initialNodeInput), Number(initialNodeInput)))
           );
-
-          // await controller.dfsAnimation();
+          await controller.bellmanFordAnimation(startNode);
           return;
         case "Clear":
           dispatch(clearInputArray());
@@ -250,14 +250,14 @@ const BellmanFordControlPanel: FC<Props> = ({
     }
 
     const nodes = new Set<number>();
-    const links: { source: number; target: number; weight: number }[] = [];
+    const links: { source: number; target: number; weight?: number }[] = [];
 
     inputData.forEach((data) => {
       nodes.add(data.source);
       nodes.add(data.target);
       links.push({ source: data.source, target: data.target, weight: data.weight });
       if (!selected) {
-        links.push({ source: data.target, target: data.source, weight: data.weight });
+        links.push({ source: data.target, target: data.source });
       }
     });
 
@@ -317,7 +317,7 @@ const BellmanFordControlPanel: FC<Props> = ({
                 </Box>
                 <TabPanel
                   value="1"
-                  className={value === "1" ? "justify-around flex w-max" : "hidden"}
+                  className={value === "1" ? "justify-around flex" : "hidden"}
                 >
                   {!showActions && (
                     <>

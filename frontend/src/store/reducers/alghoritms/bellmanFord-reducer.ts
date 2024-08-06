@@ -93,4 +93,5 @@ export const {
   setTo,
   setWeight,
   deleteInputData,
+  setTableData,
 } = bellmanFordSlice.actions;

@@ -1,10 +1,11 @@
-import { graphType } from "../../../types/GraphTypes";
+import { graphType, TableDataType } from "../../../types/GraphTypes";
 import { Events, NodeRole } from "../../../components/Simulation/BinaryTree/BinaryTreeTypes";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 
 const graphData: graphType = { nodes: [], links: [] };
 const graphNodes: DFSItemObj[] = [];
+const tableData: TableDataType = [];
 
 export const graphState = {
   graphData,
@@ -18,6 +19,7 @@ export const graphState = {
   currentActions: [] as Events,
   directed: false,
   graphNodes,
+  tableData,
 };
 
 export const graphReducers = {
@@ -53,5 +55,8 @@ export const graphReducers = {
   },
   setGraphNodes(state: any, action: PayloadAction<DFSItemObj[]>) {
     state.graphNodes = action.payload;
+  },
+  setTableData(state: any, action: PayloadAction<TableDataType>) {
+    state.tableData = action.payload;
   },
 };

@@ -32,5 +32,3 @@ const Branch: FC<BranchProps> = ({ branch, isPassed, speed, className, isVisited
   );
 };
 export default Branch;
-
-//

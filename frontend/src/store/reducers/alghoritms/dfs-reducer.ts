@@ -6,13 +6,10 @@ import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import { graphReducers, graphState } from "./graph-state";
 import { TableDataType } from "../../../types/GraphTypes";
 
-const tableData: TableDataType = [];
-
 const initialState = {
   ...graphState,
   initialNode: undefined as DFSNode | undefined,
   currentAlg: "Search" as DFSAlgNames,
-  tableData,
 };
 
 const bfsSlice = createSlice({
@@ -26,9 +23,6 @@ const bfsSlice = createSlice({
       state.currentAlg = action.payload.name;
       state.currentLine = action.payload.line;
       return state;
-    },
-    setTableData(state, action: PayloadAction<TableDataType>) {
-      state.tableData = action.payload;
     },
     ...graphReducers,
   },
