@@ -126,12 +126,15 @@ export class BellmanFordAnimationController extends AnimationController<
 
   //Animation
 
-  async bellmanFordAnimation(initialNode: BellmanFordNode | undefined) {
+  async bellmanFordAnimation(
+    initialNode: number,
+    links: { source: number; target: number; weight?: number }[]
+  ) {
     this.grNodes.forEach((node) => {
-      node.setD(0);
+      node.setD(-1);
       node.setPi(undefined);
     });
 
-    await this.playAlgorithm(bellmanFordAnimation, this.memento, this.grNodes, initialNode);
+    await this.playAlgorithm(bellmanFordAnimation, this.memento, this.grNodes, initialNode, links);
   }
 }

@@ -9,6 +9,7 @@ import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/P
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import { combineBellmanFordPseudoCode } from "../../../ClassObjects/BellmanFord/BellmanFordAlgorithms";
+import BellmanFordTable from "../../../components/Simulation/BellmanFord/BellmanFordTable";
 
 const BellmanFordPage: FC = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const BellmanFordPage: FC = () => {
   const roles = useAppSelector((state) => state.bellmanFord.currentRoles);
   const passedNode = useAppSelector((state) => state.bellmanFord.passedNodes);
   const visitedNodes = useAppSelector((state) => state.bellmanFord.visitedNodes);
-  // const tableData = useAppSelector((state) => state.bellmanFord.tableData);
+  const tableData = useAppSelector((state) => state.bellmanFord.tableData);
   const directed = useAppSelector((state) => state.bellmanFord.directed);
   const controller = BellmanFordAnimationController.getController(initialNode, dispatch);
 
@@ -69,8 +70,10 @@ const BellmanFordPage: FC = () => {
           directed={directed}
           passedNodes={passedNode}
           visitedNodes={visitedNodes}
+          tableData={tableData}
         />
       )}
+      {showActions && <BellmanFordTable />}
       {showPseudoCode && (
         <PlayerControlsPanel
           controller={controller}

@@ -16,6 +16,7 @@ interface BranchProps {
 
 const Branch: FC<BranchProps> = ({ branch, isPassed, speed, className, isVisited }) => {
   const isBFBranch = branch instanceof BFBranch;
+  console.log(branch);
 
   return (
     <motion.span
@@ -25,7 +26,14 @@ const Branch: FC<BranchProps> = ({ branch, isPassed, speed, className, isVisited
       transition={branch.getAnimationStyle(speed, isPassed)[1]}
       animate={branch.getAnimationStyle(speed, isPassed)[0]}
     >
-      <span style={{ position: "absolute", transform: branch.rotate > 90 ? `rotate(180deg)` : "" }}>
+      <span
+        style={{
+          position: "absolute",
+          transform: branch.rotate > 90 ? `rotate(180deg)` : "",
+          top: "0",
+          left: "80%",
+        }}
+      >
         {isBFBranch && branch.weight}
       </span>
     </motion.span>

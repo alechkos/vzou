@@ -1,6 +1,7 @@
 import { DFSItemObj } from "../DFS/DFSItemObj";
 import { BellmanFordNode } from "./BellmanFordNode";
 import { BFBranch } from "./BFBranch";
+import { TableDataType } from "../../types/GraphTypes";
 
 export class BellmanFordItemObj extends DFSItemObj {
   static width = 3; //Used to calculate X gap
@@ -76,19 +77,33 @@ export class BellmanFordItemObj extends DFSItemObj {
     BellmanFordItemObj.space += 8;
   }
 
-  createBranchForBF(weight: number) {
+  createBranchForBF(weight: number, par: BellmanFordItemObj) {
     this.parents.forEach((parent) => {
-      const branch = new BFBranch(
-        {
-          x1: parent.position.x,
-          x2: this.position.x,
-          y1: parent.position.y,
-          y2: this.position.y,
-        },
-        weight,
-        false,
-        true
-      );
+      let branch;
+      if (par.id === parent.id)
+        branch = new BFBranch(
+          {
+            x1: parent.position.x,
+            x2: this.position.x,
+            y1: parent.position.y,
+            y2: this.position.y,
+          },
+          false,
+          true,
+          weight
+        );
+      else {
+        branch = new BFBranch(
+          {
+            x1: parent.position.x,
+            x2: this.position.x,
+            y1: parent.position.y,
+            y2: this.position.y,
+          },
+          false,
+          true
+        );
+      }
 
       this.branches.push(branch);
     });
@@ -143,13 +158,13 @@ export class BellmanFordItemObj extends DFSItemObj {
 
     graphData.forEach((node) => {
       node.links.map((link) => {
+        let parent = bfsObjects.find((par: BellmanFordItemObj) => par.id === link.source);
         bfsObjects
           .filter((obj: BellmanFordItemObj) => obj.id === link.target)
           .map((obj: BellmanFordItemObj) => {
-            let parent = bfsObjects.find((par: BellmanFordItemObj) => par.id === link.source);
             if (parent) {
               obj.addParent(parent);
-              obj.createBranchForBF(link.weight!);
+              obj.createBranchForBF(link.weight!, parent);
             }
           });
       });
@@ -157,5 +172,16 @@ export class BellmanFordItemObj extends DFSItemObj {
 
     bfsObjects.sort((a, b) => a.id - b.id);
     return bfsObjects;
+  }
+
+  static setTableData(graphObjects: BellmanFordItemObj[], tableData: TableDataType) {
+    graphObjects.forEach((node) => {
+      tableData.forEach((data) => {
+        if (node.id === data.id) {
+          node.setD(data.data.d);
+          node.setPi(data.data.pi);
+        }
+      });
+    });
   }
 }

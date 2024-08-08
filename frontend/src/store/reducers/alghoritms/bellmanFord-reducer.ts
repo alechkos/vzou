@@ -3,8 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BellmanFordNode } from "../../../ClassObjects/BellmanFord/BellmanFordNode";
 import { BellmanFordAlgNames } from "../../../components/Simulation/PseudoCode/BelmanFordPseudoCode";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
+import { BellmanFordItemObj } from "../../../ClassObjects/BellmanFord/BellmanFordItemObj";
+
+const graphNodes: BellmanFordItemObj[] = [];
+
 const initialState = {
   ...graphState,
+  graphNodes,
   initialNode: undefined as BellmanFordNode | undefined,
   currentAlg: "Search" as BellmanFordAlgNames,
   countRows: [1],
@@ -66,6 +71,9 @@ const bellmanFordSlice = createSlice({
     },
     setWeight(state, action: PayloadAction<{ input: string; index: number }>) {
       state.weight[action.payload.index] = action.payload.input;
+    },
+    setGraphNodes(state, action: PayloadAction<BellmanFordItemObj[]>) {
+      state.graphNodes = action.payload;
     },
   },
 });

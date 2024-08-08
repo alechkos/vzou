@@ -181,7 +181,8 @@ const BellmanFordControlPanel: FC<Props> = ({
           dispatch(
             setInitialNode(new BellmanFordNode(Number(initialNodeInput), Number(initialNodeInput)))
           );
-          await controller.bellmanFordAnimation(startNode);
+
+          await controller.bellmanFordAnimation(Number(initialNodeInput), graphData.links);
           return;
         case "Clear":
           dispatch(clearInputArray());
@@ -257,7 +258,7 @@ const BellmanFordControlPanel: FC<Props> = ({
       nodes.add(data.target);
       links.push({ source: data.source, target: data.target, weight: data.weight });
       if (!selected) {
-        links.push({ source: data.target, target: data.source });
+        links.push({ source: data.target, target: data.source, weight: data.weight });
       }
     });
 
