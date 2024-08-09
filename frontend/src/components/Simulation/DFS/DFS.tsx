@@ -17,6 +17,7 @@ interface Props {
   actions: Events | null;
   roles: NodeRole[];
   tableData?: TableDataType;
+  directed: boolean;
 }
 
 const DFS: FC<Props> = ({
