@@ -31,7 +31,7 @@ const Branch: FC<BranchProps> = ({ branch, isPassed, speed, className, isVisited
           position: "absolute",
           transform: branch.rotate > 90 ? `rotate(180deg)` : "",
           top: "0",
-          left: "80%",
+          left: "70%",
         }}
       >
         {isBFBranch && branch.weight}
