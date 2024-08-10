@@ -222,45 +222,72 @@ const BellmanFordControlPanel: FC<Props> = ({
       setNumberOfRandomNodes(0);
       return;
     }
-    let randomString = "";
+    dispatch(clearInputArray());
+    controller.setGraphFromInput({ nodes: [], links: [] });
+
     let i = 1;
+    let count = 0;
+    let randomNumber;
+    let inpData: {
+      source: number;
+      target: number;
+      weight: number;
+    }[] = [];
     for (i; i <= numberOfRandomNodes; i++) {
-      let randomChar = Math.random() < 0.7 ? "-" : ",";
-      if (randomChar === "-") {
-        let randomNumber = Math.floor(Math.random() * numberOfRandomNodes) + 1;
-        if (randomNumber !== i)
-          randomString = randomString + i.toString() + randomChar + randomNumber.toString();
-        if (i !== numberOfRandomNodes && randomNumber !== i) {
-          randomString += ",";
-        }
+      let source = i;
+
+      let target;
+      if (i === numberOfRandomNodes) {
+        target = 1;
       } else {
-        randomString = randomString + i.toString();
-        if (i !== numberOfRandomNodes) {
-          randomString += ",";
-        }
+        target = i + 1;
+      }
+
+      randomNumber = Math.floor(Math.random() * 201) - 100;
+      let weight = randomNumber;
+
+      if (source !== target) {
+        dispatch(setFrom({ input: source.toString(), index: count }));
+        dispatch(setTo({ input: target.toString(), index: count }));
+        dispatch(setWeight({ input: weight.toString(), index: count }));
+        dispatch(setInputData({ source, target, weight }));
+        dispatch(setCountRows(1));
+        inpData.push({ source, target, weight });
+        count++;
       }
     }
-    dispatch(setInputArray(randomString));
-    createGraphHandler();
+    createGraphHandler(inpData);
   };
 
-  const createGraphHandler = () => {
-    if (inputData.length < 1) {
-      setCurrentError("Please enter at least one node!");
-      return;
-    }
-
+  const createGraphHandler = (inpData?: { source: number; target: number; weight: number }[]) => {
     const nodes = new Set<number>();
     const links: { source: number; target: number; weight?: number }[] = [];
 
-    inputData.forEach((data) => {
-      nodes.add(data.source);
-      nodes.add(data.target);
-      links.push({ source: data.source, target: data.target, weight: data.weight });
-      if (!selected) {
-        links.push({ source: data.target, target: data.source, weight: data.weight });
+    if (inpData) {
+      inpData.forEach((data) => {
+        nodes.add(data.source);
+        nodes.add(data.target);
+        if (data.source !== data.target) {
+          links.push({ source: data.source, target: data.target, weight: data.weight });
+          if (!selected) {
+            links.push({ source: data.target, target: data.source, weight: data.weight });
+          }
+        }
+      });
+    } else {
+      if (inputData.length < 1) {
+        setCurrentError("Please enter at least one node!");
+        return;
       }
-    });
+      inputData.forEach((data) => {
+        nodes.add(data.source);
+        nodes.add(data.target);
+        links.push({ source: data.source, target: data.target, weight: data.weight });
+        if (!selected) {
+          links.push({ source: data.target, target: data.source, weight: data.weight });
+        }
+      });
+    }
 
     const graphData = { nodes: Array.from(nodes), links };
     controller.setGraphFromInput(graphData);
