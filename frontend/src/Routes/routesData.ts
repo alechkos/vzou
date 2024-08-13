@@ -32,6 +32,7 @@ import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
 import DFSPage from "../pages/Animations/DataStructure/DFSPage";
 import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 import BellmanFordPage from "../pages/Animations/DataStructure/BellmanFordPage";
+import PrimPage from "../pages/Animations/DataStructure/PrimPage";
 
 export interface RouteItem {
   path: string;
@@ -72,6 +73,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.RADIX_SORT, element: RadixSortPage },
   { path: RoutePaths.DFS, element: DFSPage },
   { path: RoutePaths.BELLMAN_FORD, element: BellmanFordPage },
+  { path: RoutePaths.PRIM, element: PrimPage },
 ];
 
 export const lecturerRoutes: RouteItem[] = [

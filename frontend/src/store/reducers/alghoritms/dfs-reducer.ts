@@ -2,9 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { DFSAlgNames } from "../../../components/Simulation/PseudoCode/DFSPseudoCodeData";
 import { CodeReference } from "../../../components/Simulation/PseudoCode/HeapPseudoCodeData";
 import { DFSNode } from "../../../ClassObjects/DFS/DFSNode";
-import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import { graphReducers, graphState } from "./graph-state";
-import { TableDataType } from "../../../types/GraphTypes";
 
 const initialState = {
   ...graphState,

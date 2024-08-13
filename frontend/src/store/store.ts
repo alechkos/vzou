@@ -20,6 +20,7 @@ import dfsReducer from "./reducers/alghoritms/dfs-reducer";
 import hashTableReducer from "./reducers/alghoritms/hashTable-reducer";
 import basePageReducer from "./reducers/basePage-reducer";
 import bellmanFordReducer from "./reducers/alghoritms/bellmanFord-reducer";
+import prim from "./reducers/alghoritms/prim-reducer";
 
 const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ const store = configureStore({
     radixSort: radixSortReducer,
     dfs: dfsReducer,
     bellmanFord: bellmanFordReducer,
+    prim: prim,
     animationController: animationControlReducer,
     basePage: basePageReducer,
     [reportApi.reducerPath]: reportApi.reducer,

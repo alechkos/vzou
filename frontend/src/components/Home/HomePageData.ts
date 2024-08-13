@@ -111,6 +111,12 @@ const HomePageData = [
     image: BFImage,
     url: RoutePaths.BELLMAN_FORD,
   },
+  {
+    title: "Prim",
+    gif: BFGif,
+    image: BFImage,
+    url: RoutePaths.PRIM,
+  },
 ];
 
 export default HomePageData;
