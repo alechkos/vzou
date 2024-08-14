@@ -59,7 +59,7 @@ export function primAlgorithm(
     graphData.forEach((node) => {
       tableData.push({
         id: node.id,
-        data: { pi: node.pi ? node.pi.id : -1, d: node.d, S, Q },
+        data: { pi: node.pi ? node.pi.id : -1, d: node.d },
       });
 
       memento.addSnapshot(
@@ -70,7 +70,9 @@ export function primAlgorithm(
         [{ id: node.id, role: "u" }],
         visitedNodes,
         passedNodes,
-        tableData
+        tableData,
+        Q,
+        S
       );
 
       memento.addSnapshot(
@@ -81,13 +83,15 @@ export function primAlgorithm(
         [{ id: node.id, role: "u" }],
         visitedNodes,
         passedNodes,
-        tableData
+        tableData,
+        Q,
+        S
       );
     });
     startNode.d = 0;
     tableData.push({
       id: startNode.id,
-      data: { pi: startNode.pi ? startNode.pi.id : -1, d: startNode.d, S, Q },
+      data: { pi: startNode.pi ? startNode.pi.id : -1, d: startNode.d },
     });
     memento.addSnapshot(
       { line: 4, name: "Search" },
@@ -97,13 +101,15 @@ export function primAlgorithm(
       [{ id: startNode.id, role: "s" }],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
 
     S.push(startNode.id);
     tableData.push({
       id: startNode.id,
-      data: { pi: startNode.pi ? startNode.pi.id : -1, d: startNode.d, S, Q },
+      data: { pi: startNode.pi ? startNode.pi.id : -1, d: startNode.d },
     });
     memento.addSnapshot(
       { line: 5, name: "Search" },
@@ -113,7 +119,9 @@ export function primAlgorithm(
       [{ id: startNode.id, role: "s" }],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
 
     memento.addSnapshot(
@@ -124,7 +132,9 @@ export function primAlgorithm(
       [{ id: startNode.id, role: "s" }],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
 
     startNode.adjacents.forEach((node) => {
@@ -135,7 +145,7 @@ export function primAlgorithm(
         node.d = currentLink.weight!;
         tableData.push({
           id: node.id,
-          data: { pi: node.pi ? node.pi.id : -1, d: node.d, S, Q },
+          data: { pi: node.pi ? node.pi.id : -1, d: node.d },
         });
         memento.addSnapshot(
           { line: 7, name: "Search" },
@@ -145,13 +155,15 @@ export function primAlgorithm(
           [{ id: node.id, role: "v" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
 
         node.pi = startNode;
         tableData.push({
           id: node.id,
-          data: { pi: node.pi ? node.pi.id : -1, d: node.d, S, Q },
+          data: { pi: node.pi ? node.pi.id : -1, d: node.d },
         });
         memento.addSnapshot(
           { line: 8, name: "Search" },
@@ -161,7 +173,9 @@ export function primAlgorithm(
           [{ id: node.id, role: "v" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
       }
     });
@@ -173,14 +187,16 @@ export function primAlgorithm(
       [],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
 
     graphData.forEach((node) => {
       if (node.id !== startNode.id) Q.push(node);
       tableData.push({
         id: node.id,
-        data: { pi: node.pi ? node.pi.id : -1, d: node.d, S, Q },
+        data: { pi: node.pi ? node.pi.id : -1, d: node.d },
       });
     });
     memento.addSnapshot(
@@ -191,7 +207,9 @@ export function primAlgorithm(
       [],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
     memento.addSnapshot(
       { line: 11, name: "Search" },
@@ -201,7 +219,9 @@ export function primAlgorithm(
       [],
       visitedNodes,
       passedNodes,
-      tableData
+      tableData,
+      Q,
+      S
     );
     while (Q.length > 0) {
       let arrayOfD: number[] = [];
@@ -221,7 +241,9 @@ export function primAlgorithm(
           [{ id: u.id, role: "u" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
 
         let indexOfU = Q.indexOf(u);
@@ -236,7 +258,9 @@ export function primAlgorithm(
           [{ id: u.id, role: "u" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
 
         T.push({ source: u.pi!.id, target: u.id });
@@ -248,7 +272,9 @@ export function primAlgorithm(
           [{ id: u.id, role: "u" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
 
         memento.addSnapshot(
@@ -259,7 +285,9 @@ export function primAlgorithm(
           [{ id: u.id, role: "u" }],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
         u.adjacents.forEach((adj) => {
           memento.addSnapshot(
@@ -270,7 +298,9 @@ export function primAlgorithm(
             [{ id: adj.id, role: "v" }],
             visitedNodes,
             passedNodes,
-            tableData
+            tableData,
+            Q,
+            S
           );
           let currLink = links.find((link) => link.source === u!.id && link.target === adj.id);
           if (currLink) {
@@ -278,7 +308,7 @@ export function primAlgorithm(
               adj.d = currLink.weight!;
               tableData.push({
                 id: adj.id,
-                data: { pi: adj.pi ? adj.pi.id : -1, d: adj.d, S, Q },
+                data: { pi: adj.pi ? adj.pi.id : -1, d: adj.d },
               });
 
               memento.addSnapshot(
@@ -289,13 +319,15 @@ export function primAlgorithm(
                 [{ id: adj.id, role: "v" }],
                 visitedNodes,
                 passedNodes,
-                tableData
+                tableData,
+                Q,
+                S
               );
 
               adj.pi = u;
               tableData.push({
                 id: adj.id,
-                data: { pi: adj.pi ? adj.pi.id : -1, d: adj.d, S, Q },
+                data: { pi: adj.pi ? adj.pi.id : -1, d: adj.d },
               });
 
               memento.addSnapshot(
@@ -306,7 +338,9 @@ export function primAlgorithm(
                 [{ id: adj.id, role: "v" }],
                 visitedNodes,
                 passedNodes,
-                tableData
+                tableData,
+                Q,
+                S
               );
               visitedNodes.push(u!.id);
             }
@@ -320,7 +354,9 @@ export function primAlgorithm(
           [],
           visitedNodes,
           passedNodes,
-          tableData
+          tableData,
+          Q,
+          S
         );
       }
     }

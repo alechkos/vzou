@@ -13,6 +13,8 @@ import {
   setCodeRef,
   setVisitedNodes,
   setTableData,
+  setS,
+  setQ,
 } from "../../store/reducers/alghoritms/prim-reducer";
 import { graphType, TableDataType } from "../../types/GraphTypes";
 import { PrimNode } from "./PrimNode";
@@ -70,6 +72,14 @@ export class PrimAnimationController extends AnimationController<PrimNode | unde
     this.dispatch(setTableData(tableData));
   }
 
+  setS(S: number[]) {
+    this.dispatch(setS(S));
+  }
+
+  setQ(Q: PrimNode[]) {
+    this.dispatch(setQ(Q));
+  }
+
   setGraphFromInput(graphData: graphType) {
     const node = buildPrimNodes(graphData, this);
     this.data = node;
@@ -80,6 +90,8 @@ export class PrimAnimationController extends AnimationController<PrimNode | unde
     this.setPassedNodes([]);
     this.setVisitedNodes([]);
     this.setTableData([]);
+    this.setS([]);
+    this.setQ([]);
   }
 
   initData(data: PrimNode | undefined) {
@@ -90,6 +102,8 @@ export class PrimAnimationController extends AnimationController<PrimNode | unde
     this.setPassedNodes([]);
     this.setVisitedNodes([]);
     this.setTableData([]);
+    this.setS([]);
+    this.setQ([]);
   }
 
   setAllData(index: number) {
@@ -101,6 +115,8 @@ export class PrimAnimationController extends AnimationController<PrimNode | unde
     this.setVisitedNodes((this.memento as PrimMemento).getVisitedNodes(index));
     this.setPassedNodes((this.memento as PrimMemento).getPassedNodes(index));
     this.setTableData((this.memento as PrimMemento).getTableData(index));
+    this.setQ((this.memento as PrimMemento).getQ(index));
+    this.setS((this.memento as PrimMemento).getS(index));
     if (actions.length > 0 && actions[0].action === ActionType.ERROR) {
       this.setError(actions[0]?.error || "ERROR");
     }

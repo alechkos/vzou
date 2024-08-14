@@ -7,15 +7,15 @@ import { PrimItemObj } from "../../../ClassObjects/Prim/PrimItemObj";
 
 const PrimTable = () => {
   const graphData = useAppSelector((state) => state.prim.graphNodes);
-  const Q = PrimItemObj.Q;
-  const S = PrimItemObj.S;
+  let Q = useAppSelector((state) => state.prim.Q);
+  let S = useAppSelector((state) => state.prim.S);
 
   console.log(Q);
 
   return (
     <div className={styles.tableWrapper}>
       <AnimatePresence>
-        <div>
+        <div className={"flex justify-around"}>
           <span>{`Q: ${Q.map((node) => node.id)}`}</span>
           <span>{`S: ${S.map((id) => id)}`}</span>
         </div>

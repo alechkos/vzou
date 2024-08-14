@@ -14,8 +14,6 @@ export type TableDataType = {
     d: number;
     f?: number;
     w?: number;
-    S?: number[];
-    Q?: PrimNode[];
   };
 }[];
 

@@ -11,11 +11,17 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
 
   tableData: TableDataType[];
 
+  Q: PrimNode[][];
+
+  S: number[][];
+
   constructor() {
     super("Search");
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
     this.tableData = [];
+    this.Q = [];
+    this.S = [];
   }
 
   clearSnapshots() {
@@ -23,6 +29,8 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     this.visitedNodesSnapshots = [];
     this.passedNodesSnapshots = [];
     this.tableData = [];
+    this.Q = [];
+    this.S = [];
   }
 
   addBlank(
@@ -32,7 +40,9 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: TableDataType = []
+    tableData: TableDataType = [],
+    Q: PrimNode[] = [],
+    S: number[] = []
   ) {
     this.snapshots.push({
       actions: [],
@@ -43,6 +53,8 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
     this.tableData.push([...tableData]);
+    this.Q.push([...Q]);
+    this.S.push([...S]);
   }
 
   addError(
@@ -52,7 +64,9 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: TableDataType = []
+    tableData: TableDataType = [],
+    Q: PrimNode[] = [],
+    S: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action: ActionType.ERROR, item: -1, error }],
@@ -63,6 +77,8 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
     this.tableData.push([...tableData]);
+    this.Q.push([...Q]);
+    this.S.push([...S]);
   }
 
   getLength() {
@@ -77,7 +93,9 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     nodeRoles: NodeRole[] = [],
     visitedNodes: number[] = [],
     passedNodes: number[] = [],
-    tableData: TableDataType = []
+    tableData: TableDataType = [],
+    Q: PrimNode[] = [],
+    S: number[] = []
   ) {
     this.snapshots.push({
       actions: [{ action, item: index }],
@@ -88,6 +106,8 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
     this.visitedNodesSnapshots.push([...visitedNodes]);
     this.passedNodesSnapshots.push([...passedNodes]);
     this.tableData.push([...tableData]);
+    this.Q.push([...Q]);
+    this.S.push([...S]);
   }
 
   getVisitedNodes(index: number) {
@@ -109,5 +129,19 @@ export class PrimMemento extends Memento<PrimNode | undefined, string> {
       throw new Error("Index out of range");
     }
     return this.tableData[index];
+  }
+
+  getS(index: number) {
+    if (index < 0 || index >= this.tableData.length) {
+      throw new Error("Index out of range");
+    }
+    return this.S[index];
+  }
+
+  getQ(index: number) {
+    if (index < 0 || index >= this.tableData.length) {
+      throw new Error("Index out of range");
+    }
+    return this.Q[index];
   }
 }

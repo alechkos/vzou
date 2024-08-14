@@ -3,7 +3,7 @@ import { Events, NodeRole } from "../BinaryTree/BinaryTreeTypes";
 import { AnimatePresence } from "framer-motion";
 import DFSNodes from "../DFS/DFSNode";
 import { useAppDispatch } from "../../../store/hooks";
-import { setGraphNodes } from "../../../store/reducers/alghoritms/prim-reducer";
+import { setGraphNodes, setQ, setS } from "../../../store/reducers/alghoritms/prim-reducer";
 import { TableDataType } from "../../../types/GraphTypes";
 import { PrimNode } from "../../../ClassObjects/Prim/PrimNode";
 import { PrimItemObj } from "../../../ClassObjects/Prim/PrimItemObj";
@@ -17,6 +17,8 @@ interface Props {
   actions: Events | null;
   roles: NodeRole[];
   tableData?: TableDataType;
+  S?: number[];
+  Q?: PrimNode[];
   directed: boolean;
 }
 
@@ -29,6 +31,8 @@ const Prim: FC<Props> = ({
   actions,
   roles,
   tableData,
+  S,
+  Q,
   directed,
 }) => {
   const dispatch = useAppDispatch();
@@ -47,6 +51,12 @@ const Prim: FC<Props> = ({
   }
   if (tableData) {
     PrimItemObj.setTableData(primObjects, tableData);
+  }
+  if (S) {
+    PrimItemObj.setS(S);
+  }
+  if (Q) {
+    PrimItemObj.setQ(Q);
   }
 
   dispatch(setGraphNodes(primObjects));

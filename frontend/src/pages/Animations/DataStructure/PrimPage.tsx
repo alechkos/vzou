@@ -23,6 +23,8 @@ const DFSPage: FC = () => {
   const visitedNodes = useAppSelector((state) => state.prim.visitedNodes);
   const tableData = useAppSelector((state) => state.prim.tableData);
   const directed = useAppSelector((state) => state.prim.directed);
+  const S = useAppSelector((state) => state.prim.S);
+  const Q = useAppSelector((state) => state.prim.Q);
   const controller = PrimAnimationController.getController(initialNode, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -68,6 +70,8 @@ const DFSPage: FC = () => {
               passedNodes={passedNode}
               visitedNodes={visitedNodes}
               tableData={tableData}
+              S={S}
+              Q={Q}
               directed={directed}
             />
           )}

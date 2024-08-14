@@ -15,6 +15,8 @@ const initialState = {
   weight: [] as string[],
   inputData: [] as { source: number; target: number; weight: number }[],
   graphNodes: [] as PrimItemObj[],
+  Q: [] as PrimNode[],
+  S: [] as number[],
 };
 
 const primSlice = createSlice({
@@ -73,6 +75,12 @@ const primSlice = createSlice({
     setGraphNodes(state, action: PayloadAction<PrimItemObj[]>) {
       state.graphNodes = action.payload;
     },
+    setQ(state, action: PayloadAction<PrimNode[]>) {
+      state.Q = action.payload;
+    },
+    setS(state, action: PayloadAction<number[]>) {
+      state.S = action.payload;
+    },
   },
 });
 
@@ -100,4 +108,6 @@ export const {
   setWeight,
   setTo,
   setCountRows,
+  setS,
+  setQ,
 } = primSlice.actions;

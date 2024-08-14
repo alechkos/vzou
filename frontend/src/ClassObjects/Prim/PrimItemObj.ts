@@ -178,11 +178,11 @@ export class PrimItemObj extends DFSItemObj {
     return bfsObjects;
   }
 
-  setS(S: number[]) {
+  static setS(S: number[]) {
     PrimItemObj.S = S;
   }
 
-  setQ(Q: PrimNode[]) {
+  static setQ(Q: PrimNode[]) {
     PrimItemObj.Q = Q;
   }
 
@@ -193,8 +193,6 @@ export class PrimItemObj extends DFSItemObj {
         if (node.id === data.id) {
           node.setD(data.data.d);
           node.setPi(data.data.pi);
-          node.setS(data.data.S!);
-          node.setQ(data.data.Q!);
         }
       });
     });
