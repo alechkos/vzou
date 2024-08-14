@@ -90,6 +90,8 @@ const BellmanFordControlPanel: FC<Props> = ({
   };
 
   const handleAddValues = (event: any, index: number) => {
+    let flag = true;
+
     if (!from[index]) {
       setCurrentError("Enter a value for a 'from' node please!");
       return;
@@ -116,6 +118,16 @@ const BellmanFordControlPanel: FC<Props> = ({
       return;
     }
 
+    inputData.forEach((data) => {
+      if (Number(from[index]) === data.source && Number(to[index]) === data.target) {
+        setCurrentError("The branch is already exist in graph!");
+        flag = false;
+        return;
+      }
+    });
+
+    if (!flag) return;
+
     dispatch(setCountRows(1));
     const button = event.currentTarget;
     button.disabled = true;
@@ -132,6 +144,7 @@ const BellmanFordControlPanel: FC<Props> = ({
   const handleChangeValues = (event: any, index: number) => {
     const button = event.currentTarget;
     button.disabled = true;
+    controller.setGraphFromInput({ nodes: [], links: [] });
 
     dispatch(
       changeInputData({
@@ -145,6 +158,7 @@ const BellmanFordControlPanel: FC<Props> = ({
 
   const handleDeleteValues = (event: any, index: number) => {
     dispatch(deleteInputData(index));
+    controller.setGraphFromInput({ nodes: [], links: [] });
   };
 
   const handleChangeSelect = (event: any) => {
@@ -328,7 +342,7 @@ const BellmanFordControlPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label={"Create Graph"}
+                        label={"Create Graph For Bellman Ford"}
                         value="1"
                         disabled={isButtonDisabled}
                       />

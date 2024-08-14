@@ -12,6 +12,10 @@ export class PrimItemObj extends DFSItemObj {
 
   static space = 10;
 
+  static S: number[] = [];
+
+  static Q: PrimNode[] = [];
+
   constructor(
     position: { x: number; y: number },
     speed: number,
@@ -174,12 +178,23 @@ export class PrimItemObj extends DFSItemObj {
     return bfsObjects;
   }
 
+  setS(S: number[]) {
+    PrimItemObj.S = S;
+  }
+
+  setQ(Q: PrimNode[]) {
+    PrimItemObj.Q = Q;
+  }
+
   static setTableData(graphObjects: PrimItemObj[], tableData: TableDataType) {
+    console.log(tableData);
     graphObjects.forEach((node) => {
       tableData.forEach((data) => {
         if (node.id === data.id) {
           node.setD(data.data.d);
           node.setPi(data.data.pi);
+          node.setS(data.data.S!);
+          node.setQ(data.data.Q!);
         }
       });
     });

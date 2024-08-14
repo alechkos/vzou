@@ -216,7 +216,7 @@ const DFSControlsPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label={"Create Graph"}
+                        label={"Create Graph For DFS"}
                         value="1"
                         disabled={isButtonDisabled}
                       />

@@ -17,7 +17,7 @@ import {
 import { graphType, TableDataType } from "../../types/GraphTypes";
 import { PrimNode } from "./PrimNode";
 import { PrimMemento } from "./PrimMemento";
-import { buildPrimNodes } from "./PrimAlgorithms";
+import { buildPrimNodes, primAlgorithm } from "./PrimAlgorithms";
 
 export class PrimAnimationController extends AnimationController<PrimNode | undefined, string> {
   private static primController: PrimAnimationController | null = null;
@@ -111,4 +111,15 @@ export class PrimAnimationController extends AnimationController<PrimNode | unde
   }
 
   //Animation
+  async primAnimation(
+    initialNode: number,
+    links: { source: number; target: number; weight?: number }[]
+  ) {
+    this.graphNodes.forEach((node) => {
+      node.setD(Infinity);
+      node.setPi(undefined);
+    });
+
+    await this.playAlgorithm(primAlgorithm, this.memento, this.graphNodes, initialNode, links);
+  }
 }

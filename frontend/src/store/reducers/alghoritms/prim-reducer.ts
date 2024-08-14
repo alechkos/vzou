@@ -14,6 +14,7 @@ const initialState = {
   to: [] as string[],
   weight: [] as string[],
   inputData: [] as { source: number; target: number; weight: number }[],
+  graphNodes: [] as PrimItemObj[],
 };
 
 const primSlice = createSlice({

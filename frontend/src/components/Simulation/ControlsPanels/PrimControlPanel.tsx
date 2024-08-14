@@ -90,6 +90,8 @@ const PrimControlPanel: FC<Props> = ({
   };
 
   const handleAddValues = (event: any, index: number) => {
+    let flag = true;
+
     if (!from[index]) {
       setCurrentError("Enter a value for a 'from' node please!");
       return;
@@ -116,6 +118,16 @@ const PrimControlPanel: FC<Props> = ({
       return;
     }
 
+    inputData.forEach((data) => {
+      if (Number(from[index]) === data.source && Number(to[index]) === data.target) {
+        setCurrentError("The branch is already exist in graph!");
+        flag = false;
+        return;
+      }
+    });
+
+    if (!flag) return;
+
     dispatch(setCountRows(1));
     const button = event.currentTarget;
     button.disabled = true;
@@ -132,6 +144,7 @@ const PrimControlPanel: FC<Props> = ({
   const handleChangeValues = (event: any, index: number) => {
     const button = event.currentTarget;
     button.disabled = true;
+    controller.setGraphFromInput({ nodes: [], links: [] });
 
     dispatch(
       changeInputData({
@@ -144,6 +157,7 @@ const PrimControlPanel: FC<Props> = ({
   };
 
   const handleDeleteValues = (event: any, index: number) => {
+    controller.setGraphFromInput({ nodes: [], links: [] });
     dispatch(deleteInputData(index));
   };
 
@@ -169,7 +183,7 @@ const PrimControlPanel: FC<Props> = ({
       switch (animation) {
         case "Search":
           regsterActivity({
-            subject: "BellmanFord",
+            subject: "Prim",
             algorithm: "Search",
           });
           const initialNode = graphData.nodes.find((data) => data === Number(initialNodeInput));
@@ -182,7 +196,7 @@ const PrimControlPanel: FC<Props> = ({
             setInitialNode(new PrimNode(Number(initialNodeInput), Number(initialNodeInput)))
           );
 
-          // await controller.bellmanFordAnimation(Number(initialNodeInput), graphData.links);
+          await controller.primAnimation(Number(initialNodeInput), graphData.links);
           return;
         case "Clear":
           dispatch(clearInputArray());
@@ -328,7 +342,7 @@ const PrimControlPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label={"Create Graph"}
+                        label={"Create Graph For Prim"}
                         value="1"
                         disabled={isButtonDisabled}
                       />

@@ -16,7 +16,6 @@ interface BranchProps {
 
 const Branch: FC<BranchProps> = ({ branch, isPassed, speed, className, isVisited }) => {
   const isBFBranch = branch instanceof BFBranch;
-  console.log(branch);
 
   return (
     <motion.span

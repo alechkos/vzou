@@ -3,13 +3,22 @@ import { AnimatePresence } from "framer-motion";
 import TableRow from "../DFS/TableRow";
 import React from "react";
 import { useAppSelector } from "../../../store/hooks";
+import { PrimItemObj } from "../../../ClassObjects/Prim/PrimItemObj";
 
 const PrimTable = () => {
   const graphData = useAppSelector((state) => state.prim.graphNodes);
+  const Q = PrimItemObj.Q;
+  const S = PrimItemObj.S;
+
+  console.log(Q);
 
   return (
     <div className={styles.tableWrapper}>
       <AnimatePresence>
+        <div>
+          <span>{`Q: ${Q.map((node) => node.id)}`}</span>
+          <span>{`S: ${S.map((id) => id)}`}</span>
+        </div>
         <table className={styles.table}>
           <thead>
             <tr>

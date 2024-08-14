@@ -1,3 +1,5 @@
+import { PrimNode } from "../ClassObjects/Prim/PrimNode";
+
 export type graphType = {
   nodes: number[];
   links: { source: number; target: number; weight?: number }[];
@@ -6,7 +8,15 @@ export type graphType = {
 
 export type TableDataType = {
   id: number;
-  data: { color?: string; pi: number; d: number; f?: number; w?: number };
+  data: {
+    color?: string;
+    pi: number;
+    d: number;
+    f?: number;
+    w?: number;
+    S?: number[];
+    Q?: PrimNode[];
+  };
 }[];
 
 export enum Colors {
