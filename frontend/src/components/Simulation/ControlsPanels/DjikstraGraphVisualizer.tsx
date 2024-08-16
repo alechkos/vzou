@@ -7,6 +7,8 @@ interface DjikstraGraphVisualizerProps {
   highlightedLink: { source: number; target: number } | null;
   highlightedTargetNode: number | null;
   colors: { [key: number]: string };
+  currentV: number | null;
+  isHighlightingNode: boolean;
 }
 
 interface GraphNode extends d3.SimulationNodeDatum {
@@ -20,6 +22,8 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
   highlightedLink,
   highlightedTargetNode,
   colors,
+  currentV,
+  isHighlightingNode,
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const nodesDataRef = useRef<GraphNode[]>([]);
@@ -28,7 +32,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
       const svg = d3.select(svgRef.current);
-      svg.selectAll("*").remove(); // clean previous graph
+      svg.selectAll("*").remove(); // Очистка предыдущего графа
 
       const width = 1200;
       const height = 600;
@@ -101,15 +105,16 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
           .join("circle")
           .attr("r", radius)
           .attr("fill", (d) => colors[d.id] || "lime")
-          .attr("stroke", "#000")
+          .attr("stroke", "#000") // Set stroke to black
           .attr("stroke-width", 1.5)
           .attr("cx", (d: any) => d.x)
           .attr("cy", (d: any) => d.y);
 
         container
-          .selectAll("text")
+          .selectAll("text.node-label")
           .data(nodesDataRef.current)
           .join("text")
+          .attr("class", "node-label")
           .attr("dy", "0.35em")
           .attr("text-anchor", "middle")
           .attr("font-size", "10px")
@@ -117,30 +122,55 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
           .attr("x", (d: any) => d.x)
           .attr("y", (d: any) => d.y)
           .attr("fill", (d) => (colors[d.id] === "BLACK" ? "white" : "black"));
-
-        // Добавляем текст для веса ребра
-        container
-          .selectAll(".edge-label")
-          .data(linksDataRef.current)
-          .join("text")
-          .attr("class", "edge-label")
-          .attr("dy", -5) // Смещение вверх на 5 пикселей
-          .attr("font-size", "10px")
-          .attr("text-anchor", "middle")
-          .attr("x", (d: any) => (d.source.x + d.target.x) / 2)
-          .attr("y", (d: any) => (d.source.y + d.target.y) / 2)
-          .text((d: any) => d.weight);
       });
     }
   }, [data]);
+
+  // Обработка изменения currentV и добавление меток
+  useEffect(() => {
+    if (svgRef.current && nodesDataRef.current.length > 0) {
+      const svg = d3.select(svgRef.current);
+
+      // Очистка предыдущих меток и стрелок перед добавлением новых
+      svg.selectAll(".current-v-label").remove();
+      svg.selectAll(".current-v-arrow").remove();
+
+      // Добавление меток и стрелок для текущего узла
+      if (currentV !== null && isHighlightingNode) {
+        const currentNode = nodesDataRef.current.find((node) => node.id === currentV);
+        if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
+          svg
+            .append("text")
+            .attr("class", "current-v-label")
+            .attr("x", currentNode.x)
+            .attr("y", currentNode.y - 40)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text(`v = ${currentV}`);
+
+          svg
+            .append("text")
+            .attr("class", "current-v-arrow")
+            .attr("x", currentNode.x)
+            .attr("y", currentNode.y - 30)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text("↓");
+        }
+      }
+    }
+  }, [currentV, isHighlightingNode]);
 
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select(svgRef.current);
       const nodes = svg.selectAll("circle").data(nodesDataRef.current);
-      const texts = svg.selectAll("text").data(nodesDataRef.current);
+      const texts = svg.selectAll("text.node-label").data(nodesDataRef.current);
       const links = svg.selectAll("line").data(linksDataRef.current);
-      const edgeLabels = svg.selectAll(".edge-label").data(linksDataRef.current);
 
       nodes
         .transition()
@@ -161,17 +191,6 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
           d.target.id === highlightedLink.target
             ? "red"
             : "#999"
-        );
-
-      edgeLabels
-        .transition()
-        .duration(500)
-        .attr("fill", (d) =>
-          highlightedLink &&
-          d.source.id === highlightedLink.source &&
-          d.target.id === highlightedLink.target
-            ? "red"
-            : "black"
         );
     }
   }, [colors, highlightedLink]);

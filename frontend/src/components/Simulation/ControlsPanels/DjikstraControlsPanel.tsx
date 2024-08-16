@@ -1,6 +1,5 @@
-import { Slider } from "@mui/material";
 import React, { FC, useState } from "react";
-import { TextField, ThemeProvider, Box, Button } from "@mui/material";
+import { Slider, TextField, ThemeProvider, Box, Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setError, clearInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
@@ -28,6 +27,8 @@ interface DjikstraControlsPanelProps {
   handleShowActions: () => void;
   handleHideActions: () => void;
   editingConstruction: boolean;
+  currentV: number | null;
+  isHighlightingNode: boolean;
 }
 
 const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
@@ -46,6 +47,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
   handleShowActions,
   handleHideActions,
   editingConstruction,
+  currentV,
+  isHighlightingNode,
 }) => {
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
@@ -216,6 +219,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
           highlightedLink={highlightedLink}
           highlightedTargetNode={highlightedTargetNode}
           colors={colors}
+          currentV={currentV}
+          isHighlightingNode={isHighlightingNode}
         />
       )}
     </>
