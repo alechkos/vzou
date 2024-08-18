@@ -5,14 +5,12 @@ import { Link } from "react-router-dom";
 import DsCardModal from "./DsCardModal";
 import ExpendedCardItems from "./ExpendedCardItems";
 
-
 export interface ExpendedItem {
   name: string;
   url: string;
 }
 
 interface Props {
-  key: number;
   title: string;
   image: string;
   gif?: string;
@@ -23,8 +21,8 @@ interface Props {
 }
 
 function DsCard({ title, image, url, description, gif, expended, expendedList }: Props) {
-  const [ isHovering, setIsHovering ] = useState(false);
-  const [ isOpen, setIsOpen ] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleMouseOver = () => {
     setIsHovering(true);
@@ -51,8 +49,8 @@ function DsCard({ title, image, url, description, gif, expended, expendedList }:
         onClick={
           expended
             ? () => {
-              setIsOpen(!isOpen);
-            }
+                setIsOpen(!isOpen);
+              }
             : () => {}
         }
       >

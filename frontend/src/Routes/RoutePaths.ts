@@ -18,6 +18,10 @@ export enum RoutePaths {
   GENERAL_REPORTS = "/reports/general",
   ALGORITHMS_REPORTS = "/reports/algorithms",
 
+  //Categories
+  GRAPHS = "/graphs",
+  DATA_STRUCTURES = "/data-structures",
+
   // Animations
   STACK = "/stack",
   QUEUE = "/queue",

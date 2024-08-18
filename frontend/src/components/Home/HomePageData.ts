@@ -49,24 +49,6 @@ const sortTypes = [
 
 const HomePageData = [
   {
-    title: "Stack",
-    gif: stackGif,
-    image: stackPhoto,
-    url: RoutePaths.STACK,
-  },
-  {
-    title: "Queue",
-    gif: queueGif,
-    image: queuePhoto,
-    url: "/queue",
-  },
-  {
-    title: "BST",
-    gif: treeGif,
-    image: treePhoto,
-    url: "/bst",
-  },
-  {
     title: "Sorts",
     image: sortsPhoto,
     gif: sortsGif,
@@ -76,46 +58,74 @@ const HomePageData = [
     expendedList: sortTypes,
   },
   {
+    title: "Stack",
+    gif: stackGif,
+    image: stackPhoto,
+    url: RoutePaths.STACK,
+    type: "Structure",
+  },
+  {
+    title: "Queue",
+    gif: queueGif,
+    image: queuePhoto,
+    url: "/queue",
+    type: "Structure",
+  },
+  {
+    title: "BST",
+    gif: treeGif,
+    image: treePhoto,
+    url: "/bst",
+    type: "Structure",
+  },
+  {
     title: "AVL",
     gif: treeGif,
     image: treePhoto,
     url: "/avl",
+    type: "Structure",
   },
   {
     title: "Heap",
     gif: heapGif,
     image: heapPhoto,
     url: "/heap",
+    type: "Structure",
   },
   {
     title: "Linked List",
     gif: linkedListGif,
     image: linkedListPhoto,
     url: RoutePaths.LINKED_LIST,
+    type: "Structure",
   },
   {
     title: "Hash Table",
     gif: hashTableGif,
     image: hashTablePhoto,
     url: RoutePaths.HASH_TABLE,
+    type: "Structure",
   },
   {
     title: "DFS",
     gif: dfsGif,
     image: dfsPhoto,
     url: RoutePaths.DFS,
+    type: "Graph",
   },
   {
     title: "Bellman-Ford",
     gif: BFGif,
     image: BFImage,
     url: RoutePaths.BELLMAN_FORD,
+    type: "Graph",
   },
   {
     title: "Prim",
     gif: BFGif,
     image: BFImage,
     url: RoutePaths.PRIM,
+    type: "Graph",
   },
 ];
 

@@ -33,6 +33,8 @@ import DFSPage from "../pages/Animations/DataStructure/DFSPage";
 import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 import BellmanFordPage from "../pages/Animations/DataStructure/BellmanFordPage";
 import PrimPage from "../pages/Animations/DataStructure/PrimPage";
+import Graphs from "../components/Home/Graphs";
+import DataStructures from "../components/Home/DataStructures";
 
 export interface RouteItem {
   path: string;
@@ -56,6 +58,10 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.PROFILE, element: ProfilePage },
   { path: RoutePaths.EDIT_PROFILE, element: EditProfilePage },
   { path: RoutePaths.CHANGE_PASSWORD, element: ChangePassword },
+
+  //Categories
+  { path: RoutePaths.GRAPHS, element: Graphs },
+  { path: RoutePaths.DATA_STRUCTURES, element: DataStructures },
 
   // Animations
   { path: RoutePaths.STACK, element: StackPage },

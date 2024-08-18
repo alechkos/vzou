@@ -1,5 +1,3 @@
-import { PrimNode } from "../ClassObjects/Prim/PrimNode";
-
 export type graphType = {
   nodes: number[];
   links: { source: number; target: number; weight?: number }[];
