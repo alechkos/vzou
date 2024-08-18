@@ -9,6 +9,8 @@ interface DjikstraGraphVisualizerProps {
   colors: { [key: number]: string };
   currentV: number | null;
   isHighlightingNode: boolean;
+  currentLine: number; // Получаем текущую строку псевдокода
+  currentSRef: React.RefObject<number | null>; // Получаем currentSRef из пропсов
 }
 
 interface GraphNode extends d3.SimulationNodeDatum {
@@ -24,6 +26,8 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
   colors,
   currentV,
   isHighlightingNode,
+  currentLine, // Используем currentLine из пропсов
+  currentSRef, // Используем currentSRef из пропсов
 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const nodesDataRef = useRef<GraphNode[]>([]);
@@ -31,7 +35,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
 
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
-      const svg = d3.select(svgRef.current);
+      const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
       svg.selectAll("*").remove(); // Очистка предыдущего графа
 
       const width = 1200;
@@ -87,31 +91,31 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
 
       simulation.on("tick", () => {
         container
-          .selectAll("line")
+          .selectAll<SVGLineElement, (typeof linksDataRef.current)[0]>("line")
           .data(linksDataRef.current)
           .join("line")
           .attr("stroke", "#999")
           .attr("stroke-opacity", 0.6)
           .attr("stroke-width", 2)
           .attr("marker-end", "url(#arrow)")
-          .attr("x1", (d: any) => d.source.x)
-          .attr("y1", (d: any) => d.source.y)
-          .attr("x2", (d: any) => d.target.x)
-          .attr("y2", (d: any) => d.target.y);
+          .attr("x1", (d) => d.source.x!)
+          .attr("y1", (d) => d.source.y!)
+          .attr("x2", (d) => d.target.x!)
+          .attr("y2", (d) => d.target.y!);
 
         container
-          .selectAll("circle")
+          .selectAll<SVGCircleElement, GraphNode>("circle")
           .data(nodesDataRef.current)
           .join("circle")
           .attr("r", radius)
           .attr("fill", (d) => colors[d.id] || "lime")
           .attr("stroke", "#000") // Set stroke to black
           .attr("stroke-width", 1.5)
-          .attr("cx", (d: any) => d.x)
-          .attr("cy", (d: any) => d.y);
+          .attr("cx", (d) => d.x!)
+          .attr("cy", (d) => d.y!);
 
         container
-          .selectAll("text.node-label")
+          .selectAll<SVGTextElement, GraphNode>("text.node-label")
           .data(nodesDataRef.current)
           .join("text")
           .attr("class", "node-label")
@@ -119,17 +123,16 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
           .attr("text-anchor", "middle")
           .attr("font-size", "10px")
           .text((d) => d.value.toString())
-          .attr("x", (d: any) => d.x)
-          .attr("y", (d: any) => d.y)
+          .attr("x", (d) => d.x!)
+          .attr("y", (d) => d.y!)
           .attr("fill", (d) => (colors[d.id] === "BLACK" ? "white" : "black"));
       });
     }
   }, [data]);
 
-  // Обработка изменения currentV и добавление меток
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
-      const svg = d3.select(svgRef.current);
+      const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
 
       // Очистка предыдущих меток и стрелок перед добавлением новых
       svg.selectAll(".current-v-label").remove();
@@ -167,10 +170,65 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
 
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
-      const svg = d3.select(svgRef.current);
-      const nodes = svg.selectAll("circle").data(nodesDataRef.current);
-      const texts = svg.selectAll("text.node-label").data(nodesDataRef.current);
-      const links = svg.selectAll("line").data(linksDataRef.current);
+      const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
+
+      // Отображаем `s =` со стрелкой, когда находимся на 4-й строке
+      if (currentLine === 4 && currentSRef.current !== null) {
+        const currentNode = nodesDataRef.current.find((node) => node.id === currentSRef.current);
+        if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
+          svg
+            .append("text")
+            .attr("class", "current-s-label")
+            .attr("x", currentNode.x)
+            .attr("y", currentNode.y - 40)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text(`s = ${currentSRef.current}`);
+
+          svg
+            .append("text")
+            .attr("class", "current-s-arrow")
+            .attr("x", currentNode.x)
+            .attr("y", currentNode.y - 30)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "12px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text("↓");
+
+          // Узел остается желтым, пока мы находимся на 4-й строке
+          svg
+            .selectAll<SVGCircleElement, GraphNode>("circle")
+            .filter((d) => d.id === currentSRef.current)
+            .attr("fill", "yellow");
+        }
+      }
+
+      // Если переходим на 5-ю строку, возвращаем цвет узла `s` обратно и удаляем метки
+      if (currentLine === 5 && currentSRef.current !== null) {
+        svg
+          .selectAll<SVGCircleElement, GraphNode>("circle")
+          .filter((d) => d.id === currentSRef.current)
+          .attr("fill", colors[currentSRef.current!] || "lime");
+
+        svg.selectAll(".current-s-label").remove();
+        svg.selectAll(".current-s-arrow").remove();
+      }
+    }
+  }, [currentLine, colors, currentSRef]);
+
+  useEffect(() => {
+    if (svgRef.current && nodesDataRef.current.length > 0) {
+      const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
+      const nodes = svg.selectAll<SVGCircleElement, GraphNode>("circle").data(nodesDataRef.current);
+      const texts = svg
+        .selectAll<SVGTextElement, GraphNode>("text.node-label")
+        .data(nodesDataRef.current);
+      const links = svg
+        .selectAll<SVGLineElement, (typeof linksDataRef.current)[0]>("line")
+        .data(linksDataRef.current);
 
       nodes
         .transition()

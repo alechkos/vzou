@@ -10,6 +10,8 @@ import controlStyles from "./DjikstraControlsPanel.module.css";
 import DjikstraTable from "../../../components/Simulation/ControlsPanels/DjikstraTable";
 
 const DjikstraPage: FC = () => {
+  const currentSRef = useRef<number | null>(null); // Добавляем currentSRef
+
   const index = useRef(0);
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
@@ -26,7 +28,7 @@ const DjikstraPage: FC = () => {
   const [showPseudoCode, setShowPseudoCode] = useState(false);
   const [initialNode, setInitialNode] = useState<number | null>(null);
   const [speed, setSpeed] = useState(1);
-  const [currentLine, setCurrentLine] = useState(0);
+  const [currentLine, setCurrentLine] = useState(0); // Добавляем currentLine
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
   const [predecessors, setPredecessors] = useState<{ [key: number]: number | null }>({});
   const [queue, setQueue] = useState<number[]>([]);
@@ -283,6 +285,7 @@ const DjikstraPage: FC = () => {
       setIsHighlightingNode(false);
       setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
       d[initialNode] = 0;
+      currentSRef.current = initialNode; // Установка текущего узла s
       saveState(cl + 4, d, p, q, s, u);
       await waitForNextStep(signal);
       if (signal.aborted) return resetAnimation();
@@ -644,6 +647,8 @@ const DjikstraPage: FC = () => {
             colors={{ [currentV as number]: isHighlightingNode ? "yellow" : "lime" }}
             currentV={currentV}
             isHighlightingNode={isHighlightingNode}
+            currentLine={currentLine} // Передаем текущую строку псевдокода
+            currentSRef={currentSRef} // Передаем currentSRef
           />
 
           {hasStarted && (
