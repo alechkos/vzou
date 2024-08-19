@@ -136,7 +136,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
 
-      // Очистка предыдущих меток и стрелок перед добавлением новых
+      // clean old v and arrow to avoid overlap
       svg.selectAll(".current-v-label").remove();
       svg.selectAll(".current-v-arrow").remove();
 
@@ -174,7 +174,11 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
 
-      // Отображаем `s =` со стрелкой, когда находимся на 4-й строке
+      // clean old v and arrow to avoid overlap
+      svg.selectAll(".current-s-label").remove();
+      svg.selectAll(".current-s-arrow").remove();
+
+      // here we show s= with arrow while the code on 4-th line
       if (currentLine === 4 && currentSRef.current !== null) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentSRef.current);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {

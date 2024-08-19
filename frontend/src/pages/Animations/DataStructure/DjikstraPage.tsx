@@ -168,6 +168,8 @@ const DjikstraPage: FC = () => {
     setIsHighlightingNode(false);
     setCurrentLine(0);
     setDistances({});
+    currentSRef.current = null;
+    currentURef.current = null;
   };
 
   const waitForNextStep = async (signal: AbortSignal) => {
@@ -219,7 +221,13 @@ const DjikstraPage: FC = () => {
       setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
       s = s2.current;
     }
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
+
+    //------------------------------------0-th line------------------------------------------------
 
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
@@ -229,11 +237,22 @@ const DjikstraPage: FC = () => {
       setIsHighlightingNode(false);
       saveState(cl, d, p, q, s, u);
       await waitForNextStep(signal);
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
     }
 
     for (const v of graphData.nodes) {
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
+      //------------------------------------end 0-th line------------------------------------------------
+
+      //------------------------------------1-th line------------------------------------------------
 
       index.current++;
       setCurrentV(v);
@@ -242,16 +261,28 @@ const DjikstraPage: FC = () => {
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
           backClicked.current = false;
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
         }
         setCurrentLine(cl + 1);
         setIsHighlightingNode(true);
         console.log("isHighlightingNode set to:", true);
         saveState(cl + 1, d, p, q, s, u);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
 
         await waitForNextStep(signal);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
       }
 
       index.current++;
@@ -267,7 +298,11 @@ const DjikstraPage: FC = () => {
         saveState(cl + 2, d, p, q, s, u);
 
         await waitForNextStep(signal);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
       } else {
         setDistances((prev) => ({ ...prev, [v]: Infinity }));
         d[v] = Infinity;
@@ -283,18 +318,34 @@ const DjikstraPage: FC = () => {
         setPredecessors((prev) => ({ ...prev, [v]: null }));
         p[v] = null;
         saveState(cl + 3, d, p, q, s, u);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
         await waitForNextStep(signal);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
       } else {
         p[v] = null;
         setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
       }
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
     }
 
     index.current++;
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
         backClicked.current = false;
@@ -306,13 +357,21 @@ const DjikstraPage: FC = () => {
       currentSRef.current = initialNode;
       saveState(cl + 4, d, p, q, s, u);
       await waitForNextStep(signal);
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
     } else {
       d[initialNode] = 0;
     }
 
     index.current++;
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
         backClicked.current = false;
@@ -321,10 +380,18 @@ const DjikstraPage: FC = () => {
       saveState(cl + 5, d, p, q, s, u);
       await waitForNextStep(signal);
     }
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
 
     index.current++;
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
         backClicked.current = false;
@@ -342,10 +409,17 @@ const DjikstraPage: FC = () => {
       setQueue(historyRef.current[historyRef.current.length - 1].queue);
     }
 
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
     while (q.length > 0 || (backClicked.current && indexReturn.current > index.current)) {
-      if (signal.aborted) return resetAnimation();
-
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -356,7 +430,11 @@ const DjikstraPage: FC = () => {
         saveState(cl + 7, d, p, q, s, u);
         await waitForNextStep(signal);
       }
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
 
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
@@ -376,7 +454,11 @@ const DjikstraPage: FC = () => {
         setCurrentU(historyRef.current[historyRef.current.length - 1].u);
       }
 
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
 
       index.current++;
       let neighbors = graphData.links
@@ -421,7 +503,11 @@ const DjikstraPage: FC = () => {
           setCurrentV(v);
           console.log("CurrentV during neighbors iteration set to:", v);
 
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
           index.current++;
           if (
             !backClicked.current ||
@@ -437,7 +523,11 @@ const DjikstraPage: FC = () => {
             await waitForNextStep(signal);
           }
 
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
 
           index.current++;
           if (
@@ -452,10 +542,18 @@ const DjikstraPage: FC = () => {
             await waitForNextStep(signal);
           }
 
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
 
           if (!s.includes(v)) {
-            if (signal.aborted) return resetAnimation();
+            if (signal.aborted || stopClicked.current) {
+              if (stopClicked.current) {
+                return resetAnimation2();
+              } else return resetAnimation();
+            }
             index.current++;
             if (
               !backClicked.current ||
@@ -467,10 +565,18 @@ const DjikstraPage: FC = () => {
               setCurrentLine(cl + 12);
               saveState(cl + 12, d, p, q, s, u);
               await waitForNextStep(signal);
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) {
+                if (stopClicked.current) {
+                  return resetAnimation2();
+                } else return resetAnimation();
+              }
             }
 
-            if (signal.aborted) return resetAnimation();
+            if (signal.aborted || stopClicked.current) {
+              if (stopClicked.current) {
+                return resetAnimation2();
+              } else return resetAnimation();
+            }
             index.current++;
             if (
               !backClicked.current ||
@@ -483,9 +589,17 @@ const DjikstraPage: FC = () => {
               saveState(cl + 16, d, p, q, s, u);
               await waitForNextStep(signal);
             }
-            if (signal.aborted) return resetAnimation();
+            if (signal.aborted || stopClicked.current) {
+              if (stopClicked.current) {
+                return resetAnimation2();
+              } else return resetAnimation();
+            }
 
-            if (signal.aborted) return resetAnimation();
+            if (signal.aborted || stopClicked.current) {
+              if (stopClicked.current) {
+                return resetAnimation2();
+              } else return resetAnimation();
+            }
             index.current++;
             if (
               !backClicked.current ||
@@ -502,7 +616,11 @@ const DjikstraPage: FC = () => {
             const weight = getEdgeWeight(u, v);
 
             if (d[v] > d[u] + weight!) {
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) {
+                if (stopClicked.current) {
+                  return resetAnimation2();
+                } else return resetAnimation();
+              }
               index.current++;
               if (
                 !backClicked.current ||
@@ -520,7 +638,11 @@ const DjikstraPage: FC = () => {
               } else {
                 d[v] = d[u] + weight!;
               }
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) {
+                if (stopClicked.current) {
+                  return resetAnimation2();
+                } else return resetAnimation();
+              }
 
               index.current++;
               if (
@@ -539,7 +661,11 @@ const DjikstraPage: FC = () => {
                 p[v] = u;
                 setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
               }
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) {
+                if (stopClicked.current) {
+                  return resetAnimation2();
+                } else return resetAnimation();
+              }
 
               index.current++;
               if (
@@ -553,12 +679,20 @@ const DjikstraPage: FC = () => {
                 saveState(cl + 20, d, p, q, s, u);
                 await waitForNextStep(signal);
               }
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) {
+                if (stopClicked.current) {
+                  return resetAnimation2();
+                } else return resetAnimation();
+              }
             }
           }
         }
         await waitForNextStep(signal);
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
         index.current++;
         if (
           !backClicked.current ||
@@ -572,9 +706,17 @@ const DjikstraPage: FC = () => {
           await waitForNextStep(signal);
         }
       } else {
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
         index.current++;
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
         if (
           !backClicked.current ||
           (backClicked.current && indexReturn.current === index.current)
@@ -583,13 +725,25 @@ const DjikstraPage: FC = () => {
             backClicked.current = false;
           }
           setCurrentLine(cl + 10);
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
           saveState(cl + 10, d, p, q, s, u);
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
           await waitForNextStep(signal);
         }
 
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
         index.current++;
         if (
           !backClicked.current ||
@@ -602,12 +756,24 @@ const DjikstraPage: FC = () => {
           if (signal.aborted) return resetAnimation();
           if (signal.aborted) return resetAnimation();
           saveState(cl + 14, d, p, q, s, u);
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) {
+            if (stopClicked.current) {
+              return resetAnimation2();
+            } else return resetAnimation();
+          }
           await waitForNextStep(signal);
         }
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) {
+          if (stopClicked.current) {
+            return resetAnimation2();
+          } else return resetAnimation();
+        }
       }
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) {
+        if (stopClicked.current) {
+          return resetAnimation2();
+        } else return resetAnimation();
+      }
     }
 
     setIsPlayingAnimation(false);
@@ -618,7 +784,10 @@ const DjikstraPage: FC = () => {
   };
 
   const handlePlay = () => {
-    if (backClicked.current) {
+    if (stopClicked.current) {
+      stopClicked.current = false;
+      startDjikstraAnimation();
+    } else if (backClicked.current) {
       setQueue(historyRef.current[historyRef.current.length - 1].queue);
       setDistances(historyRef.current[historyRef.current.length - 1].distances);
       index.current = 0;
@@ -632,10 +801,6 @@ const DjikstraPage: FC = () => {
 
   const handleStop = () => {
     stopClicked.current = true;
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    resetAnimation2();
   };
 
   const startDjikstraAnimation = () => {
