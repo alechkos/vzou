@@ -15,6 +15,7 @@ import {
 import HashTable from "../../../components/Simulation/HashTable/HashTable";
 import { combineHashTablePseudoCode } from "../../../components/Simulation/HashTable/Helpers/HashTableHelpers";
 import { HashTablePseudoCodeKeys } from "../../../components/Simulation/PseudoCode/HashTablePseudoCodeData";
+import { setValuesForHash } from "../../../store/reducers/alghoritms/hashTable-reducer";
 
 const HashTablePage: FC = () => {
   const head = useAppSelector((state) => state.hashTable.head);
@@ -80,6 +81,8 @@ const HashTablePage: FC = () => {
           code={combineHashTablePseudoCode(currentAlg as HashTablePseudoCodeKeys) as PseudoItem[]}
         />
       }
+      subject={"HashTable"}
+      setInput={setValuesForHash}
     />
   );
 };

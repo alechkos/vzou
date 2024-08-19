@@ -4,6 +4,8 @@ import PhoneRotate from "../../../assets/rotateTablet.svg";
 import { useAppSelector } from "../../../store/hooks";
 import { setToInitial, setViewPortWidth } from "../../../store/reducers/basePage-reducer";
 import { useDispatch } from "react-redux";
+import SavedInput from "../../../components/Layout/SideBar/SavedInput";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface Props {
   controlPanel: React.ReactNode;
@@ -11,6 +13,8 @@ interface Props {
   array?: React.ReactNode;
   playerControlPanel: React.ReactNode;
   pseudoCode: React.ReactNode;
+  subject: string;
+  setInput: ActionCreatorWithPayload<string> | ActionCreatorWithPayload<string | number[]>;
 }
 
 const BasePage: FC<Props> = ({
@@ -19,6 +23,8 @@ const BasePage: FC<Props> = ({
   playerControlPanel,
   array,
   pseudoCode,
+  subject,
+  setInput,
 }) => {
   const dispatch = useDispatch();
 
@@ -44,6 +50,12 @@ const BasePage: FC<Props> = ({
   return (
     <>
       <SideBar />
+      {!showActions && (
+        <SavedInput
+          subject={subject}
+          setInput={setInput}
+        />
+      )}
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           {controlPanel}

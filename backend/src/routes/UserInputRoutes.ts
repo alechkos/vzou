@@ -6,7 +6,7 @@ const router = Router()
 
 router
   .post('/add-input', authMiddleware, UserInputController.addInput)
-  .get('/get-input', authMiddleware, UserInputController.getInput)
+  .get('/get-input/:id/:subject', authMiddleware, UserInputController.getInput)
   .delete('/delete-one', authMiddleware, UserInputController.deleteOne)
   .delete('/delete-all', authMiddleware, UserInputController.deleteAll)
 

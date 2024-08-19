@@ -16,11 +16,9 @@ export const userInputReducerApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getUserInput: builder.query<GetUserInput, any>({
-      query: (payload) => ({
-        url: "/input/get-input",
-        method: "GET",
-        body: payload,
+    getUserInput: builder.query<any, any>({
+      query: (payload: GetUserInput) => ({
+        url: `/input/get-input/${payload.userID}/${payload.subject}`,
       }),
     }),
     addUserInput: builder.mutation<{ status: "OK" }, AddUserInput>({

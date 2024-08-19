@@ -12,6 +12,7 @@ import { useRegisterActivityMutation } from "../../../store/reducers/report-redu
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import { randomBuildTree } from "../BST/BST_Algorithms";
 import BaseControlPanel from "./BaseControlPanel";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: BSTreeAnimationController;
@@ -41,9 +42,12 @@ const BSTreeControlsPanel: FC<Props> = ({
   handleHideActions,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
+
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const [value, setValue] = useState("1");
 
@@ -90,6 +94,17 @@ const BSTreeControlsPanel: FC<Props> = ({
         controller.setTreeFromInput(res);
         handleShowActions();
         setValue("2");
+
+        const userInputData = {
+          userID: Number(user!.id),
+          subject: "BST",
+          algorithm: "BST",
+          input: inputArray,
+          actionDate: new Date(),
+        };
+
+        await userInput(userInputData);
+
         dispatch(setCurrentAlg("Min"));
       } catch (e: any) {
         setCurrentError(e.message);

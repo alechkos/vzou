@@ -13,6 +13,7 @@ import { useRegisterActivityMutation } from "../../../store/reducers/report-redu
 import { buildTree } from "../AVL/AVL_Algorithms";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import BaseControlPanel from "./BaseControlPanel";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: AvlAnimationController;
@@ -42,8 +43,11 @@ const AvlControlsPanel: FC<Props> = ({
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
+
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
 
   const algorithms = [
     "Min / Max",
@@ -89,6 +93,17 @@ const AvlControlsPanel: FC<Props> = ({
         controller.setTreeFromInput(res);
         handleShowActions();
         setValue("2");
+
+        const userInputData = {
+          userID: Number(user!.id),
+          subject: "AVL",
+          algorithm: "AVL",
+          input: inputArray,
+          actionDate: new Date(),
+        };
+
+        await userInput(userInputData);
+
         dispatch(setCurrentAlg("Min"));
       } catch (e: any) {
         setCurrentError(e.message);

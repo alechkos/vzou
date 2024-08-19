@@ -18,6 +18,7 @@ import {
   setShowActions,
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
+import { setInputArray } from "../../../store/reducers/alghoritms/heap-reducer";
 
 const HeapPage: FC = () => {
   const root = useAppSelector((state) => state.heap.root);
@@ -95,6 +96,8 @@ const HeapPage: FC = () => {
           code={combineHeapPseudoCodes(currentAlg)}
         />
       }
+      subject={"Heap"}
+      setInput={setInputArray}
     />
   );
 };

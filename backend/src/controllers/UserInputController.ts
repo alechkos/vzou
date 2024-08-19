@@ -23,8 +23,8 @@ class UserInputController {
   }
 
   async getInput(req: TypedRequestBody<IUserGetInput>, res: Response, next: NextFunction) {
-    const { userID, subject, algorithm } = req.body
-    const userInput = await UserInput.findAll({ where: { userID, subject, algorithm } })
+    const { id: userID, subject } = req.params
+    const userInput = await UserInput.findAll({ where: { userID, subject } })
     if (!userInput) {
       return next(ApiError.internal('No user input'))
     }
@@ -32,8 +32,8 @@ class UserInputController {
   }
 
   async deleteOne(req: TypedRequestBody<IUserDeleteInput>, res: Response, next: NextFunction) {
-    const { userID, subject, algorithm, input } = req.body
-    const userInput = await UserInput.findOne({ where: { userID, subject, algorithm, input } })
+    const { userID, subject, input } = req.body
+    const userInput = await UserInput.findOne({ where: { userID, subject, input } })
     if (!userInput) {
       return next(ApiError.internal('No user input'))
     }
@@ -42,8 +42,8 @@ class UserInputController {
   }
 
   async deleteAll(req: TypedRequestBody<IUserGetInput>, res: Response, next: NextFunction) {
-    const { userID, subject, algorithm } = req.body
-    const userInput = await UserInput.findAll({ where: { userID, subject, algorithm } })
+    const { userID, subject } = req.body
+    const userInput = await UserInput.findAll({ where: { userID, subject } })
     if (!userInput) {
       return next(ApiError.internal('No user input'))
     }

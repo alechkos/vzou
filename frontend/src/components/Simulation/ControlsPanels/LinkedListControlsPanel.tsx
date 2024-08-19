@@ -11,6 +11,7 @@ import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { LinkedListAnimationController } from "../../../ClassObjects/LinkedList/LinkedListAnimationController";
 import BaseControlPanel from "./BaseControlPanel";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: LinkedListAnimationController;
@@ -35,10 +36,12 @@ const LinkedListControlsPanel: FC<Props> = ({
   const inputArray = useAppSelector((state) => state.linkedList.inputArray);
   const inputValues = useAppSelector((state) => state.linkedList.inputValues);
   const error = useAppSelector((state) => state.linkedList.error);
+  const user = useAppSelector((state) => state.auth.user);
 
   const algorithms = ["Search", "InsertToHead", "InsertToTail", "DeleteFromHead", "DeleteFromTail"];
 
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
 
   const dispatch = useAppDispatch();
 
@@ -76,13 +79,24 @@ const LinkedListControlsPanel: FC<Props> = ({
     }
   };
 
-  const createLinkedListHandler = () => {
+  const createLinkedListHandler = async () => {
     const res = getArrFromInputForHeap(8, inputArray);
     if (typeof res !== "string") {
       try {
         controller.setListFromInput(res);
         handleShowActions();
         setValue("Search");
+
+        const userInputData = {
+          userID: Number(user!.id),
+          subject: "LinkedList",
+          algorithm: "LinkedList",
+          input: inputArray,
+          actionDate: new Date(),
+        };
+
+        await userInput(userInputData);
+
         dispatch(setCurrentAlgorithm("Search"));
       } catch (e: any) {
         setCurrentError(e.message);
