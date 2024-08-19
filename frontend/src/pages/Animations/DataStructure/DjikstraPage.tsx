@@ -16,6 +16,7 @@ const DjikstraPage: FC = () => {
   const index = useRef(0);
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
+  const stopClicked = useRef(false);
   const neighbors2 = useRef<number[]>([]);
   const s2 = useRef<Number[]>([]);
 
@@ -151,6 +152,22 @@ const DjikstraPage: FC = () => {
     setHighlightedTargetNode(null);
     setCurrentV(null);
     setIsHighlightingNode(false);
+  };
+  const resetAnimation2 = () => {
+    setDistances({});
+    setPredecessors({});
+    setIsPlayingAnimation(false);
+    setIsPaused(true);
+    setQueue([]);
+    setS([]);
+    setCurrentU(null);
+    setHighlightedNode(null);
+    setHighlightedLink(null);
+    setHighlightedTargetNode(null);
+    setCurrentV(null);
+    setIsHighlightingNode(false);
+    setCurrentLine(0);
+    setDistances({});
   };
 
   const waitForNextStep = async (signal: AbortSignal) => {
@@ -614,10 +631,11 @@ const DjikstraPage: FC = () => {
   };
 
   const handleStop = () => {
+    stopClicked.current = true;
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    resetAnimation();
+    resetAnimation2();
   };
 
   const startDjikstraAnimation = () => {
