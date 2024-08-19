@@ -132,19 +132,21 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
     }
   }, [data]);
 
+  //-------------------------------------v= with arrow--------------------------------------------
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
+      const container = svg.select("g");
 
       // clean old v and arrow to avoid overlap
-      svg.selectAll(".current-v-label").remove();
-      svg.selectAll(".current-v-arrow").remove();
+      container.selectAll(".current-v-label").remove();
+      container.selectAll(".current-v-arrow").remove();
 
       // Добавление меток и стрелок для текущего узла
       if (currentV !== null && isHighlightingNode) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentV);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
-          svg
+          container
             .append("text")
             .attr("class", "current-v-label")
             .attr("x", currentNode.x)
@@ -155,7 +157,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .attr("fill", "black")
             .text(`v = ${currentV}`);
 
-          svg
+          container
             .append("text")
             .attr("class", "current-v-arrow")
             .attr("x", currentNode.x)
@@ -170,19 +172,21 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
     }
   }, [currentV, isHighlightingNode]);
 
+  //-------------------------------------s= with arrow-----------------------------------------------------
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
+      const container = svg.select("g");
 
       // clean old v and arrow to avoid overlap
-      svg.selectAll(".current-s-label").remove();
-      svg.selectAll(".current-s-arrow").remove();
+      container.selectAll(".current-s-label").remove();
+      container.selectAll(".current-s-arrow").remove();
 
       // here we show s= with arrow while the code on 4-th line
       if (currentLine === 4 && currentSRef.current !== null) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentSRef.current);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
-          svg
+          container
             .append("text")
             .attr("class", "current-s-label")
             .attr("x", currentNode.x)
@@ -193,7 +197,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .attr("fill", "black")
             .text(`s = ${currentSRef.current}`);
 
-          svg
+          container
             .append("text")
             .attr("class", "current-s-arrow")
             .attr("x", currentNode.x)
@@ -205,7 +209,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .text("↓");
 
           // Узел остается желтым, пока мы находимся на 4-й строке
-          svg
+          container
             .selectAll<SVGCircleElement, GraphNode>("circle")
             .filter((d) => d.id === currentSRef.current)
             .attr("fill", "yellow");
@@ -214,28 +218,34 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
 
       // Если переходим на 5-ю строку, возвращаем цвет узла `s` обратно и удаляем метки
       if (currentLine === 5 && currentSRef.current !== null) {
-        svg
+        container
           .selectAll<SVGCircleElement, GraphNode>("circle")
           .filter((d) => d.id === currentSRef.current)
           .attr("fill", colors[currentSRef.current!] || "lime");
 
-        svg.selectAll(".current-s-label").remove();
-        svg.selectAll(".current-s-arrow").remove();
+        container.selectAll(".current-s-label").remove();
+        container.selectAll(".current-s-arrow").remove();
       }
     }
   }, [currentLine, colors, currentSRef]);
 
+  //-----------------------------------------------u= with arrow---------------------------------------
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
+      const container = svg.select("g");
+
+      // clean old v and arrow to avoid overlap
+      container.selectAll(".current-u-label").remove();
+      container.selectAll(".current-u-arrow").remove();
 
       // Отображаем `s =` со стрелкой, когда находимся на 4-й строке
-      if (currentLine === 8 && currentURef.current !== null) {
+      if (currentLine >= 7 && currentURef.current !== null) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentURef.current);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
-          svg
+          container
             .append("text")
-            .attr("class", "current-s-label")
+            .attr("class", "current-u-label")
             .attr("x", currentNode.x)
             .attr("y", currentNode.y - 40)
             .attr("text-anchor", "middle")
@@ -244,9 +254,9 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .attr("fill", "black")
             .text(`u = ${currentURef.current}`);
 
-          svg
+          container
             .append("text")
-            .attr("class", "current-s-arrow")
+            .attr("class", "current-u-arrow")
             .attr("x", currentNode.x)
             .attr("y", currentNode.y - 30)
             .attr("text-anchor", "middle")
@@ -255,23 +265,11 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .attr("fill", "black")
             .text("↓");
 
-          // Узел остается желтым, пока мы находимся на 4-й строке
-          svg
+          container
             .selectAll<SVGCircleElement, GraphNode>("circle")
             .filter((d) => d.id === currentURef.current)
             .attr("fill", "yellow");
         }
-      }
-
-      // Если переходим на 5-ю строку, возвращаем цвет узла `s` обратно и удаляем метки
-      if (currentLine === 13 && currentURef.current !== null) {
-        svg
-          .selectAll<SVGCircleElement, GraphNode>("circle")
-          .filter((d) => d.id === currentURef.current)
-          .attr("fill", colors[currentURef.current!] || "lime");
-
-        svg.selectAll(".current-s-label").remove();
-        svg.selectAll(".current-s-arrow").remove();
       }
     }
   }, [currentLine, colors, currentURef]);
