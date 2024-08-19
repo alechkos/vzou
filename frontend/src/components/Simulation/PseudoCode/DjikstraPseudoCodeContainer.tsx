@@ -1,5 +1,5 @@
 import { Drawer as MuiDrawer } from "@mui/material";
-import React, { FC, useState } from "react";
+import React, { useEffect, FC, useState } from "react";
 import { Spin as Hamburger } from "hamburger-react";
 import styles from "./PseudoCodeWrapper.module.css";
 import { SubjectImg } from "../../UI/SubjectImg";
@@ -8,10 +8,17 @@ import headlinePhoto from "../../../assets/Algorithms/PseudoCode.png";
 interface Props {
   visible: boolean;
   currentLine: number;
+  open: boolean;
+  toggleOpen: () => void;
 }
 
-const DjikstraPseudoCodeContainer: FC<Props> = ({ visible, currentLine }) => {
-  const [open, setOpen] = useState(true);
+const DjikstraPseudoCodeContainer: FC<Props> = ({ visible, currentLine, open, toggleOpen }) => {
+  //const [open, setOpen] = useState(true);
+  console.log("The open is ", open);
+  console.log("The visible is ", visible);
+  useEffect(() => {
+    console.log("Current open state:", open);
+  }, [open]);
 
   const pseudoCode = [
     "0. Djikstra(G,w,s){",
@@ -48,7 +55,7 @@ const DjikstraPseudoCodeContainer: FC<Props> = ({ visible, currentLine }) => {
           />
           <Hamburger
             toggled={open}
-            toggle={setOpen}
+            toggle={toggleOpen}
             direction="left"
             size={30}
             rounded
@@ -75,10 +82,11 @@ const DjikstraPseudoCodeContainer: FC<Props> = ({ visible, currentLine }) => {
           }}
           open={visible}
         >
+          {/* our x for close pseudocode */}
           <div className={styles.hamburgerWrapper}>
             <Hamburger
               toggled={open}
-              toggle={setOpen}
+              toggle={toggleOpen}
               direction="left"
               size={30}
               rounded

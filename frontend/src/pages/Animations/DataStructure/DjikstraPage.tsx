@@ -55,6 +55,7 @@ const DjikstraPage: FC = () => {
   const [isPlayingAnimation, setIsPlayingAnimation] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [isHighlightingNode, setIsHighlightingNode] = useState(false);
+  const [pseudoCodeOpen, setPseudoCodeOpen] = useState(true);
 
   const isPausedRef = useRef(isPaused);
   isPausedRef.current = isPaused;
@@ -67,6 +68,10 @@ const DjikstraPage: FC = () => {
     setShowActions(false);
     setEditingConstruction(true);
     setShowPseudoCode(false);
+  };
+
+  const tooglePseudoCode = () => {
+    setPseudoCodeOpen((prev) => !prev);
   };
 
   useEffect(() => {
@@ -211,6 +216,8 @@ const DjikstraPage: FC = () => {
     let s: any[] = [];
     let u: any = null;
 
+    //setShowPseudoCode(true);
+    console.log("The showPseudoCode is ", showPseudoCode);
     setIsPlayingAnimation(true);
     setIsPaused(false);
     setHasStarted(true);
@@ -874,6 +881,8 @@ const DjikstraPage: FC = () => {
             <DjikstraPseudoCodeContainer
               visible={showPseudoCode}
               currentLine={currentLine}
+              open={pseudoCodeOpen}
+              toggleOpen={tooglePseudoCode}
             />
           )}
           {showPseudoCode && (
