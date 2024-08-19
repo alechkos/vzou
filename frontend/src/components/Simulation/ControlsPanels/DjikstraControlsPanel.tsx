@@ -29,8 +29,9 @@ interface DjikstraControlsPanelProps {
   editingConstruction: boolean;
   currentV: number | null;
   isHighlightingNode: boolean;
-  currentLine: number; // Получаем currentLine из пропсов
-  currentSRef: React.RefObject<number | null>; // Получаем currentSRef из пропсов
+  currentLine: number;
+  currentSRef: React.RefObject<number | null>;
+  currentURef: React.RefObject<number | null>;
 }
 
 const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
@@ -51,8 +52,9 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
   editingConstruction,
   currentV,
   isHighlightingNode,
-  currentLine, // Используем currentLine из пропсов
-  currentSRef, // Используем currentSRef из пропсов
+  currentLine,
+  currentSRef,
+  currentURef,
 }) => {
   const error = useAppSelector((state) => state.bst.error);
   const dispatch = useAppDispatch();
@@ -225,8 +227,9 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
           colors={colors}
           currentV={currentV}
           isHighlightingNode={isHighlightingNode}
-          currentLine={currentLine} // Передаем текущую строку псевдокода
-          currentSRef={currentSRef} // Передаем currentSRef
+          currentLine={currentLine}
+          currentSRef={currentSRef}
+          currentURef={currentURef}
         />
       )}
     </>

@@ -10,7 +10,8 @@ import controlStyles from "./DjikstraControlsPanel.module.css";
 import DjikstraTable from "../../../components/Simulation/ControlsPanels/DjikstraTable";
 
 const DjikstraPage: FC = () => {
-  const currentSRef = useRef<number | null>(null); // Добавляем currentSRef
+  const currentSRef = useRef<number | null>(null);
+  const currentURef = useRef<number | null>(null);
 
   const index = useRef(0);
   const indexReturn = useRef(0);
@@ -285,7 +286,7 @@ const DjikstraPage: FC = () => {
       setIsHighlightingNode(false);
       setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
       d[initialNode] = 0;
-      currentSRef.current = initialNode; // Установка текущего узла s
+      currentSRef.current = initialNode;
       saveState(cl + 4, d, p, q, s, u);
       await waitForNextStep(signal);
       if (signal.aborted) return resetAnimation();
@@ -350,6 +351,7 @@ const DjikstraPage: FC = () => {
         q = q.filter((node) => node !== u);
         setQueue([...q]);
         setCurrentU(u);
+        currentURef.current = u;
         saveState(cl + 8, d, p, q, s, u);
         await waitForNextStep(signal);
       } else {
@@ -647,8 +649,9 @@ const DjikstraPage: FC = () => {
             colors={{ [currentV as number]: isHighlightingNode ? "yellow" : "lime" }}
             currentV={currentV}
             isHighlightingNode={isHighlightingNode}
-            currentLine={currentLine} // Передаем текущую строку псевдокода
-            currentSRef={currentSRef} // Передаем currentSRef
+            currentLine={currentLine}
+            currentSRef={currentSRef}
+            currentURef={currentURef}
           />
 
           {hasStarted && (
