@@ -21,6 +21,7 @@ import hashTableReducer from "./reducers/alghoritms/hashTable-reducer";
 import basePageReducer from "./reducers/basePage-reducer";
 import bellmanFordReducer from "./reducers/alghoritms/bellmanFord-reducer";
 import prim from "./reducers/alghoritms/prim-reducer";
+import { userInputReducerApi } from "./reducers/userInput-reducer-api";
 
 const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ const store = configureStore({
     [reportApi.reducerPath]: reportApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
     [feedbackApi.reducerPath]: feedbackApi.reducer,
+    [userInputReducerApi.reducerPath]: userInputReducerApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat([
@@ -53,6 +55,7 @@ const store = configureStore({
       reportApi.middleware,
       authApi.middleware,
       feedbackApi.middleware,
+      userInputReducerApi.middleware,
     ]),
 });
 
