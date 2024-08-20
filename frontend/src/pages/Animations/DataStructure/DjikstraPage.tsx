@@ -531,6 +531,7 @@ const DjikstraPage: FC = () => {
             setCurrentLine(cl + 10);
             setIsHighlightingNode(true);
             console.log("isHighlightingNode set to:", true);
+            setHighlightedLink({ source: u, target: v });
             saveState(cl + 10, d, p, q, s, u);
             await waitForNextStep(signal);
           }
@@ -786,6 +787,7 @@ const DjikstraPage: FC = () => {
           return resetAnimation2();
         } else return resetAnimation();
       }
+      setHighlightedLink(null);
     }
 
     setIsPlayingAnimation(false);

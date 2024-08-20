@@ -273,7 +273,6 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
       }
     }
   }, [currentLine, colors, currentURef]);
-
   useEffect(() => {
     if (svgRef.current && nodesDataRef.current.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
@@ -298,15 +297,18 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
       links
         .transition()
         .duration(500)
-        .attr("stroke", (d) =>
-          highlightedLink &&
-          d.source.id === highlightedLink.source &&
-          d.target.id === highlightedLink.target
-            ? "red"
-            : "#999"
+        .attr(
+          "stroke",
+          (d) =>
+            highlightedLink &&
+            d.source.id === highlightedLink.source &&
+            d.target.id === highlightedLink.target
+              ? "red" // Подсвечиваем красным цветом
+              : "#999" // Обычный цвет для других ссылок
         );
     }
   }, [colors, highlightedLink]);
+
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
