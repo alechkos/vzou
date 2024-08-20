@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { Slider, TextField, ThemeProvider, Box, Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { setError, clearInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
+import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
 import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
@@ -135,41 +135,89 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
             <Box sx={{ width: "100%", typography: "body1" }}>
               {!graphCreated && (
                 <>
-                  <TextField
-                    placeholder="From"
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={source}
-                    label="From"
-                    variant="outlined"
-                    onChange={(e) => setSource(e.target.value)}
-                  />
-                  <TextField
-                    placeholder="To"
-                    size="small"
-                    sx={{ width: "150px", marginLeft: 2 }}
-                    value={target}
-                    label="To"
-                    variant="outlined"
-                    onChange={(e) => setTarget(e.target.value)}
-                  />
-                  <TextField
-                    placeholder="Weight"
-                    size="small"
-                    sx={{ width: "150px", marginLeft: 2 }}
-                    value={weight}
-                    label="Weight"
-                    variant="outlined"
-                    onChange={(e) => setWeight(e.target.value)}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ marginLeft: 2 }}
-                    onClick={addEdgeHandler}
+                  {/* Контейнер с фиксированной высотой и прокруткой */}
+                  <Box
+                    sx={{
+                      maxHeight: "100px", // Фиксированная высота
+                      overflowY: "auto", // Вертикальная полоса прокрутки
+                      marginBottom: 2, // Отступ от нижних элементов
+                      border: "1px solid #ccc", // Для визуального отделения контейнера
+                      padding: 2, // Отступ внутри контейнера
+                    }}
                   >
-                    Add
-                  </Button>
+                    {edges.map((edge, index) => (
+                      <Box
+                        key={index}
+                        sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}
+                      >
+                        <TextField
+                          label="From"
+                          value={edge.source}
+                          disabled
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
+                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                        />
+                        <TextField
+                          label="To"
+                          value={edge.target}
+                          disabled
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
+                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                        />
+                        <TextField
+                          label="Weight"
+                          value={edge.weight}
+                          disabled
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
+                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                        />
+                      </Box>
+                    ))}
+                  </Box>
+
+                  {/* Поля ввода новых данных */}
+                  <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+                    <TextField
+                      placeholder="From"
+                      size="small"
+                      sx={{ width: "100px", height: "40px" }} // Высота TextField
+                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      value={source}
+                      label="From"
+                      variant="outlined"
+                      onChange={(e) => setSource(e.target.value)}
+                    />
+                    <TextField
+                      placeholder="To"
+                      size="small"
+                      sx={{ width: "100px", marginLeft: 2, height: "40px" }} // Высота TextField
+                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      value={target}
+                      label="To"
+                      variant="outlined"
+                      onChange={(e) => setTarget(e.target.value)}
+                    />
+                    <TextField
+                      placeholder="Weight"
+                      size="small"
+                      sx={{ width: "100px", marginLeft: 2, height: "40px" }} // Высота TextField
+                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      value={weight}
+                      label="Weight"
+                      variant="outlined"
+                      onChange={(e) => setWeight(e.target.value)}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ marginLeft: 2 }}
+                      onClick={addEdgeHandler}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+
+                  {/* Кнопка для создания графа */}
                   <Button
                     variant="contained"
                     color="primary"
@@ -185,7 +233,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                   <TextField
                     placeholder="Initial node"
                     size="small"
-                    sx={{ width: "150px", marginLeft: 2 }}
+                    sx={{ width: "150px", marginLeft: 2, height: "40px" }} // Высота TextField
+                    InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
                     value={initialNodeInput}
                     label="Initial Node"
                     variant="outlined"
