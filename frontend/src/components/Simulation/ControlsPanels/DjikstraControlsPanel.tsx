@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Slider, TextField, ThemeProvider, Box, Button } from "@mui/material";
+import { Slider, TextField, ThemeProvider, Box, Button, IconButton } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
@@ -7,6 +7,8 @@ import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import DjikstraGraphVisualizer from "./DjikstraGraphVisualizer";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface DjikstraControlsPanelProps {
   isButtonDisabled: boolean;
@@ -62,7 +64,9 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [showInitialNodeInput, setShowInitialNodeInput] = useState<boolean>(false);
-  const [edges, setEdges] = useState<{ source: number; target: number; weight: number }[]>([]);
+  const [edges, setEdges] = useState<
+    { source: number; target: number; weight: number; editable?: boolean }[]
+  >([]);
   const [source, setSource] = useState<string>("");
   const [target, setTarget] = useState<string>("");
   const [weight, setWeight] = useState<string>("");
@@ -89,10 +93,32 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
       return;
     }
 
-    setEdges([...edges, { source: sourceNode, target: targetNode, weight: edgeWeight }]);
+    setEdges([
+      ...edges,
+      { source: sourceNode, target: targetNode, weight: edgeWeight, editable: false },
+    ]);
     setSource("");
     setTarget("");
     setWeight("");
+  };
+
+  const handleEdit = (index: number) => {
+    setEdges(edges.map((edge, i) => (i === index ? { ...edge, editable: !edge.editable } : edge)));
+  };
+
+  const handleDelete = (index: number) => {
+    setEdges(edges.filter((_, i) => i !== index));
+  };
+
+  const handleEdgeChange = (
+    index: number,
+    field: "source" | "target" | "weight",
+    value: string
+  ) => {
+    const updatedEdges = edges.map((edge, i) =>
+      i === index ? { ...edge, [field]: parseInt(value, 10) || 0 } : edge
+    );
+    setEdges(updatedEdges);
   };
 
   const createGraphHandler = () => {
@@ -138,7 +164,7 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                   {/* Контейнер с фиксированной высотой и прокруткой */}
                   <Box
                     sx={{
-                      maxHeight: "100px", // Фиксированная высота
+                      maxHeight: "200px", // Фиксированная высота
                       overflowY: "auto", // Вертикальная полоса прокрутки
                       marginBottom: 2, // Отступ от нижних элементов
                       border: "1px solid #ccc", // Для визуального отделения контейнера
@@ -153,24 +179,39 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                         <TextField
                           label="From"
                           value={edge.source}
-                          disabled
+                          disabled={!edge.editable}
+                          onChange={(e) => handleEdgeChange(index, "source", e.target.value)}
                           sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
                           InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
                         />
                         <TextField
                           label="To"
                           value={edge.target}
-                          disabled
+                          disabled={!edge.editable}
+                          onChange={(e) => handleEdgeChange(index, "target", e.target.value)}
                           sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
                           InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
                         />
                         <TextField
                           label="Weight"
                           value={edge.weight}
-                          disabled
+                          disabled={!edge.editable}
+                          onChange={(e) => handleEdgeChange(index, "weight", e.target.value)}
                           sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
                           InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
                         />
+                        <IconButton
+                          onClick={() => handleEdit(index)}
+                          sx={{ marginRight: 1 }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDelete(index)}
+                          sx={{ marginRight: 1 }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </Box>
                     ))}
                   </Box>
