@@ -85,7 +85,7 @@
 
 .tableWrapperDjikstra {
   position: absolute;
-  top: 300px; /* Setting the value for moving the table vertically */
+  top: 310px; /* Setting the value for moving the table vertically */
   right: 230px; /* Setting the value for moving the table horizontally */
   background-color: white;
   border: 1px solid #ccc;

@@ -9,6 +9,8 @@ import MediumCard from "../../UI/MediumCard";
 import DjikstraGraphVisualizer from "./DjikstraGraphVisualizer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import SpeedIcon from "@mui/icons-material/Speed";
+import { Typography } from "@mui/material";
 
 interface DjikstraControlsPanelProps {
   isButtonDisabled: boolean;
@@ -164,7 +166,7 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                   {/* Контейнер с фиксированной высотой и прокруткой */}
                   <Box
                     sx={{
-                      maxHeight: "200px", // Фиксированная высота
+                      maxHeight: "100px", // Фиксированная высота
                       overflowY: "auto", // Вертикальная полоса прокрутки
                       marginBottom: 2, // Отступ от нижних элементов
                       border: "1px solid #ccc", // Для визуального отделения контейнера
@@ -291,6 +293,16 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                     Start Algorithm Animation
                   </Button>
                   <Box sx={{ width: 200, marginTop: 2 }}>
+                    <SpeedIcon
+                      color="primary"
+                      fontSize="large"
+                    />
+                    <Typography
+                      variant="body1" // Укажите нужный стиль текста
+                      sx={{ marginLeft: 1 }} // Отступ между иконкой и текстом
+                    >
+                      Speed
+                    </Typography>
                     <Slider
                       defaultValue={1}
                       aria-labelledby="discrete-slider"
