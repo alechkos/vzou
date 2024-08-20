@@ -10,6 +10,13 @@ import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/Pseud
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
 import DFS from "../../../components/Simulation/DFS/DFS";
 import DFSTable from "../../../components/Simulation/DFS/DFSTable";
+import BasePage from "./BasePage";
+import { setInputArray } from "../../../store/reducers/alghoritms/dfs-reducer";
+import {
+  setEditingConstruction,
+  setShowActions,
+  setShowPseudoCode,
+} from "../../../store/reducers/basePage-reducer";
 
 const DFSPage: FC = () => {
   const dispatch = useDispatch();
@@ -25,68 +32,62 @@ const DFSPage: FC = () => {
   const directed = useAppSelector((state) => state.dfs.directed);
   const controller = DFSAnimationController.getController(initialNode, dispatch);
 
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  const [showActions, setShowActions] = useState(false);
-  const [editingConstruction, setEditingConstruction] = useState(false);
-  const [showPseudoCode, setShowPseudoCode] = useState(false);
+  const viewportWidth = useAppSelector((state) => state.basePage.viewportWidth);
+  const showActions = useAppSelector((state) => state.basePage.showActions);
+  const editingConstruction = useAppSelector((state) => state.basePage.editingConstruction);
 
-  const handleShowActions = () => setShowActions(true);
-  const handleHideActions = () => {
-    setShowActions(false);
-    setEditingConstruction(true);
-    setShowPseudoCode(false);
+  const handleShowActions = () => {
+    dispatch(setShowActions(true));
+    dispatch(setShowPseudoCode(true));
   };
 
-  const fitsAnimation = viewportWidth >= 1500;
-
-  useEffect(() => {
-    const handleResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const handleHideActions = () => {
+    dispatch(setShowActions(false));
+    dispatch(setEditingConstruction(false));
+    dispatch(setShowPseudoCode(false));
+  };
 
   return (
-    <>
-      <SideBar />
-      {fitsAnimation && (
-        <div>
-          <DFSControlsPanel
-            showActions={showActions}
-            handleShowActions={handleShowActions}
-            handleHideActions={handleHideActions}
-            editingConstruction={editingConstruction}
-            setShowPseudoCode={setShowPseudoCode}
-            controller={controller}
-          />
-          {(showActions || editingConstruction) && (
-            <DFS
-              graphData={controller.graphNodes}
-              speed={controller.speed}
-              viewportWidth={viewportWidth}
-              actions={actions}
-              roles={roles}
-              passedNodes={passedNode}
-              visitedNodes={visitedNodes}
-              tableData={tableData}
-              directed={directed}
-            />
-          )}
-          {showActions && <DFSTable />}
-          {showPseudoCode && (
-            <PlayerControlsPanel
-              controller={controller}
-              isPlaying={isPlaying}
-            />
-          )}
-          {showPseudoCode && (
-            <PseudoCodeContainer
-              line={currentLine}
-              code={combineDFSPseudoCode(currentAlg) as PseudoItem[]}
-            />
-          )}
-        </div>
-      )}
-    </>
+    <BasePage
+      controlPanel={
+        <DFSControlsPanel
+          showActions={showActions}
+          handleShowActions={handleShowActions}
+          handleHideActions={handleHideActions}
+          editingConstruction={editingConstruction}
+          setShowPseudoCode={setShowPseudoCode}
+          controller={controller}
+        />
+      }
+      visualization={
+        <DFS
+          graphData={controller.graphNodes}
+          speed={controller.speed}
+          viewportWidth={viewportWidth}
+          actions={actions}
+          roles={roles}
+          passedNodes={passedNode}
+          visitedNodes={visitedNodes}
+          tableData={tableData}
+          directed={directed}
+        />
+      }
+      table={<DFSTable />}
+      playerControlPanel={
+        <PlayerControlsPanel
+          controller={controller}
+          isPlaying={isPlaying}
+        />
+      }
+      pseudoCode={
+        <PseudoCodeContainer
+          line={currentLine}
+          code={combineDFSPseudoCode(currentAlg) as PseudoItem[]}
+        />
+      }
+      subject={"DFS"}
+      setInput={setInputArray}
+    />
   );
 };
 

@@ -10,6 +10,13 @@ import { PrimAnimationController } from "../../../ClassObjects/Prim/PrimAnimatio
 import PrimControlPanel from "../../../components/Simulation/ControlsPanels/PrimControlPanel";
 import Prim from "../../../components/Simulation/Prim/Prim";
 import PrimTable from "../../../components/Simulation/Prim/PrimTable";
+import BasePage from "./BasePage";
+import { setFrom, setInputArray } from "../../../store/reducers/alghoritms/prim-reducer";
+import {
+  setEditingConstruction,
+  setShowActions,
+  setShowPseudoCode,
+} from "../../../store/reducers/basePage-reducer";
 
 const DFSPage: FC = () => {
   const dispatch = useDispatch();
@@ -27,70 +34,66 @@ const DFSPage: FC = () => {
   const Q = useAppSelector((state) => state.prim.Q);
   const controller = PrimAnimationController.getController(initialNode, dispatch);
 
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  const [showActions, setShowActions] = useState(false);
-  const [editingConstruction, setEditingConstruction] = useState(false);
-  const [showPseudoCode, setShowPseudoCode] = useState(false);
+  const viewportWidth = useAppSelector((state) => state.basePage.viewportWidth);
+  const showActions = useAppSelector((state) => state.basePage.showActions);
+  const editingConstruction = useAppSelector((state) => state.basePage.editingConstruction);
 
-  const handleShowActions = () => setShowActions(true);
+  const handleShowActions = () => {
+    dispatch(setShowActions(true));
+    dispatch(setShowPseudoCode(true));
+  };
+
   const handleHideActions = () => {
-    setShowActions(false);
-    setEditingConstruction(true);
-    setShowPseudoCode(false);
+    dispatch(setShowActions(false));
+    dispatch(setEditingConstruction(false));
+    dispatch(setShowPseudoCode(false));
   };
 
   const fitsAnimation = viewportWidth >= 1500;
 
-  useEffect(() => {
-    const handleResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
-    <>
-      <SideBar />
-      {fitsAnimation && (
-        <div>
-          <PrimControlPanel
-            showActions={showActions}
-            handleShowActions={handleShowActions}
-            handleHideActions={handleHideActions}
-            editingConstruction={editingConstruction}
-            setShowPseudoCode={setShowPseudoCode}
-            controller={controller}
-          />
-          {(showActions || editingConstruction) && (
-            <Prim
-              graphData={controller.graphNodes}
-              speed={controller.speed}
-              viewportWidth={viewportWidth}
-              actions={actions}
-              roles={roles}
-              passedNodes={passedNode}
-              visitedNodes={visitedNodes}
-              tableData={tableData}
-              S={S}
-              Q={Q}
-              directed={directed}
-            />
-          )}
-          {showActions && <PrimTable />}
-          {showPseudoCode && (
-            <PlayerControlsPanel
-              controller={controller}
-              isPlaying={isPlaying}
-            />
-          )}
-          {showPseudoCode && (
-            <PseudoCodeContainer
-              line={currentLine}
-              code={combinePrimPseudoCode(currentAlg) as PseudoItem[]}
-            />
-          )}
-        </div>
-      )}
-    </>
+    <BasePage
+      controlPanel={
+        <PrimControlPanel
+          showActions={showActions}
+          handleShowActions={handleShowActions}
+          handleHideActions={handleHideActions}
+          editingConstruction={editingConstruction}
+          setShowPseudoCode={setShowPseudoCode}
+          controller={controller}
+        />
+      }
+      visualization={
+        <Prim
+          graphData={controller.graphNodes}
+          speed={controller.speed}
+          viewportWidth={viewportWidth}
+          actions={actions}
+          roles={roles}
+          passedNodes={passedNode}
+          visitedNodes={visitedNodes}
+          tableData={tableData}
+          S={S}
+          Q={Q}
+          directed={directed}
+        />
+      }
+      table={<PrimTable />}
+      playerControlPanel={
+        <PlayerControlsPanel
+          controller={controller}
+          isPlaying={isPlaying}
+        />
+      }
+      pseudoCode={
+        <PseudoCodeContainer
+          line={currentLine}
+          code={combinePrimPseudoCode(currentAlg) as PseudoItem[]}
+        />
+      }
+      subject={"Prim"}
+      setInput={setInputArray}
+    />
   );
 };
 

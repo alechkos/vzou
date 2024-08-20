@@ -15,6 +15,7 @@ interface Props {
   pseudoCode: React.ReactNode;
   subject: string;
   setInput: ActionCreatorWithPayload<string> | ActionCreatorWithPayload<string | number[]>;
+  table?: React.ReactNode;
 }
 
 const BasePage: FC<Props> = ({
@@ -25,6 +26,7 @@ const BasePage: FC<Props> = ({
   pseudoCode,
   subject,
   setInput,
+  table,
 }) => {
   const dispatch = useDispatch();
 
@@ -59,7 +61,8 @@ const BasePage: FC<Props> = ({
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           {controlPanel}
-          {(showActions || editingConstruction) && visualization}
+          {showActions && visualization}
+          {showActions && table}
           {array && (
             <div className="container mx-auto max-w-7xl px-0 py-0 mt-96">
               <p className="mr-56">

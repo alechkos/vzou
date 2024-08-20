@@ -10,6 +10,13 @@ import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/Pseud
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import { combineBellmanFordPseudoCode } from "../../../ClassObjects/BellmanFord/BellmanFordAlgorithms";
 import BellmanFordTable from "../../../components/Simulation/BellmanFord/BellmanFordTable";
+import BasePage from "./BasePage";
+import { setInputArray } from "../../../store/reducers/alghoritms/bellmanFord-reducer";
+import {
+  setEditingConstruction,
+  setShowActions,
+  setShowPseudoCode,
+} from "../../../store/reducers/basePage-reducer";
 
 const BellmanFordPage: FC = () => {
   const dispatch = useDispatch();
@@ -25,42 +32,34 @@ const BellmanFordPage: FC = () => {
   const directed = useAppSelector((state) => state.bellmanFord.directed);
   const controller = BellmanFordAnimationController.getController(initialNode, dispatch);
 
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-  const [showActions, setShowActions] = useState(false);
-  const [editingConstruction, setEditingConstruction] = useState(false);
-  const [showPseudoCode, setShowPseudoCode] = useState(false);
+  const viewportWidth = useAppSelector((state) => state.basePage.viewportWidth);
+  const showActions = useAppSelector((state) => state.basePage.showActions);
+  const editingConstruction = useAppSelector((state) => state.basePage.editingConstruction);
 
-  const handleShowActions = () => setShowActions(true);
-  const handleHideActions = () => {
-    setShowActions(false);
-    setEditingConstruction(true);
-    setShowPseudoCode(false);
+  const handleShowActions = () => {
+    dispatch(setShowActions(true));
+    dispatch(setShowPseudoCode(true));
   };
 
-  const fitsAnimation = viewportWidth >= 1500;
-
-  useEffect(() => {
-    const handleResize = () => setViewportWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const handleHideActions = () => {
+    dispatch(setShowActions(false));
+    dispatch(setEditingConstruction(false));
+    dispatch(setShowPseudoCode(false));
+  };
 
   return (
-    <>
-      <SideBar />
-      {fitsAnimation && (
-        <div>
-          <BellmanFordControlPanel
-            controller={controller}
-            showActions={showActions}
-            handleShowActions={handleShowActions}
-            handleHideActions={handleHideActions}
-            editingConstruction={editingConstruction}
-            setShowPseudoCode={setShowPseudoCode}
-          />
-        </div>
-      )}
-      {(showActions || editingConstruction) && (
+    <BasePage
+      controlPanel={
+        <BellmanFordControlPanel
+          controller={controller}
+          showActions={showActions}
+          handleShowActions={handleShowActions}
+          handleHideActions={handleHideActions}
+          editingConstruction={editingConstruction}
+          setShowPseudoCode={setShowPseudoCode}
+        />
+      }
+      visualization={
         <BellmanFord
           graphData={controller.grNodes}
           speed={controller.speed}
@@ -72,21 +71,23 @@ const BellmanFordPage: FC = () => {
           visitedNodes={visitedNodes}
           tableData={tableData}
         />
-      )}
-      {showActions && <BellmanFordTable />}
-      {showPseudoCode && (
+      }
+      table={<BellmanFordTable />}
+      playerControlPanel={
         <PlayerControlsPanel
           controller={controller}
           isPlaying={isPlaying}
         />
-      )}
-      {showPseudoCode && (
+      }
+      pseudoCode={
         <PseudoCodeContainer
           line={currentLine}
           code={combineBellmanFordPseudoCode(currentAlg) as PseudoItem[]}
         />
-      )}
-    </>
+      }
+      subject={"BellmanFord"}
+      setInput={setInputArray}
+    />
   );
 };
 

@@ -28,6 +28,7 @@ import {
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import CasinoIcon from "@mui/icons-material/Casino";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: DFSAnimationController;
@@ -50,6 +51,9 @@ const DFSControlsPanel: FC<Props> = ({
   controller,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
+  const [usersInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
+
+  const user = useAppSelector((state) => state.auth.user);
   const inputArray = useAppSelector((state) => state.dfs.inputArray);
   const error = useAppSelector((state) => state.dfs.error);
   const graphData = useAppSelector((state) => state.dfs.graphData);
@@ -139,7 +143,7 @@ const DFSControlsPanel: FC<Props> = ({
     createGraphHandler(randomString);
   };
 
-  const createGraphHandler = (randomInp?: string) => {
+  const createGraphHandler = async (randomInp?: string) => {
     let userInput;
     if (randomInp) {
       userInput = randomInp.split(",");
@@ -180,15 +184,21 @@ const DFSControlsPanel: FC<Props> = ({
     handleShowActions();
     setShowPseudoCode(true);
     DFSItemObj.positions = [];
+
+    const userInputData = {
+      userID: Number(user!.id),
+      subject: "DFS",
+      algorithm: "DFS",
+      input: inputArray,
+      actionDate: new Date(),
+    };
+
+    await usersInput(userInputData);
   };
 
   const handleInput = (e: any) => {
     dispatch(setInputArray(e.target.value));
   };
-
-  // useEffect(() => {
-  //   dispatch(clearInputArray());
-  // }, [dispatch]);
 
   return (
     <>
