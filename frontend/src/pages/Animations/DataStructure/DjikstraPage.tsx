@@ -886,12 +886,14 @@ const DjikstraPage: FC = () => {
             />
           )}
           {showPseudoCode && (
-            <div className={styles.tableWrapper}>
-              <DjikstraTable
-                nodes={graphData.nodes}
-                distances={distances}
-                predecessors={predecessors}
-              />
+            <div className={styles.tableWrapperDjikstra}>
+              <div className={styles.table}>
+                <DjikstraTable
+                  nodes={graphData.nodes}
+                  distances={distances}
+                  predecessors={predecessors}
+                />
+              </div>
               <div className={styles.queueWrapper}>
                 <h3>Q</h3>
                 <ul>
