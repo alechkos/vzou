@@ -195,15 +195,24 @@ const BfsPage: FC = () => {
         await waitForNextStep(signal);
       }
       //-------------------------------------end of 1-th line-------------------
+
+      //-------------------------------------2-th line--------------------------
       if (signal.aborted) return resetAnimation();
-      setDistances((prev) => ({ ...prev, [v]: Infinity }));
-      d = { ...d, [v]: Infinity };
+      index.current++;
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        setDistances((prev) => ({ ...prev, [v]: Infinity }));
+        d = { ...d, [v]: Infinity };
 
-      setCurrentLine(2);
+        setCurrentLine(2);
 
-      saveState(cl + 2, d, p, c, q, u);
+        saveState(cl + 2, d, p, c, q, u);
 
-      await waitForNextStep(signal);
+        await waitForNextStep(signal);
+      }
+      if (signal.aborted) return resetAnimation();
       setPredecessors((prev) => ({ ...prev, [v]: null }));
       p = { ...p, [v]: null };
 
