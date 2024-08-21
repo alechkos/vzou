@@ -81,7 +81,6 @@ const BfsPage: FC = () => {
   };
 
   const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any) => {
-    console.log("I save my last to ", cl);
     const currentState = {
       cl,
       distances: { ...d },
@@ -93,9 +92,8 @@ const BfsPage: FC = () => {
       highlightedLink,
       highlightedTargetNode,
     };
-    console.log("My last current state is ", currentState);
+
     historyRef.current.push(currentState);
-    console.log("My last history is ", historyRef);
   };
 
   const restoreState = (index: number) => {
@@ -114,6 +112,7 @@ const BfsPage: FC = () => {
   };
 
   const handleBack = () => {
+    console.log("After I clicked back my history is ", historyRef.current);
     //here we save the placa where we need to return when we click play
     indexReturn.current = index.current;
     //but when we clicked the index is less
@@ -144,6 +143,7 @@ const BfsPage: FC = () => {
   };
 
   const bfsAnimation = async (signal: AbortSignal) => {
+    console.log("The animation has started");
     let cl = 0;
     let d = {};
     let p = {};
@@ -166,13 +166,19 @@ const BfsPage: FC = () => {
     const initColors: { [key: number]: string } = {};
 
     if (!backClicked.current) {
+      console.log("I set the distances here if (!backClicked.current) {");
       setDistances(initDistances);
+
       setPredecessors(initPredecessors);
       setColors(initColors);
     } else {
+      console.log("I set the distances here else");
       setDistances(historyRef.current[historyRef.current.length - 1].distances);
+      d = historyRef.current[historyRef.current.length - 1].distances;
       setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
+      p = historyRef.current[historyRef.current.length - 1].predecessors;
       setColors(historyRef.current[historyRef.current.length - 1].colors);
+      c = historyRef.current[historyRef.current.length - 1].colors;
     }
 
     //-------------------------------------0-th line-------------------
@@ -180,8 +186,13 @@ const BfsPage: FC = () => {
       if (backClicked.current && indexReturn.current === index.current) {
         backClicked.current = false;
       }
+      console.log("I am on line 0");
       setCurrentLine(0);
       saveState(cl, d, p, c, q, u);
+      console.log(
+        "My distances here 0 is ",
+        historyRef.current[historyRef.current.length - 1].distances
+      );
       await waitForNextStep(signal);
     }
     //-------------------------------------end 0-th line-------------------
@@ -194,10 +205,14 @@ const BfsPage: FC = () => {
         if (backClicked.current && indexReturn.current === index.current) {
           backClicked.current = false;
         }
+        console.log("I am on line 1");
         setCurrentLine(1);
 
         saveState(cl + 1, d, p, c, q, u);
-
+        console.log(
+          "My distances here 1 is ",
+          historyRef.current[historyRef.current.length - 1].distances
+        );
         await waitForNextStep(signal);
       }
       //-------------------------------------end of 1-th line-------------------
@@ -209,12 +224,17 @@ const BfsPage: FC = () => {
         if (backClicked.current && indexReturn.current === index.current) {
           backClicked.current = false;
         }
+        console.log("I am on line 2");
         setDistances((prev) => ({ ...prev, [v]: Infinity }));
         d = { ...d, [v]: Infinity };
-
+        console.log("I set the distances on line 2");
         setCurrentLine(2);
 
         saveState(cl + 2, d, p, c, q, u);
+        console.log(
+          "My distances here 2 is ",
+          historyRef.current[historyRef.current.length - 1].distances
+        );
 
         await waitForNextStep(signal);
       }
@@ -227,22 +247,45 @@ const BfsPage: FC = () => {
         if (backClicked.current && indexReturn.current === index.current) {
           backClicked.current = false;
         }
+        console.log("I am on line 3");
         setPredecessors((prev) => ({ ...prev, [v]: null }));
         p = { ...p, [v]: null };
         setCurrentLine(3);
         saveState(cl + 3, d, p, c, q, u);
+        console.log(
+          "My distances here 3 is ",
+          historyRef.current[historyRef.current.length - 1].distances
+        );
         await waitForNextStep(signal);
       }
       //-------------------------------------end of 3-th line-----------------------
+
+      //-------------------------------------4-th line------------------------------
       if (signal.aborted) return resetAnimation();
-      setColors((prev) => ({ ...prev, [v]: "WHITE" }));
-      c = { ...c, [v]: "WHITE" };
-      setHighlightedNode(v); // подсветка узла
-      setCurrentLine(4);
-      saveState(cl + 4, d, p, c, q, u);
-      await waitForNextStep(signal);
-      setHighlightedNode(null); // убрать подсветку узла
+      index.current++;
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        console.log("I am on line 4");
+        setColors((prev) => ({ ...prev, [v]: "WHITE" }));
+        c = { ...c, [v]: "WHITE" };
+        setHighlightedNode(v); // here we give color to our node
+        setCurrentLine(4);
+        saveState(cl + 4, d, p, c, q, u);
+        console.log(
+          "My distances here 4 is ",
+          historyRef.current[historyRef.current.length - 1].distances
+        );
+        console.log("My history is ", historyRef.current);
+        await waitForNextStep(signal);
+        setHighlightedNode(null);
+      }
+      if (signal.aborted) return resetAnimation();
+      console.log("end of iteration");
+      //-------------------------------------end 4-th line---------------------------------
     }
+    if (signal.aborted) return resetAnimation();
 
     setHighlightedNode(null);
     setCurrentLine(5);
