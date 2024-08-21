@@ -14,6 +14,13 @@ const BfsPage: FC = () => {
   const isPlaying = useAppSelector((state) => state.bst.isPlaying);
   const dispatch = useDispatch();
 
+  //index in order to know in what index our anymation now. I need this if somebody clicked on back and then on play.This is the cuurent
+  //index
+  const index = useRef(0);
+  //is user click back then we save in this returnIndex place we need to return after play
+  const indexReturn = useRef(0);
+  const backClicked = useRef(false);
+
   const controller = BfsAnimationController.getController(root, dispatch);
 
   const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
@@ -107,27 +114,33 @@ const BfsPage: FC = () => {
   };
 
   const handleBack = () => {
+    //here we save the placa where we need to return when we click play
+    indexReturn.current = index.current;
+    //but when we clicked the index is less
+    index.current--;
+    backClicked.current = true;
     if (historyRef.current.length > 1) {
       historyRef.current.pop();
       restoreState(historyRef.current.length - 1);
       setIsPaused(true);
     }
+    //here we stop our anymation
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
   };
 
   const resetAnimation = () => {
+    setDistances(historyRef.current[historyRef.current.length - 1].distances);
+    setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
     setIsPlayingAnimation(false);
-    setHasStarted(false);
-    setIsPaused(false);
-    setCurrentLine(0);
-    setDistances({});
-    setPredecessors({});
-    setColors({});
-    setQueue([]);
-    setCurrentU(null);
+    setIsPaused(true);
+    setQueue(historyRef.current[historyRef.current.length - 1].queue);
+    setCurrentU(historyRef.current[historyRef.current.length - 1].u);
     setHighlightedNode(null);
     setHighlightedLink(null);
     setHighlightedTargetNode(null);
-    historyRef.current = [];
+    setColors({});
   };
 
   const bfsAnimation = async (signal: AbortSignal) => {
@@ -156,18 +169,33 @@ const BfsPage: FC = () => {
     setPredecessors(initPredecessors);
     setColors(initColors);
 
-    setCurrentLine(0);
-    saveState(cl, d, p, c, q, u);
-
-    await waitForNextStep(signal);
+    //-------------------------------------0-th line-------------------
+    if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+      if (backClicked.current && indexReturn.current === index.current) {
+        backClicked.current = false;
+      }
+      setCurrentLine(0);
+      saveState(cl, d, p, c, q, u);
+      await waitForNextStep(signal);
+    }
+    //-------------------------------------end 0-th line-------------------
 
     for (const v of graphData.nodes) {
       if (signal.aborted) return resetAnimation();
-      setCurrentLine(1);
+      //------------------------------------1-th line-----------------------
+      index.current++;
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        setCurrentLine(1);
 
-      saveState(cl + 1, d, p, c, q, u);
+        saveState(cl + 1, d, p, c, q, u);
 
-      await waitForNextStep(signal);
+        await waitForNextStep(signal);
+      }
+      //-------------------------------------end of 1-th line-------------------
+      if (signal.aborted) return resetAnimation();
       setDistances((prev) => ({ ...prev, [v]: Infinity }));
       d = { ...d, [v]: Infinity };
 
@@ -340,7 +368,15 @@ const BfsPage: FC = () => {
   };
 
   const handlePlay = () => {
-    setIsPaused(false);
+    if (backClicked.current) {
+      //because we are starting over
+      index.current = 0;
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
+      bfsAnimation(controller.signal);
+    } else {
+      setIsPaused(false);
+    }
   };
 
   const handleStop = () => {
