@@ -268,7 +268,9 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
           container
             .selectAll<SVGCircleElement, GraphNode>("circle")
             .filter((d) => d.id === currentURef.current)
-            .attr("fill", "yellow");
+            .attr("fill", "#9370DB")
+            .attr("stroke", "black")
+            .attr("stroke-width", 2);
         }
       }
     }
@@ -287,7 +289,12 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
       nodes
         .transition()
         .duration(500)
-        .attr("fill", (d) => colors[d.id] || "lime");
+        .attr("fill", (d) => {
+          if (d.id === currentURef.current) {
+            return "#9370DB"; // Если узел текущий U, оставляем его желтым
+          }
+          return colors[d.id] || "lime"; // Все остальные узлы
+        });
 
       texts
         .transition()
