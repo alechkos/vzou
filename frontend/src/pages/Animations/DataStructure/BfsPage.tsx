@@ -165,9 +165,15 @@ const BfsPage: FC = () => {
     const initPredecessors: { [key: number]: number | null } = {};
     const initColors: { [key: number]: string } = {};
 
-    setDistances(initDistances);
-    setPredecessors(initPredecessors);
-    setColors(initColors);
+    if (!backClicked.current) {
+      setDistances(initDistances);
+      setPredecessors(initPredecessors);
+      setColors(initColors);
+    } else {
+      setDistances(historyRef.current[historyRef.current.length - 1].distances);
+      setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
+      setColors(historyRef.current[historyRef.current.length - 1].colors);
+    }
 
     //-------------------------------------0-th line-------------------
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
@@ -212,13 +218,23 @@ const BfsPage: FC = () => {
 
         await waitForNextStep(signal);
       }
-      if (signal.aborted) return resetAnimation();
-      setPredecessors((prev) => ({ ...prev, [v]: null }));
-      p = { ...p, [v]: null };
+      //-----------------------------------end 2-th line-----------------------
 
-      setCurrentLine(3);
-      saveState(cl + 3, d, p, c, q, u);
-      await waitForNextStep(signal);
+      //-----------------------------------3-th line-----------------------------
+      if (signal.aborted) return resetAnimation();
+      index.current++;
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        setPredecessors((prev) => ({ ...prev, [v]: null }));
+        p = { ...p, [v]: null };
+        setCurrentLine(3);
+        saveState(cl + 3, d, p, c, q, u);
+        await waitForNextStep(signal);
+      }
+      //-------------------------------------end of 3-th line-----------------------
+      if (signal.aborted) return resetAnimation();
       setColors((prev) => ({ ...prev, [v]: "WHITE" }));
       c = { ...c, [v]: "WHITE" };
       setHighlightedNode(v); // подсветка узла
