@@ -285,14 +285,22 @@ const BfsPage: FC = () => {
       if (signal.aborted) return resetAnimation();
       console.log("end of iteration");
       //-------------------------------------end 4-th line---------------------------------
-    }
+    } //end 1-st for
+
+    //---------------------------------------5-th line-------------------------------------
     if (signal.aborted) return resetAnimation();
-
-    setHighlightedNode(null);
-    setCurrentLine(5);
-    saveState(cl + 5, d, p, c, q, u);
-    await waitForNextStep(signal);
-
+    index.current++;
+    if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+      if (backClicked.current && indexReturn.current === index.current) {
+        backClicked.current = false;
+      }
+      setHighlightedNode(null);
+      setCurrentLine(5);
+      saveState(cl + 5, d, p, c, q, u);
+      await waitForNextStep(signal);
+    }
+    //---------------------------------------end 5-th line-------------------------------------
+    if (signal.aborted) return resetAnimation();
     setCurrentLine(6);
     setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
     d = { ...d, [initialNode]: 0 };
