@@ -172,13 +172,18 @@ const BfsPage: FC = () => {
       setPredecessors(initPredecessors);
       setColors(initColors);
     } else {
-      console.log("I set the distances here else");
       setDistances(historyRef.current[historyRef.current.length - 1].distances);
       d = historyRef.current[historyRef.current.length - 1].distances;
       setPredecessors(historyRef.current[historyRef.current.length - 1].predecessors);
       p = historyRef.current[historyRef.current.length - 1].predecessors;
       setColors(historyRef.current[historyRef.current.length - 1].colors);
       c = historyRef.current[historyRef.current.length - 1].colors;
+      console.log("The queue is ", historyRef.current[historyRef.current.length - 1].queue);
+      setQueue(historyRef.current[historyRef.current.length - 1].queue);
+      q = historyRef.current[historyRef.current.length - 1].queue;
+      console.log("The history for queue in else is ", historyRef.current);
+      console.log("The q is ", q);
+      //localQueue = historyRef.current[historyRef.current.length - 1].queue;
     }
 
     //-------------------------------------0-th line-------------------
@@ -324,6 +329,8 @@ const BfsPage: FC = () => {
         backClicked.current = false;
       }
       setCurrentLine(7);
+      console.log("I am om the 7 line");
+      console.log("Here on the 7 line my history is ", historyRef.current);
       setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
       c = { ...c, [initialNode]: "GRAY" };
       setHighlightedNode(initialNode);
@@ -341,16 +348,20 @@ const BfsPage: FC = () => {
       }
       setHighlightedNode(null);
       setCurrentLine(8);
-
+      console.log("I am om the 8 line");
+      //console.log("Here on the 8 line my history is ", historyRef.current);
       localQueue.push(initialNode);
+      console.log("The local now is ", localQueue);
       setQueue([...localQueue]);
+      console.log("The queue now is ", queue);
       q = [...localQueue];
-
+      console.log("The q now is ", q);
       saveState(cl + 8, d, p, c, q, u);
       await waitForNextStep(signal);
     }
     //-----------------------------------------end of 8-th line-----------------------------------------------
     if (signal.aborted) return resetAnimation();
+    console.log("The localqueue before continue animation is ", localQueue);
     continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
 
@@ -369,19 +380,30 @@ const BfsPage: FC = () => {
     let q = [...qu];
     let localU = null;
 
-    while (localQueue.length > 0) {
+    console.log("The local queue length is ", localQueue.length);
+    while (q.length > 0) {
+      //-------------------------------------------9-th line-----------------------------------------
       if (signal.aborted) return resetAnimation();
-      setCurrentLine(9);
-      saveState(cl, d, p, c, q, localU);
+      index.current++;
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        setCurrentLine(9);
+        console.log("I am om the 9 line");
+        console.log("Here on the 9 line my history is ", historyRef.current);
+        saveState(cl, d, p, c, q, localU);
 
-      await waitForNextStep(signal);
-
+        await waitForNextStep(signal);
+      }
+      //-------------------------------------------end of 9-th line-------------------------------------
+      if (signal.aborted) return resetAnimation();
       setCurrentLine(10);
 
-      const u = localQueue.shift()!;
+      const u = q.shift()!;
       localU = u;
-      q = [...localQueue];
-      setQueue([...localQueue]);
+      q = [...q];
+      setQueue([...q]);
       setCurrentU(u ?? null);
       saveState(cl + 1, d, p, c, q, localU);
       await waitForNextStep(signal);
@@ -429,9 +451,9 @@ const BfsPage: FC = () => {
               setHighlightedNode(null); // убрать подсветку узла
               setCurrentLine(16);
 
-              localQueue.push(v);
-              q = [...localQueue];
-              setQueue([...localQueue]);
+              q.push(v);
+              q = [...q];
+              setQueue([...q]);
               saveState(cl + 7, d, p, c, q, localU);
               await waitForNextStep(signal);
             }
@@ -446,7 +468,7 @@ const BfsPage: FC = () => {
         setHighlightedNode(null); // убрать подсветку узла
       }
     }
-
+    if (signal.aborted) return resetAnimation();
     setCurrentLine(18);
     saveState(cl + 7, d, p, c, q, localU);
     await waitForNextStep(signal);
