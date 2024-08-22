@@ -300,12 +300,22 @@ const BfsPage: FC = () => {
       await waitForNextStep(signal);
     }
     //---------------------------------------end 5-th line-------------------------------------
+
+    //----------------------------------------6-th line----------------------------------------
     if (signal.aborted) return resetAnimation();
-    setCurrentLine(6);
-    setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
-    d = { ...d, [initialNode]: 0 };
-    saveState(cl + 6, d, p, c, q, u);
-    await waitForNextStep(signal);
+    index.current++;
+    if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+      if (backClicked.current && indexReturn.current === index.current) {
+        backClicked.current = false;
+      }
+      setCurrentLine(6);
+      setDistances((prev) => ({ ...prev, [initialNode]: 0 }));
+      d = { ...d, [initialNode]: 0 };
+      saveState(cl + 6, d, p, c, q, u);
+      await waitForNextStep(signal);
+    }
+    //----------------------------------------end of 6-th line----------------------------------------
+    if (signal.aborted) return resetAnimation();
     setCurrentLine(7);
     setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
     c = { ...c, [initialNode]: "GRAY" };
