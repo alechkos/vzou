@@ -139,7 +139,7 @@ const BfsPage: FC = () => {
     setHighlightedNode(null);
     setHighlightedLink(null);
     setHighlightedTargetNode(null);
-    setColors({});
+    //setColors({});
   };
 
   const bfsAnimation = async (signal: AbortSignal) => {
@@ -213,6 +213,7 @@ const BfsPage: FC = () => {
           "My distances here 1 is ",
           historyRef.current[historyRef.current.length - 1].distances
         );
+        console.log("My history here is ", historyRef.current);
         await waitForNextStep(signal);
       }
       //-------------------------------------end of 1-th line-------------------
