@@ -326,22 +326,31 @@ const BfsPage: FC = () => {
       setCurrentLine(7);
       setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
       c = { ...c, [initialNode]: "GRAY" };
-      setHighlightedNode(initialNode); // подсветка узла
+      setHighlightedNode(initialNode);
       saveState(cl + 7, d, p, c, q, u);
       await waitForNextStep(signal);
     }
     //------------------------------------------end of 7-th line-----------------------------------------
+
+    //------------------------------------------8-th line-------------------------------------------------
     if (signal.aborted) return resetAnimation();
-    setHighlightedNode(null); // убрать подсветку узла
+    index.current++;
+    if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+      if (backClicked.current && indexReturn.current === index.current) {
+        backClicked.current = false;
+      }
+      setHighlightedNode(null);
+      setCurrentLine(8);
 
-    setCurrentLine(8);
+      localQueue.push(initialNode);
+      setQueue([...localQueue]);
+      q = [...localQueue];
 
-    localQueue.push(initialNode);
-    setQueue([...localQueue]);
-    q = [...localQueue];
-
-    saveState(cl + 8, d, p, c, q, u);
-    await waitForNextStep(signal);
+      saveState(cl + 8, d, p, c, q, u);
+      await waitForNextStep(signal);
+    }
+    //-----------------------------------------end of 8-th line-----------------------------------------------
+    if (signal.aborted) return resetAnimation();
     continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
 
