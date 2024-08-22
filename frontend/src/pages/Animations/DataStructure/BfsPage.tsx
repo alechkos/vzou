@@ -315,13 +315,23 @@ const BfsPage: FC = () => {
       await waitForNextStep(signal);
     }
     //----------------------------------------end of 6-th line----------------------------------------
+
+    //----------------------------------------7-th line-----------------------------------------------
     if (signal.aborted) return resetAnimation();
-    setCurrentLine(7);
-    setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
-    c = { ...c, [initialNode]: "GRAY" };
-    setHighlightedNode(initialNode); // подсветка узла
-    saveState(cl + 7, d, p, c, q, u);
-    await waitForNextStep(signal);
+    index.current++;
+    if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+      if (backClicked.current && indexReturn.current === index.current) {
+        backClicked.current = false;
+      }
+      setCurrentLine(7);
+      setColors((prev) => ({ ...prev, [initialNode]: "GRAY" }));
+      c = { ...c, [initialNode]: "GRAY" };
+      setHighlightedNode(initialNode); // подсветка узла
+      saveState(cl + 7, d, p, c, q, u);
+      await waitForNextStep(signal);
+    }
+    //------------------------------------------end of 7-th line-----------------------------------------
+    if (signal.aborted) return resetAnimation();
     setHighlightedNode(null); // убрать подсветку узла
 
     setCurrentLine(8);
