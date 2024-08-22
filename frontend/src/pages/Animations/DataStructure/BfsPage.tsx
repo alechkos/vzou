@@ -397,17 +397,25 @@ const BfsPage: FC = () => {
         await waitForNextStep(signal);
       }
       //-------------------------------------------end of 9-th line-------------------------------------
-      if (signal.aborted) return resetAnimation();
-      setCurrentLine(10);
 
+      //-------------------------------------------10-th line-------------------------------------------
+      if (signal.aborted) return resetAnimation();
+      index.current++;
       const u = q.shift()!;
       localU = u;
       q = [...q];
       setQueue([...q]);
       setCurrentU(u ?? null);
-      saveState(cl + 1, d, p, c, q, localU);
-      await waitForNextStep(signal);
-
+      if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
+        if (backClicked.current && indexReturn.current === index.current) {
+          backClicked.current = false;
+        }
+        setCurrentLine(10);
+        saveState(cl + 1, d, p, c, q, localU);
+        await waitForNextStep(signal);
+      }
+      //-----------------------------------------end of 10-th line--------------------------------------
+      if (signal.aborted) return resetAnimation();
       if (u !== undefined) {
         await waitForNextStep(signal);
 
