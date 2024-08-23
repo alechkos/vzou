@@ -458,15 +458,12 @@ const BfsPage: FC = () => {
             setCurrentLine(11);
             console.log("My index now is ", index.current);
             saveState(cl + 2, d, p, c, q, localU);
-            await waitForNextStep(signal);
-
             setHighlightedLink({ source: u, target: v });
             setHighlightedTargetNode(v);
+            await waitForNextStep(signal);
           }
           //-----------------------------------end of 11-th line-----------------------------------------------
           if (signal.aborted) return resetAnimation();
-
-          await waitForNextStep(signal);
 
           if (c[u] !== "BLACK") {
             if (c[v] === "WHITE") {
