@@ -20,6 +20,7 @@ const BfsPage: FC = () => {
   //is user click back then we save in this returnIndex place we need to return after play
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
+  const qFlag = useRef(false);
 
   const controller = BfsAnimationController.getController(root, dispatch);
 
@@ -112,9 +113,17 @@ const BfsPage: FC = () => {
   };
 
   const handleBack = () => {
+    if (historyRef.current[historyRef.current.length - 1].cl === 11) {
+      qFlag.current = true;
+      console.log("I am here");
+    } else {
+      qFlag.current = false;
+    }
+    console.log("The cl is ", historyRef.current[historyRef.current.length - 1].cl);
     console.log("After I clicked back my history is ", historyRef.current);
     //here we save the placa where we need to return when we click play
     indexReturn.current = index.current;
+    console.log("The index return is ", indexReturn.current);
     //but when we clicked the index is less
     index.current--;
     backClicked.current = true;
@@ -144,6 +153,7 @@ const BfsPage: FC = () => {
 
   const bfsAnimation = async (signal: AbortSignal) => {
     console.log("The animation has started");
+
     let cl = 0;
     let d = {};
     let p = {};
@@ -178,11 +188,10 @@ const BfsPage: FC = () => {
       p = historyRef.current[historyRef.current.length - 1].predecessors;
       setColors(historyRef.current[historyRef.current.length - 1].colors);
       c = historyRef.current[historyRef.current.length - 1].colors;
-      console.log("The queue is ", historyRef.current[historyRef.current.length - 1].queue);
+
       setQueue(historyRef.current[historyRef.current.length - 1].queue);
       q = historyRef.current[historyRef.current.length - 1].queue;
-      console.log("The history for queue in else is ", historyRef.current);
-      console.log("The q is ", q);
+
       //localQueue = historyRef.current[historyRef.current.length - 1].queue;
     }
 
@@ -361,7 +370,7 @@ const BfsPage: FC = () => {
     }
     //-----------------------------------------end of 8-th line-----------------------------------------------
     if (signal.aborted) return resetAnimation();
-    console.log("The localqueue before continue animation is ", localQueue);
+
     continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
 
@@ -380,11 +389,12 @@ const BfsPage: FC = () => {
     let q = [...qu];
     let localU = null;
 
-    console.log("The local queue length is ", localQueue.length);
-    while (q.length > 0) {
+    while (q.length > 0 || qFlag.current) {
+      console.log("I am in while");
       //-------------------------------------------9-th line-----------------------------------------
       if (signal.aborted) return resetAnimation();
       index.current++;
+      console.log("The index here is ", index.current); //index =13(in 1-t iteration)
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
           backClicked.current = false;
@@ -400,8 +410,17 @@ const BfsPage: FC = () => {
 
       //-------------------------------------------10-th line-------------------------------------------
       if (signal.aborted) return resetAnimation();
-      index.current++;
-      const u = q.shift()!;
+      index.current++; //here index =14
+      let u: any;
+      if (qFlag.current) {
+        console.log("I am enter to here in order evaluate u");
+
+        u = historyRef.current[historyRef.current.length - 1].u;
+      } else {
+        u = q.shift()!;
+        console.log("I am here in else");
+      }
+
       localU = u;
       q = [...q];
       setQueue([...q]);
@@ -416,20 +435,36 @@ const BfsPage: FC = () => {
       }
       //-----------------------------------------end of 10-th line--------------------------------------
       if (signal.aborted) return resetAnimation();
+      console.log("The u is ", u);
       if (u !== undefined) {
-        await waitForNextStep(signal);
-
+        //await waitForNextStep(signal);
+        console.log("I am here");
         for (const v of graphData.links
           .filter((link) => link.source === u)
           .map((link) => link.target)) {
+          //-----------------------------------11-th line----------------------------------------------
+          console.log("I am here");
           if (signal.aborted) return resetAnimation();
-          setCurrentLine(11);
+          index.current++;
+          console.log("My index now is ", index.current);
+          if (
+            !backClicked.current ||
+            (backClicked.current && indexReturn.current === index.current)
+          ) {
+            if (backClicked.current && indexReturn.current === index.current) {
+              backClicked.current = false;
+            }
+            qFlag.current = false;
+            setCurrentLine(11);
+            console.log("My index now is ", index.current);
+            saveState(cl + 2, d, p, c, q, localU);
+            await waitForNextStep(signal);
 
-          saveState(cl + 2, d, p, c, q, localU);
-          await waitForNextStep(signal);
-
-          setHighlightedLink({ source: u, target: v });
-          setHighlightedTargetNode(v);
+            setHighlightedLink({ source: u, target: v });
+            setHighlightedTargetNode(v);
+          }
+          //-----------------------------------end of 11-th line-----------------------------------------------
+          if (signal.aborted) return resetAnimation();
 
           await waitForNextStep(signal);
 
@@ -467,6 +502,8 @@ const BfsPage: FC = () => {
             }
           }
         }
+        if (signal.aborted) return resetAnimation();
+
         c = { ...c, [u]: "BLACK" };
         setColors((prev) => ({ ...prev, [u]: "BLACK" }));
         setHighlightedNode(u); // подсветка узла
@@ -476,6 +513,7 @@ const BfsPage: FC = () => {
         setHighlightedNode(null); // убрать подсветку узла
       }
     }
+
     if (signal.aborted) return resetAnimation();
     setCurrentLine(18);
     saveState(cl + 7, d, p, c, q, localU);
