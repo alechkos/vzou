@@ -1,21 +1,12 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
-export interface ExpendedItem {
-  name: string;
-  url: string;
-}
+import HomePageData from "../../Home/HomePageData";
 
 interface Props {
   title: string;
-  keyz: number;
-  url: string;
-  type?: string;
-  expended?: boolean;
-  expendedList?: ExpendedItem[];
 }
 
-const SortElements = ({ title, keyz, url, expendedList, expended, type }: Props) => {
+const SortElements = ({ title }: Props) => {
   const currentUrl = window.location.href;
 
   const [showSorts, setShowSorts] = useState(true);
@@ -27,26 +18,25 @@ const SortElements = ({ title, keyz, url, expendedList, expended, type }: Props)
   return (
     <>
       <div
-        key={keyz}
-        className={`flex flex-col p-2 hover:text-green-400 hover:cursor-pointer w-full ${
-          currentUrl.includes(url) && url !== "" ? "text-green-400" : ""
-        }`}
+        className={`flex flex-col p-2 hover:text-green-400 hover:cursor-pointer w-full`}
         onClick={setShowSortsHandler}
       >
         <p className="border-b-2 border-gray-200">{title}</p>
-        {expended &&
-          showSorts &&
-          expendedList?.map((element) => (
-            <Link
-              to={element.url}
-              key={element.url}
-              className={`text-black hover:text-green-400 pt-1 ${
-                currentUrl.includes(element.url) ? "text-green-400" : ""
-              }`}
-            >
-              {element.name}
-            </Link>
-          ))}
+          {showSorts &&
+              HomePageData.map((element) => {
+                  if (element.type === "Sort")
+                      return (
+                          <Link
+                              to={element.url}
+                              key={element.url}
+                              className={`text-black hover:text-green-400 pt-1 ${
+                                  currentUrl.includes(element!.url) ? "text-green-400" : ""
+                              }`}
+                          >
+                              {element.title}
+                          </Link>
+                      );
+              })}
       </div>
     </>
   );
