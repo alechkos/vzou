@@ -1,5 +1,4 @@
 import DsCard from "./DsCard";
-import HomePageData from "./HomePageData";
 import bfsImage from "../../assets/Gallery/bfsPhoto.png";
 import bfsGif from "../../assets/Gallery/bfsGif.gif";
 import bstImage from "../../assets/Gallery/treePhoto.png";

@@ -20,43 +20,7 @@ import BFImage from "../../assets/Gallery/BFImage.png";
 import BFGif from "../../assets/Gallery/BFGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
 
-const sortTypes = [
-  {
-    name: "Insertion Sort",
-    url: "/insertionsort",
-  },
-  {
-    name: "Counting Sort",
-    url: "/countingsort",
-  },
-  {
-    name: "Bucket Sort",
-    url: "/bucketsort",
-  },
-  {
-    name: "Merge Sort",
-    url: "/mergesort",
-  },
-  {
-    name: "Quick Sort",
-    url: "/quicksort",
-  },
-  {
-    name: "Radix Sort",
-    url: "/radixsort",
-  },
-];
-
 const HomePageData = [
-  {
-    title: "Sorts",
-    image: sortsPhoto,
-    gif: sortsGif,
-    url: "",
-    description: "Click to see all the sort options",
-    expended: true,
-    expendedList: sortTypes,
-  },
   {
     title: "Stack",
     gif: stackGif,
