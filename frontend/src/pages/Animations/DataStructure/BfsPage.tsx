@@ -21,6 +21,7 @@ const BfsPage: FC = () => {
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
   const qFlag = useRef(false);
+  const hl: any = useRef({});
 
   const controller = BfsAnimationController.getController(root, dispatch);
 
@@ -114,8 +115,8 @@ const BfsPage: FC = () => {
 
   const handleBack = () => {
     if (
-      historyRef.current[historyRef.current.length - 1].cl === 11 ||
-      historyRef.current[historyRef.current.length - 1].cl === 12
+      historyRef.current[historyRef.current.length - 1].cl >= 11 &&
+      historyRef.current[historyRef.current.length - 1].cl <= 13
     ) {
       qFlag.current = true;
     } else {
@@ -390,7 +391,6 @@ const BfsPage: FC = () => {
     let c = { ...co };
     let q = [...qu];
     let localU = null;
-    let hl: any;
 
     while (q.length > 0 || qFlag.current) {
       console.log("I am in while");
@@ -459,11 +459,11 @@ const BfsPage: FC = () => {
             }
             qFlag.current = false;
             setCurrentLine(11);
-            hl = { source: u, target: v };
+            hl.current = { source: u, target: v };
             console.log("My index now is ", index.current);
             setHighlightedLink({ source: u, target: v });
             setHighlightedTargetNode(v);
-            saveState(cl + 2, d, p, c, q, localU, hl);
+            saveState(cl + 2, d, p, c, q, localU, hl.current);
 
             await waitForNextStep(signal);
           }
@@ -487,18 +487,30 @@ const BfsPage: FC = () => {
                 qFlag.current = false;
                 setCurrentLine(12);
 
-                saveState(cl + 3, d, p, c, q, localU);
+                saveState(cl + 3, d, p, c, q, localU, hl.current);
                 console.log("My history in 12 is ", historyRef.current);
                 await waitForNextStep(signal);
               }
-              //-------------------------------------end of 12-th line
+              //-------------------------------------end of 12-th line-------------------------
 
+              //------------------------------------13-th line---------------------------------
               if (signal.aborted) return resetAnimation();
-              d = { ...d, [v]: d[u] + 1 };
-              setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
-              setCurrentLine(13);
-              saveState(cl + 4, d, p, c, q, localU);
-              await waitForNextStep(signal);
+              index.current++;
+              if (
+                !backClicked.current ||
+                (backClicked.current && indexReturn.current === index.current)
+              ) {
+                if (backClicked.current && indexReturn.current === index.current) {
+                  backClicked.current = false;
+                }
+                qFlag.current = false;
+                d = { ...d, [v]: d[u] + 1 };
+                setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
+                setCurrentLine(13);
+                saveState(cl + 4, d, p, c, q, localU, hl.current);
+                await waitForNextStep(signal);
+              }
+              //-------------------------------------end of 13-th line----------------------------
               if (signal.aborted) return resetAnimation();
               p = { ...p, [v]: u };
               setPredecessors((prev) => ({ ...prev, [v]: u }));
