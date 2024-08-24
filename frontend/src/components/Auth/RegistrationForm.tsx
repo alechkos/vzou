@@ -227,7 +227,6 @@ function RegistrationForm() {
       </div>
 
       <RadioButton
-        labelText="Gender"
         onChange={onChangeGender}
         options={[
           <div
