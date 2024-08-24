@@ -11,7 +11,15 @@ import PrimControlPanel from "../../../components/Simulation/ControlsPanels/Prim
 import Prim from "../../../components/Simulation/Prim/Prim";
 import PrimTable from "../../../components/Simulation/Prim/PrimTable";
 import BasePage from "./BasePage";
-import { setFrom, setInputArray } from "../../../store/reducers/alghoritms/prim-reducer";
+import {
+  setInputArray,
+  setFrom,
+  setTo,
+  setWeight,
+  setInputData,
+  setCountRows,
+  clearInputArray,
+} from "../../../store/reducers/alghoritms/prim-reducer";
 import {
   setEditingConstruction,
   setShowActions,
@@ -93,6 +101,12 @@ const DFSPage: FC = () => {
       }
       subject={"Prim"}
       setInput={setInputArray}
+      setFrom={setFrom}
+      setTo={setTo}
+      setWeight={setWeight}
+      setCountRow={setCountRows}
+      setInputData={setInputData}
+      clearInputArray={clearInputArray}
     />
   );
 };

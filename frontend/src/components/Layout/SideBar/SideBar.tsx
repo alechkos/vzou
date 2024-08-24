@@ -1,6 +1,9 @@
 import HomePageData from "../../Home/HomePageData";
-import ListElement from "./ListElement";
+import SortElements from "./SortElements";
 import { useState } from "react";
+import { elements } from "chart.js";
+import DataStructureElements from "./DataStructureElements";
+import GraphElements from "./GraphElements";
 
 const SideBar = () => {
   const [show, setShow] = useState(true);
@@ -14,7 +17,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="absolute border border-gray-200 shadow-2xl rounded-xl text-xl top-48 ml-4">
+    <div className="absolute border border-gray-200 shadow-2xl rounded-xl text-xl top-48 ml-4 overflow-auto max-h-[700px]">
       <ul className="flex flex-col p-4 w-52">
         {show && (
           <>
@@ -24,16 +27,22 @@ const SideBar = () => {
             >
               X
             </span>
-            {HomePageData.map((element, index) => (
-              <ListElement
-                key={element.title}
-                keyz={index}
-                title={element.title}
-                url={element.url}
-                expended={element.expended}
-                expendedList={element.expendedList}
-              />
-            ))}
+            {HomePageData.map((element, index) => {
+              if (element.expended)
+                return (
+                  <SortElements
+                    key={element.title}
+                    keyz={index}
+                    title={element.title}
+                    url={element.url}
+                    expended={element.expended}
+                    expendedList={element.expendedList}
+                    type={element.type}
+                  />
+                );
+            })}
+            <DataStructureElements title={"Data Structures"} />
+            <GraphElements title={"Graphs"} />
           </>
         )}
         {!show && (

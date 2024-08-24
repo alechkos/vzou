@@ -4,13 +4,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { numbersToSortItems } from "../../../components/Simulation/Sorts/helpers/functions";
 import { SortItem } from "../../../components/Simulation/Sorts/helpers/types";
 
-
 export interface State {
   data: SortItem[];
   sortData: SortItem[];
   i: number;
   line: number;
   currDigit: number;
+  enteredValue: string;
 }
 
 interface ActionPayload {
@@ -24,6 +24,7 @@ const initialState: State = {
   i: -1,
   currDigit: -1,
   line: -1,
+  enteredValue: "",
 };
 
 const radixSortSlice = createSlice({
@@ -31,7 +32,14 @@ const radixSortSlice = createSlice({
   initialState,
   reducers: {
     setData(state, action: PayloadAction<number[]>) {
-      state = { ...initialState };
+      state = {
+        data: [] as SortItem[],
+        sortData: [] as SortItem[],
+        i: -1,
+        currDigit: -1,
+        line: -1,
+        enteredValue: state.enteredValue,
+      };
       state.data = numbersToSortItems(action.payload);
       // state.sortData = numbersToSortItems(state.data.map(e => e.value!%10));
       for (const item of state.data) {
@@ -70,6 +78,9 @@ const radixSortSlice = createSlice({
     },
     setState(state, action: PayloadAction<State>) {
       return action.payload;
+    },
+    setEnteredValue(state, action: PayloadAction<string>) {
+      state.enteredValue = action.payload;
     },
   },
 });

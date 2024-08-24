@@ -191,6 +191,9 @@ const DFSControlsPanel: FC<Props> = ({
       algorithm: "DFS",
       input: inputArray,
       actionDate: new Date(),
+      from: [],
+      to: [],
+      weight: [],
     };
 
     await usersInput(userInputData);

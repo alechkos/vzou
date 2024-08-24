@@ -8,4 +8,7 @@ export interface AddUserInput extends GetUserInput {
   algorithm?: string;
   actionDate?: Date;
   size?: number;
+  to?: string[];
+  from?: string[];
+  weight?: string[];
 }

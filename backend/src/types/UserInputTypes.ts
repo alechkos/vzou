@@ -9,6 +9,9 @@ export interface UserInputT {
   actionDate: Date
   input: string
   size?: number
+  from?: string[]
+  to?: string[]
+  weight?: string[]
 }
 
 export interface IUserGetInput {

@@ -188,6 +188,9 @@ const HashTableControlPanel: FC<Props> = ({
       input: hashTableValues,
       actionDate: new Date(),
       size: Number(hashTableSize),
+      from: [],
+      to: [],
+      weight: [],
     };
 
     await userInput(userInputData);

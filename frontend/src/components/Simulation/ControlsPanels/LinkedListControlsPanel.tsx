@@ -93,6 +93,9 @@ const LinkedListControlsPanel: FC<Props> = ({
           algorithm: "LinkedList",
           input: inputArray,
           actionDate: new Date(),
+          from: [],
+          to: [],
+          weight: [],
         };
 
         await userInput(userInputData);

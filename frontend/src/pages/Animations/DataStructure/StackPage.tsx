@@ -14,7 +14,6 @@ import { stackActions } from "../../../store/reducers/stackReducer";
 import { sleep } from "../../../utils/animation-helpers";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
 
-
 const MAX_ELEMENTS = 10;
 
 // The stack page divides to 3 col: left = control panel (navbar), middle = stack, rigth = psaudo code
@@ -22,8 +21,8 @@ const MAX_ELEMENTS = 10;
 function StackPage() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.stack);
-  const [ regsterActivity ] = useRegisterActivityMutation();
-  const [ isAnimate, setIsAnimate ] = useState<boolean>(false);
+  const [regsterActivity] = useRegisterActivityMutation();
+  const [isAnimate, setIsAnimate] = useState<boolean>(false);
   const popFromStack = async () => {
     setIsAnimate(true);
     regsterActivity({
@@ -101,6 +100,7 @@ function StackPage() {
       <AnimationWrapper
         line={state.line}
         code={stackPseudoCode}
+        showPseudoCode={true}
       >
         <Stack items={state.data} />
       </AnimationWrapper>

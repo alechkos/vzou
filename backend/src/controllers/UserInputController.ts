@@ -6,7 +6,7 @@ import ApiError from '../error/ApiError.js'
 
 class UserInputController {
   async addInput(req: TypedRequestBody<UserInputT>, res: Response, next: NextFunction) {
-    const { userID, subject, algorithm, actionDate, input, size } = req.body
+    const { userID, subject, algorithm, actionDate, input, size, from, to, weight } = req.body
     try {
       await UserInput.create({
         userID,
@@ -14,7 +14,10 @@ class UserInputController {
         actionDate,
         subject,
         algorithm,
-        size
+        size,
+        from,
+        to,
+        weight
       })
       return res.json({ message: 'Input created!' })
     } catch (e: any) {

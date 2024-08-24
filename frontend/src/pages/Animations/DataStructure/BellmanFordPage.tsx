@@ -11,7 +11,15 @@ import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers
 import { combineBellmanFordPseudoCode } from "../../../ClassObjects/BellmanFord/BellmanFordAlgorithms";
 import BellmanFordTable from "../../../components/Simulation/BellmanFord/BellmanFordTable";
 import BasePage from "./BasePage";
-import { setInputArray } from "../../../store/reducers/alghoritms/bellmanFord-reducer";
+import {
+  setInputArray,
+  setFrom,
+  setTo,
+  setWeight,
+  setInputData,
+  setCountRows,
+  clearInputArray,
+} from "../../../store/reducers/alghoritms/bellmanFord-reducer";
 import {
   setEditingConstruction,
   setShowActions,
@@ -87,6 +95,12 @@ const BellmanFordPage: FC = () => {
       }
       subject={"BellmanFord"}
       setInput={setInputArray}
+      setFrom={setFrom}
+      setTo={setTo}
+      setWeight={setWeight}
+      setCountRow={setCountRows}
+      setInputData={setInputData}
+      clearInputArray={clearInputArray}
     />
   );
 };

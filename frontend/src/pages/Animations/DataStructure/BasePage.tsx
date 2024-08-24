@@ -5,7 +5,7 @@ import { useAppSelector } from "../../../store/hooks";
 import { setToInitial, setViewPortWidth } from "../../../store/reducers/basePage-reducer";
 import { useDispatch } from "react-redux";
 import SavedInput from "../../../components/Layout/SideBar/SavedInput";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface Props {
   controlPanel: React.ReactNode;
@@ -15,6 +15,12 @@ interface Props {
   pseudoCode: React.ReactNode;
   subject: string;
   setInput: ActionCreatorWithPayload<string> | ActionCreatorWithPayload<string | number[]>;
+  setFrom?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setTo?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setWeight?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setCountRow?: ActionCreatorWithPayload<number>;
+  setInputData?: ActionCreatorWithPayload<{ source: number; target: number; weight: number }>;
+  clearInputArray?: ActionCreatorWithoutPayload;
   table?: React.ReactNode;
 }
 
@@ -27,6 +33,12 @@ const BasePage: FC<Props> = ({
   subject,
   setInput,
   table,
+  setFrom,
+  setTo,
+  setWeight,
+  setCountRow,
+  setInputData,
+  clearInputArray,
 }) => {
   const dispatch = useDispatch();
 
@@ -56,6 +68,12 @@ const BasePage: FC<Props> = ({
         <SavedInput
           subject={subject}
           setInput={setInput}
+          setFrom={setFrom}
+          setTo={setTo}
+          setWeight={setWeight}
+          setCountRow={setCountRow}
+          setInputData={setInputData}
+          clearInputArray={clearInputArray}
         />
       )}
       {fitsAnimation ? (

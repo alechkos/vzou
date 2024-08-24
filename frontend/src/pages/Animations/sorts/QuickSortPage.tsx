@@ -14,6 +14,9 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { quickSortActions as ActionKind } from "../../../store/reducers/sorts/quickSortReducer";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
+import { useState } from "react";
+import SavedInput from "../../../components/Layout/SideBar/SavedInput";
 
 const MAX_ELEMENTS = 10;
 
@@ -26,9 +29,15 @@ export interface Position {
 function QuickSortPage() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.quickSort);
+  const user = useAppSelector((state) => state.auth.user);
+
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
+
   const controller = QuickSortController.getController(dispatch);
   const isSortStarted = useAppSelector((s) => s.animationController.isSortStarted);
+
+  const [showPseudoCode, setShowPseudoCode] = useState(false);
   const Sort = async () => {
     regsterActivity({
       algorithm: "Quick",
@@ -38,18 +47,43 @@ function QuickSortPage() {
     await controller.sort(opArr);
   };
 
-  const setInput = (data: number[]) => {
+  const setInput = async (data: number[], isRandom?: boolean) => {
     controller.init();
     dispatch(ActionKind.init(data));
+
+    if (!isRandom) {
+      const userInputData = {
+        userID: Number(user!.id),
+        subject: "QuickSort",
+        algorithm: "QuickSort",
+        input: data.toString(),
+        actionDate: new Date(),
+        from: [],
+        to: [],
+        weight: [],
+      };
+
+      await userInput(userInputData);
+    }
+    setShowPseudoCode(true);
   };
 
   const setRandomInput = () => {
-    setInput(getRandomNumsArr(MAX_ELEMENTS));
+    const randInput = getRandomNumsArr(MAX_ELEMENTS);
+    dispatch(ActionKind.setEnteredValue(randInput.toString()));
+
+    setInput(randInput, true);
   };
 
   return (
     <>
       <SideBar />
+      {!showPseudoCode && (
+        <SavedInput
+          subject={"QuickSort"}
+          setInput={ActionKind.setEnteredValue}
+        />
+      )}
       {/* top section */}
       <SubjectImg
         name="Quick Sort"
@@ -64,30 +98,36 @@ function QuickSortPage() {
         rightBtnText="Sort"
         leftBtnText="Random"
         maxElements={MAX_ELEMENTS}
+        enteredValue={state.enteredValue}
+        setEnteredValue={ActionKind.setEnteredValue}
       />
-      <AnimationWrapper
-        line={state.line}
-        code={QuickSortPseudoCode}
-        controller={controller}
-      >
-        <IndexArray
-          size={state.data.length + 1}
-          i={state.i}
-          j={state.j}
-        />
-        <QuickSort
-          items={state.data}
-          speed={controller.speed}
-        />
-        {isSortStarted ? (
-          <>
-            <StyledTextDiv text={`P -> ${state.p}`} />
-            <StyledTextDiv text={`R -> ${state.r}`} />
-          </>
-        ) : (
-          <></>
-        )}
-      </AnimationWrapper>
+
+      {showPseudoCode && (
+        <AnimationWrapper
+          line={state.line}
+          code={QuickSortPseudoCode}
+          controller={controller}
+          showPseudoCode={showPseudoCode}
+        >
+          <IndexArray
+            size={state.data.length + 1}
+            i={state.i}
+            j={state.j}
+          />
+          <QuickSort
+            items={state.data}
+            speed={controller.speed}
+          />
+          {isSortStarted ? (
+            <>
+              <StyledTextDiv text={`P -> ${state.p}`} />
+              <StyledTextDiv text={`R -> ${state.r}`} />
+            </>
+          ) : (
+            <></>
+          )}
+        </AnimationWrapper>
+      )}
     </>
   );
 }

@@ -9,16 +9,22 @@ class UserInput extends Model<UserInputAttributes, UserInputT> implements UserIn
   public actionDate!: Date
   public size!: number
   public input!: string
+  public from!: string[]
+  public to!: string[]
+  public weight!: string[]
 }
 
 UserInput.init(
   {
-    userID: { type: DataTypes.INTEGER, references: { model: 'Users', key: 'id' } },
-    subject: { type: DataTypes.STRING, allowNull: false },
+    userID: { type: DataTypes.INTEGER, references: { model: 'Users', key: 'id' }, primaryKey: true },
+    subject: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
     algorithm: { type: DataTypes.STRING, allowNull: false },
     actionDate: { type: DataTypes.DATEONLY, allowNull: false },
-    size: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1 },
-    input: { type: DataTypes.STRING, allowNull: false }
+    size: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 1, primaryKey: true },
+    input: { type: DataTypes.STRING, allowNull: true, primaryKey: true },
+    from: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true, primaryKey: true },
+    to: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true, primaryKey: true },
+    weight: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true, primaryKey: true }
   },
   {
     sequelize: sequelize,

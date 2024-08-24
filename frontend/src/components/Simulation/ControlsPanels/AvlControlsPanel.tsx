@@ -100,6 +100,9 @@ const AvlControlsPanel: FC<Props> = ({
           algorithm: "AVL",
           input: inputArray,
           actionDate: new Date(),
+          from: [],
+          to: [],
+          weight: [],
         };
 
         await userInput(userInputData);

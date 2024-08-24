@@ -1,0 +1,55 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+
+export interface ExpendedItem {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  title: string;
+  keyz: number;
+  url: string;
+  type?: string;
+  expended?: boolean;
+  expendedList?: ExpendedItem[];
+}
+
+const SortElements = ({ title, keyz, url, expendedList, expended, type }: Props) => {
+  const currentUrl = window.location.href;
+
+  const [showSorts, setShowSorts] = useState(true);
+
+  const setShowSortsHandler = () => {
+    setShowSorts((prev) => !prev);
+  };
+
+  return (
+    <>
+      <div
+        key={keyz}
+        className={`flex flex-col p-2 hover:text-green-400 hover:cursor-pointer w-full ${
+          currentUrl.includes(url) && url !== "" ? "text-green-400" : ""
+        }`}
+        onClick={setShowSortsHandler}
+      >
+        <p className="border-b-2 border-gray-200">{title}</p>
+        {expended &&
+          showSorts &&
+          expendedList?.map((element) => (
+            <Link
+              to={element.url}
+              key={element.url}
+              className={`text-black hover:text-green-400 pt-1 ${
+                currentUrl.includes(element.url) ? "text-green-400" : ""
+              }`}
+            >
+              {element.name}
+            </Link>
+          ))}
+      </div>
+    </>
+  );
+};
+
+export default SortElements;

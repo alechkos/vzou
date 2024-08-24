@@ -4,7 +4,7 @@ import swal from "sweetalert";
 import MediumCard from "../../UI/MediumCard";
 import SimulationInputGroup from "../../UI/SimulationInputGroup";
 import { getArrFromInput } from "../Sorts/helpers/functions";
-
+import { UnknownAction } from "redux";
 
 export interface Item {
   value: string;
@@ -27,19 +27,20 @@ interface Props {
   maxElements: number;
 
   maxInputNum?: number;
+
+  enteredValue: string;
+  setEnteredValue: (val: string) => UnknownAction;
 }
 
 export function SortControlsPanel(props: Props) {
-  const [ enteredValue, setEnteredValue ] = useState<string>(""); // state for the value that need to be push
-
   const inputValueHandler = () => {
-    const result = getArrFromInput(props.maxElements, enteredValue, props.maxInputNum);
+    const result = getArrFromInput(props.maxElements, props.enteredValue, props.maxInputNum);
 
     if (typeof result === "string") swal({ icon: "error", text: result });
     else {
       props.inputHandler(result as number[]);
       if (props.abortTrueHandler) props.abortTrueHandler();
-      setEnteredValue("");
+      props.setEnteredValue("");
     }
   };
 
@@ -60,10 +61,10 @@ export function SortControlsPanel(props: Props) {
         {/* input text box for value to push */}
         <SimulationInputGroup
           name="value"
-          value={enteredValue}
+          value={props.enteredValue}
           placeholder="e.g. 1,5,6,4"
           btnText={props.inputBtnText}
-          onChange={setEnteredValue}
+          onChange={props.setEnteredValue}
           btnOnClick={inputValueHandler}
         />
 

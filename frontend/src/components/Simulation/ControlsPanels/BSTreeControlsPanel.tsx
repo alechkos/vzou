@@ -7,6 +7,7 @@ import {
   setInput,
   setInputArray,
   setCurrentAlg,
+  clearInputArray,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
@@ -101,6 +102,9 @@ const BSTreeControlsPanel: FC<Props> = ({
           algorithm: "BST",
           input: inputArray,
           actionDate: new Date(),
+          from: [],
+          to: [],
+          weight: [],
         };
 
         await userInput(userInputData);
@@ -184,6 +188,7 @@ const BSTreeControlsPanel: FC<Props> = ({
           return;
         case "Clear":
           controller.setTreeFromInput([]);
+          dispatch(clearInputArray());
           return;
         case "Inorder":
           regsterActivity({

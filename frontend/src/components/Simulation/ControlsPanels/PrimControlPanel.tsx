@@ -37,6 +37,7 @@ import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import CasinoIcon from "@mui/icons-material/Casino";
 import { PrimAnimationController } from "../../../ClassObjects/Prim/PrimAnimationController";
 import { PrimNode } from "../../../ClassObjects/Prim/PrimNode";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: PrimAnimationController;
@@ -59,6 +60,9 @@ const PrimControlPanel: FC<Props> = ({
   controller,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
+
+  const user = useAppSelector((state) => state.auth.user);
   const inputArray = useAppSelector((state) => state.prim.inputArray);
   const error = useAppSelector((state) => state.prim.error);
   const isButtonDisabled = useAppSelector((state) => state.prim.isPlaying);
@@ -273,7 +277,9 @@ const PrimControlPanel: FC<Props> = ({
     createGraphHandler(inpData);
   };
 
-  const createGraphHandler = (inpData?: { source: number; target: number; weight: number }[]) => {
+  const createGraphHandler = async (
+    inpData?: { source: number; target: number; weight: number }[]
+  ) => {
     const nodes = new Set<number>();
     const links: { source: number; target: number; weight?: number }[] = [];
 
@@ -310,6 +316,20 @@ const PrimControlPanel: FC<Props> = ({
     handleShowActions();
     setShowPseudoCode(true);
     DFSItemObj.positions = [];
+
+    const userInputData = {
+      userID: Number(user!.id),
+      subject: "Prim",
+      algorithm: "Prim",
+      input: "",
+      actionDate: new Date(),
+      size: from.length,
+      from,
+      to,
+      weight,
+    };
+
+    await userInput(userInputData);
   };
 
   const handleInput = (e: any) => {
@@ -372,11 +392,7 @@ const PrimControlPanel: FC<Props> = ({
                                   placeholder="e.g 1,2,3,..."
                                   size="small"
                                   sx={{ width: "80px" }}
-                                  label={
-                                    !editingConstruction
-                                      ? "From"
-                                      : inputData[index] && inputData[index]!.source
-                                  }
+                                  label={"From"}
                                   variant="outlined"
                                   value={from[index] ? from[index] : ""}
                                   onChange={(event) => fromChangeHandler(event, index)}
@@ -385,11 +401,7 @@ const PrimControlPanel: FC<Props> = ({
                                   placeholder="e.g 1,2,3,..."
                                   size="small"
                                   sx={{ width: "80px" }}
-                                  label={
-                                    !editingConstruction
-                                      ? "To"
-                                      : inputData[index] && inputData[index]!.target
-                                  }
+                                  label={"To"}
                                   variant="outlined"
                                   value={to[index] ? to[index] : ""}
                                   onChange={(event) => toChangeHandler(event, index)}
@@ -398,16 +410,12 @@ const PrimControlPanel: FC<Props> = ({
                                   placeholder="e.g 1,2,3,..."
                                   size="small"
                                   sx={{ width: "80px" }}
-                                  label={
-                                    !editingConstruction
-                                      ? "Weight"
-                                      : inputData[index] && inputData[index]!.weight
-                                  }
+                                  label={"Weight"}
                                   variant="outlined"
                                   value={weight[index] ? weight[index] : ""}
                                   onChange={(event) => weightChangeHandler(event, index)}
                                 />
-                                {!editingConstruction && (
+                                {!inputData[index] && (
                                   <button
                                     disabled={isButtonDisabled}
                                     className={`${buttonClassname} w-auto h-[40px]`}
@@ -416,7 +424,7 @@ const PrimControlPanel: FC<Props> = ({
                                     Add
                                   </button>
                                 )}
-                                {editingConstruction && inputData[index] && (
+                                {inputData[index] && (
                                   <>
                                     <button
                                       disabled={isButtonDisabled}

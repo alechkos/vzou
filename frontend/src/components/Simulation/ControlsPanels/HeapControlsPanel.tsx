@@ -64,6 +64,9 @@ const HeapControlsPanel: FC<Props> = ({
         algorithm: "Heap",
         input: inputArray,
         actionDate: new Date(),
+        from: [],
+        to: [],
+        weight: [],
       };
 
       await userInput(userInputData);

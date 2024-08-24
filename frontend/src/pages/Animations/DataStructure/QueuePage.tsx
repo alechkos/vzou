@@ -12,7 +12,6 @@ import { useRegisterActivityMutation } from "../../../store/reducers/report-redu
 import { sleep } from "../../../utils/animation-helpers";
 import SideBar from "../../../components/Layout/SideBar/SideBar";
 
-
 const MAX_ELEMENTS = 10;
 
 // The Queue page divides to 3 col: left = control panel (navbar), middle = stack, rigth = psaudo code
@@ -24,8 +23,8 @@ export interface Position {
 function QueuePage() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state.queue);
-  const [ regsterActivity ] = useRegisterActivityMutation();
-  const [ isAnimate, setIsAnimate ] = useState<boolean>(false);
+  const [regsterActivity] = useRegisterActivityMutation();
+  const [isAnimate, setIsAnimate] = useState<boolean>(false);
 
   const Dequeue = async () => {
     regsterActivity({
@@ -101,6 +100,7 @@ function QueuePage() {
       <AnimationWrapper
         line={state.line}
         code={queuePseudoCode}
+        showPseudoCode={true}
       >
         <Queue
           headPosition={state.headPosition}
