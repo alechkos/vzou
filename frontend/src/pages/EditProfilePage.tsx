@@ -61,7 +61,7 @@ function EditProfilePage() {
           className="mt-8 space-y-6"
           onSubmit={onSubmitHandler}
         >
-          <div className="-space-y-px rounded-md shadow-sm grid grid-cols-3">
+          <div className="p-3 -space-y-px rounded-md shadow-sm grid grid-cols-3">
             {/* first name */}
             <label htmlFor="First-Name">First Name:</label>
             <input
@@ -131,7 +131,7 @@ function EditProfilePage() {
                     ]}
                   />
                 </div>
-                <label htmlFor="2-factor-auth">2 factor auth:</label>
+                <label htmlFor="2-factor-auth">2FA:</label>
                 <Switch
                   checked={!!editUser.isEnabled2FA}
                   onChange={(checked: boolean) => {
@@ -153,7 +153,7 @@ function EditProfilePage() {
           </div>
           <FormButton
             type="submit"
-            title="submit"
+            title="Submit"
             icon={
               <ClipboardDocumentListIcon
                 className={`h-5 w-5 text-${mainHoverColor} group-hover:text-${mainColor}`}

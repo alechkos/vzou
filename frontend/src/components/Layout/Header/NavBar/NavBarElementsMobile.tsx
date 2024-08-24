@@ -64,7 +64,7 @@ function NavBarElemetsMobile() {
                     Sign up
                   </Link>
                   <p className="mt-6 text-center text-base font-medium text-gray-500">
-                    Existing customer?{" "}
+                    Existing user?{" "}
                     <Link
                       to={RoutePaths.LOGIN}
                       className="text-lime-600 hover:text-lime-500"
