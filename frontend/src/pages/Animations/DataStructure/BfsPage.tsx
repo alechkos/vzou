@@ -116,7 +116,7 @@ const BfsPage: FC = () => {
   const handleBack = () => {
     if (
       historyRef.current[historyRef.current.length - 1].cl >= 11 &&
-      historyRef.current[historyRef.current.length - 1].cl <= 13
+      historyRef.current[historyRef.current.length - 1].cl <= 14
     ) {
       qFlag.current = true;
     } else {
@@ -511,12 +511,25 @@ const BfsPage: FC = () => {
                 await waitForNextStep(signal);
               }
               //-------------------------------------end of 13-th line----------------------------
+
+              //--------------------------------------14-th line---------------------------------
               if (signal.aborted) return resetAnimation();
-              p = { ...p, [v]: u };
-              setPredecessors((prev) => ({ ...prev, [v]: u }));
-              setCurrentLine(14);
-              saveState(cl + 5, d, p, c, q, localU);
-              await waitForNextStep(signal);
+              index.current++;
+              if (
+                !backClicked.current ||
+                (backClicked.current && indexReturn.current === index.current)
+              ) {
+                if (backClicked.current && indexReturn.current === index.current) {
+                  backClicked.current = false;
+                }
+                qFlag.current = false;
+                p = { ...p, [v]: u };
+                setPredecessors((prev) => ({ ...prev, [v]: u }));
+                setCurrentLine(14);
+                saveState(cl + 5, d, p, c, q, localU, hl.current);
+                await waitForNextStep(signal);
+              }
+              //----------------------------------------end 14-th line------------------------------------
               if (signal.aborted) return resetAnimation();
               c = { ...c, [v]: "GRAY" };
               setColors((prev) => ({ ...prev, [v]: "GRAY" }));
