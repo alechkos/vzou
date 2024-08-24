@@ -21,6 +21,7 @@ const BfsPage: FC = () => {
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
   const qFlag = useRef(false);
+  const cFlag = useRef(false);
   const hl: any = useRef({});
 
   const controller = BfsAnimationController.getController(root, dispatch);
@@ -116,11 +117,17 @@ const BfsPage: FC = () => {
   const handleBack = () => {
     if (
       historyRef.current[historyRef.current.length - 1].cl >= 11 &&
-      historyRef.current[historyRef.current.length - 1].cl <= 15
+      historyRef.current[historyRef.current.length - 1].cl <= 16
     ) {
       qFlag.current = true;
     } else {
       qFlag.current = false;
+    }
+
+    if (historyRef.current[historyRef.current.length - 1].cl >= 16) {
+      cFlag.current = true;
+    } else {
+      cFlag.current = false;
     }
 
     console.log("After I clicked back my history is ", historyRef.current);
@@ -473,7 +480,7 @@ const BfsPage: FC = () => {
 
           if (c[u] !== "BLACK") {
             if (signal.aborted) return resetAnimation();
-            if (c[v] === "WHITE") {
+            if (c[v] === "WHITE" || cFlag.current) {
               //-----------------------------------12-th line-----------------------------------------------------
               if (signal.aborted) return resetAnimation();
               index.current++;
@@ -551,15 +558,30 @@ const BfsPage: FC = () => {
                 await waitForNextStep(signal);
               }
               //---------------------------------------end 15-th line---------------------------------------
-              if (signal.aborted) return resetAnimation();
-              setHighlightedNode(null); // убрать подсветку узла
-              setCurrentLine(16);
 
-              q.push(v);
-              q = [...q];
-              setQueue([...q]);
-              saveState(cl + 7, d, p, c, q, localU);
-              await waitForNextStep(signal);
+              //---------------------------------------16-th line-------------------------------------------
+              if (signal.aborted) return resetAnimation();
+              index.current++;
+              if (
+                !backClicked.current ||
+                (backClicked.current && indexReturn.current === index.current)
+              ) {
+                if (backClicked.current && indexReturn.current === index.current) {
+                  backClicked.current = false;
+                }
+                qFlag.current = false;
+                cFlag.current = false;
+                setHighlightedNode(null);
+                setCurrentLine(16);
+
+                q.push(v);
+                q = [...q];
+                setQueue([...q]);
+                saveState(cl + 7, d, p, c, q, localU, hl.current);
+                await waitForNextStep(signal);
+              }
+              //--------------------------------------end of 16-th line-------------------------------------------
+              if (signal.aborted) return resetAnimation();
             }
           }
         }
