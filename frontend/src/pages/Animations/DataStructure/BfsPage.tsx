@@ -116,7 +116,7 @@ const BfsPage: FC = () => {
   const handleBack = () => {
     if (
       historyRef.current[historyRef.current.length - 1].cl >= 11 &&
-      historyRef.current[historyRef.current.length - 1].cl <= 14
+      historyRef.current[historyRef.current.length - 1].cl <= 15
     ) {
       qFlag.current = true;
     } else {
@@ -530,14 +530,27 @@ const BfsPage: FC = () => {
                 await waitForNextStep(signal);
               }
               //----------------------------------------end 14-th line------------------------------------
-              if (signal.aborted) return resetAnimation();
-              c = { ...c, [v]: "GRAY" };
-              setColors((prev) => ({ ...prev, [v]: "GRAY" }));
-              setHighlightedNode(v); // подсветка узла
-              setCurrentLine(15);
 
-              saveState(cl + 6, d, p, c, q, localU);
-              await waitForNextStep(signal);
+              //----------------------------------------15-th line----------------------------------------
+              if (signal.aborted) return resetAnimation();
+              index.current++;
+              if (
+                !backClicked.current ||
+                (backClicked.current && indexReturn.current === index.current)
+              ) {
+                if (backClicked.current && indexReturn.current === index.current) {
+                  backClicked.current = false;
+                }
+                qFlag.current = false;
+                c = { ...c, [v]: "GRAY" };
+                setColors((prev) => ({ ...prev, [v]: "GRAY" }));
+                setHighlightedNode(v);
+                setCurrentLine(15);
+
+                saveState(cl + 6, d, p, c, q, localU, hl.current);
+                await waitForNextStep(signal);
+              }
+              //---------------------------------------end 15-th line---------------------------------------
               if (signal.aborted) return resetAnimation();
               setHighlightedNode(null); // убрать подсветку узла
               setCurrentLine(16);
