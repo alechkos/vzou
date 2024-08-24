@@ -20,7 +20,7 @@ jobs:
       - name: Set Issue Status
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.PAC_TOKEN }}
+          gh_token: ${{ secrets.PAC_TOKEN }} # project, read:org, repo
           user: ${{ steps.get-manager.outputs.manager }}
           project_id: 8
           resource_node_id: ${{ github.event.issue.node_id }}

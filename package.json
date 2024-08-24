@@ -1,5 +1,10 @@
 {
-  "dependencies": {
-    "react-router-dom": "^6.26.1"
+  "name": "vzou",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "back": "cd backend && npm run dev",
+    "back2": "cd backend && npm run dev2",
+    "front": "cd frontend && npm run start"
   }
 }

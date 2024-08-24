@@ -1,17 +1,17 @@
 name: Automerge PR
 
-on:
-  pull_request_target:
-    types:
-      - synchronize
-      - edited
-      - ready_for_review
-      - reopened
-    branches:
-      - 'develop'
-  pull_request_review:
-    types:
-      - submitted
+# on:
+#   pull_request_target:
+#     types:
+#       - synchronize
+#       - edited
+#       - ready_for_review
+#       - reopened
+#     branches:
+#       - 'develop'
+#   pull_request_review:
+#     types:
+#       - submitted
 
 jobs:
   automerge-for-humans:
