@@ -81,7 +81,7 @@ const BfsPage: FC = () => {
     }, 5000);
   };
 
-  const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any) => {
+  const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any, hl = null) => {
     const currentState = {
       cl,
       distances: { ...d },
@@ -90,7 +90,7 @@ const BfsPage: FC = () => {
       queue: [...q],
       u,
       highlightedNode,
-      highlightedLink,
+      highlightedLink: hl,
       highlightedTargetNode,
     };
 
@@ -113,13 +113,15 @@ const BfsPage: FC = () => {
   };
 
   const handleBack = () => {
-    if (historyRef.current[historyRef.current.length - 1].cl === 11) {
+    if (
+      historyRef.current[historyRef.current.length - 1].cl === 11 ||
+      historyRef.current[historyRef.current.length - 1].cl === 12
+    ) {
       qFlag.current = true;
-      console.log("I am here");
     } else {
       qFlag.current = false;
     }
-    console.log("The cl is ", historyRef.current[historyRef.current.length - 1].cl);
+
     console.log("After I clicked back my history is ", historyRef.current);
     //here we save the placa where we need to return when we click play
     indexReturn.current = index.current;
@@ -146,7 +148,7 @@ const BfsPage: FC = () => {
     setQueue(historyRef.current[historyRef.current.length - 1].queue);
     setCurrentU(historyRef.current[historyRef.current.length - 1].u);
     setHighlightedNode(null);
-    setHighlightedLink(null);
+    //setHighlightedLink(null);
     setHighlightedTargetNode(null);
     //setColors({});
   };
@@ -388,6 +390,7 @@ const BfsPage: FC = () => {
     let c = { ...co };
     let q = [...qu];
     let localU = null;
+    let hl: any;
 
     while (q.length > 0 || qFlag.current) {
       console.log("I am in while");
@@ -456,31 +459,53 @@ const BfsPage: FC = () => {
             }
             qFlag.current = false;
             setCurrentLine(11);
+            hl = { source: u, target: v };
             console.log("My index now is ", index.current);
-            saveState(cl + 2, d, p, c, q, localU);
             setHighlightedLink({ source: u, target: v });
             setHighlightedTargetNode(v);
+            saveState(cl + 2, d, p, c, q, localU, hl);
+
             await waitForNextStep(signal);
           }
           //-----------------------------------end of 11-th line-----------------------------------------------
+
           if (signal.aborted) return resetAnimation();
 
           if (c[u] !== "BLACK") {
+            if (signal.aborted) return resetAnimation();
             if (c[v] === "WHITE") {
-              setCurrentLine(12);
+              //-----------------------------------12-th line-----------------------------------------------------
+              if (signal.aborted) return resetAnimation();
+              index.current++;
+              if (
+                !backClicked.current ||
+                (backClicked.current && indexReturn.current === index.current)
+              ) {
+                if (backClicked.current && indexReturn.current === index.current) {
+                  backClicked.current = false;
+                }
+                qFlag.current = false;
+                setCurrentLine(12);
 
-              saveState(cl + 3, d, p, c, q, localU);
-              await waitForNextStep(signal);
+                saveState(cl + 3, d, p, c, q, localU);
+                console.log("My history in 12 is ", historyRef.current);
+                await waitForNextStep(signal);
+              }
+              //-------------------------------------end of 12-th line
+
+              if (signal.aborted) return resetAnimation();
               d = { ...d, [v]: d[u] + 1 };
               setDistances((prev) => ({ ...prev, [v]: d[u] + 1 }));
               setCurrentLine(13);
               saveState(cl + 4, d, p, c, q, localU);
               await waitForNextStep(signal);
+              if (signal.aborted) return resetAnimation();
               p = { ...p, [v]: u };
               setPredecessors((prev) => ({ ...prev, [v]: u }));
               setCurrentLine(14);
               saveState(cl + 5, d, p, c, q, localU);
               await waitForNextStep(signal);
+              if (signal.aborted) return resetAnimation();
               c = { ...c, [v]: "GRAY" };
               setColors((prev) => ({ ...prev, [v]: "GRAY" }));
               setHighlightedNode(v); // подсветка узла
@@ -488,6 +513,7 @@ const BfsPage: FC = () => {
 
               saveState(cl + 6, d, p, c, q, localU);
               await waitForNextStep(signal);
+              if (signal.aborted) return resetAnimation();
               setHighlightedNode(null); // убрать подсветку узла
               setCurrentLine(16);
 
