@@ -31,16 +31,17 @@ import {
   setTo,
   setWeight,
   deleteInputData,
-} from "../../../store/reducers/alghoritms/prim-reducer";
+} from "../../../store/reducers/alghoritms/kruskal-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { DFSItemObj } from "../../../ClassObjects/DFS/DFSItemObj";
 import CasinoIcon from "@mui/icons-material/Casino";
-import { PrimAnimationController } from "../../../ClassObjects/Prim/PrimAnimationController";
-import { PrimNode } from "../../../ClassObjects/Prim/PrimNode";
 import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
+import { KruskalAnimationController } from "../../../ClassObjects/Kruskal/KruskalAnimationController";
+import { PrimNode } from "../../../ClassObjects/Prim/PrimNode";
+import { KruskalNode } from "../../../ClassObjects/Kruskal/KruskalNode";
 
 interface Props {
-  controller: PrimAnimationController;
+  controller: KruskalAnimationController;
   showActions: boolean;
   handleShowActions: () => void;
   handleHideActions: () => void;
@@ -51,7 +52,7 @@ interface Props {
 const buttonClassname =
   "bg-white hover:bg-lime-100 text-lime-800 font-semibold py-2 px-2 border border-lime-600 rounded shadow disabled:opacity-50 disabled:cursor-not-allowed";
 
-const PrimControlPanel: FC<Props> = ({
+const KruskalControlPanel: FC<Props> = ({
   handleHideActions,
   handleShowActions,
   showActions,
@@ -187,20 +188,14 @@ const PrimControlPanel: FC<Props> = ({
       switch (animation) {
         case "Search":
           regsterActivity({
-            subject: "Prim",
+            subject: "Kruskal",
             algorithm: "Search",
           });
-          const initialNode = graphData.nodes.find((data) => data === Number(initialNodeInput));
-          if (initialNode === undefined) {
-            setCurrentError("The node doesn't exist");
-            setInitialNodeInput("");
-            return;
-          }
           dispatch(
-            setInitialNode(new PrimNode(Number(initialNodeInput), Number(initialNodeInput)))
+            setInitialNode(new KruskalNode(Number(initialNodeInput), Number(initialNodeInput)))
           );
 
-          await controller.primAnimation(Number(initialNodeInput), graphData.links);
+          await controller.doKruskalAnimation(graphData.links);
           return;
         case "Clear":
           dispatch(clearInputArray());
@@ -310,8 +305,8 @@ const PrimControlPanel: FC<Props> = ({
 
       const userInputData = {
         userID: Number(user!.id),
-        subject: "Prim",
-        algorithm: "Prim",
+        subject: "Kruskal",
+        algorithm: "Kruskal",
         input: "",
         actionDate: new Date(),
         size: from.length,
@@ -362,7 +357,7 @@ const PrimControlPanel: FC<Props> = ({
                   >
                     {!showActions && !editingConstruction && (
                       <Tab
-                        label={"Create Graph For Prim"}
+                        label={"Create Graph For Kruskal"}
                         value="1"
                         disabled={isButtonDisabled}
                       />
@@ -511,21 +506,6 @@ const PrimControlPanel: FC<Props> = ({
                   )}
                   {showActions && (
                     <div>
-                      <TextField
-                        sx={{ width: "150px" }}
-                        name={"InitialNode"}
-                        size="small"
-                        type="text"
-                        variant="outlined"
-                        label={"Initial node"}
-                        inputProps={{
-                          min: 0,
-                          max: 999,
-                          style: { textAlign: "center" },
-                        }}
-                        onChange={handleInitialNodeInput}
-                        value={initialNodeInput}
-                      />
                       <button
                         disabled={isButtonDisabled}
                         className={`${buttonClassname} w-auto h-[40px]`}
@@ -545,4 +525,4 @@ const PrimControlPanel: FC<Props> = ({
   );
 };
 
-export default PrimControlPanel;
+export default KruskalControlPanel;

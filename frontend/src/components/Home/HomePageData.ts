@@ -127,6 +127,13 @@ const HomePageData = [
     url: RoutePaths.PRIM,
     type: "Graph",
   },
+  {
+    title: "Kruskal",
+    gif: BFGif,
+    image: BFImage,
+    url: RoutePaths.KRUSKAL,
+    type: "Graph",
+  },
 ];
 
 export default HomePageData;

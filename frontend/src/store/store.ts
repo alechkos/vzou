@@ -21,6 +21,7 @@ import hashTableReducer from "./reducers/alghoritms/hashTable-reducer";
 import basePageReducer from "./reducers/basePage-reducer";
 import bellmanFordReducer from "./reducers/alghoritms/bellmanFord-reducer";
 import prim from "./reducers/alghoritms/prim-reducer";
+import kruskal from "./reducers/alghoritms/kruskal-reducer";
 import { userInputReducerApi } from "./reducers/userInput-reducer-api";
 
 const store = configureStore({
@@ -42,6 +43,7 @@ const store = configureStore({
     dfs: dfsReducer,
     bellmanFord: bellmanFordReducer,
     prim: prim,
+    kruskal: kruskal,
     animationController: animationControlReducer,
     basePage: basePageReducer,
     [reportApi.reducerPath]: reportApi.reducer,

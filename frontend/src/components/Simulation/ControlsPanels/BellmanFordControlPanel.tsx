@@ -307,6 +307,20 @@ const BellmanFordControlPanel: FC<Props> = ({
           links.push({ source: data.target, target: data.source, weight: data.weight });
         }
       });
+
+      const userInputData = {
+        userID: Number(user!.id),
+        subject: "BellmanFord",
+        algorithm: "BellmanFord",
+        input: "",
+        actionDate: new Date(),
+        size: from.length,
+        from,
+        to,
+        weight,
+      };
+
+      await userInput(userInputData);
     }
 
     const graphData = { nodes: Array.from(nodes), links };
@@ -316,20 +330,6 @@ const BellmanFordControlPanel: FC<Props> = ({
     handleShowActions();
     setShowPseudoCode(true);
     DFSItemObj.positions = [];
-
-    const userInputData = {
-      userID: Number(user!.id),
-      subject: "BellmanFord",
-      algorithm: "BellmanFord",
-      input: "",
-      actionDate: new Date(),
-      size: from.length,
-      from,
-      to,
-      weight,
-    };
-
-    await userInput(userInputData);
   };
 
   const handleInput = (e: any) => {

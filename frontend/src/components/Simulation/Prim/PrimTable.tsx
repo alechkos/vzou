@@ -10,8 +10,6 @@ const PrimTable = () => {
   let Q = useAppSelector((state) => state.prim.Q);
   let S = useAppSelector((state) => state.prim.S);
 
-  console.log(Q);
-
   return (
     <div className={styles.tableWrapper}>
       <AnimatePresence>

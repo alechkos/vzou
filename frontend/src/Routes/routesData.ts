@@ -35,6 +35,7 @@ import BellmanFordPage from "../pages/Animations/DataStructure/BellmanFordPage";
 import PrimPage from "../pages/Animations/DataStructure/PrimPage";
 import Graphs from "../components/Home/Graphs";
 import DataStructures from "../components/Home/DataStructures";
+import KruskalPage from "../pages/Animations/DataStructure/KruskalPage";
 
 export interface RouteItem {
   path: string;
@@ -80,6 +81,7 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.DFS, element: DFSPage },
   { path: RoutePaths.BELLMAN_FORD, element: BellmanFordPage },
   { path: RoutePaths.PRIM, element: PrimPage },
+  { path: RoutePaths.KRUSKAL, element: KruskalPage },
 ];
 
 export const lecturerRoutes: RouteItem[] = [

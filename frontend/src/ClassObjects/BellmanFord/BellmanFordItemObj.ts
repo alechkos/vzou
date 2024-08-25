@@ -127,7 +127,7 @@ export class BellmanFordItemObj extends DFSItemObj {
         newItem = new BellmanFordItemObj(
           {
             x: viewportWidth / 2 - 200,
-            y: 400,
+            y: 200,
           },
           speed,
           node.id,
@@ -140,8 +140,8 @@ export class BellmanFordItemObj extends DFSItemObj {
       } else {
         newItem = new BellmanFordItemObj(
           {
-            x: viewportWidth / 2 - 200,
-            y: 400,
+            x: viewportWidth / 2 - 100,
+            y: 200,
           },
           speed,
           node.id,

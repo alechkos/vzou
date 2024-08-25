@@ -55,7 +55,8 @@ const SavedInput: FC<Props> = ({
     if (subject === ("HashTable" as string)) {
       dispatch(setInput(input));
       dispatch(setSizeForHash(size!));
-    } else if (subject !== "BellmanFord" && subject !== "Prim") dispatch(setInput(input));
+    } else if (subject !== "BellmanFord" && subject !== "Prim" && subject !== "Kruskal")
+      dispatch(setInput(input));
     else {
       dispatch(clearInputArray!());
       const fromArr = from!.split(",");
@@ -123,12 +124,16 @@ const SavedInput: FC<Props> = ({
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         №
                       </th>
-                      {subject !== "BellmanFord" && subject !== ("Prim" as string) && (
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Input
-                        </th>
-                      )}
-                      {(subject === "BellmanFord" || subject === ("Prim" as string)) && (
+                      {subject !== "BellmanFord" &&
+                        subject !== ("Prim" as string) &&
+                        subject !== "Kruskal" && (
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Input
+                          </th>
+                        )}
+                      {(subject === "BellmanFord" ||
+                        subject === ("Prim" as string) ||
+                        subject === "Kruskal") && (
                         <>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             From
@@ -160,13 +165,17 @@ const SavedInput: FC<Props> = ({
                             {index + 1}
                           </td>
 
-                          {subject !== "BellmanFord" && subject !== ("Prim" as string) && (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                              {input.input}
-                            </td>
-                          )}
+                          {subject !== "BellmanFord" &&
+                            subject !== ("Prim" as string) &&
+                            subject !== "Kruskal" && (
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {input.input}
+                              </td>
+                            )}
 
-                          {(subject === "BellmanFord" || subject === ("Prim" as string)) && (
+                          {(subject === "BellmanFord" ||
+                            subject === ("Prim" as string) ||
+                            subject === "Kruskal") && (
                             <>
                               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {input.from.toString()}

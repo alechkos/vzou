@@ -1,6 +1,6 @@
 export type graphType = {
   nodes: number[];
-  links: { source: number; target: number; weight?: number }[];
+  links: linksType;
   pointer?: number;
 };
 
@@ -13,6 +13,17 @@ export type TableDataType = {
     f?: number;
     w?: number;
   };
+}[];
+
+export type KruskalTableType = {
+  id: number;
+  nodes: number[];
+}[];
+
+export type linksType = {
+  source: number;
+  target: number;
+  weight?: number;
 }[];
 
 export enum Colors {

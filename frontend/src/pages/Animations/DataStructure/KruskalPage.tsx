@@ -1,15 +1,9 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../store/hooks";
-import SideBar from "../../../components/Layout/SideBar/SideBar";
-import { combinePrimPseudoCode } from "../../../ClassObjects/Prim/PrimAlgorithms";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";
 import PlayerControlsPanel from "../../../components/Simulation/ControlsPanels/PlayerControlsPanel";
-import { PrimAnimationController } from "../../../ClassObjects/Prim/PrimAnimationController";
-import PrimControlPanel from "../../../components/Simulation/ControlsPanels/PrimControlPanel";
-import Prim from "../../../components/Simulation/Prim/Prim";
-import PrimTable from "../../../components/Simulation/Prim/PrimTable";
 import BasePage from "./BasePage";
 import {
   setInputArray,
@@ -19,28 +13,33 @@ import {
   setInputData,
   setCountRows,
   clearInputArray,
-} from "../../../store/reducers/alghoritms/prim-reducer";
+} from "../../../store/reducers/alghoritms/kruskal-reducer";
 import {
   setEditingConstruction,
   setShowActions,
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
+import { KruskalAnimationController } from "../../../ClassObjects/Kruskal/KruskalAnimationController";
+import KruskalControlPanel from "../../../components/Simulation/ControlsPanels/KruskalControlPanel";
+import Kruskal from "../../../components/Simulation/Kruskal/Kruskal";
+import KruskalTable from "../../../components/Simulation/Kruskal/KruskalTable";
+import { combineKruskalPseudoCode } from "../../../ClassObjects/Kruskal/KruskalAlgorithms";
 
-const PrimPage: FC = () => {
+const KruskalPage: FC = () => {
   const dispatch = useDispatch();
-  const initialNode = useAppSelector((state) => state.prim.initialNode);
-  const isPlaying = useAppSelector((state) => state.prim.isPlaying);
-  const currentAlg = useAppSelector((state) => state.prim.currentAlg);
-  const currentLine = useAppSelector((state) => state.prim.currentLine);
-  const actions = useAppSelector((state) => state.prim.currentActions);
-  const roles = useAppSelector((state) => state.prim.currentRoles);
-  const passedNode = useAppSelector((state) => state.prim.passedNodes);
-  const visitedNodes = useAppSelector((state) => state.prim.visitedNodes);
-  const tableData = useAppSelector((state) => state.prim.tableData);
-  const directed = useAppSelector((state) => state.prim.directed);
-  const S = useAppSelector((state) => state.prim.S);
-  const Q = useAppSelector((state) => state.prim.Q);
-  const controller = PrimAnimationController.getController(initialNode, dispatch);
+  const initialNode = useAppSelector((state) => state.kruskal.initialNode);
+  const isPlaying = useAppSelector((state) => state.kruskal.isPlaying);
+  const currentAlg = useAppSelector((state) => state.kruskal.currentAlg);
+  const currentLine = useAppSelector((state) => state.kruskal.currentLine);
+  const actions = useAppSelector((state) => state.kruskal.currentActions);
+  const roles = useAppSelector((state) => state.kruskal.currentRoles);
+  const passedNode = useAppSelector((state) => state.kruskal.passedNodes);
+  const visitedNodes = useAppSelector((state) => state.kruskal.visitedNodes);
+  const tableData = useAppSelector((state) => state.kruskal.tableData);
+  const directed = useAppSelector((state) => state.kruskal.directed);
+  const T = useAppSelector((state) => state.kruskal.T);
+  const links = useAppSelector((state) => state.kruskal.links);
+  const controller = KruskalAnimationController.getController(initialNode, dispatch);
 
   const viewportWidth = useAppSelector((state) => state.basePage.viewportWidth);
   const showActions = useAppSelector((state) => state.basePage.showActions);
@@ -62,7 +61,7 @@ const PrimPage: FC = () => {
   return (
     <BasePage
       controlPanel={
-        <PrimControlPanel
+        <KruskalControlPanel
           showActions={showActions}
           handleShowActions={handleShowActions}
           handleHideActions={handleHideActions}
@@ -72,7 +71,7 @@ const PrimPage: FC = () => {
         />
       }
       visualization={
-        <Prim
+        <Kruskal
           graphData={controller.graphNodes}
           speed={controller.speed}
           viewportWidth={viewportWidth}
@@ -81,12 +80,12 @@ const PrimPage: FC = () => {
           passedNodes={passedNode}
           visitedNodes={visitedNodes}
           tableData={tableData}
-          S={S}
-          Q={Q}
+          T={T}
+          links={links}
           directed={directed}
         />
       }
-      table={<PrimTable />}
+      table={<KruskalTable />}
       playerControlPanel={
         <PlayerControlsPanel
           controller={controller}
@@ -96,10 +95,10 @@ const PrimPage: FC = () => {
       pseudoCode={
         <PseudoCodeContainer
           line={currentLine}
-          code={combinePrimPseudoCode(currentAlg) as PseudoItem[]}
+          code={combineKruskalPseudoCode(currentAlg) as PseudoItem[]}
         />
       }
-      subject={"Prim"}
+      subject={"Kruskal"}
       setInput={setInputArray}
       setFrom={setFrom}
       setTo={setTo}
@@ -111,4 +110,4 @@ const PrimPage: FC = () => {
   );
 };
 
-export default PrimPage;
+export default KruskalPage;

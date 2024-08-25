@@ -1,9 +1,9 @@
 import { DFSItemObj } from "../DFS/DFSItemObj";
 import { BFBranch } from "../BellmanFord/BFBranch";
-import { TableDataType } from "../../types/GraphTypes";
-import { PrimNode } from "./PrimNode";
+import { KruskalTableType, linksType, TableDataType } from "../../types/GraphTypes";
+import { KruskalNode } from "./KruskalNode";
 
-export class PrimItemObj extends DFSItemObj {
+export class KruskalItemObj extends DFSItemObj {
   static width = 3; //Used to calculate X gap
 
   static positions: { x: number; y: number }[] = [];
@@ -12,9 +12,11 @@ export class PrimItemObj extends DFSItemObj {
 
   static space = 10;
 
-  static S: number[] = [];
+  static T: linksType = [];
 
-  static Q: PrimNode[] = [];
+  static links: linksType = [];
+
+  nodes: number[];
 
   constructor(
     position: { x: number; y: number },
@@ -22,11 +24,12 @@ export class PrimItemObj extends DFSItemObj {
     id: number,
     value: number,
     viewportWidth: number,
-    parent: PrimItemObj | undefined,
+    parent: KruskalItemObj | undefined,
     type: "root" | "left" | "right",
-    parents: PrimItemObj[]
+    parents: KruskalItemObj[]
   ) {
     super(position, speed, id, value, viewportWidth, parent, type, parents);
+    this.nodes = [];
   }
 
   calculatePosition() {
@@ -37,11 +40,11 @@ export class PrimItemObj extends DFSItemObj {
       return;
     }
     if (this.type === "left") {
-      let x = this.position.x - this.getXGap() + PrimItemObj.space * 6;
+      let x = this.position.x - this.getXGap() + KruskalItemObj.space * 6;
 
-      let y = this.position.y + PrimItemObj.gapY + PrimItemObj.space * 6;
+      let y = this.position.y + KruskalItemObj.gapY + KruskalItemObj.space * 6;
 
-      PrimItemObj.positions.forEach((pos) => {
+      KruskalItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
           x -= add;
         }
@@ -55,13 +58,13 @@ export class PrimItemObj extends DFSItemObj {
         y: y,
       };
 
-      PrimItemObj.positions.push(this.position);
+      KruskalItemObj.positions.push(this.position);
     } else {
-      let x = this.position.x + this.getXGap() - PrimItemObj.space * 6;
+      let x = this.position.x + this.getXGap() - KruskalItemObj.space * 6;
 
-      let y = this.position.y + PrimItemObj.gapY + PrimItemObj.space * 6;
+      let y = this.position.y + KruskalItemObj.gapY + KruskalItemObj.space * 6;
 
-      PrimItemObj.positions.forEach((pos) => {
+      KruskalItemObj.positions.forEach((pos) => {
         if (Math.abs(pos.x - x) <= dist) {
           x += add;
         }
@@ -75,13 +78,13 @@ export class PrimItemObj extends DFSItemObj {
         y: y,
       };
 
-      PrimItemObj.positions.push(this.position);
+      KruskalItemObj.positions.push(this.position);
     }
 
-    PrimItemObj.space += 8;
+    KruskalItemObj.space += 8;
   }
 
-  createBranchForBF(weight: number, par: PrimItemObj) {
+  createBranchForBF(weight: number, par: KruskalItemObj) {
     this.parents.forEach((parent) => {
       let branch;
       if (par.id === parent.id)
@@ -113,12 +116,16 @@ export class PrimItemObj extends DFSItemObj {
     });
   }
 
-  static generatePrimObjects(viewportWidth: number, speed: number, graphData: PrimNode[]) {
+  setNodes(nodes: number[]) {
+    this.nodes = nodes;
+  }
+
+  static generatePrimObjects(viewportWidth: number, speed: number, graphData: KruskalNode[]) {
     if (graphData.length === 0) return [];
     const directions = ["right", "left"];
-    const bfsObjects: PrimItemObj[] = [];
+    const bfsObjects: KruskalItemObj[] = [];
 
-    let newItem: PrimItemObj;
+    let newItem: KruskalItemObj;
     graphData.forEach((node, index) => {
       if (directions.length === 0) {
         directions.push("right");
@@ -128,7 +135,7 @@ export class PrimItemObj extends DFSItemObj {
       let dir = directions.pop();
 
       if (index === 0) {
-        newItem = new PrimItemObj(
+        newItem = new KruskalItemObj(
           {
             x: viewportWidth / 2 - 200,
             y: 200,
@@ -142,7 +149,7 @@ export class PrimItemObj extends DFSItemObj {
           []
         );
       } else {
-        newItem = new PrimItemObj(
+        newItem = new KruskalItemObj(
           {
             x: viewportWidth / 2 - 100,
             y: 200,
@@ -162,10 +169,10 @@ export class PrimItemObj extends DFSItemObj {
 
     graphData.forEach((node) => {
       node.links.map((link) => {
-        let parent = bfsObjects.find((par: PrimItemObj) => par.id === link.source);
+        let parent = bfsObjects.find((par: KruskalItemObj) => par.id === link.source);
         bfsObjects
-          .filter((obj: PrimItemObj) => obj.id === link.target)
-          .map((obj: PrimItemObj) => {
+          .filter((obj: KruskalItemObj) => obj.id === link.target)
+          .map((obj: KruskalItemObj) => {
             if (parent) {
               obj.addParent(parent);
               obj.createBranchForBF(link.weight!, parent);
@@ -178,21 +185,19 @@ export class PrimItemObj extends DFSItemObj {
     return bfsObjects;
   }
 
-  static setS(S: number[]) {
-    PrimItemObj.S = S;
+  static setT(T: linksType) {
+    KruskalItemObj.T = T;
   }
 
-  static setQ(Q: PrimNode[]) {
-    PrimItemObj.Q = Q;
+  static setLinks(links: linksType) {
+    KruskalItemObj.links = links;
   }
 
-  static setTableData(graphObjects: PrimItemObj[], tableData: TableDataType) {
-    console.log(tableData);
+  static setTableDataForKruskal(graphObjects: KruskalItemObj[], tableData: KruskalTableType) {
     graphObjects.forEach((node) => {
       tableData.forEach((data) => {
         if (node.id === data.id) {
-          node.setD(data.data.d);
-          node.setPi(data.data.pi);
+          node.setNodes(data.nodes);
         }
       });
     });
