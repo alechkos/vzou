@@ -33,6 +33,7 @@ const BfsPage: FC = () => {
   const [showPseudoCode, setShowPseudoCode] = useState(false);
   const [initialNode, setInitialNode] = useState<number | null>(null);
   const [speed, setSpeed] = useState(1);
+  const speedRef = useRef(speed);
   const [currentLine, setCurrentLine] = useState(0);
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
   const [predecessors, setPredecessors] = useState<{ [key: number]: number | null }>({});
@@ -74,6 +75,10 @@ const BfsPage: FC = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   const fitsAnimation = viewportWidth >= 1500;
 
@@ -626,7 +631,7 @@ const BfsPage: FC = () => {
   };
 
   const waitForNextStep = async (signal: AbortSignal) => {
-    const delay = 1000 / speed;
+    const delay = 1000 / speedRef.current;
     const checkInterval = Math.min(100, delay); // Проверка каждые 100ms или меньше
     const steps = Math.ceil(delay / checkInterval);
 
