@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { TextField, ThemeProvider, Tab, Box, Slider, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -14,6 +14,9 @@ import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import GraphVisualizer from "./GraphVisualizer";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 
 interface Props {
   isButtonDisabled: boolean;
@@ -30,7 +33,7 @@ interface Props {
   highlightedNode: number | null;
   highlightedLink: { source: number; target: number } | null;
   highlightedTargetNode: number | null;
-  colors: { [key: number]: string }; // добавляем colors
+  colors: { [key: number]: string };
 }
 
 const buttonClassname =
@@ -51,7 +54,7 @@ const BfsControlsPanel: FC<Props> = ({
   highlightedNode,
   highlightedLink,
   highlightedTargetNode,
-  colors, // принимаем colors
+  colors,
 }) => {
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const error = useAppSelector((state) => state.bst.error);
@@ -60,6 +63,10 @@ const BfsControlsPanel: FC<Props> = ({
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [showInitialNodeInput, setShowInitialNodeInput] = useState<boolean>(false);
+  const [showGraphInputFields, setShowGraphInputFields] = useState<boolean>(true);
+  const [edges, setEdges] = useState<{ source: number; target: number; editable?: boolean }[]>([]);
+  const [source, setSource] = useState<string>("");
+  const [target, setTarget] = useState<string>("");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -72,24 +79,46 @@ const BfsControlsPanel: FC<Props> = ({
     }, 5000);
   };
 
-  const createGraphHandler = async () => {
-    const input = inputArray.split(",");
-    const nodes = new Set<number>();
-    const links: { source: number; target: number }[] = [];
+  const addEdgeHandler = () => {
+    const sourceNode = parseInt(source, 10);
+    const targetNode = parseInt(target, 10);
 
-    for (const pair of input) {
-      const [source, target] = pair.split("-").map(Number);
-      if (isNaN(source) || isNaN(target)) {
-        setCurrentError("Invalid input. Please enter data with format 1-2,3-4");
-        return;
-      }
-      nodes.add(source);
-      nodes.add(target);
-      links.push({ source, target });
+    if (isNaN(sourceNode) || isNaN(targetNode)) {
+      setCurrentError("Invalid input. Please enter valid integers.");
+      return;
     }
-    setGraphData({ nodes: Array.from(nodes), links });
+
+    setEdges([...edges, { source: sourceNode, target: targetNode, editable: false }]);
+    setSource("");
+    setTarget("");
+  };
+
+  const handleEdit = (index: number) => {
+    setEdges(edges.map((edge, i) => (i === index ? { ...edge, editable: !edge.editable } : edge)));
+  };
+
+  const handleDelete = (index: number) => {
+    setEdges(edges.filter((_, i) => i !== index));
+  };
+
+  const handleEdgeChange = (index: number, field: "source" | "target", value: string) => {
+    const updatedEdges = edges.map((edge, i) =>
+      i === index ? { ...edge, [field]: parseInt(value, 10) || 0 } : edge
+    );
+    setEdges(updatedEdges);
+  };
+
+  const createGraphHandler = () => {
+    const nodes = new Set<number>();
+    edges.forEach((edge) => {
+      nodes.add(edge.source);
+      nodes.add(edge.target);
+    });
+
+    setGraphData({ nodes: Array.from(nodes), links: edges });
     setShowPseudoCode(true);
-    setShowInitialNodeInput(true); // показать поле начального узла и кнопку запуска анимации
+    setShowInitialNodeInput(true);
+    setShowGraphInputFields(false); // Скрываем поля ввода после создания графа
   };
 
   const handleInput = (e: any) => {
@@ -102,6 +131,10 @@ const BfsControlsPanel: FC<Props> = ({
     if (!isNaN(node)) {
       setInitialNode(node);
     }
+  };
+
+  const handleChangeGraph = () => {
+    setShowGraphInputFields(true); // Показываем поля ввода при изменении графа
   };
 
   useEffect(() => {
@@ -142,22 +175,97 @@ const BfsControlsPanel: FC<Props> = ({
                   value="1"
                   className={value === "1" ? "justify-start " : "hidden"}
                 >
-                  <TextField
-                    placeholder="e.g 1-2,3-4,..."
-                    size="small"
-                    sx={{ width: "150px" }}
-                    value={inputArray}
-                    label="Graph Data"
-                    variant="outlined"
-                    onChange={handleInput}
-                  />
-                  <button
-                    className={`${buttonClassname} w-[40px] h-[40px]`}
-                    onClick={createGraphHandler}
-                  >
-                    Go
-                  </button>
-                  {showInitialNodeInput && (
+                  {showGraphInputFields && (
+                    <>
+                      {edges.length > 0 && (
+                        <Box
+                          sx={{
+                            maxHeight: "100px",
+                            overflowY: "auto",
+                            marginBottom: 2,
+                            border: "1px solid #ccc",
+                            padding: 2,
+                          }}
+                        >
+                          {edges.map((edge, index) => (
+                            <Box
+                              key={index}
+                              sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}
+                            >
+                              <TextField
+                                label="From"
+                                value={edge.source}
+                                disabled={!edge.editable}
+                                onChange={(e) => handleEdgeChange(index, "source", e.target.value)}
+                                sx={{ width: "100px", marginRight: 2 }}
+                                InputProps={{ sx: { height: "40px" } }}
+                              />
+                              <TextField
+                                label="To"
+                                value={edge.target}
+                                disabled={!edge.editable}
+                                onChange={(e) => handleEdgeChange(index, "target", e.target.value)}
+                                sx={{ width: "100px", marginRight: 2 }}
+                                InputProps={{ sx: { height: "40px" } }}
+                              />
+                              <IconButton
+                                onClick={() => handleEdit(index)}
+                                sx={{ marginRight: 1 }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => handleDelete(index)}
+                                sx={{ marginRight: 1 }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        </Box>
+                      )}
+
+                      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
+                        <TextField
+                          placeholder="From"
+                          size="small"
+                          sx={{ width: "100px" }}
+                          value={source}
+                          label="From"
+                          variant="outlined"
+                          onChange={(e) => setSource(e.target.value)}
+                        />
+                        <TextField
+                          placeholder="To"
+                          size="small"
+                          sx={{ width: "100px", marginLeft: 2 }}
+                          value={target}
+                          label="To"
+                          variant="outlined"
+                          onChange={(e) => setTarget(e.target.value)}
+                        />
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ marginLeft: 2 }}
+                          onClick={addEdgeHandler}
+                        >
+                          Add
+                        </Button>
+                      </Box>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ marginLeft: 2 }}
+                        onClick={createGraphHandler}
+                      >
+                        Create Graph
+                      </Button>
+                    </>
+                  )}
+
+                  {!showGraphInputFields && (
                     <>
                       <TextField
                         placeholder="Initial node"
@@ -176,6 +284,14 @@ const BfsControlsPanel: FC<Props> = ({
                         disabled={isButtonDisabled}
                       >
                         Start Algorithm Animation
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        sx={{ marginLeft: 2 }}
+                        onClick={handleChangeGraph}
+                      >
+                        Change Graph
                       </Button>
                       <Box sx={{ width: 200, marginTop: 2 }}>
                         <Slider
@@ -201,9 +317,9 @@ const BfsControlsPanel: FC<Props> = ({
         <GraphVisualizer
           data={graphData}
           highlightedNode={highlightedNode}
-          highlightedLink={highlightedLink} // передача состояния
-          highlightedTargetNode={highlightedTargetNode} // передача состояния
-          colors={colors} // передача colors
+          highlightedLink={highlightedLink}
+          highlightedTargetNode={highlightedTargetNode}
+          colors={colors}
         />
       )}
     </>
