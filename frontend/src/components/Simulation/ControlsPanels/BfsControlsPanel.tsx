@@ -17,6 +17,8 @@ import GraphVisualizer from "./GraphVisualizer";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import SpeedIcon from "@mui/icons-material/Speed";
+import { Typography } from "@mui/material";
 
 interface Props {
   isButtonDisabled: boolean;
@@ -285,6 +287,7 @@ const BfsControlsPanel: FC<Props> = ({
                       >
                         Start Algorithm Animation
                       </Button>
+
                       <Button
                         variant="contained"
                         color="secondary"
@@ -294,6 +297,16 @@ const BfsControlsPanel: FC<Props> = ({
                         Change Graph
                       </Button>
                       <Box sx={{ width: 200, marginTop: 2 }}>
+                        <SpeedIcon
+                          color="primary"
+                          fontSize="large"
+                        />
+                        <Typography
+                          variant="body1" // Укажите нужный стиль текста
+                          sx={{ marginLeft: 1 }} // Отступ между иконкой и текстом
+                        >
+                          Speed
+                        </Typography>
                         <Slider
                           defaultValue={1}
                           aria-labelledby="discrete-slider"
