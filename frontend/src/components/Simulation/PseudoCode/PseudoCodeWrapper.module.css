@@ -74,8 +74,8 @@
 
 .tableWrapper {
   position: absolute;
-  top: 500px; /* Setting the value for moving the table vertically */
-  right: 500px; /* Setting the value for moving the table horizontally */
+  top: 350px; /* Setting the value for moving the table vertically */
+  right: 290px; /* Setting the value for moving the table horizontally */
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px;
