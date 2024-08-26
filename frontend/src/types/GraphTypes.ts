@@ -18,6 +18,7 @@ export type TableDataType = {
 export type KruskalTableType = {
   id: number;
   nodes: number[];
+  pi: number;
 }[];
 
 export type linksType = {

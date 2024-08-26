@@ -10,20 +10,20 @@ const KruskalTable = () => {
   let links = useAppSelector((state) => state.kruskal.links);
 
   return (
-    <div className={`${styles.tableWrapper} -mr-36 mt-56 flex flex-row gap-10`}>
+    <div className={`${styles.tableWrapper} -mr-60 mt-56 flex flex-row gap-10`}>
       <AnimatePresence>
-        <div className={"flex flex-col"}>
+        <div className={"flex flex-col overflow-auto max-h-[180px]"}>
           <span>Links:</span>
           {links.map((link) => (
             <span>{`(u: ${link.source}, v: ${link.target}, w: ${link.weight!})`}</span>
           ))}
         </div>
-        <div className={"flex flex-col"}>
-          <div className={"m-1"}>
+        <div className={"flex flex-col overflow-auto max-w-[480px]"}>
+          <div className={"m-1 w-max"}>
             <div>
               T:
               {T.map((data) => (
-                <span>{`(u: ${data.source}, v: ${data.target}, w: ${data.weight!})`}</span>
+                <span>{`(u: ${data.source}, v: ${data.target}, w: ${data.weight!}), `}</span>
               ))}
             </div>
           </div>

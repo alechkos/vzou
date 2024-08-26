@@ -82,7 +82,7 @@ export function kruskalAnimation(
   );
 
   graphData.forEach((node) => {
-    tableData.push({ id: node.id, nodes: [node.id] });
+    tableData.push({ id: node.id, nodes: [node.id], pi: -1 });
   });
 
   memento.addBlank(
@@ -203,11 +203,9 @@ export function kruskalAnimation(
         );
         b.nodes.forEach((adj) => {
           a!.addNode(adj);
-          adj.addNode(a!);
         });
         a.nodes.forEach((adj) => {
           b!.addNode(adj);
-          adj.addNode(b!);
         });
         let aNodes: number[] = [];
         let bNodes: number[] = [];
@@ -217,12 +215,13 @@ export function kruskalAnimation(
         b.nodes.forEach((adj) => {
           bNodes.push(adj.id);
         });
-        tableData.push({ id: a.id, nodes: aNodes });
-        tableData.push({ id: b.id, nodes: bNodes });
-        visitedNodes.push(a.id);
-        passedNodes.push(a.id);
-        visitedNodes.push(b.id);
+
+        if (a.pi === undefined) a.setPi(b);
+        if (b.pi === undefined) b.setPi(a);
+        tableData.push({ id: a.id, nodes: aNodes, pi: a.pi!.id });
+        tableData.push({ id: b.id, nodes: bNodes, pi: b.pi!.id });
         passedNodes.push(b.id);
+        passedNodes.push(a.id);
 
         memento.addSnapshot(
           { line: 9, name: "Search" },

@@ -187,7 +187,6 @@ export class PrimItemObj extends DFSItemObj {
   }
 
   static setTableData(graphObjects: PrimItemObj[], tableData: TableDataType) {
-    console.log(tableData);
     graphObjects.forEach((node) => {
       tableData.forEach((data) => {
         if (node.id === data.id) {

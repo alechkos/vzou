@@ -198,6 +198,7 @@ export class KruskalItemObj extends DFSItemObj {
       tableData.forEach((data) => {
         if (node.id === data.id) {
           node.setNodes(data.nodes);
+          node.setPi(data.pi);
         }
       });
     });
