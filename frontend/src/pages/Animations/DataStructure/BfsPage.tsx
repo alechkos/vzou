@@ -710,6 +710,14 @@ const BfsPage: FC = () => {
 
   //fucntion when user clicked on start algorithm animation
   const startBfsAnimation = () => {
+    if (initialNode === null) {
+      setCurrentError("You did not put initial node ");
+      return;
+    }
+    if (!graphData.nodes.includes(initialNode!)) {
+      setCurrentError("This initial node does not consist in list of node that you entered");
+      return;
+    }
     const controller = new AbortController();
     abortControllerRef.current = controller;
     bfsAnimation(controller.signal);
