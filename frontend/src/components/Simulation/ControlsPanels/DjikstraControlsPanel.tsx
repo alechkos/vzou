@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Slider, TextField, ThemeProvider, Box, Button, IconButton } from "@mui/material";
+import {Slider, TextField, ThemeProvider, Box, Button, IconButton, Tab} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { setError } from "../../../store/reducers/alghoritms/bst-reducer";
 import { AlertError } from "../../UI/Controls/AlertError";
@@ -11,6 +11,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SpeedIcon from "@mui/icons-material/Speed";
 import { Typography } from "@mui/material";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
 
 interface DjikstraControlsPanelProps {
   isButtonDisabled: boolean;
@@ -164,13 +166,26 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
               {!graphCreated && (
                 <>
                   {/*container with fix height and scrolling */}
+                  <TabContext value={value}>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                      <TabList
+                          onChange={handleChange}
+                          aria-label="algorithms and actions"
+                          centered
+                      >
+                        <Tab
+                            label="Create Graph"
+                            value="1"
+                        />
+                      </TabList>
+                    </Box>
+                  </TabContext>
                   <Box
                     sx={{
                       maxHeight: "100px",
                       overflowY: "auto", // scrolling
                       marginBottom: 2,
-                      border: "1px solid #ccc",
-                      padding: 2,
+                      padding: 1,
                     }}
                   >
                     {edges.map((edge, index) => (
