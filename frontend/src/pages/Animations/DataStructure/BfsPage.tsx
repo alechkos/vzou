@@ -20,6 +20,7 @@ const BfsPage: FC = () => {
   //is user click back then we save in this returnIndex place we need to return after play
   const indexReturn = useRef(0);
   const backClicked = useRef(false);
+  const stopClicked = useRef(false);
   const qFlag = useRef(false);
   const cFlag = useRef(false);
   const cBlackFlag = useRef(false);
@@ -172,6 +173,28 @@ const BfsPage: FC = () => {
     setHighlightedTargetNode(null);
     //setColors({});
   };
+  const resetAnimation2 = () => {
+    setDistances({});
+    setPredecessors({});
+    setIsPlayingAnimation(false);
+    setIsPaused(true);
+    setQueue([]);
+    setCurrentU(null);
+    setHighlightedNode(null);
+    setHighlightedLink(null);
+    setHighlightedTargetNode(null);
+    setCurrentLine(0);
+    setDistances({});
+    setColors({});
+  };
+
+  const checkStopOrBack = (signal: AbortSignal) => {
+    if (signal.aborted || stopClicked.current) {
+      if (stopClicked.current) {
+        return resetAnimation2();
+      } else return resetAnimation();
+    }
+  };
 
   const bfsAnimation = async (signal: AbortSignal) => {
     console.log("The animation has started");
@@ -234,7 +257,8 @@ const BfsPage: FC = () => {
     //-------------------------------------end 0-th line-------------------
 
     for (const v of graphData.nodes) {
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
+
       //------------------------------------1-th line-----------------------
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
@@ -255,7 +279,7 @@ const BfsPage: FC = () => {
       //-------------------------------------end of 1-th line-------------------
 
       //-------------------------------------2-th line--------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -278,7 +302,7 @@ const BfsPage: FC = () => {
       //-----------------------------------end 2-th line-----------------------
 
       //-----------------------------------3-th line-----------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -298,7 +322,7 @@ const BfsPage: FC = () => {
       //-------------------------------------end of 3-th line-----------------------
 
       //-------------------------------------4-th line------------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -318,13 +342,13 @@ const BfsPage: FC = () => {
         await waitForNextStep(signal);
         setHighlightedNode(null);
       }
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       console.log("end of iteration");
       //-------------------------------------end 4-th line---------------------------------
     } //end 1-st for
 
     //---------------------------------------5-th line-------------------------------------
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
     index.current++;
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
@@ -338,7 +362,7 @@ const BfsPage: FC = () => {
     //---------------------------------------end 5-th line-------------------------------------
 
     //----------------------------------------6-th line----------------------------------------
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
     index.current++;
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
@@ -353,7 +377,7 @@ const BfsPage: FC = () => {
     //----------------------------------------end of 6-th line----------------------------------------
 
     //----------------------------------------7-th line-----------------------------------------------
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
     index.current++;
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
@@ -371,7 +395,7 @@ const BfsPage: FC = () => {
     //------------------------------------------end of 7-th line-----------------------------------------
 
     //------------------------------------------8-th line-------------------------------------------------
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
     index.current++;
     if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
       if (backClicked.current && indexReturn.current === index.current) {
@@ -391,7 +415,7 @@ const BfsPage: FC = () => {
       await waitForNextStep(signal);
     }
     //-----------------------------------------end of 8-th line-----------------------------------------------
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
 
     continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
@@ -414,7 +438,7 @@ const BfsPage: FC = () => {
     while (q.length > 0 || qFlag.current) {
       console.log("I am in while");
       //-------------------------------------------9-th line-----------------------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       index.current++;
       console.log("The index here is ", index.current); //index =13(in 1-t iteration)
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
@@ -431,7 +455,7 @@ const BfsPage: FC = () => {
       //-------------------------------------------end of 9-th line-------------------------------------
 
       //-------------------------------------------10-th line-------------------------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       index.current++; //here index =14
       let u: any;
       if (qFlag.current) {
@@ -456,7 +480,7 @@ const BfsPage: FC = () => {
         await waitForNextStep(signal);
       }
       //-----------------------------------------end of 10-th line--------------------------------------
-      if (signal.aborted) return resetAnimation();
+      if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       console.log("The u is ", u);
       if (u !== undefined) {
         //await waitForNextStep(signal);
@@ -466,7 +490,7 @@ const BfsPage: FC = () => {
           .map((link) => link.target)) {
           //-----------------------------------11-th line----------------------------------------------
           console.log("I am here");
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
           index.current++;
           console.log("My index now is ", index.current);
           if (
@@ -488,13 +512,13 @@ const BfsPage: FC = () => {
           }
           //-----------------------------------end of 11-th line-----------------------------------------------
 
-          if (signal.aborted) return resetAnimation();
+          if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
 
           if (c[u] !== "BLACK" || cBlackFlag.current) {
-            if (signal.aborted) return resetAnimation();
+            if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
             if (c[v] === "WHITE" || cFlag.current) {
               //-----------------------------------12-th line-----------------------------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
               index.current++;
               if (
                 !backClicked.current ||
@@ -513,7 +537,7 @@ const BfsPage: FC = () => {
               //-------------------------------------end of 12-th line-------------------------
 
               //------------------------------------13-th line---------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
               index.current++;
               if (
                 !backClicked.current ||
@@ -532,7 +556,7 @@ const BfsPage: FC = () => {
               //-------------------------------------end of 13-th line----------------------------
 
               //--------------------------------------14-th line---------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
               index.current++;
               if (
                 !backClicked.current ||
@@ -551,7 +575,7 @@ const BfsPage: FC = () => {
               //----------------------------------------end 14-th line------------------------------------
 
               //----------------------------------------15-th line----------------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
               index.current++;
               if (
                 !backClicked.current ||
@@ -572,7 +596,7 @@ const BfsPage: FC = () => {
               //---------------------------------------end 15-th line---------------------------------------
 
               //---------------------------------------16-th line-------------------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
               index.current++;
               if (
                 !backClicked.current ||
@@ -593,12 +617,12 @@ const BfsPage: FC = () => {
                 await waitForNextStep(signal);
               }
               //--------------------------------------end of 16-th line-------------------------------------------
-              if (signal.aborted) return resetAnimation();
+              if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
             }
           }
         }
         //-------------------------------------------17-th line---------------------------------------------------
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
         index.current++;
         if (
           !backClicked.current ||
@@ -619,11 +643,11 @@ const BfsPage: FC = () => {
           setHighlightedNode(null);
         }
         //-------------------------------------------end of 17-th line----------------------------------------------
-        if (signal.aborted) return resetAnimation();
+        if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
       }
     }
 
-    if (signal.aborted) return resetAnimation();
+    if (signal.aborted || stopClicked.current) return checkStopOrBack(signal);
     setCurrentLine(18);
     saveState(cl + 7, d, p, c, q, localU);
     await waitForNextStep(signal);
@@ -651,7 +675,10 @@ const BfsPage: FC = () => {
   };
 
   const handlePlay = () => {
-    if (backClicked.current) {
+    if (stopClicked.current) {
+      stopClicked.current = false;
+      startBfsAnimation();
+    } else if (backClicked.current) {
       //because we are starting over
       index.current = 0;
       const controller = new AbortController();
@@ -663,9 +690,7 @@ const BfsPage: FC = () => {
   };
 
   const handleStop = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
+    stopClicked.current = true;
   };
 
   const startBfsAnimation = () => {
