@@ -1,7 +1,7 @@
 import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { Alert } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 
 import { CheckConfirmPassword, CheckEmail, CheckName, CheckPassword } from "./AuthFunctions";
 import FormButton from "./FormButton";
@@ -14,6 +14,7 @@ import ErrorMsg from "../UI/ErrorMsg";
 import RadioButton from "../UI/RadioButton";
 import Spinner from "../UI/Spinner";
 
+import { useHistory } from "react-router-dom";
 
 const initialState = {
   firstName: "",
@@ -24,12 +25,14 @@ const initialState = {
   confirmPassword: "",
   gender: "Male" as "Male" | "Female",
 };
-const GENDER = [ "Male", "Female" ];
+const GENDER = ["Male", "Female"];
 
 function RegistrationForm() {
-  const [ registerUser, { error, isLoading, isSuccess }] = useRegisterMutation();
-  const [ dataEntered, setDataEntered ] = useState<RegisterPayload>(initialState);
-  const [ errorMsgs, setErrorMsg ] = useState<string[]>([]);
+  const [registerUser, { error, isLoading, isSuccess }] = useRegisterMutation();
+  const [dataEntered, setDataEntered] = useState<RegisterPayload>(initialState);
+  const [errorMsgs, setErrorMsg] = useState<string[]>([]);
+
+  const history = useHistory();
   const onChangeGender = (index: number) => {
     setDataEntered((prevstate) => ({ ...prevstate, gender: GENDER[index] as "Male" | "Female" }));
   };
@@ -42,7 +45,9 @@ function RegistrationForm() {
 
     // check passwords
     if (!CheckPassword(dataEntered.password)) {
-      errorStack.push("Invalid password, must contain at least 8 characters: [a-z], [A-Z], [0-9] and a special character");
+      errorStack.push(
+        "Invalid password, must contain at least 8 characters: [a-z], [A-Z], [0-9] and a special character"
+      );
     } else if (!CheckConfirmPassword(dataEntered.password, dataEntered.confirmPassword!)) {
       errorStack.push("The passwords must match");
     }
@@ -60,7 +65,7 @@ function RegistrationForm() {
     return errorStack;
   };
 
-  const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     // check entered data
@@ -69,8 +74,24 @@ function RegistrationForm() {
     if (errors.length) {
       return;
     }
-    registerUser(dataEntered);
+    await registerUser(dataEntered);
   };
+
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isSuccess) {
+        history.push("/");
+      }
+    }, 5000);
+  }, [isSuccess]);
 
   return (
     <form
@@ -107,6 +128,7 @@ function RegistrationForm() {
             type="text"
             autoComplete="first-name"
             required
+            ref={firstInputRef}
             className={`relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-${mainColor} focus:outline-none focus:ring-${mainColor} sm:text-sm`}
             placeholder="First name"
           />
@@ -214,7 +236,6 @@ function RegistrationForm() {
       </div>
 
       <RadioButton
-        labelText="Gender"
         onChange={onChangeGender}
         options={[
           <div
@@ -235,7 +256,7 @@ function RegistrationForm() {
       />
 
       {errorMsgs.length !== 0 && <ErrorMsg errorMessages={errorMsgs} />}
-      {isErrorWithDataAndMessage(error) && <ErrorMsg errorMessages={[ error.data.message ]} />}
+      {isErrorWithDataAndMessage(error) && <ErrorMsg errorMessages={[error.data.message]} />}
 
       <FormButton
         type="submit"

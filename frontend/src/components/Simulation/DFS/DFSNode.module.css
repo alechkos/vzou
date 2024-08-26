@@ -1,0 +1,15 @@
+.node {
+    display: flex;
+    position: absolute;
+    margin-top: 150px;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #84cc16;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #ffffe0ff;
+    z-index: 2;
+}

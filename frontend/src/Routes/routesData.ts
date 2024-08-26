@@ -32,6 +32,14 @@ import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
 import BfsPage from "../pages/Animations/DataStructure/BfsPage";
 import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 import DjikstraPage from "../pages/Animations/DataStructure/DjikstraPage";
+import DFSPage from "../pages/Animations/DataStructure/DFSPage";
+import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
+import BellmanFordPage from "../pages/Animations/DataStructure/BellmanFordPage";
+import PrimPage from "../pages/Animations/DataStructure/PrimPage";
+import Graphs from "../components/Home/Graphs";
+import DataStructures from "../components/Home/DataStructures";
+import KruskalPage from "../pages/Animations/DataStructure/KruskalPage";
+import Sorts from "../components/Home/Sorts";
 
 export interface RouteItem {
   path: string;
@@ -56,6 +64,11 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.EDIT_PROFILE, element: EditProfilePage },
   { path: RoutePaths.CHANGE_PASSWORD, element: ChangePassword },
 
+  //Categories
+  { path: RoutePaths.GRAPHS, element: Graphs },
+  { path: RoutePaths.DATA_STRUCTURES, element: DataStructures },
+  { path: RoutePaths.SORTS, element: Sorts },
+
   // Animations
   { path: RoutePaths.STACK, element: StackPage },
   { path: RoutePaths.QUEUE, element: QueuePage },
@@ -72,6 +85,10 @@ export const userRoutes: RouteItem[] = [
   { path: RoutePaths.RADIX_SORT, element: RadixSortPage },
   { path: RoutePaths.BFS, element: BfsPage },
   { path: RoutePaths.DJIKSTRA, element: DjikstraPage },
+  { path: RoutePaths.DFS, element: DFSPage },
+  { path: RoutePaths.BELLMAN_FORD, element: BellmanFordPage },
+  { path: RoutePaths.PRIM, element: PrimPage },
+  { path: RoutePaths.KRUSKAL, element: KruskalPage },
 ];
 
 export const lecturerRoutes: RouteItem[] = [

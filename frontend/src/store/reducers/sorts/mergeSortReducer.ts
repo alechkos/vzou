@@ -6,12 +6,12 @@ import { ItemColor } from "./quickSortReducer";
 import { numbersToSortItems } from "../../../components/Simulation/Sorts/helpers/functions";
 import { SortItem } from "../../../components/Simulation/Sorts/helpers/types";
 
-
 export interface State {
   tree: MergeNode[];
   line: number;
   left: number;
   right: number;
+  enteredValue: string;
 }
 
 interface BasePayload {
@@ -65,6 +65,7 @@ const initialState: State = {
   line: -1,
   right: -2,
   left: -2,
+  enteredValue: "",
 };
 
 const mergeSortSlice = createSlice({
@@ -72,7 +73,13 @@ const mergeSortSlice = createSlice({
   initialState,
   reducers: {
     init(state, action: PayloadAction<number[]>) {
-      state = { ...initialState };
+      state = {
+        tree: Array.from({ length: 16 }, () => ({ data: [] })),
+        line: -1,
+        right: -2,
+        left: -2,
+        enteredValue: state.enteredValue,
+      };
       // 4 levels tree
       state.tree = Array.from({ length: 16 }, () => ({ data: [] }));
       state.tree[1].data = numbersToSortItems(action.payload); // head
@@ -130,6 +137,9 @@ const mergeSortSlice = createSlice({
     },
     setState(state, action: PayloadAction<State>) {
       return action.payload;
+    },
+    setEnteredValue(state, action: PayloadAction<string>) {
+      state.enteredValue = action.payload;
     },
   },
 });

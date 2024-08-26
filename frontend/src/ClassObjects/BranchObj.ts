@@ -15,13 +15,30 @@ export class BranchObj {
 
   isArrow?: boolean;
 
-  constructor(position: { x1: number; y1: number; x2: number; y2: number }, isArrow?: boolean) {
+  isGraph?: boolean;
+
+  rotate: number;
+
+  constructor(
+    position: { x1: number; y1: number; x2: number; y2: number },
+    isArrow?: boolean,
+    isGraph?: boolean
+  ) {
     const { x1, x2, y1, y2 } = position;
-    this.x1 = x1 + BranchObj.baseSize;
-    this.x2 = x2 + BranchObj.baseSize;
-    this.y1 = y1 + BranchObj.baseSize;
-    this.y2 = y2 + BranchObj.baseSize;
+    if (!isGraph) {
+      this.x1 = x1 + BranchObj.baseSize;
+      this.x2 = x2 + BranchObj.baseSize;
+      this.y1 = y1 + BranchObj.baseSize;
+      this.y2 = y2 + BranchObj.baseSize;
+    } else {
+      this.x1 = x1;
+      this.x2 = x2;
+      this.y1 = y1;
+      this.y2 = y2;
+    }
     this.isArrow = isArrow;
+    this.isGraph = isGraph;
+    this.rotate = 0;
   }
 
   getBranchLength() {
@@ -33,6 +50,7 @@ export class BranchObj {
   }
 
   getRotateAngle() {
+    this.rotate = (Math.atan2(this.y2 - this.y1, this.x2 - this.x1) * 180) / Math.PI;
     return (Math.atan2(this.y2 - this.y1, this.x2 - this.x1) * 180) / Math.PI;
   }
 
@@ -50,23 +68,46 @@ export class BranchObj {
    * A passing algorithm is one such algorithm where a traversal is displayed, much like an inorder scan.
    * In that case, we use a special style for the branch to represent the path.
    */
-  getStyle(isPassed = false) {
-    if (!isPassed) {
+  getStyle(isPassed = false, isArrow: boolean = false, isVisited = false) {
+    let borderLeft = "";
+    if (isArrow && isVisited) {
+      borderLeft = "20px solid rgba(0,100,0,0.3)";
+    }
+
+    if (isArrow && isPassed) {
+      borderLeft = "20px solid rgba(241,0,0, 0.3)";
+    }
+
+    if (!isPassed && !isVisited) {
       return {
-        top: `${this.y1}px`,
-        left: `${this.x1}px`,
-        width: `${this.getBranchLength()}px`,
+        top: `${isArrow ? this.y2 + 10 : this.y1}px`,
+        left: `${isArrow ? this.x2 : this.x1}px`,
+        width: `${!isArrow ? this.getBranchLength() : 0}px`,
         transform: `rotate(${this.getRotateAngle()}deg)`,
       };
     }
+    if (isVisited) {
+      return {
+        top: `${isArrow ? this.y2 + 10 : this.y1}px`,
+        left: `${isArrow ? this.x2 : this.x1}px`,
+        width: `${!isArrow ? this.getBranchLength() : 0}px`,
+        transform: `rotate(${this.getRotateAngle()}deg)`,
+        background: "linear-gradient(to right, black, green)",
+        backgroundSize: "200% 100%",
+        backgroundPosition: "100% 0%",
+        borderLeft,
+      };
+    }
     return {
-      top: `${this.y1}px`,
-      left: `${this.x1}px`,
-      width: `${this.getBranchLength()}px`,
+      top: `${isArrow ? this.y2 + 10 : this.y1}px`,
+      left: `${isArrow ? this.x2 : this.x1}px`,
+      width: `${!isArrow ? this.getBranchLength() : 0}px`,
       transform: `rotate(${this.getRotateAngle()}deg)`,
       background: "linear-gradient(to right, black, red)",
+      zIndex: "100",
       backgroundSize: "200% 100%",
       backgroundPosition: "100% 0%",
+      borderLeft,
     };
   }
 

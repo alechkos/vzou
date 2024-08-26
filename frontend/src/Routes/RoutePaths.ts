@@ -18,6 +18,11 @@ export enum RoutePaths {
   GENERAL_REPORTS = "/reports/general",
   ALGORITHMS_REPORTS = "/reports/algorithms",
 
+  //Categories
+  GRAPHS = "/graphs",
+  DATA_STRUCTURES = "/data-structures",
+  SORTS = "/sorts",
+
   // Animations
   STACK = "/stack",
   QUEUE = "/queue",
@@ -34,6 +39,10 @@ export enum RoutePaths {
   RADIX_SORT = "/radixsort",
   BFS = "/bfs",
   DJIKSTRA = "/djikstra",
+  DFS = "/dfs",
+  BELLMAN_FORD = "/bellman-ford",
+  PRIM = "/prim",
+  KRUSKAL = "/kruskal",
 
   // feedbacks
   POST_FEEDBACK = "/post-feedback",

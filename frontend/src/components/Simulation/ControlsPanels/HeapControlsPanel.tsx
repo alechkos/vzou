@@ -16,6 +16,7 @@ import { theme } from "../../UI/Controls/ControlsTheme";
 import { ControlsToolTip } from "../../UI/Controls/ControlsToolTip";
 import MediumCard from "../../UI/MediumCard";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: HeapAnimationController;
@@ -36,9 +37,12 @@ const HeapControlsPanel: FC<Props> = ({
 }) => {
   const inputArray = useAppSelector((state) => state.heap.inputArray);
   const inputKey = useAppSelector((state) => state.heap.inputKey);
+  const user = useAppSelector((state) => state.auth.user);
+
   const [error, setError] = useState("");
   const dispatch = useAppDispatch();
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
   const [value, setValue] = useState("1");
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -54,6 +58,19 @@ const HeapControlsPanel: FC<Props> = ({
     if (typeof res !== "string") {
       controller.setArrFromInput(res);
       handleShowActions();
+      const userInputData = {
+        userID: Number(user!.id),
+        subject: "Heap",
+        algorithm: "Heap",
+        input: inputArray,
+        actionDate: new Date(),
+        from: [],
+        to: [],
+        weight: [],
+      };
+
+      await userInput(userInputData);
+
       await Animate("Build-Max-Heap");
     } else {
       setCurrentError(res);

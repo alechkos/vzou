@@ -7,11 +7,13 @@ import {
   setInput,
   setInputArray,
   setCurrentAlg,
+  clearInputArray,
 } from "../../../store/reducers/alghoritms/bst-reducer";
 import { useRegisterActivityMutation } from "../../../store/reducers/report-reducer";
 import { generateRandomArrForHeap, getArrFromInputForHeap } from "../BinaryTree/Helpers/Functions";
 import { randomBuildTree } from "../BST/BST_Algorithms";
 import BaseControlPanel from "./BaseControlPanel";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: BSTreeAnimationController;
@@ -41,9 +43,12 @@ const BSTreeControlsPanel: FC<Props> = ({
   handleHideActions,
 }) => {
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
+
   const inputArray = useAppSelector((state) => state.bst.inputArray);
   const inputValues = useAppSelector((state) => state.bst.inputValues);
   const error = useAppSelector((state) => state.bst.error);
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
   const [value, setValue] = useState("1");
 
@@ -90,6 +95,20 @@ const BSTreeControlsPanel: FC<Props> = ({
         controller.setTreeFromInput(res);
         handleShowActions();
         setValue("2");
+
+        const userInputData = {
+          userID: Number(user!.id),
+          subject: "BST",
+          algorithm: "BST",
+          input: inputArray,
+          actionDate: new Date(),
+          from: [],
+          to: [],
+          weight: [],
+        };
+
+        await userInput(userInputData);
+
         dispatch(setCurrentAlg("Min"));
       } catch (e: any) {
         setCurrentError(e.message);
@@ -169,6 +188,7 @@ const BSTreeControlsPanel: FC<Props> = ({
           return;
         case "Clear":
           controller.setTreeFromInput([]);
+          dispatch(clearInputArray());
           return;
         case "Inorder":
           regsterActivity({
@@ -216,10 +236,10 @@ const BSTreeControlsPanel: FC<Props> = ({
     dispatch(setCurrentAlg(name));
   };
 
-  useEffect(() => {
-    // create a random array whenever the page is loaded.
-    controller.setTreeFromInput([2, 1, 3]);
-  }, []);
+  // useEffect(() => {
+  //   // create a random array whenever the page is loaded.
+  //   controller.setTreeFromInput([2, 1, 3]);
+  // }, []);
 
   return (
     <BaseControlPanel

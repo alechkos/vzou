@@ -4,6 +4,8 @@ import PhoneRotate from "../../../assets/rotateTablet.svg";
 import { useAppSelector } from "../../../store/hooks";
 import { setToInitial, setViewPortWidth } from "../../../store/reducers/basePage-reducer";
 import { useDispatch } from "react-redux";
+import SavedInput from "../../../components/Layout/SideBar/SavedInput";
+import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 interface Props {
   controlPanel: React.ReactNode;
@@ -11,6 +13,15 @@ interface Props {
   array?: React.ReactNode;
   playerControlPanel: React.ReactNode;
   pseudoCode: React.ReactNode;
+  subject: string;
+  setInput: ActionCreatorWithPayload<string> | ActionCreatorWithPayload<string | number[]>;
+  setFrom?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setTo?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setWeight?: ActionCreatorWithPayload<{ input: string; index: number }>;
+  setCountRow?: ActionCreatorWithPayload<number>;
+  setInputData?: ActionCreatorWithPayload<{ source: number; target: number; weight: number }>;
+  clearInputArray?: ActionCreatorWithoutPayload;
+  table?: React.ReactNode;
 }
 
 const BasePage: FC<Props> = ({
@@ -19,6 +30,15 @@ const BasePage: FC<Props> = ({
   playerControlPanel,
   array,
   pseudoCode,
+  subject,
+  setInput,
+  table,
+  setFrom,
+  setTo,
+  setWeight,
+  setCountRow,
+  setInputData,
+  clearInputArray,
 }) => {
   const dispatch = useDispatch();
 
@@ -44,10 +64,23 @@ const BasePage: FC<Props> = ({
   return (
     <>
       <SideBar />
+      {!showActions && (
+        <SavedInput
+          subject={subject}
+          setInput={setInput}
+          setFrom={setFrom}
+          setTo={setTo}
+          setWeight={setWeight}
+          setCountRow={setCountRow}
+          setInputData={setInputData}
+          clearInputArray={clearInputArray}
+        />
+      )}
       {fitsAnimation ? (
         <div className="flex flex-col items-center justify-between">
           {controlPanel}
-          {(showActions || editingConstruction) && visualization}
+          {showActions && visualization}
+          {showActions && table}
           {array && (
             <div className="container mx-auto max-w-7xl px-0 py-0 mt-96">
               <p className="mr-56">

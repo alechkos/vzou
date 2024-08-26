@@ -6,7 +6,6 @@ import { ItemColor } from "./quickSortReducer";
 import { numbersToSortItems } from "../../../components/Simulation/Sorts/helpers/functions";
 import { SortItem } from "../../../components/Simulation/Sorts/helpers/types";
 
-
 export interface Bucket {
   title: string;
   data: SortItem[];
@@ -18,6 +17,7 @@ export interface State {
   buckets: Bucket[];
   line: number;
   bucketIndex: number;
+  enteredValue: string;
 }
 
 interface ActionLinePayload {
@@ -38,6 +38,7 @@ const initialState: State = {
   buckets: [] as Bucket[],
   line: -1,
   bucketIndex: -1,
+  enteredValue: "",
 };
 
 const bucketSortSlice = createSlice({
@@ -45,7 +46,13 @@ const bucketSortSlice = createSlice({
   initialState,
   reducers: {
     setData(state, action: PayloadAction<number[]>) {
-      state = { ...initialState };
+      state = {
+        data: [] as SortItem[],
+        buckets: [] as Bucket[],
+        line: -1,
+        bucketIndex: -1,
+        enteredValue: state.enteredValue,
+      };
       state.data = numbersToSortItems(action.payload);
       return state;
     },
@@ -61,7 +68,7 @@ const bucketSortSlice = createSlice({
       state.line = action.payload.line;
     },
     setBuckets(state, action: PayloadAction<ActionLinePayload>) {
-      state.buckets = [ ...(action.payload.payload as Bucket[]) ];
+      state.buckets = [...(action.payload.payload as Bucket[])];
       state.line = action.payload.line;
     },
     markElement(state, action: PayloadAction<ActionLinePayload>) {
@@ -78,7 +85,7 @@ const bucketSortSlice = createSlice({
       state.line = action.payload.line;
     },
     removeFromStart(state, action: PayloadAction<number>) {
-      state.data = [ ...state.data.slice(1) ];
+      state.data = [...state.data.slice(1)];
       state.line = action.payload;
       return state;
     },
@@ -102,8 +109,13 @@ const bucketSortSlice = createSlice({
     setState(state, action: PayloadAction<State>) {
       return action.payload;
     },
+    setEnteredValue(state, action: PayloadAction<string>) {
+      state.enteredValue = action.payload;
+    },
   },
 });
 
 export default bucketSortSlice.reducer;
 export const bucketSortActions = bucketSortSlice.actions;
+
+export const { setEnteredValue, setData } = bucketSortSlice.actions;

@@ -20,6 +20,7 @@ import {
   setShowPseudoCode,
   setViewPortWidth,
 } from "../../../store/reducers/basePage-reducer";
+import { setInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
 
 const AvlPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
@@ -97,6 +98,8 @@ const AvlPage: FC = () => {
           code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}
         />
       }
+      subject={"AVL"}
+      setInput={setInputArray}
     />
   );
 };

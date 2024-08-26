@@ -11,7 +11,6 @@ import { SubjectImg } from "../../UI/SubjectImg";
 export function PseudoCode(props: PseudoProps) {
   const [open, setOpen] = useState(true);
   // const [open, cycleOpen] = useCycle(true, false);
-  console.log(props.code);
   return (
     <div className={"z-50 " + styles["div-side"]}>
       <div className={styles["button-div"]}>

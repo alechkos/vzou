@@ -14,6 +14,7 @@ import {
   setShowActions,
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
+import { setInputArray } from "../../../store/reducers/alghoritms/linkedList-reducer";
 
 const LinkedListPage: FC = () => {
   const head = useAppSelector((state) => state.linkedList.head);
@@ -77,6 +78,8 @@ const LinkedListPage: FC = () => {
           code={combineLinkedListPseudoCode(currentAlg) as PseudoItem[]}
         />
       }
+      subject={"LinkedList"}
+      setInput={setInputArray}
     />
   );
 };

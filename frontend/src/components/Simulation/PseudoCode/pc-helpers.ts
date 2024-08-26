@@ -1,6 +1,5 @@
 import SortController from "../../../ClassObjects/SortControllers/SortController";
 
-
 export interface PseudoProps {
   line: number;
   code: PseudoItem[];
@@ -10,6 +9,7 @@ export interface PseudoProps {
 
 export interface AnimationWrraperProps extends PseudoProps {
   controller?: SortController;
+  showPseudoCode?: boolean;
 }
 
 export interface PseudoItem {

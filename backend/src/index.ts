@@ -5,6 +5,7 @@ import { sequelize } from './db.js'
 import ErrorHandlingMiddleware from './middleware/ErrorHandlingMiddleware.js'
 import LecturerRouter from './routes/LecturerRoutes.js'
 import UserRouter from './routes/UserRoutes.js'
+import UserInputRouter from './routes/UserInputRoutes.js'
 // uncomment 2 next lines for production
 // import fs from 'fs'
 // import https from 'https'
@@ -21,6 +22,7 @@ app.options('*', cors())
 app.use(express.json())
 app.use('/api/user', UserRouter)
 app.use('/api/lecturer', LecturerRouter)
+app.use('/api/input', UserInputRouter)
 // uncomment the next line for production
 // const server = https.createServer(credentials, app)
 //Error Handler - Last middleware

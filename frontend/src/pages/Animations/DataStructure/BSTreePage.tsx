@@ -19,7 +19,7 @@ import {
   setShowActions,
   setShowPseudoCode,
 } from "../../../store/reducers/basePage-reducer";
-import { clearInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
+import { clearInputArray, setInputArray } from "../../../store/reducers/alghoritms/bst-reducer";
 
 const HeapPage: FC = () => {
   const root = useAppSelector((state) => state.bst.currentRoot);
@@ -101,6 +101,8 @@ const HeapPage: FC = () => {
           code={combineBSTPseudoCodes(currentAlg) as PseudoItem[]}
         />
       }
+      subject={"BST"}
+      setInput={setInputArray}
     />
   );
 };

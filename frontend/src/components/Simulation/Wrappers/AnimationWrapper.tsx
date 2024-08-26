@@ -15,11 +15,13 @@ export function AnimationWrapper(props: AnimationWrraperProps) {
         {props.controller && isSortStarted && <SortPlayerPanel controller={props.controller} />}
       </div>
       {/* rigth section */}
-      <PseudoCode
-        code={props.code}
-        line={props.line}
-        width={props.width ? props.width : 280}
-      />
+      {props.showPseudoCode && (
+        <PseudoCode
+          code={props.code}
+          line={props.line}
+          width={props.width ? props.width : 280}
+        />
+      )}
     </div>
   );
 }

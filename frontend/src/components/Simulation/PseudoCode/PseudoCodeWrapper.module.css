@@ -87,6 +87,8 @@
   position: absolute;
   top: 310px; /* Setting the value for moving the table vertically */
   right: 230px; /* Setting the value for moving the table horizontally */
+  top: 500px; /* Setting the value for moving the table vertically */
+  right: 300px; /* Setting the value for moving the table horizontally */
   background-color: white;
   border: 1px solid #ccc;
   padding: 10px;

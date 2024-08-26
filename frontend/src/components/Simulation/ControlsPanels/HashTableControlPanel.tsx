@@ -27,6 +27,7 @@ import TabList from "@mui/lab/TabList";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import CasinoIcon from "@mui/icons-material/Casino";
+import { useAddUserInputMutation } from "../../../store/reducers/userInput-reducer-api";
 
 interface Props {
   controller: HashTableAnimationController;
@@ -55,7 +56,10 @@ const HashTableControlPanel: FC<Props> = ({
   const hashTableValues = useAppSelector((state) => state.hashTable.hashTableValues);
   const error = useAppSelector((state) => state.hashTable.error);
 
+  const user = useAppSelector((state) => state.auth.user);
+
   const [regsterActivity] = useRegisterActivityMutation();
+  const [userInput, { error: userInpError, isLoading, isSuccess }] = useAddUserInputMutation();
 
   const dispatch = useAppDispatch();
 
@@ -161,7 +165,7 @@ const HashTableControlPanel: FC<Props> = ({
     }
   };
 
-  const createHashTableHandler = () => {
+  const createHashTableHandler = async () => {
     if (hashTableSize === "") {
       setCurrentError("Enter the size of table please!");
       return;
@@ -176,6 +180,20 @@ const HashTableControlPanel: FC<Props> = ({
     handleShowActions();
     setValue(index === 0 ? "ChainingSearch" : "Search");
     dispatch(setCurrentAlgorithm(index === 0 ? "ChainingSearch1" : "Search1"));
+
+    const userInputData = {
+      userID: Number(user!.id),
+      subject: "HashTable",
+      algorithm: "ChainingSearch",
+      input: hashTableValues,
+      actionDate: new Date(),
+      size: Number(hashTableSize),
+      from: [],
+      to: [],
+      weight: [],
+    };
+
+    await userInput(userInputData);
   };
 
   const randomizeInput = () => {
@@ -223,6 +241,7 @@ const HashTableControlPanel: FC<Props> = ({
           if (selected === "multiplicationMethod")
             await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size, Number(A));
           else await controller.chainingSearch(inputValues.ChainingSearch, inputArray.size);
+
           return;
         case "ChainingInsert":
           regsterActivity({
@@ -300,10 +319,6 @@ const HashTableControlPanel: FC<Props> = ({
     }
     dispatch(setCurrentAlgorithm(algName));
   };
-
-  useEffect(() => {
-    dispatch(clearInputArray());
-  }, []);
 
   useEffect(() => {
     if (selected === "divisionMethod" || selected === "multiplicationMethod") setIndex(0);

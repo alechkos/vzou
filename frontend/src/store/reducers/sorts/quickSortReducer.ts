@@ -4,7 +4,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { numbersToSortItems } from "../../../components/Simulation/Sorts/helpers/functions";
 import { SortItem } from "../../../components/Simulation/Sorts/helpers/types";
 
-
 export enum ItemColor {
   BASE = "#84cc16",
   MARKED = "#ecfccb",
@@ -19,6 +18,7 @@ export interface State {
   p: number;
   r: number;
   line: number;
+  enteredValue: string;
 }
 
 interface ActionPayload {
@@ -35,6 +35,7 @@ const initialState = {
   p: -1,
   r: -1,
   line: -1,
+  enteredValue: "",
 };
 
 const quickSortSlice = createSlice({
@@ -42,7 +43,15 @@ const quickSortSlice = createSlice({
   initialState,
   reducers: {
     init(state, action: PayloadAction<number[]>) {
-      state = { ...initialState };
+      state = {
+        data: [] as SortItem[],
+        i: -2,
+        j: -2,
+        p: -1,
+        r: -1,
+        line: -1,
+        enteredValue: state.enteredValue,
+      };
       if (action.payload.length > 0) {
         state.data = numbersToSortItems(action.payload);
       }
@@ -113,6 +122,9 @@ const quickSortSlice = createSlice({
     },
     setState(state, action: PayloadAction<State>) {
       return action.payload;
+    },
+    setEnteredValue(state, action: PayloadAction<string>) {
+      state.enteredValue = action.payload;
     },
   },
 });
