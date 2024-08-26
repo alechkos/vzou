@@ -159,12 +159,14 @@ const HomePageData = [
     gif: bfsGif,
     image: bfsPhoto,
     url: RoutePaths.BFS,
+    type: "Graph"
   },
   {
     title: "Djikstra",
     gif: djikstraGif,
     image: djikstraPhoto,
     url: RoutePaths.DJIKSTRA,
+    type: "Graph"
   },
 ];
 
