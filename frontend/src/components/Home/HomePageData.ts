@@ -32,6 +32,8 @@ import quickSortGif from "../../assets/Gallery/quickSortGif.gif";
 import quickSortImg from "../../assets/Gallery/quickSortImg.png";
 import radixSortGif from "../../assets/Gallery/radixSortGif.gif";
 import radixSortImg from "../../assets/Gallery/radixSortImg.png";
+import kruskalImg from "../../assets/Gallery/kruskalImg.png";
+import kruskalGif from "../../assets/Gallery/kruskalGif.gif";
 import { RoutePaths } from "../../Routes/RoutePaths";
 
 const HomePageData = [
@@ -107,8 +109,8 @@ const HomePageData = [
   },
   {
     title: "Kruskal",
-    gif: BFGif,
-    image: BFImage,
+    gif: kruskalGif,
+    image: kruskalImg,
     url: RoutePaths.KRUSKAL,
     type: "Graph",
   },
@@ -159,14 +161,14 @@ const HomePageData = [
     gif: bfsGif,
     image: bfsPhoto,
     url: RoutePaths.BFS,
-    type: "Graph"
+    type: "Graph",
   },
   {
     title: "Djikstra",
     gif: djikstraGif,
     image: djikstraPhoto,
     url: RoutePaths.DJIKSTRA,
-    type: "Graph"
+    type: "Graph",
   },
 ];
 
