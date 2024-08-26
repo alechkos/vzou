@@ -12,7 +12,6 @@ import linkedListPhoto from "../../assets/Gallery/LinkedListPhoto.png";
 import linkedListGif from "../../assets/Gallery/LinkedListGif.gif";
 import bfsPhoto from "../../assets/Gallery/bfsPhoto.png";
 import djikstraPhoto from "../../assets/Gallery/DjikstraPhoto.png";
-import bfsGif from "../../assets/Gallery/bfsGif.gif";
 import djikstraGif from "../../assets/Gallery/djikstraGif.gif";
 import bfsGif from "../../assets/Gallery/bfsGif.gif";
 import dfsPhoto from "../../assets/Gallery/DFSPhoto.png";

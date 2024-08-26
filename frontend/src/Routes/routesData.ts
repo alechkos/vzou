@@ -30,7 +30,6 @@ import RegistrationPage from "../pages/RegistrationPage";
 import TwoFactorAuthPage from "../pages/TwoFactorAuthPage";
 import LinkedListPage from "../pages/Animations/DataStructure/LinkedListPage";
 import BfsPage from "../pages/Animations/DataStructure/BfsPage";
-import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
 import DjikstraPage from "../pages/Animations/DataStructure/DjikstraPage";
 import DFSPage from "../pages/Animations/DataStructure/DFSPage";
 import HashTablePage from "../pages/Animations/DataStructure/HashTablePage";
