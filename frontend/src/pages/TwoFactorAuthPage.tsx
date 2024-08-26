@@ -13,7 +13,7 @@ function TwoFactorAuthPage() {
 
   return (
     <AuthWrapper
-      cardTitle="Enter the code"
+      cardTitle="Enter the code that was sent to your email"
       cardContent={<CodeVerificationForm type={CodeTypes.TWO_FA} />}
       imgContent={
         <div className="flex items-center justify-center px-2 sm:px-4 lg:px-8 ">

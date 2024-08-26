@@ -1,7 +1,7 @@
 import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { Alert } from "@mui/material";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 
 import { CheckConfirmPassword, CheckEmail, CheckName, CheckPassword } from "./AuthFunctions";
 import FormButton from "./FormButton";
@@ -77,6 +77,14 @@ function RegistrationForm() {
     await registerUser(dataEntered);
   };
 
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
   useEffect(() => {
     setTimeout(() => {
       if (isSuccess) {
@@ -120,6 +128,7 @@ function RegistrationForm() {
             type="text"
             autoComplete="first-name"
             required
+            ref={firstInputRef}
             className={`relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-${mainColor} focus:outline-none focus:ring-${mainColor} sm:text-sm`}
             placeholder="First name"
           />

@@ -27,20 +27,7 @@ const SideBar = () => {
             >
               X
             </span>
-            {HomePageData.map((element, index) => {
-              if (element.expended)
-                return (
-                  <SortElements
-                    key={element.title}
-                    keyz={index}
-                    title={element.title}
-                    url={element.url}
-                    expended={element.expended}
-                    expendedList={element.expendedList}
-                    type={element.type}
-                  />
-                );
-            })}
+            <SortElements title={"Sorts"} />
             <DataStructureElements title={"Data Structures"} />
             <GraphElements title={"Graphs"} />
           </>

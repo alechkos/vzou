@@ -16,7 +16,6 @@ const Graphs = () => {
                   image={element.image}
                   gif={element.gif}
                   url={element.url}
-                  description={element.description}
                 />
               );
           })}

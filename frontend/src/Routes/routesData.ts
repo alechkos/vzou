@@ -36,6 +36,7 @@ import PrimPage from "../pages/Animations/DataStructure/PrimPage";
 import Graphs from "../components/Home/Graphs";
 import DataStructures from "../components/Home/DataStructures";
 import KruskalPage from "../pages/Animations/DataStructure/KruskalPage";
+import Sorts from "../components/Home/Sorts";
 
 export interface RouteItem {
   path: string;
@@ -63,6 +64,7 @@ export const userRoutes: RouteItem[] = [
   //Categories
   { path: RoutePaths.GRAPHS, element: Graphs },
   { path: RoutePaths.DATA_STRUCTURES, element: DataStructures },
+  { path: RoutePaths.SORTS, element: Sorts },
 
   // Animations
   { path: RoutePaths.STACK, element: StackPage },

@@ -1,5 +1,5 @@
 import { LockClosedIcon } from "@heroicons/react/20/solid";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import FormButton from "./FormButton";
@@ -20,6 +20,15 @@ function LoginForm() {
     event.preventDefault();
     await loginUser({ password: enteredPassword, email: enteredEmail });
   };
+
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
   useEffect(() => {
     if (isSuccess && data?.status === "Redirect-2FA") {
       history.push(RoutePaths.TWO_FA);
@@ -53,6 +62,7 @@ function LoginForm() {
             required
             className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-lime-500 focus:outline-none focus:ring-lime-500 sm:text-sm"
             placeholder="Email address"
+            ref={firstInputRef}
             value={enteredEmail}
             onChange={(e) => {
               setEnteredEmail(e.target.value);

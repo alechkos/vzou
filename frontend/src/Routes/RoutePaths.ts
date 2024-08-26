@@ -21,6 +21,7 @@ export enum RoutePaths {
   //Categories
   GRAPHS = "/graphs",
   DATA_STRUCTURES = "/data-structures",
+  SORTS = "/sorts",
 
   // Animations
   STACK = "/stack",
