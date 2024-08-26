@@ -31,7 +31,7 @@ const DjikstraPage: FC = () => {
   const [initialNode, setInitialNode] = useState<number | null>(null);
   const [speed, setSpeed] = useState(1);
   const speedRef = useRef(speed);
-  const [currentLine, setCurrentLine] = useState(0); // Добавляем currentLine
+  const [currentLine, setCurrentLine] = useState(0);
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
   const [predecessors, setPredecessors] = useState<{ [key: number]: number | null }>({});
   const [queue, setQueue] = useState<number[]>([]);
@@ -296,6 +296,9 @@ const DjikstraPage: FC = () => {
           } else return resetAnimation();
         }
       }
+      //-------------------------------------------------end 1-st line-----------------------------
+
+      //------------------------------------------------2-nd line----------------------------------
 
       index.current++;
 
@@ -320,6 +323,9 @@ const DjikstraPage: FC = () => {
         d[v] = Infinity;
       }
 
+      //------------------------------------------------end of 2-nd line----------------------------------
+
+      //-------------------------------------------------3-th line---------------------------------------
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -352,6 +358,9 @@ const DjikstraPage: FC = () => {
       }
     }
 
+    //-------------------------------------------------end of 3-th line---------------------------------------
+
+    //-------------------------------------------------4-th line---------------------------------------
     index.current++;
     if (signal.aborted || stopClicked.current) {
       if (stopClicked.current) {
@@ -378,6 +387,9 @@ const DjikstraPage: FC = () => {
       d[initialNode] = 0;
     }
 
+    //-------------------------------------------------end of 4-th line---------------------------------------
+
+    //-------------------------------------------------5-th line---------------------------------------
     index.current++;
     if (signal.aborted || stopClicked.current) {
       if (stopClicked.current) {
@@ -398,6 +410,9 @@ const DjikstraPage: FC = () => {
       } else return resetAnimation();
     }
 
+    //-------------------------------------------------end of 5-th line---------------------------------------
+
+    //-------------------------------------------------6-th line----------------------------------------------
     index.current++;
     if (signal.aborted || stopClicked.current) {
       if (stopClicked.current) {
@@ -432,6 +447,9 @@ const DjikstraPage: FC = () => {
           return resetAnimation2();
         } else return resetAnimation();
       }
+      //-------------------------------------------------end of 6-th line---------------------------------------
+
+      //-------------------------------------------------7-th line---------------------------------------
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -448,6 +466,9 @@ const DjikstraPage: FC = () => {
         } else return resetAnimation();
       }
 
+      //-------------------------------------------------end of 7-th line---------------------------------------
+
+      //-------------------------------------------------8-th line----------------------------------------------
       index.current++;
       if (!backClicked.current || (backClicked.current && indexReturn.current === index.current)) {
         if (backClicked.current && indexReturn.current === index.current) {
@@ -472,6 +493,9 @@ const DjikstraPage: FC = () => {
         } else return resetAnimation();
       }
 
+      //-------------------------------------------------end of 8-th line---------------------------------------
+
+      //-------------------------------------------------9-th line----------------------------------------------
       index.current++;
       let neighbors = graphData.links
         .filter((edge) => edge.source === u)
@@ -507,6 +531,9 @@ const DjikstraPage: FC = () => {
       if (signal.aborted) return resetAnimation();
 
       if (neighbors.length === 0 && backClicked.current) {
+        //-------------------------------------------------end of 9-th line----------------------------------------------
+
+        //-------------------------------------------------10-th line----------------------------------------------------
         index.current++;
       }
       if (signal.aborted) return resetAnimation();
@@ -542,6 +569,9 @@ const DjikstraPage: FC = () => {
             } else return resetAnimation();
           }
 
+          //-------------------------------------------------end of 10-th line----------------------------------------------
+
+          //-------------------------------------------------11-th line----------------------------------------------
           index.current++;
           if (
             !backClicked.current ||
@@ -567,6 +597,10 @@ const DjikstraPage: FC = () => {
                 return resetAnimation2();
               } else return resetAnimation();
             }
+
+            //-------------------------------------------------end of 11-th line----------------------------------------------
+
+            //--------------------------------------------------12-th line----------------------------------------------------
             index.current++;
             if (
               !backClicked.current ||
@@ -590,6 +624,9 @@ const DjikstraPage: FC = () => {
                 return resetAnimation2();
               } else return resetAnimation();
             }
+            //-------------------------------------------------end of 12-th line----------------------------------------------
+
+            //-------------------------------------------------16-th line----------------------------------------------
             index.current++;
             if (
               !backClicked.current ||
@@ -613,6 +650,10 @@ const DjikstraPage: FC = () => {
                 return resetAnimation2();
               } else return resetAnimation();
             }
+
+            //-------------------------------------------------end of 16-th line----------------------------------------------
+
+            //-------------------------------------------------17-th line------------------------------------------------------
             index.current++;
             if (
               !backClicked.current ||
@@ -634,6 +675,9 @@ const DjikstraPage: FC = () => {
                   return resetAnimation2();
                 } else return resetAnimation();
               }
+              //-------------------------------------------------end of 17-th line----------------------------------------------
+
+              //-------------------------------------------------18-th line----------------------------------------------
               index.current++;
               if (
                 !backClicked.current ||
@@ -656,7 +700,9 @@ const DjikstraPage: FC = () => {
                   return resetAnimation2();
                 } else return resetAnimation();
               }
+              //-------------------------------------------------end of 18-th line----------------------------------------------
 
+              //-------------------------------------------------19-th line----------------------------------------------
               index.current++;
               if (
                 !backClicked.current ||
@@ -679,7 +725,9 @@ const DjikstraPage: FC = () => {
                   return resetAnimation2();
                 } else return resetAnimation();
               }
+              //-------------------------------------------------end of 19-th line----------------------------------------------
 
+              //-------------------------------------------------20-th line----------------------------------------------
               index.current++;
               if (
                 !backClicked.current ||
@@ -706,6 +754,8 @@ const DjikstraPage: FC = () => {
             return resetAnimation2();
           } else return resetAnimation();
         }
+
+        //---------------------------------------------------------13-th line-----------------------------------
         index.current++;
         if (
           !backClicked.current ||
@@ -724,6 +774,10 @@ const DjikstraPage: FC = () => {
             return resetAnimation2();
           } else return resetAnimation();
         }
+
+        //-----------------------------------------------------end of 13-th line------------------------------------
+
+        //--------------------------------------------------------10-th line-----------------------------------------
         index.current++;
         if (signal.aborted || stopClicked.current) {
           if (stopClicked.current) {
@@ -757,7 +811,10 @@ const DjikstraPage: FC = () => {
             return resetAnimation2();
           } else return resetAnimation();
         }
+
+        //----------------------------------------------------------end of 10-th line------------------------------
         index.current++;
+        //--------------------------------------------------------------14-th line---------------------------------
         if (
           !backClicked.current ||
           (backClicked.current && indexReturn.current === index.current)

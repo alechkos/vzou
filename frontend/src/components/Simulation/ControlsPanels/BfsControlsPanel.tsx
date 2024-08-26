@@ -120,7 +120,7 @@ const BfsControlsPanel: FC<Props> = ({
     setGraphData({ nodes: Array.from(nodes), links: edges });
     setShowPseudoCode(true);
     setShowInitialNodeInput(true);
-    setShowGraphInputFields(false); // Скрываем поля ввода после создания графа
+    setShowGraphInputFields(false); 
   };
 
   const handleInput = (e: any) => {
@@ -136,7 +136,7 @@ const BfsControlsPanel: FC<Props> = ({
   };
 
   const handleChangeGraph = () => {
-    setShowGraphInputFields(true); // Показываем поля ввода при изменении графа
+    setShowGraphInputFields(true); 
   };
 
   useEffect(() => {
@@ -302,8 +302,8 @@ const BfsControlsPanel: FC<Props> = ({
                           fontSize="large"
                         />
                         <Typography
-                          variant="body1" // Укажите нужный стиль текста
-                          sx={{ marginLeft: 1 }} // Отступ между иконкой и текстом
+                          variant="body1" 
+                          sx={{ marginLeft: 1 }} 
                         >
                           Speed
                         </Typography>

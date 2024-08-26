@@ -14,6 +14,7 @@ interface GraphNode extends d3.SimulationNodeDatum {
   value: number;
 }
 
+//this page for visualisation of bfs graph
 const GraphVisualizer: React.FC<GraphVisualizerProps> = ({
   data,
   highlightedNode,

@@ -38,7 +38,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
-      svg.selectAll("*").remove(); // Очистка предыдущего графа
+      svg.selectAll("*").remove(); // clean previous graph
 
       const width = 1200;
       const height = 600;
@@ -142,7 +142,6 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
       container.selectAll(".current-v-label").remove();
       container.selectAll(".current-v-arrow").remove();
 
-      // Добавление меток и стрелок для текущего узла
       if (currentV !== null && isHighlightingNode) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentV);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
@@ -208,7 +207,6 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             .attr("fill", "black")
             .text("↓");
 
-          // Узел остается желтым, пока мы находимся на 4-й строке
           container
             .selectAll<SVGCircleElement, GraphNode>("circle")
             .filter((d) => d.id === currentSRef.current)
@@ -216,7 +214,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
         }
       }
 
-      // Если переходим на 5-ю строку, возвращаем цвет узла `s` обратно и удаляем метки
+      // if we move on line 5 we make our node color green again
       if (currentLine === 5 && currentSRef.current !== null) {
         container
           .selectAll<SVGCircleElement, GraphNode>("circle")
@@ -239,7 +237,6 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
       container.selectAll(".current-u-label").remove();
       container.selectAll(".current-u-arrow").remove();
 
-      // Отображаем `s =` со стрелкой, когда находимся на 4-й строке
       if (currentLine >= 7 && currentURef.current !== null) {
         const currentNode = nodesDataRef.current.find((node) => node.id === currentURef.current);
         if (currentNode && currentNode.x !== undefined && currentNode.y !== undefined) {
@@ -291,9 +288,9 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
         .duration(500)
         .attr("fill", (d) => {
           if (d.id === currentURef.current) {
-            return "#9370DB"; // Если узел текущий U, оставляем его желтым
+            return "#9370DB"; // if this is u it will stay yellow
           }
-          return colors[d.id] || "lime"; // Все остальные узлы
+          return colors[d.id] || "lime"; // other nodes
         });
 
       texts
@@ -310,8 +307,8 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
             highlightedLink &&
             d.source.id === highlightedLink.source &&
             d.target.id === highlightedLink.target
-              ? "red" // Подсвечиваем красным цветом
-              : "#999" // Обычный цвет для других ссылок
+              ? "red" // red links
+              : "#999" // usual color for other links
         );
     }
   }, [colors, highlightedLink]);
@@ -319,8 +316,7 @@ const DjikstraGraphVisualizer: React.FC<DjikstraGraphVisualizerProps> = ({
   useEffect(() => {
     if (svgRef.current && data.nodes.length > 0) {
       const svg = d3.select<SVGSVGElement, unknown>(svgRef.current);
-      svg.selectAll("*").remove(); // Очистка предыдущего графа
-
+      svg.selectAll("*").remove();
       const width = 1200;
       const height = 600;
       const radius = 20;

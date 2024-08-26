@@ -163,14 +163,14 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
             <Box sx={{ width: "100%", typography: "body1" }}>
               {!graphCreated && (
                 <>
-                  {/* Контейнер с фиксированной высотой и прокруткой */}
+                  {/*container with fix height and scrolling */}
                   <Box
                     sx={{
-                      maxHeight: "100px", // Фиксированная высота
-                      overflowY: "auto", // Вертикальная полоса прокрутки
-                      marginBottom: 2, // Отступ от нижних элементов
-                      border: "1px solid #ccc", // Для визуального отделения контейнера
-                      padding: 2, // Отступ внутри контейнера
+                      maxHeight: "100px",
+                      overflowY: "auto", // scrolling
+                      marginBottom: 2,
+                      border: "1px solid #ccc",
+                      padding: 2,
                     }}
                   >
                     {edges.map((edge, index) => (
@@ -183,24 +183,24 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                           value={edge.source}
                           disabled={!edge.editable}
                           onChange={(e) => handleEdgeChange(index, "source", e.target.value)}
-                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
-                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // height of TextField
+                          InputProps={{ style: { height: "40px" } }} // text height into TextField
                         />
                         <TextField
                           label="To"
                           value={edge.target}
                           disabled={!edge.editable}
                           onChange={(e) => handleEdgeChange(index, "target", e.target.value)}
-                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
-                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // height TextField
+                          InputProps={{ style: { height: "40px" } }} // text height into TextField
                         />
                         <TextField
                           label="Weight"
                           value={edge.weight}
                           disabled={!edge.editable}
                           onChange={(e) => handleEdgeChange(index, "weight", e.target.value)}
-                          sx={{ width: "100px", marginRight: 2, height: "40px" }} // Высота TextField
-                          InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                          sx={{ width: "100px", marginRight: 2, height: "40px" }}
+                          InputProps={{ style: { height: "40px" } }}
                         />
                         <IconButton
                           onClick={() => handleEdit(index)}
@@ -218,13 +218,13 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                     ))}
                   </Box>
 
-                  {/* Поля ввода новых данных */}
+                  {/* input fields */}
                   <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
                     <TextField
                       placeholder="From"
                       size="small"
-                      sx={{ width: "100px", height: "40px" }} // Высота TextField
-                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      sx={{ width: "100px", height: "40px" }}
+                      InputProps={{ style: { height: "40px" } }}
                       value={source}
                       label="From"
                       variant="outlined"
@@ -233,8 +233,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                     <TextField
                       placeholder="To"
                       size="small"
-                      sx={{ width: "100px", marginLeft: 2, height: "40px" }} // Высота TextField
-                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      sx={{ width: "100px", marginLeft: 2, height: "40px" }}
+                      InputProps={{ style: { height: "40px" } }}
                       value={target}
                       label="To"
                       variant="outlined"
@@ -243,8 +243,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                     <TextField
                       placeholder="Weight"
                       size="small"
-                      sx={{ width: "100px", marginLeft: 2, height: "40px" }} // Высота TextField
-                      InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                      sx={{ width: "100px", marginLeft: 2, height: "40px" }}
+                      InputProps={{ style: { height: "40px" } }}
                       value={weight}
                       label="Weight"
                       variant="outlined"
@@ -260,7 +260,7 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                     </Button>
                   </Box>
 
-                  {/* Кнопка для создания графа */}
+                  {/* button create graph */}
                   <Button
                     variant="contained"
                     color="primary"
@@ -276,8 +276,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                   <TextField
                     placeholder="Initial node"
                     size="small"
-                    sx={{ width: "150px", marginLeft: 2, height: "40px" }} // Высота TextField
-                    InputProps={{ style: { height: "40px" } }} // Высота текста внутри TextField
+                    sx={{ width: "150px", marginLeft: 2, height: "40px" }}
+                    InputProps={{ style: { height: "40px" } }}
                     value={initialNodeInput}
                     label="Initial Node"
                     variant="outlined"
@@ -298,8 +298,8 @@ const DjikstraControlsPanel: React.FC<DjikstraControlsPanelProps> = ({
                       fontSize="large"
                     />
                     <Typography
-                      variant="body1" // Укажите нужный стиль текста
-                      sx={{ marginLeft: 1 }} // Отступ между иконкой и текстом
+                      variant="body1"
+                      sx={{ marginLeft: 1 }}
                     >
                       Speed
                     </Typography>
