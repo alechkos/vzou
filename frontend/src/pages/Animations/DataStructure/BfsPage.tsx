@@ -19,11 +19,17 @@ const BfsPage: FC = () => {
   const index = useRef(0);
   //is user click back then we save in this returnIndex place we need to return after play
   const indexReturn = useRef(0);
+  //for indicate if user clicked on button back
   const backClicked = useRef(false);
+  //for indicate if user clicked on button stop
   const stopClicked = useRef(false);
+  //this flag if someone clicked back on line>=10
   const qFlag = useRef(false);
+  //this flag if I need to enter in if but dont execute its body(only for index++)
   const cFlag = useRef(false);
+  //this flag if I need to enter in if but dont execute its body(only for index++)
   const cBlackFlag = useRef(false);
+  //this for save states about highlighted lines
   const hl: any = useRef({});
 
   const controller = BfsAnimationController.getController(root, dispatch);
@@ -34,6 +40,7 @@ const BfsPage: FC = () => {
   const [showPseudoCode, setShowPseudoCode] = useState(false);
   const [initialNode, setInitialNode] = useState<number | null>(null);
   const [speed, setSpeed] = useState(1);
+  //This I need for control speed while animation is playing
   const speedRef = useRef(speed);
   const [currentLine, setCurrentLine] = useState(0);
   const [distances, setDistances] = useState<{ [key: number]: number }>({});
@@ -61,8 +68,8 @@ const BfsPage: FC = () => {
   const isPausedRef = useRef(isPaused);
   isPausedRef.current = isPaused;
 
-  const historyRef = useRef<any[]>([]); // Состояние истории
-  const abortControllerRef = useRef<AbortController | null>(null); // Контроллер для остановки
+  const historyRef = useRef<any[]>([]); // our history for save states
+  const abortControllerRef = useRef<AbortController | null>(null); // controller for stops
 
   const handleShowActions = () => setShowActions(true);
   const handleHideActions = () => {
@@ -90,6 +97,7 @@ const BfsPage: FC = () => {
     }, 5000);
   };
 
+  //function for save our history in order to restore when sombody click on back and play
   const saveState = (cl: any, d: any, p: any, c: any, q: number[], u: any, hl = null) => {
     const currentState = {
       cl,
@@ -121,6 +129,7 @@ const BfsPage: FC = () => {
     }
   };
 
+  //function that works when someone click on back
   const handleBack = () => {
     if (
       historyRef.current[historyRef.current.length - 1].cl >= 11 &&
@@ -169,9 +178,8 @@ const BfsPage: FC = () => {
     setQueue(historyRef.current[historyRef.current.length - 1].queue);
     setCurrentU(historyRef.current[historyRef.current.length - 1].u);
     setHighlightedNode(null);
-    //setHighlightedLink(null);
+
     setHighlightedTargetNode(null);
-    //setColors({});
   };
   const resetAnimation2 = () => {
     setDistances({});
@@ -188,6 +196,7 @@ const BfsPage: FC = () => {
     setColors({});
   };
 
+  //here our controller check what button user clicked
   const checkStopOrBack = (signal: AbortSignal) => {
     if (signal.aborted || stopClicked.current) {
       if (stopClicked.current) {
@@ -196,6 +205,7 @@ const BfsPage: FC = () => {
     }
   };
 
+  //---------------------------this the main function in algorithm bfs-------------------------------
   const bfsAnimation = async (signal: AbortSignal) => {
     console.log("The animation has started");
 
@@ -420,6 +430,7 @@ const BfsPage: FC = () => {
     continueBfsAnimation(localQueue, signal, d, p, c, q);
   };
 
+  //--------------------------------------this function continue our main function-----------------------------
   const continueBfsAnimation = async (
     localQueue: number[],
     signal: AbortSignal,
@@ -654,9 +665,10 @@ const BfsPage: FC = () => {
     setIsPlayingAnimation(false);
   };
 
+  //this function make delay between lines and if someone click  pause theis function work too
   const waitForNextStep = async (signal: AbortSignal) => {
     const delay = 1000 / speedRef.current;
-    const checkInterval = Math.min(100, delay); // Проверка каждые 100ms или меньше
+    const checkInterval = Math.min(100, delay);
     const steps = Math.ceil(delay / checkInterval);
 
     for (let i = 0; i < steps; i++) {
@@ -670,10 +682,12 @@ const BfsPage: FC = () => {
     }
   };
 
+  //function when user clicked on pause
   const handlePause = () => {
     setIsPaused(true);
   };
 
+  //fucntion when user clicked on play
   const handlePlay = () => {
     if (stopClicked.current) {
       stopClicked.current = false;
@@ -689,16 +703,19 @@ const BfsPage: FC = () => {
     }
   };
 
+  //fucntion when user clicked on stop
   const handleStop = () => {
     stopClicked.current = true;
   };
 
+  //fucntion when user clicked on start algorithm animation
   const startBfsAnimation = () => {
     const controller = new AbortController();
     abortControllerRef.current = controller;
     bfsAnimation(controller.signal);
   };
 
+  //rendering of page
   return (
     <>
       <SideBar />
@@ -719,7 +736,7 @@ const BfsPage: FC = () => {
             highlightedNode={highlightedNode}
             highlightedLink={highlightedLink}
             highlightedTargetNode={highlightedTargetNode}
-            colors={colors} // передача colors
+            colors={colors}
           />
           {hasStarted && (
             <div className={controlStyles.buttonContainer}>
