@@ -1,5 +1,5 @@
 import { EnvelopeIcon } from "@heroicons/react/24/solid";
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useState, useEffect, useRef } from "react";
 
 import { CheckEmail } from "./AuthFunctions";
 import FormButton from "./FormButton";
@@ -48,6 +48,14 @@ const EmailForVerification: FC<EmailForVerificationProps> = ({ setEmail, onConfi
       });
   };
 
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <form
       className="mt-8 space-y-6"
@@ -72,6 +80,7 @@ const EmailForVerification: FC<EmailForVerificationProps> = ({ setEmail, onConfi
             type="text"
             autoComplete="email"
             required
+            ref={firstInputRef}
             className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-lime-500 focus:outline-none focus:ring-lime-500 sm:text-sm"
             placeholder="Email address"
             value={enteredEmail}

@@ -1,5 +1,5 @@
 import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 
 import { CheckConfirmPassword, CheckPassword } from "./AuthFunctions";
@@ -52,6 +52,14 @@ const PasswordResetForm: FC<PasswordResetFormProps> = ({ code, email }) => {
       });
   };
 
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <form
       className="mt-8 space-y-6"
@@ -69,6 +77,7 @@ const PasswordResetForm: FC<PasswordResetFormProps> = ({ code, email }) => {
             name="password1"
             type="password"
             required
+            ref={firstInputRef}
             className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-lime-500 focus:outline-none focus:ring-lime-500 sm:text-sm"
             placeholder="Password"
             value={password1}
