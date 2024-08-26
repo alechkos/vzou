@@ -1,9 +1,10 @@
 import DsCard from "./DsCard";
-import HomePageData from "./HomePageData";
 import bfsImage from "../../assets/Gallery/bfsPhoto.png";
 import bfsGif from "../../assets/Gallery/bfsGif.gif";
 import bstImage from "../../assets/Gallery/treePhoto.png";
 import bstGif from "../../assets/Gallery/treeGif.gif";
+import sortsGif from "../../assets/Gallery/sortsGif.gif";
+import sortsImage from "../../assets/Gallery/sortsPhoto.png";
 import RoutePaths from "../../Routes/RoutePaths";
 
 function HomeGallery() {
@@ -23,13 +24,10 @@ function HomeGallery() {
           url={RoutePaths.DATA_STRUCTURES}
         />
         <DsCard
-          title={HomePageData[0].title}
-          image={HomePageData[0].image}
-          gif={HomePageData[0].gif}
-          url={HomePageData[0].url}
-          description={HomePageData[0].description}
-          expended={HomePageData[0].expended}
-          expendedList={HomePageData[0].expendedList}
+          title={"Sorts"}
+          image={sortsImage}
+          gif={sortsGif}
+          url={RoutePaths.SORTS}
         />
       </div>
     </section>
