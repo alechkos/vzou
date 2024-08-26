@@ -22,7 +22,6 @@ import {
   setInputArray,
   setGraphData,
   clearInputArray,
-  setDirected,
   setInitialNode,
   setCountRows,
   setInputData,
@@ -67,7 +66,6 @@ const KruskalControlPanel: FC<Props> = ({
   const inputArray = useAppSelector((state) => state.prim.inputArray);
   const error = useAppSelector((state) => state.prim.error);
   const isButtonDisabled = useAppSelector((state) => state.prim.isPlaying);
-  const directed = useAppSelector((state) => state.prim.directed);
   const graphData = useAppSelector((state) => state.prim.graphData);
   const rowCount = useAppSelector((state) => state.prim.countRows);
   const inputData = useAppSelector((state) => state.prim.inputData);
@@ -80,7 +78,6 @@ const KruskalControlPanel: FC<Props> = ({
   const [value, setValue] = useState("1");
   const [initialNodeInput, setInitialNodeInput] = useState<string>("");
   const [numberOfRandomNodes, setNumberOfRandomNodes] = useState(0);
-  const [selected, setSelected] = useState(directed);
 
   const fromChangeHandler = (e: any, index: number) => {
     dispatch(setFrom({ input: e.target.value, index }));
@@ -164,12 +161,6 @@ const KruskalControlPanel: FC<Props> = ({
   const handleDeleteValues = (event: any, index: number) => {
     controller.setGraphFromInput({ nodes: [], links: [] });
     dispatch(deleteInputData(index));
-  };
-
-  const handleChangeSelect = (event: any) => {
-    const newSelected = !selected;
-    setSelected(newSelected);
-    dispatch(setDirected(newSelected));
   };
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -284,9 +275,7 @@ const KruskalControlPanel: FC<Props> = ({
         nodes.add(data.target);
         if (data.source !== data.target) {
           links.push({ source: data.source, target: data.target, weight: data.weight });
-          if (!selected) {
-            links.push({ source: data.target, target: data.source, weight: data.weight });
-          }
+          links.push({ source: data.target, target: data.source, weight: data.weight });
         }
       });
     } else {
@@ -298,9 +287,7 @@ const KruskalControlPanel: FC<Props> = ({
         nodes.add(data.source);
         nodes.add(data.target);
         links.push({ source: data.source, target: data.target, weight: data.weight });
-        if (!selected) {
-          links.push({ source: data.target, target: data.source, weight: data.weight });
-        }
+        links.push({ source: data.target, target: data.source, weight: data.weight });
       });
 
       const userInputData = {
@@ -457,19 +444,6 @@ const KruskalControlPanel: FC<Props> = ({
                         >
                           Create Graph
                         </button>
-                      </div>
-
-                      <div>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={selected}
-                              name={"directed"}
-                              onChange={handleChangeSelect}
-                            />
-                          }
-                          label={"Directed Graph"}
-                        />
                       </div>
                       <div className={"ml-10"}>
                         <TextField

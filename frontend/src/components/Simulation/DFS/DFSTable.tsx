@@ -13,14 +13,18 @@ const DFSTable: FC = () => {
   const graphData = useAppSelector((state) => state.dfs.graphNodes);
 
   return (
-    <div className={styles.tableWrapper}>
+    <div className={`${styles.tableWrapper} overflow-auto max-w-[480px] mr-2`}>
       <AnimatePresence>
         <table className={styles.table}>
           <thead>
             <tr>
               <th>Node</th>
               {graphData.map((node) => (
-                <th key={node.id}> {node.id}</th>
+                <TableRow
+                  key={node.id}
+                  rowData={node.id}
+                  nodeObj={node}
+                />
               ))}
             </tr>
           </thead>

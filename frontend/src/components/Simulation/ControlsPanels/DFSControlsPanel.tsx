@@ -268,7 +268,7 @@ const DFSControlsPanel: FC<Props> = ({
                           Create Graph
                         </button>
                       </div>
-                      <div>
+                      <div className={"ml-1"}>
                         <FormControlLabel
                           control={
                             <Checkbox

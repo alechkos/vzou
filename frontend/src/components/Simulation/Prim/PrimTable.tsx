@@ -11,7 +11,7 @@ const PrimTable = () => {
   let S = useAppSelector((state) => state.prim.S);
 
   return (
-    <div className={styles.tableWrapper}>
+    <div className={`${styles.tableWrapper} overflow-auto max-w-[480px] mr-2`}>
       <AnimatePresence>
         <div className={"flex justify-around"}>
           <span>{`Q: ${Q.map((node) => node.id)}`}</span>
@@ -22,7 +22,11 @@ const PrimTable = () => {
             <tr>
               <th>Node</th>
               {graphData.map((node) => (
-                <th key={node.id}> {node.id}</th>
+                <TableRow
+                  key={node.id}
+                  rowData={node.id}
+                  nodeObj={node}
+                />
               ))}
             </tr>
           </thead>

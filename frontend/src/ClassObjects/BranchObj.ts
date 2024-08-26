@@ -104,7 +104,6 @@ export class BranchObj {
       width: `${!isArrow ? this.getBranchLength() : 0}px`,
       transform: `rotate(${this.getRotateAngle()}deg)`,
       background: "linear-gradient(to right, black, red)",
-      zIndex: "100",
       backgroundSize: "200% 100%",
       backgroundPosition: "100% 0%",
       borderLeft,

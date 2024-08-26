@@ -102,28 +102,59 @@ export function insertToTailWithAnimations(
   memento: LinkedListMemento,
   value: number
 ) {
-  let tail = LinkedListNode.getTailOfList(head);
-  LinkedListNode.addNodeToTail(head, tail, value);
-  if (tail) {
-    memento.addSnapshot(
+  let x = head;
+  const passedIds: number[] = [];
+
+  if (x !== undefined) {
+    passedIds.push(x.id);
+    memento.addBlank(
       { line: 1, name: "InsertToTail" },
       head,
-      tail.id,
-      ActionType.CHANGE,
-      [{ id: tail.id, role: "X" }],
+      [{ id: x.id, role: "X" }],
       undefined,
-      undefined
+      passedIds
     );
-    if (tail.next)
+
+    while (x.next !== undefined) {
+      passedIds.push(x.next.id);
       memento.addSnapshot(
-        { line: 1, name: "InsertToTail" },
+        { line: 2, name: "InsertToTail" },
         head,
-        tail.next.id,
-        ActionType.CHANGE,
-        [{ id: tail.next.id, role: "X" }],
+        x.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: x.id, role: "X" }],
         undefined,
-        undefined
+        passedIds
       );
+      memento.addSnapshot(
+        { line: 3, name: "InsertToTail" },
+        head,
+        x.next.id,
+        ActionType.HIGHLIGHT_LIGHT,
+        [{ id: x.next.id, role: "X" }],
+        undefined,
+        passedIds
+      );
+      x = x.next;
+    }
+    memento.addSnapshot(
+      { line: 4, name: "InsertToTail" },
+      head,
+      x.id,
+      ActionType.HIGHLIGHT_LIGHT,
+      [{ id: x.id, role: "X" }],
+      undefined,
+      passedIds
+    );
+  } else {
+    memento.addError(
+      { line: 0, name: "InsertToTail" },
+      head,
+      `The List is empty!`,
+      [],
+      [],
+      passedIds
+    );
   }
 }
 
@@ -224,6 +255,13 @@ export function deleteFromTailWithAnimations(
       passedIds
     );
   } else {
-    memento.addError({ line: 0, name: "Search" }, head, `The List is empty!`, [], [], passedIds);
+    memento.addError(
+      { line: 0, name: "DeleteFromTail" },
+      head,
+      `The List is empty!`,
+      [],
+      [],
+      passedIds
+    );
   }
 }

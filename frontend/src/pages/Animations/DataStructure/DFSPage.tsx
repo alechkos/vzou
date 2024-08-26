@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { useDispatch } from "react-redux";
 import { DFSAnimationController } from "../../../ClassObjects/DFS/DFSAnimationController";
 import DFSControlsPanel from "../../../components/Simulation/ControlsPanels/DFSControlsPanel";
 import { useAppSelector } from "../../../store/hooks";
-import SideBar from "../../../components/Layout/SideBar/SideBar";
 import { combineDFSPseudoCode } from "../../../ClassObjects/DFS/DFSAlgorithms";
 import { PseudoItem } from "../../../components/Simulation/PseudoCode/pc-helpers";
 import PseudoCodeContainer from "../../../components/Simulation/PseudoCode/PseudoCodeContainer";

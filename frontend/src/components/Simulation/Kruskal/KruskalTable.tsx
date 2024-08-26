@@ -10,7 +10,7 @@ const KruskalTable = () => {
   let links = useAppSelector((state) => state.kruskal.links);
 
   return (
-    <div className={`${styles.tableWrapper} -mr-60 mt-56 flex flex-row gap-10`}>
+    <div className={`${styles.tableWrapper} -mr-60 mt-72 flex flex-row gap-4`}>
       <AnimatePresence>
         <div className={"flex flex-col overflow-auto max-h-[180px]"}>
           <span>Links:</span>
@@ -18,7 +18,7 @@ const KruskalTable = () => {
             <span>{`(u: ${link.source}, v: ${link.target}, w: ${link.weight!})`}</span>
           ))}
         </div>
-        <div className={"flex flex-col overflow-auto max-w-[480px]"}>
+        <div className={"flex flex-col overflow-auto max-w-[440px]"}>
           <div className={"m-1 w-max"}>
             <div>
               T:

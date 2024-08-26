@@ -125,8 +125,11 @@ export class LinkedListAnimationController extends AnimationController<
 
   async insertToTail(value: number) {
     await this.playAlgorithm(insertToTailWithAnimations, this.memento, value);
+    const tail = LinkedListNode.getTailOfList(this.data);
+    this.data = LinkedListNode.addNodeToTail(this.data, tail, value);
     setLength(LinkedListNode.getLengthOfList(this.data));
     this.dispatch(addNodeToTail(value));
+    this.initData(this.data);
   }
 
   async deleteFromHead(value: number) {
