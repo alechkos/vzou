@@ -7,7 +7,7 @@
 ## Project Overview
 
 > [!NOTE]
-> This project was originally started by a previous team (@gilbenhamo, @yovelal, @eodinzov94, @RonSCE) as a part of their final project, and we continued its development as part of our final project.
+> This project was originally started by a previous team ([@gilbenhamo](https://github.com/gilbenhamo), [@yovelal](https://github.com/yovelal), [@eodinzov94](https://github.com/eodinzov94), [@RonSCE](https://github.com/RonSCE)) as a part of their final project, and we continued its development as part of our final project.
 > We have added new features and improvements, including animations for various algorithms and data structures.
 
 Many students struggle to grasp explanations of algorithms and data structures in traditional classroom settings.
